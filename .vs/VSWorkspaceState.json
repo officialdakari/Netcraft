@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Minecraft2D",
-    "\\Minecraft2D\\Resources"
+    "\\Minecraft2D"
   ],
-  "SelectedNode": "\\Minecraft2D\\Resources\\gold_block.png",
+  "SelectedNode": "\\Minecraft2D\\Resources.resx",
   "PreviewInSolutionExplorer": false
 }
