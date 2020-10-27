@@ -103,7 +103,7 @@ namespace NCore
             Netcraft.AddCommand(new Commandbroadcast());
             Netcraft.AddCommand(new Commandlist());
             Netcraft.AddCommand(new Commandstop());
-            Netcraft.AddCommand(new Commandsky());
+            Netcraft.AddCommand(new Commandmessage());
             Netcraft.AddCommand(new Commandsudo());
             Netcraft.AddCommand(new Commandtppos());
             Netcraft.AddCommand(new Commandversion());
@@ -999,9 +999,9 @@ namespace NCore
                     try
                     {
                         var block = World.GetBlockAt(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
-                        if (block is null)
+                        if (block == null)
                         {
-                            ClientExited(n);
+                            n.Kick("Internal server error occured.");
                             return;
                         }
 
@@ -1030,14 +1030,14 @@ namespace NCore
                                     if (b.Unbreakable)
                                         return;
                                     var pos = Normalize(n.Position);
-                                    if (DistanceBetween(pos.X, pos.Y, b.Position.X, b.Position.Y) > 6d)
-                                    {
-                                        n.DoWarning("Unreachable block!");
-                                        return;
-                                    }
 
                                     var ev = new netcraft.server.api.events.BlockBreakEventArgs(n, b);
                                     NCSApi.REBlockBreakEvent(ev);
+                                    if (DistanceBetween(pos.X, pos.Y, b.Position.X, b.Position.Y) > 6d)
+                                    {
+                                        ev.SetCancelled(true);
+                                        return;
+                                    }
                                     if (ev.GetCancelled())
                                     {
                                         return;
@@ -1187,7 +1187,7 @@ namespace NCore
                     }
                     catch (Exception ex)
                     {
-                        Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{ex.ToString()}");
+                        Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{ex.ToString()}", "WARNING");
                         return;
                     }
                 }
@@ -1200,16 +1200,16 @@ namespace NCore
                         EnumBlockType type;
                         var pos = Normalize(n.Position);
                         placeAt = Normalize(placeAt);
-                        if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d)
-                        {
-                            n.DoWarning("Unreachable block!");
-                            return;
-                        }
 
                         type = (EnumBlockType)Enum.Parse(typeof(EnumBlockType), n.SelectedItem.Type.ToString());
                         var b = new Block(placeAt, type, false, false);
                         var ev = new netcraft.server.api.events.BlockPlaceEventArgs(n, b);
                         NCSApi.REBlockPlaceEvent(ev);
+                        if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d)
+                        {
+                            ev.SetCancelled(true);
+                            return;
+                        }
                         if (ev.GetCancelled())
                         {
                             return;
@@ -1234,16 +1234,15 @@ namespace NCore
                         EnumBlockType type;
                         var pos = Normalize(n.Position);
                         placeAt = Normalize(placeAt);
-                        if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d)
-                        {
-                            n.DoWarning("Unreachable block!");
-                            return;
-                        }
-
                         type = (EnumBlockType)Enum.Parse(typeof(EnumBlockType), n.SelectedItem.Type.ToString());
                         var b = new Block(placeAt, type, false, true);
                         var ev = new netcraft.server.api.events.BlockPlaceEventArgs(n, b);
                         NCSApi.REBlockPlaceEvent(ev);
+                        if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d)
+                        {
+                            ev.SetCancelled(true);
+                            return;
+                        }
                         if (ev.GetCancelled())
                         {
                             return;
@@ -1267,7 +1266,7 @@ namespace NCore
                 }
                 catch (Exception ex)
                 {
-                    Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{ex.ToString()}");
+                    Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{ex.ToString()}", "WARNING");
                     return;
                 }
 
@@ -1336,7 +1335,7 @@ namespace NCore
                 }
                 catch (Exception ex)
                 {
-                    Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{ex.ToString()}");
+                    Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{ex.ToString()}", "WARNING");
                     return;
                 }
 
@@ -1351,14 +1350,14 @@ namespace NCore
                 }
                 catch (Exception ex)
                 {
-                    Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{ex.ToString()}");
+                    Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{ex.ToString()}", "WARNING");
                     return;
                 }
             }
             catch (Exception globalEx)
             {
-                Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{globalEx.ToString()}");
-                n.Kick();
+                Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{globalEx.ToString()}", "WARNING");
+                n.Kick("Internal server error occured.");
                 return;
             }
         }
@@ -1423,7 +1422,7 @@ namespace NCore
             {
                 var ev = new netcraft.server.api.events.PlayerLeaveEventArgs(client);
                 NCSApi.REPlayerLeaveEvent(ev);
-                File.WriteAllText(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), client.Username), ".txt")), PlayerInfoSaveLoad.Save(client), Encoding.UTF8);
+                File.WriteAllText($"./playerdata/{client.Username}.txt", PlayerInfoSaveLoad.Save(client), Encoding.UTF8);
                 if (!isError)
                 {
                     Chat(client.Username + " покинул игру");

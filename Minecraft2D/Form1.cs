@@ -48,16 +48,14 @@ namespace Minecraft2D
         {
             try
             {
-                var x = Encode.Decrypt(new StreamReader(client.GetStream()).ReadLine()).Split(Conversions.ToChar(Constants.vbLf));
-                // Packet(x)
+                var x = Encode.d(new StreamReader(client.GetStream()).ReadLine()).Split(Conversions.ToChar(Constants.vbLf));
                 handlePackets(x);
                 client.GetStream().BeginRead(new byte[] { 0 }, 0, 0, Read, null);
             }
             catch (Exception ex)
             {
-                // xUpdate("You have disconnecting from server")
-                // Exit Sub
-                Interaction.MsgBox(ex.ToString());
+                FancyMessage.Show($"Соединение потеряно:\r\n\r\n{ex.ToString()}", "Отключение от удалённого сервера", FancyMessage.Icon.Error);
+                Environment.Exit(0);   
             }
         }
 
@@ -72,11 +70,12 @@ namespace Minecraft2D
             try
             {
                 sWriter = new StreamWriter(client.GetStream());
-                sWriter.WriteLine(Encode.Encrypt(str));
+                sWriter.WriteLine(Encode.e(str));
                 sWriter.Flush();
             }
             catch (Exception ex)
             {
+                FancyMessage.Show("Не удалось отправить пакет серверу:\r\n\r\n" + ex.ToString(), "Ошибка при отправке пакета", FancyMessage.Icon.Error);
                 Environment.Exit(0);
             }
         }
@@ -95,7 +94,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                Interaction.MsgBox("Не удалось подключится к серверу!" + Constants.vbCrLf + Constants.vbCrLf + $"{ex.GetType().ToString()}: {ex.Message}");
+                FancyMessage.Show($"Не удалось подключиться к серверу:\r\n\r\n{ex.ToString()}", "Ошибка при соединении", FancyMessage.Icon.Error);
                 Close();
             }
         }
@@ -271,7 +270,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                Interaction.MsgBox("Не удалось загрузить Discord Rich Presence");
+                FancyMessage.Show("Не удалось загрузить Discord Rich Presence");
             }
 
             foreach (var i in Enum.GetNames(typeof(Material)))
@@ -327,7 +326,6 @@ namespace Minecraft2D
             else
             {
                 ProgressBar1.Value = arg0;
-                // SendMessage(ProgressBar1.Handle, 1040, 2, 0)
             }
         }
 
@@ -348,13 +346,10 @@ namespace Minecraft2D
         public void Packet(string p)
         {
             var a = p.Split('?');
-            // p = Encode.Decrypt(p)
-            // MsgBox(p)
             if (a[0] == "blockchange")
             {
                 var b = new Panel();
                 bool g = false;
-                // b.Parent = Me
                 if (a.Length == 5)
                 {
                     b.Tag = a[4];
@@ -362,8 +357,6 @@ namespace Minecraft2D
 
                 b.Name = a[1] + "B" + a[2];
                 b.Size = new Size(32, 32);
-                // b.Left = a(1)
-                // b.Top = a(2)
                 b.Location = new Point(Conversions.ToInteger(a[1]) * 32, Conversions.ToInteger(a[2]) * 32);
                 if (a[3] == "iron_ore")
                 {
@@ -478,7 +471,6 @@ namespace Minecraft2D
 
                 b.Visible = true;
                 b.Text = "";
-                // MsgBox("Added block with color " + a(3) + " at " + a(1) + " " + a(2))
                 blocks.Add(b);
                 CreateBlock(b);
             }
@@ -525,28 +517,23 @@ namespace Minecraft2D
 
             if (a[0] == "msgerror")
             {
-                Interaction.MsgBox(string.Join("?", a.Skip(1).ToArray()), Constants.vbCritical);
+                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Сообщение от сервера", FancyMessage.Icon.Error);
             }
 
             if (a[0] == "msgwarn")
             {
-                Interaction.MsgBox(string.Join("?", a.Skip(1).ToArray()), Constants.vbExclamation);
+                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Сообщение от сервера", FancyMessage.Icon.Warning);
             }
 
             if (a[0] == "msg")
             {
-                Interaction.MsgBox(string.Join("?", a.Skip(1).ToArray()), Constants.vbInformation);
+                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Сообщение от сервера", FancyMessage.Icon.Info);
             }
 
             if (a[0] == "chat")
             {
-                // Invoke(New MethodInvoker1(AddressOf Chat.RichTextBox1.AppendText), String.Join("?", a.Skip(1).ToArray) + vbCrLf)
-                // MsgBox(a(1))
                 WriteChat(string.Join("?", a.Skip(1).ToArray()));
             }
-            // SetText = p
-            // Invoke(New MethodInvoker(AddressOf UpdateWindowText))
-            // 'Exit Sub
             if (a[0] == "health")
             {
                 SetHealth(Conversions.ToInteger(a[1]));
@@ -768,7 +755,7 @@ namespace Minecraft2D
                 }
                 catch (Exception ex)
                 {
-                    Interaction.MsgBox(ex.ToString());
+                    FancyMessage.Show($"Ошибка при установке текстуры предмета в руке игрока {Utils.IIf(a[1] == "@", "Локальный игрок", a[1]).ToString()} на {a[2]}.\r\n\r\n{ex.ToString()}", "Exception", FancyMessage.Icon.Warning);
                 }
 
                 try
@@ -1083,7 +1070,7 @@ namespace Minecraft2D
             return Math.Sqrt(Math.Pow(x2 - x1, 2d) + Math.Pow(y2 - y1, 2d));
         }
 
-        public object Normalize(Point arg0)
+        public Point Normalize(Point arg0)
         {
             return new Point(arg0.X / 32, arg0.Y / 32);
         }
@@ -1691,22 +1678,18 @@ namespace Minecraft2D
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            // TextBox1.Visible = Not TextBox1.Visible
             My.MyProject.Forms.Chat.Show();
         }
 
         private void Timer3_Tick(object sender, EventArgs e)
         {
-            // Label1.ForeColor = MainMenu.rainbow
             Timer3.Stop();
-            // Timer3.Start()
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (FancyMessage.Show("Вы уверены что хотите выйти из игры?", "Подтвердите действие", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) != FancyMessage.Result.OK) return;
             e.Cancel = true;
-            // StopServer()
-
             dRPC.ClearPresence();
             Environment.Exit(0);
         }
@@ -1851,22 +1834,22 @@ namespace Minecraft2D
 
     }
 
-    public class Encode
+    internal class Encode
     {
-        private static byte[] key = new byte[] { 62, 59, 25, 19, 37 };
-        private static readonly byte[] IV = new byte[] { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
-        internal const string EncryptionKey = "81iSifdf"; // "HOMECLOUD" & New Random().Next(11111111, 99999999).ToString & New Random().Next(11111111, 99999999).ToString ' & New Random().Next(11111111, 99999999).ToString & New Random().Next(11111111, 99999999).ToString
+        protected static byte[] a = new byte[] { 62, 59, 25, 19, 37 };
+        protected static readonly byte[] b = new byte[] { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
+        protected const string c = "YmFuIHRlYmUgZXNsaSB1em5hbCBldG90IGtvZA==";
 
-        public static string Decrypt(string stringToDecrypt)
+        public static string d(string stringToDecrypt)
         {
             try
             {
                 var inputByteArray = new byte[stringToDecrypt.Length + 1];
-                key = Encoding.UTF8.GetBytes(Strings.Left(EncryptionKey, 8));
+                a = Encoding.UTF8.GetBytes(Strings.Left(Encoding.ASCII.GetString(Convert.FromBase64String(c)), 8));
                 var des = new DESCryptoServiceProvider();
                 inputByteArray = Convert.FromBase64String(stringToDecrypt);
                 var ms = new MemoryStream();
-                var cs = new CryptoStream(ms, des.CreateDecryptor(key, IV), CryptoStreamMode.Write);
+                var cs = new CryptoStream(ms, des.CreateDecryptor(a, b), CryptoStreamMode.Write);
                 cs.Write(inputByteArray, 0, inputByteArray.Length);
                 cs.FlushFinalBlock();
                 var encoding = Encoding.UTF8;
@@ -1874,29 +1857,25 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                // oops - add your exception logic
-                // MsgBox("ошибка")
                 return "";
             }
         }
 
-        public static string Encrypt(string stringToEncrypt)
+        public static string e(string stringToEncrypt)
         {
             try
             {
-                key = Encoding.UTF8.GetBytes(Strings.Left(EncryptionKey, 8));
+                a = Encoding.UTF8.GetBytes(Strings.Left(Encoding.ASCII.GetString(Convert.FromBase64String(c)), 8));
                 var des = new DESCryptoServiceProvider();
                 var inputByteArray = Encoding.UTF8.GetBytes(stringToEncrypt);
                 var ms = new MemoryStream();
-                var cs = new CryptoStream(ms, des.CreateEncryptor(key, IV), CryptoStreamMode.Write);
+                var cs = new CryptoStream(ms, des.CreateEncryptor(a, b), CryptoStreamMode.Write);
                 cs.Write(inputByteArray, 0, inputByteArray.Length);
                 cs.FlushFinalBlock();
                 return Convert.ToBase64String(ms.ToArray());
             }
             catch (Exception ex)
             {
-                // oops - add your exception logic
-                // MsgBox("ошибка")
                 return "";
             }
         }

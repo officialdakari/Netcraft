@@ -20,3 +20,5 @@ C:\Users\gkiki\Desktop\netcraft1\Minecraft2D\bin\Debug\DiscordRPC.xml
 C:\Users\gkiki\Desktop\netcraft1\Minecraft2D\bin\Debug\Newtonsoft.Json.xml
 C:\Users\gkiki\Desktop\netcraft1\Minecraft2D\obj\Debug\Minecraft2D.csproj.CopyComplete
 C:\Users\gkiki\Desktop\netcraft1\Minecraft2D\obj\Debug\Minecraft2D.Properties.Resources.resources
+C:\Users\gkiki\Desktop\netcraft1\Minecraft2D\bin\Debug\Netcraft.xml
+C:\Users\gkiki\Desktop\netcraft1\Minecraft2D\obj\Debug\Minecraft2D.FancyMessageBox.resources

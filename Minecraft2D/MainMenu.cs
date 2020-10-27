@@ -47,13 +47,14 @@ namespace Minecraft2D
                 labelCurDelay -= 1;
             }
 
-            string t = ">" + Strings.Left(labelText, labelPos) + (labelWithCur ? "_" : "");
+            string t = ">" + Strings.Left(labelText, labelPos) + (labelWithCur ? "|" : "");
             if (labelChangeDelay == 0)
             {
                 labelPos += labelDirection;
                 if (labelPos == 0)
                 {
                     labelDirection = 1;
+                    labelChangeDelay = 20;
                 }
                 else if (labelPos == labelText.Length)
                 {
@@ -112,6 +113,15 @@ namespace Minecraft2D
 
         private void MainMenu_Load(object sender, EventArgs e)
         {
+            if(Debugger.IsAttached)
+            {
+                FancyMessage.Show("Данное приложение не может работать под отладкой. Пожалуйста, отсоедините отладчик чтобы продолжить.", "Error", FancyMessage.Icon.Error);
+                for(var i=0;i<1000;i++)
+                {
+                    Debug.WriteLine("Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger.");
+                }
+                Environment.Exit(-912);
+            }
             Label5.Text = $"Netcraft {Ver}";
             CheckForIllegalCrossThreadCalls = false;
             foreach (Control c in Controls)
@@ -182,6 +192,25 @@ namespace Minecraft2D
                 My.MyProject.Forms.HelpWindow.Show();
             }
         }
+
+        int clicks;
+
+        private void Label3_MouseClick(object sender, MouseEventArgs e)
+        {
+            clicks++;
+            if(clicks == 10)
+            {
+                FancyMessage.Show("Зачем кликать по этой штуке тем более 10 раз?");
+            }
+        }
+
+        private void MainMenu_VisibleChanged(object sender, EventArgs e)
+        {
+            if(Visible)
+            {
+                Form1.GetInstance().Close();
+            }
+        }
     }
 
     public class Pinger
@@ -194,13 +223,7 @@ namespace Minecraft2D
         private StreamWriter sWriter;
 
         public delegate void _xUpdate(string str);
-        // 
-        // '    '     If InvokeRequired Then
-        // 
-        // Else
-        // '   '      TextBox3.AppendText(str & vbNewLine)
-        // End If
-        // End Sub
+
         public event OnPingCompleteEventHandler OnPingComplete;
 
         public delegate void OnPingCompleteEventHandler();
@@ -209,7 +232,7 @@ namespace Minecraft2D
         {
             try
             {
-                string x = Encode.Decrypt(new StreamReader(client.GetStream()).ReadLine());
+                string x = Encode.d(new StreamReader(client.GetStream()).ReadLine());
                 Packet(x);
                 client.GetStream().BeginRead(new byte[] { 0 }, 0, 0, Read, null);
             }
@@ -257,7 +280,7 @@ namespace Minecraft2D
             try
             {
                 sWriter = new StreamWriter(client.GetStream());
-                sWriter.WriteLine(Encode.Encrypt(str));
+                sWriter.WriteLine(Encode.e(str));
                 sWriter.Flush();
             }
             catch (Exception ex)

@@ -19,7 +19,10 @@ namespace NCore
                     foreach (var a in Netcraft.GetCommands())
                     {
                         foreach (var b in a.Aliases)
+                        {
+                            if (b == a.Name) continue;
                             p.PacketQueue.AddQueue($"chat?/{b} => /{a.Name}");
+                        }
                     }
 
                     p.PacketQueue.SendQueue();
@@ -29,7 +32,10 @@ namespace NCore
                 foreach (var a in Netcraft.GetCommands())
                 {
                     foreach (var b in a.Aliases)
+                    {
+                        if (b == a.Name) continue;
                         sender.SendMessage($"{b} => {a.Name}");
+                    }
                 }
 
                 return true;

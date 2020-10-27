@@ -122,15 +122,17 @@ namespace Minecraft2D
             // 
             // Label3
             // 
-            this.Label3.AutoSize = true;
-            this.Label3.BackColor = System.Drawing.Color.Transparent;
+            this.Label3.BackColor = System.Drawing.Color.White;
+            this.Label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Label3.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Label3.ForeColor = System.Drawing.Color.White;
-            this.Label3.Location = new System.Drawing.Point(12, 346);
+            this.Label3.ForeColor = System.Drawing.Color.Black;
+            this.Label3.Location = new System.Drawing.Point(12, 340);
             this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(17, 17);
+            this.Label3.Size = new System.Drawing.Size(225, 23);
             this.Label3.TabIndex = 6;
             this.Label3.Text = ">";
+            this.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Label3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Label3_MouseClick);
             // 
             // _Button4
             // 
@@ -296,6 +298,7 @@ namespace Minecraft2D
             this.Text = "NetCraft";
             this.Load += new System.EventHandler(this.MainMenu_Load);
             this.LocationChanged += new System.EventHandler(this.MainMenu_LocationChanged);
+            this.VisibleChanged += new System.EventHandler(this.MainMenu_VisibleChanged);
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();

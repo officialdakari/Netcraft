@@ -24,8 +24,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\Debug\Netcraft.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
@@ -89,6 +88,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FancyMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FancyMessageBox.Designer.cs">
+      <DependentUpon>FancyMessageBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="PluginAbstract.cs" />
     <Compile Include="Properties\Application.Designer.cs" />
     <Compile Include="Properties\MyNamespace.Dynamic.Designer.cs" />
@@ -152,10 +157,14 @@
     <Compile Include="Rendering\TransparentPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Chat.resx">
       <DependentUpon>Chat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FancyMessageBox.resx">
+      <DependentUpon>FancyMessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -290,6 +299,8 @@
     <None Include="Resources\DIRT.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\log_oak.png" />
+    <None Include="Resources\planks_oak.png" />
     <None Include="Resources\NCLogo.png" />
     <None Include="Resources\netcraft.png" />
     <None Include="Resources\vbnet-edition.png" />
@@ -298,12 +309,10 @@
     <None Include="Resources\SANDBLOCK.png" />
     <None Include="Resources\water_still.png" />
     <None Include="Resources\stone1.png" />
-    <None Include="Resources\planks_oak.png" />
     <None Include="Resources\obsidian1.png" />
     <None Include="Resources\OBSIDIAN.png" />
     <None Include="Resources\platformPack_tile034.png" />
     <None Include="Resources\leaves.jpg" />
-    <None Include="Resources\log_oak.png" />
     <None Include="Resources\bedrock.png" />
     <None Include="Resources\cobblestone4.png" />
     <None Include="Resources\DIAMOND.png" />
@@ -326,12 +335,12 @@
     <None Include="Resources\furnace_front_off.png" />
     <None Include="Resources\coal.png" />
     <None Include="Resources\coal_ore.png" />
-    <None Include="Resources\diamond_block.png" />
-    <None Include="Resources\gold_block.png" />
-    <None Include="Resources\iron_block.png" />
     <None Include="Resources\Grid_Sapling.png" />
     <None Include="Resources\c-edition.png" />
     <Content Include="logoNC.ico" />
+    <None Include="Resources\gold_block.png" />
+    <None Include="Resources\diamond_block.png" />
+    <None Include="Resources\iron_block.png" />
     <Content Include="Resources\iron_ore.png" />
     <None Include="Resources\platformPack_tile016.png" />
     <None Include="Resources\platformPack_tile004.png" />

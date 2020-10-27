@@ -652,6 +652,28 @@ namespace NCore
             d = null;
         }
 
+
+        /// <summary>
+        /// Отправить игроку сообщение в окне.
+        /// </summary>
+        /// <param name="text">Текст сообщения</param>
+        /// <param name="type">тип сообщения. 0 - информация, 1 - предупреждение, 2 - ошибка.</param>
+        public void Message(string text, int type)
+        {
+            switch(type)
+            {
+                case 0:
+                    Send("msg?" + text);
+                    break;
+                case 1:
+                    Send("msgwarn?" + text);
+                    break;
+                case 2:
+                    Send("msgerror?" + text);
+                    break;
+            }
+        }
+
         public bool IsOnGround
         {
             get
@@ -689,7 +711,7 @@ namespace NCore
             PlayerRectangle = new Rectangle(Position, new Size(47, 92));
             try
             {
-                a?.Invoke(Encode.Decrypt(new StreamReader(d.GetStream()).ReadLine()), this);
+                a?.Invoke(Encode.d(new StreamReader(d.GetStream()).ReadLine()), this);
             }
             catch (SocketException ex)
             {
@@ -754,7 +776,7 @@ namespace NCore
             try
             {
                 c = new StreamWriter(d.GetStream());
-                c.WriteLine(Encode.Encrypt(Messsage));
+                c.WriteLine(Encode.e(Messsage));
                 c.Flush();
             }
             catch (Exception ex)
@@ -776,22 +798,22 @@ namespace NCore
         }
     }
     /* TODO ERROR: Skipped WarningDirectiveTrivia */
-    public class Encode
+    internal class Encode
     {
-        private static byte[] key = new byte[] { 62, 59, 25, 19, 37 };
-        private static byte[] IV = new byte[] { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
-        internal const string EncryptionKey = "81iSifdf"; // "HOMECLOUD" & New Random().Next(11111111, 99999999).ToString & New Random().Next(11111111, 99999999).ToString ' & New Random().Next(11111111, 99999999).ToString & New Random().Next(11111111, 99999999).ToString
+        protected static byte[] a = new byte[] { 62, 59, 25, 19, 37 };
+        protected static readonly byte[] b = new byte[] { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
+        protected const string c = "YmFuIHRlYmUgZXNsaSB1em5hbCBldG90IGtvZA==";
 
-        public static string Decrypt(string stringToDecrypt)
+        public static string d(string stringToDecrypt)
         {
             try
             {
                 var inputByteArray = new byte[stringToDecrypt.Length + 1];
-                key = Encoding.UTF8.GetBytes(NCore.Left(EncryptionKey, 8));
+                a = Encoding.UTF8.GetBytes(NCore.Left(Encoding.ASCII.GetString(Convert.FromBase64String(c)), 8));
                 var des = new DESCryptoServiceProvider();
                 inputByteArray = Convert.FromBase64String(stringToDecrypt);
                 var ms = new MemoryStream();
-                var cs = new CryptoStream(ms, des.CreateDecryptor(key, IV), CryptoStreamMode.Write);
+                var cs = new CryptoStream(ms, des.CreateDecryptor(a, b), CryptoStreamMode.Write);
                 cs.Write(inputByteArray, 0, inputByteArray.Length);
                 cs.FlushFinalBlock();
                 var encoding = Encoding.UTF8;
@@ -799,33 +821,27 @@ namespace NCore
             }
             catch (Exception ex)
             {
-                // oops - add your exception logic
-                // MsgBox("ошибка")
+                return "";
             }
-
-            return default;
         }
 
-        public static string Encrypt(string stringToEncrypt)
+        public static string e(string stringToEncrypt)
         {
             try
             {
-                key = Encoding.UTF8.GetBytes(NCore.Left(EncryptionKey, 8));
+                a = Encoding.UTF8.GetBytes(NCore.Left(Encoding.ASCII.GetString(Convert.FromBase64String(c)), 8));
                 var des = new DESCryptoServiceProvider();
                 var inputByteArray = Encoding.UTF8.GetBytes(stringToEncrypt);
                 var ms = new MemoryStream();
-                var cs = new CryptoStream(ms, des.CreateEncryptor(key, IV), CryptoStreamMode.Write);
+                var cs = new CryptoStream(ms, des.CreateEncryptor(a, b), CryptoStreamMode.Write);
                 cs.Write(inputByteArray, 0, inputByteArray.Length);
                 cs.FlushFinalBlock();
                 return Convert.ToBase64String(ms.ToArray());
             }
             catch (Exception ex)
             {
-                // oops - add your exception logic
-                // MsgBox("ошибка")
+                return "";
             }
-
-            return default;
         }
     }
 }

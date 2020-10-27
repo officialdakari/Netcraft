@@ -1,9 +1,9 @@
 ﻿
 namespace NCore
 {
-    public class Commandsky : Command
+    public class Commandmessage : Command
     {
-        public Commandsky() : base("sky", "test", "sky <clr>")
+        public Commandmessage() : base("msg", "msg", "msg <i/w/e>")
         {
         }
 
@@ -18,7 +18,9 @@ namespace NCore
                 }
 
                 NetworkPlayer p = (NetworkPlayer)sender;
-                p.SendSkyColorChange(System.Drawing.Color.FromName(args[0]));
+                if (args[0] == "i") p.Message("Это тестовое сообщение", 0);
+                if (args[0] == "w") p.Message("Это тестовое сообщение", 1);
+                if (args[0] == "e") p.Message("Это тестовое сообщение", 2);
                 return true;
             }
 
