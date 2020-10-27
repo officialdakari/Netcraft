@@ -1,0 +1,1 @@
+﻿enable-automod=1
