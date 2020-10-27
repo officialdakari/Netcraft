@@ -84,9 +84,10 @@ namespace Minecraft2D
             // 
             // TextBox1
             // 
+            this.TextBox1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.TextBox1.Location = new System.Drawing.Point(500, 201);
             this.TextBox1.Name = "TextBox1";
-            this.TextBox1.Size = new System.Drawing.Size(202, 22);
+            this.TextBox1.Size = new System.Drawing.Size(202, 27);
             this.TextBox1.TabIndex = 2;
             this.TextBox1.Text = "127.0.0.1";
             // 
@@ -95,7 +96,7 @@ namespace Minecraft2D
             this.Label2.AutoSize = true;
             this.Label2.BackColor = System.Drawing.Color.Transparent;
             this.Label2.ForeColor = System.Drawing.Color.White;
-            this.Label2.Location = new System.Drawing.Point(475, 204);
+            this.Label2.Location = new System.Drawing.Point(478, 208);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(19, 13);
             this.Label2.TabIndex = 3;
@@ -185,7 +186,7 @@ namespace Minecraft2D
             this._Button5.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this._Button5.Location = new System.Drawing.Point(708, 201);
             this._Button5.Name = "_Button5";
-            this._Button5.Size = new System.Drawing.Size(80, 35);
+            this._Button5.Size = new System.Drawing.Size(80, 27);
             this._Button5.TabIndex = 11;
             this._Button5.Text = "Ping";
             this._Button5.UseVisualStyleBackColor = true;

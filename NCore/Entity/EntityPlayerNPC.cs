@@ -1,39 +1,30 @@
 ﻿using global::System.Drawing;
+using System.Threading;
 
 namespace NCore
 {
-    public class EntityPlayerNPC
+    public class EntityPlayerNPC : Entity.EntityBase
     {
+        Thread thread;
 
-        // REM - Сделать это сегодня!
-
-        public Point Position { get; set; }
-
-        private int direction = 2;
-
-        public void NPCTick()
+        public EntityPlayerNPC(WorldServer w) : base("NPCPlayer1", new Point(0,0), w, new Size(47,92))
         {
-            if (Position.X == 0)
-            {
-                direction = 2;
-            }
-            else if (Position.X == 100)
-            {
-                direction = -2;
-            }
-
-            Position = new Point(Position.X + direction, 0);
-            UpdateNPCPosition();
+            thread = new Thread((_) => entityAiLoop());
+            thread.Start();
         }
 
-        public void UpdateNPCPosition()
+        private void entityAiLoop()
         {
-            NCore.Send("updateplayerposition?NPC1?" + Position.X.ToString() + "?" + Position.Y.ToString());
+            while(true)
+            {
+                Thread.Sleep(10);
+                handleGravity();
+            }
         }
 
-        public EntityPlayerNPC()
+        protected internal override void EntityMoved()
         {
-            Position = new Point(0, 0);
+            base.EntityMoved();
         }
     }
 }

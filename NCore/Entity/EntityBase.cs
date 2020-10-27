@@ -12,10 +12,10 @@ namespace NCore.Entity
     /// </summary>
     public class EntityBase
     {
-        public System.Drawing.Point Position { get; set; }
-        public WorldServer World { get; set; }
-        public System.Drawing.Size Size { get; set; }
-        public System.Drawing.Rectangle Rectangle { get; set; }
+        public System.Drawing.Point Position;
+        public WorldServer World;
+        public System.Drawing.Size Size;
+        public System.Drawing.Rectangle Rectangle;
         public string Name { get; set; }
 
         public EntityBase(string name, System.Drawing.Point point, WorldServer worldServer, System.Drawing.Size sz)
@@ -27,14 +27,37 @@ namespace NCore.Entity
             Name = name;
         }
 
-        public void Move(System.Drawing.Point to)
+        protected internal void handleGravity()
         {
-            bool collision = false;
-            foreach(Block b in World.Blocks)
+            foreach (Block b in World.Blocks)
             {
                 if (b.IsBackground) continue;
                 if (b.Type == EnumBlockType.SAPLING || b.Type == EnumBlockType.WATER) continue;
-                if (b.Rectangle.IntersectsWith(Rectangle))
+                var bpos = new Point(b.Position.X * 32, b.Position.Y * 32);
+                var brec = new Rectangle(bpos, new Size(32, 32));
+                if (NCore.DistanceBetweenPoint(bpos, Position) > 10 * 32)
+                    continue;
+                if (brec.IntersectsWith(Rectangle))
+                {
+                    break;
+                }
+            }
+            Position.Y += 1;
+            EntityMoved();
+        }
+
+        public bool Move(System.Drawing.Point to)
+        {
+            bool collision = false;
+            foreach(Block b in World.Blocks)
+            { 
+                if (b.IsBackground) continue;
+                if (b.Type == EnumBlockType.SAPLING || b.Type == EnumBlockType.WATER) continue;
+                var bpos = new Point(b.Position.X * 32, b.Position.Y * 32);
+                var brec = new Rectangle(bpos, new Size(32, 32));
+                if (NCore.DistanceBetweenPoint(bpos, Position) > 10 * 32)
+                    continue;
+                if (brec.IntersectsWith(Rectangle))
                 {
                     collision = true;
                     break;
@@ -43,9 +66,15 @@ namespace NCore.Entity
             if(collision)
             {
                 NCore.Log($"{Name} ({this.GetType().ToString()}) moved wrongly!");
-                return;
+                return false;
             }
             Position = to;
+            EntityMoved();
+            return true;
+        }
+
+        protected internal virtual void EntityMoved()
+        {
         }
     }
 }

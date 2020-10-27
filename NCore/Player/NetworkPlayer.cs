@@ -668,6 +668,8 @@ namespace NCore
                             continue;
                         if (o.Type == EnumBlockType.WATER)
                             continue;
+                        if (o.Type == EnumBlockType.SAPLING)
+                            continue;
                         if (NoClip)
                             return true;
                         return true;

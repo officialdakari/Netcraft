@@ -665,42 +665,42 @@ namespace Minecraft2D
                     // REM - Блоки
                     if (a[2] == "WOOD")
                     {
-                        SetItem(a[1], My.Resources.Resources.WOOD, My.Resources.Resources.WOOD, a[2]);
+                        SetItem(a[1], My.Resources.Resources.log_oak, My.Resources.Resources.log_oak, a[2]);
                     }
 
                     if (a[2] == "COBBLESTONE")
                     {
-                        SetItem(a[1], My.Resources.Resources.COBBLESTONE, My.Resources.Resources.COBBLESTONE, a[2]);
+                        SetItem(a[1], My.Resources.Resources.cobblestone4, My.Resources.Resources.cobblestone4, a[2]);
                     }
 
                     if (a[2] == "STONE")
                     {
-                        SetItem(a[1], My.Resources.Resources.STONE, My.Resources.Resources.STONE, a[2]);
+                        SetItem(a[1], My.Resources.Resources.stone1, My.Resources.Resources.stone1, a[2]);
                     }
 
                     if (a[2] == "PLANKS")
                     {
-                        SetItem(a[1], My.Resources.Resources.WOOD, My.Resources.Resources.WOOD, a[2]);
+                        SetItem(a[1], My.Resources.Resources.planks_oak, My.Resources.Resources.planks_oak, a[2]);
                     }
 
                     if (a[2] == "DIRT")
                     {
-                        SetItem(a[1], My.Resources.Resources.DIRT, My.Resources.Resources.DIRT, a[2]);
+                        SetItem(a[1], My.Resources.Resources.dirt1, My.Resources.Resources.dirt1, a[2]);
                     }
 
                     if (a[2] == "OBSIDIAN")
                     {
-                        SetItem(a[1], My.Resources.Resources.OBSIDIAN, My.Resources.Resources.OBSIDIAN, a[2]);
+                        SetItem(a[1], My.Resources.Resources.obsidian1, My.Resources.Resources.obsidian1, a[2]);
                     }
 
                     if (a[2] == "SAND")
                     {
-                        SetItem(a[1], My.Resources.Resources.SANDBLOCK, My.Resources.Resources.SANDBLOCK, a[2]);
+                        SetItem(a[1], My.Resources.Resources.sand, My.Resources.Resources.sand, a[2]);
                     }
 
                     if (a[2] == "GLASS")
                     {
-                        SetItem(a[1], My.Resources.Resources.GLASSBLOCK, My.Resources.Resources.GLASSBLOCK, a[2]);
+                        SetItem(a[1], My.Resources.Resources.glass, My.Resources.Resources.glass, a[2]);
                     }
 
                     if (a[2] == "FURNACE")

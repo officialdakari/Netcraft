@@ -8,6 +8,11 @@
     <LangVersion>latest</LangVersion>
     <StartupObject>NCore.NCore</StartupObject>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>0</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
