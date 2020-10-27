@@ -9,3 +9,5 @@ C:\Users\gkiki\Desktop\netcraft1\NCore\bin\Debug\netcoreapp2.1\NCore.runtimeconf
 C:\Users\gkiki\Desktop\netcraft1\NCore\bin\Debug\netcoreapp2.1\NCore.runtimeconfig.dev.json
 C:\Users\gkiki\Desktop\netcraft1\NCore\bin\Debug\netcoreapp2.1\NCore.dll
 C:\Users\gkiki\Desktop\netcraft1\NCore\bin\Debug\netcoreapp2.1\NCore.pdb
+F:\Development\Netcraft\dev\NCore\obj\Debug\netcoreapp2.1\NCore.dll
+F:\Development\Netcraft\dev\NCore\obj\Debug\netcoreapp2.1\NCore.pdb
