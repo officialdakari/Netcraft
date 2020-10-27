@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{76C8D3B3-2185-0E07-088D-5183EE91D9D1}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Minecraft2D.My.MyApplication</StartupObject>
+    <RootNamespace>Minecraft2D</RootNamespace>
+    <AssemblyName>Netcraft</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(ProjectDir)**\*.vb</DefaultItemExcludes>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>Netcraft.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logoNC.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="DiscordRPC, Version=1.0.150.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DiscordRichPresence.1.0.150\lib\net35\DiscordRPC.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="PluginAbstract.cs" />
+    <Compile Include="Properties\Application.Designer.cs" />
+    <Compile Include="Properties\MyNamespace.Dynamic.Designer.cs" />
+    <Compile Include="Properties\MyNamespace.Static.1.Designer.cs" />
+    <Compile Include="Properties\MyNamespace.Static.2.Designer.cs" />
+    <Compile Include="Properties\MyNamespace.Static.3.Designer.cs" />
+    <Compile Include="ApplicationEvents.cs" />
+    <Compile Include="Chat.Designer.cs">
+      <DependentUpon>Chat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Chat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Entity\EntityPlayer.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gamesettings.Designer.cs">
+      <DependentUpon>Gamesettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gamesettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HelpWindow.Designer.cs">
+      <DependentUpon>HelpWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HelpWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoginForm1.Designer.cs">
+      <DependentUpon>LoginForm1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoginForm1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainMenu.Designer.cs">
+      <DependentUpon>MainMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="PluginManager.cs" />
+    <Compile Include="ProcSpd.cs" />
+    <Compile Include="Rendering\OpaqueRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Rendering\OpaquePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Rendering\TransparentPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Chat.resx">
+      <DependentUpon>Chat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gamesettings.resx">
+      <DependentUpon>Gamesettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HelpWindow.resx">
+      <DependentUpon>HelpWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoginForm1.resx">
+      <DependentUpon>LoginForm1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainMenu.resx">
+      <DependentUpon>MainMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx" />
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Minecraft2D.My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>Minecraft2D.My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\Player1Texture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Player2Texture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WOODEN_PICKAXE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WOODEN_PICKAXE_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WOODEN_AXE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WOODEN_AXE_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WOODEN_SWORD.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WOODEN_SWORD_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WOODEN_SHOVEL.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WOODEN_SHOVEL_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\STONE_AXE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\STONE_AXE_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\STONE_PICKAXE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\STONE_PICKAXE_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\STONE_SHOVEL.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\STONE_SHOVEL_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\STONE_SWORD.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\STONE_SWORD_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\STICK.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WOOD.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\COBBLESTONE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\STONE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRON.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRON_AXE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRON_AXE_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRON_PICKAXE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRON_PICKAXE_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRON_SHOVEL.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRON_SHOVEL_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRON_SWORD.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRON_SWORD_FLIPPED.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DIRT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NCLogo.png" />
+    <None Include="Resources\netcraft.png" />
+    <None Include="Resources\vbnet-edition.png" />
+    <None Include="Resources\sprite.png" />
+    <None Include="Resources\sand.png" />
+    <None Include="Resources\SANDBLOCK.png" />
+    <None Include="Resources\water_still.png" />
+    <None Include="Resources\stone1.png" />
+    <None Include="Resources\planks_oak.png" />
+    <None Include="Resources\obsidian1.png" />
+    <None Include="Resources\OBSIDIAN.png" />
+    <None Include="Resources\platformPack_tile034.png" />
+    <None Include="Resources\leaves.jpg" />
+    <None Include="Resources\log_oak.png" />
+    <None Include="Resources\bedrock.png" />
+    <None Include="Resources\cobblestone4.png" />
+    <None Include="Resources\DIAMOND.png" />
+    <None Include="Resources\DIAMOND_AXE_FLIPPED.png" />
+    <None Include="Resources\DIAMOND_PICKAXE.png" />
+    <None Include="Resources\DIAMOND_PICKAXE_FLIPPED.png" />
+    <None Include="Resources\DIAMOND_SHOVEL.png" />
+    <None Include="Resources\DIAMOND_SHOVEL_FLIPPED.png" />
+    <None Include="Resources\DIAMOND_SWORD.png" />
+    <None Include="Resources\DIAMOND_SWORD_FLIPPED.png" />
+    <None Include="Resources\DIAMOND_AXE.png" />
+    <None Include="Resources\diamond_ore.png" />
+    <None Include="Resources\grass_side.png" />
+    <None Include="Resources\dirt1.png" />
+    <None Include="Resources\GLASSBLOCK.png" />
+    <None Include="Resources\glass.png" />
+    <None Include="Resources\gold_ore.png" />
+    <None Include="Resources\GOLD.png" />
+    <None Include="Resources\furnace_front_on.png" />
+    <None Include="Resources\furnace_front_off.png" />
+    <None Include="Resources\coal.png" />
+    <None Include="Resources\coal_ore.png" />
+    <None Include="Resources\diamond_block.png" />
+    <None Include="Resources\gold_block.png" />
+    <None Include="Resources\iron_block.png" />
+    <None Include="Resources\Grid_Sapling.png" />
+    <None Include="Resources\c-edition.png" />
+    <Content Include="logoNC.ico" />
+    <Content Include="Resources\iron_ore.png" />
+    <None Include="Resources\platformPack_tile016.png" />
+    <None Include="Resources\platformPack_tile004.png" />
+    <None Include="Resources\platformPack_tile001.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
