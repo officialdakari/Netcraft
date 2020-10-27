@@ -555,13 +555,11 @@ namespace Minecraft2D
             if (a[0] == "noclip")
             {
                 NoClip = true;
-                cTicker.Suspend();
             }
 
             if (a[0] == "clip")
             {
                 NoClip = false;
-                cTicker.Resume();
             }
 
             if (a[0] == "dowarn")
@@ -1486,29 +1484,32 @@ namespace Minecraft2D
 
             try
             {
-                bool collision = false;
-                foreach (var b in blocks)
+                if (!NoClip)
                 {
-                    if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32)
-                        continue;
-                    if (b.Bounds.IntersectsWith(localPlayer.Bounds))
+                    bool collision = false;
+                    foreach (var b in blocks)
                     {
-                        if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
+                        if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32)
+                            continue;
+                        if (b.Bounds.IntersectsWith(localPlayer.Bounds))
                         {
-                            continue;
+                            if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
+                            {
+                                continue;
+                            }
+
+                            if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
+                                continue;
+                            collision = true;
+                            break;
                         }
-
-                        if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
-                            continue;
-                        collision = true;
-                        break;
                     }
-                }
 
-                if (!collision)
-                {
-                    localPlayer.Top += 1;
-                    UpdatePlayerPosition();
+                    if (!collision)
+                    {
+                        localPlayer.Top += 1;
+                        UpdatePlayerPosition();
+                    }
                 }
             }
             catch (Exception ex)

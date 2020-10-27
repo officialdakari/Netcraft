@@ -28,8 +28,6 @@ namespace Minecraft2D
                 base.Dispose(disposing);
             }
         }
-
-        internal PictureBox LogoPictureBox;
         internal Label UsernameLabel;
         internal TextBox UsernameTextBox;
         private Button _OK;
@@ -93,81 +91,70 @@ namespace Minecraft2D
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm1));
-            LogoPictureBox = new PictureBox();
-            UsernameLabel = new Label();
-            UsernameTextBox = new TextBox();
-            _OK = new Button();
-            _OK.Click += new EventHandler(OK_Click);
-            _Cancel = new Button();
-            _Cancel.Click += new EventHandler(Cancel_Click);
-            ((System.ComponentModel.ISupportInitialize)LogoPictureBox).BeginInit();
-            SuspendLayout();
-            // 
-            // LogoPictureBox
-            // 
-            LogoPictureBox.Image = (Image)resources.GetObject("LogoPictureBox.Image");
-            LogoPictureBox.Location = new Point(0, 0);
-            LogoPictureBox.Name = "LogoPictureBox";
-            LogoPictureBox.Size = new Size(165, 193);
-            LogoPictureBox.TabIndex = 0;
-            LogoPictureBox.TabStop = false;
+            this.UsernameLabel = new System.Windows.Forms.Label();
+            this.UsernameTextBox = new System.Windows.Forms.TextBox();
+            this._OK = new System.Windows.Forms.Button();
+            this._Cancel = new System.Windows.Forms.Button();
+            this.SuspendLayout();
             // 
             // UsernameLabel
             // 
-            UsernameLabel.Location = new Point(172, 54);
-            UsernameLabel.Name = "UsernameLabel";
-            UsernameLabel.Size = new Size(220, 23);
-            UsernameLabel.TabIndex = 0;
-            UsernameLabel.Text = "Имя игрока";
-            UsernameLabel.TextAlign = ContentAlignment.MiddleLeft;
+            this.UsernameLabel.Location = new System.Drawing.Point(12, 15);
+            this.UsernameLabel.Name = "UsernameLabel";
+            this.UsernameLabel.Size = new System.Drawing.Size(220, 23);
+            this.UsernameLabel.TabIndex = 0;
+            this.UsernameLabel.Text = "Имя игрока";
+            this.UsernameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // UsernameTextBox
             // 
-            UsernameTextBox.Location = new Point(174, 74);
-            UsernameTextBox.Name = "UsernameTextBox";
-            UsernameTextBox.Size = new Size(220, 22);
-            UsernameTextBox.TabIndex = 1;
+            this.UsernameTextBox.Location = new System.Drawing.Point(12, 41);
+            this.UsernameTextBox.Name = "UsernameTextBox";
+            this.UsernameTextBox.Size = new System.Drawing.Size(335, 22);
+            this.UsernameTextBox.TabIndex = 1;
             // 
-            // OK
+            // _OK
             // 
-            _OK.Location = new Point(197, 161);
-            _OK.Name = "_OK";
-            _OK.Size = new Size(94, 23);
-            _OK.TabIndex = 4;
-            _OK.Text = "&ОК";
+            this._OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this._OK.Location = new System.Drawing.Point(150, 69);
+            this._OK.Name = "_OK";
+            this._OK.Size = new System.Drawing.Size(94, 23);
+            this._OK.TabIndex = 4;
+            this._OK.Text = "&ОК";
+            this._OK.Click += new System.EventHandler(this.OK_Click);
             // 
-            // Cancel
+            // _Cancel
             // 
-            _Cancel.DialogResult = DialogResult.Cancel;
-            _Cancel.Location = new Point(300, 161);
-            _Cancel.Name = "_Cancel";
-            _Cancel.Size = new Size(94, 23);
-            _Cancel.TabIndex = 5;
-            _Cancel.Text = "&Отмена";
+            this._Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this._Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this._Cancel.Location = new System.Drawing.Point(253, 69);
+            this._Cancel.Name = "_Cancel";
+            this._Cancel.Size = new System.Drawing.Size(94, 23);
+            this._Cancel.TabIndex = 5;
+            this._Cancel.Text = "&Отмена";
+            this._Cancel.Click += new System.EventHandler(this.Cancel_Click);
             // 
             // LoginForm1
             // 
-            AcceptButton = _OK;
-            AutoScaleDimensions = new SizeF(6.0f, 13.0f);
-            AutoScaleMode = AutoScaleMode.Font;
-            CancelButton = _Cancel;
-            ClientSize = new Size(401, 192);
-            Controls.Add(_Cancel);
-            Controls.Add(_OK);
-            Controls.Add(UsernameTextBox);
-            Controls.Add(UsernameLabel);
-            Controls.Add(LogoPictureBox);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "LoginForm1";
-            SizeGripStyle = SizeGripStyle.Hide;
-            StartPosition = FormStartPosition.CenterParent;
-            Text = "Netcraft";
-            ((System.ComponentModel.ISupportInitialize)LogoPictureBox).EndInit();
-            ResumeLayout(false);
-            PerformLayout();
+            this.AcceptButton = this._OK;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this._Cancel;
+            this.ClientSize = new System.Drawing.Size(354, 100);
+            this.Controls.Add(this._Cancel);
+            this.Controls.Add(this._OK);
+            this.Controls.Add(this.UsernameTextBox);
+            this.Controls.Add(this.UsernameLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "LoginForm1";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Netcraft";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
     }
 }
