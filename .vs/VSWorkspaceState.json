@@ -1,8 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Minecraft2D"
+    "\\Minecraft2D",
+    "\\Minecraft2D\\obj",
+    "\\Minecraft2D\\Rendering",
+    "\\Minecraft2D\\Resources",
+    "\\Minecraft2D\\Resources\\Texts"
   ],
-  "SelectedNode": "\\Minecraft2D\\Resources.resx",
+  "SelectedNode": "\\Minecraft2D\\Resources\\Texts\\MenuLines.txt",
   "PreviewInSolutionExplorer": false
 }

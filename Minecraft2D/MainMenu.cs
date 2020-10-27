@@ -6,6 +6,7 @@ using System.Linq;
 using global::System.Net.Sockets;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using System.Text;
 
 namespace Minecraft2D
 {
@@ -30,10 +31,19 @@ namespace Minecraft2D
         protected int labelChangeDelay = 0;
         protected int labelCurDelay = 0;
         protected bool labelWithCur = true;
-        protected string labelText = "converted to c# from vbnet";
         protected int indexPos = 0;
         protected int direction = 1;
         protected Color[] colors = new[] { Color.Red, Color.Orange, Color.Goldenrod, Color.Gold, Color.Yellow, Color.GreenYellow, Color.LightGreen, Color.Green, Color.LightBlue, Color.Blue, Color.DarkBlue, Color.BlueViolet, Color.Violet };
+
+        private Random randomString = new Random();
+
+        protected string[] strings = {"Minecraft 2D!", "Hello, World!", "Fix it please!", "Converted from VB.net to C#", "By GladCypress3030 and TheNonameee.", "Amazing picture)", "Good job!", "Jeb dream"};
+        protected string labelText;
+
+        private void SetTitle()
+        {
+            labelText = strings[randomString.Next(strings.Length)];
+        }
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
@@ -47,7 +57,7 @@ namespace Minecraft2D
                 labelCurDelay -= 1;
             }
 
-            string t = ">" + Strings.Left(labelText, labelPos) + (labelWithCur ? "_" : "");
+            string t = ">" +Strings.Left(labelText, labelPos) + (labelWithCur ? "|" : "");
             if (labelChangeDelay == 0)
             {
                 labelPos += labelDirection;
@@ -112,6 +122,7 @@ namespace Minecraft2D
 
         private void MainMenu_Load(object sender, EventArgs e)
         {
+            SetTitle();
             Label5.Text = $"Netcraft {Ver}";
             CheckForIllegalCrossThreadCalls = false;
             foreach (Control c in Controls)
@@ -194,13 +205,7 @@ namespace Minecraft2D
         private StreamWriter sWriter;
 
         public delegate void _xUpdate(string str);
-        // 
-        // '    '     If InvokeRequired Then
-        // 
-        // Else
-        // '   '      TextBox3.AppendText(str & vbNewLine)
-        // End If
-        // End Sub
+
         public event OnPingCompleteEventHandler OnPingComplete;
 
         public delegate void OnPingCompleteEventHandler();

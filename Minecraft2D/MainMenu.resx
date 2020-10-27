@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="_Timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="_Timer1.TrayLocation" type="System.Drawing.Point, System.Drawing">
+    <value>17, 17</value>
+  </data>
   <data name="PictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAbAAAABACAYAAAB7qyKHAAAABGdBTUEAALGPC/xhBQAAyyRJREFUeF7s
@@ -3299,5 +3299,9 @@
         Kjhnx6e5PtnzAXg2Aj4Zc9H3OT9eAz6UnIEfdXuY5DpPB0o3nBfQo3JzuT3EXBauj/o9iO3NcntccG6b
         m3F9EnqIutTvScenzlUIfiRDTxWctcGZng/9ntQMPrNmnQr9r9X/C1PqgIgkm8OTAAAAAElFTkSuQmCC
 </value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="MenuLines" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Texts\MenuLines.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;koi8-r</value>
   </data>
 </root>
