@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1259
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minecraft2D", "Minecraft2D\Minecraft2D.csproj", "{76C8D3B3-2185-0E07-088D-5183EE91D9D1}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "NetcraftServer", "NetcraftServer\NetcraftServer.vbproj", "{48E87CFA-2E25-4180-B698-7BE694B9D7CF}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "AIChatBot", "AIChatBot\AIChatBot.vbproj", "{317BF4AF-33BB-4AF4-BB22-BA90D364F8B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NCore", "NCore\NCore.csproj", "{46B9D018-AFFD-01D3-2E97-9DA059E91CAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTested", "ProjectTested\ProjectTested.csproj", "{A3708FE1-C3F3-091A-1ABC-65212E4EB924}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUtilsN", "AdminUtilsN\AdminUtilsN.csproj", "{598FEE19-3DFB-0293-24F8-A839924CE667}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCheat", "NetCheat\NetCheat.csproj", "{7AACF845-0B4A-4FD0-B6D5-2DE2A0DB72F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76C8D3B3-2185-0E07-088D-5183EE91D9D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C8D3B3-2185-0E07-088D-5183EE91D9D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76C8D3B3-2185-0E07-088D-5183EE91D9D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76C8D3B3-2185-0E07-088D-5183EE91D9D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48E87CFA-2E25-4180-B698-7BE694B9D7CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48E87CFA-2E25-4180-B698-7BE694B9D7CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48E87CFA-2E25-4180-B698-7BE694B9D7CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48E87CFA-2E25-4180-B698-7BE694B9D7CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{317BF4AF-33BB-4AF4-BB22-BA90D364F8B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{317BF4AF-33BB-4AF4-BB22-BA90D364F8B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{317BF4AF-33BB-4AF4-BB22-BA90D364F8B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{317BF4AF-33BB-4AF4-BB22-BA90D364F8B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46B9D018-AFFD-01D3-2E97-9DA059E91CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46B9D018-AFFD-01D3-2E97-9DA059E91CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46B9D018-AFFD-01D3-2E97-9DA059E91CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46B9D018-AFFD-01D3-2E97-9DA059E91CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3708FE1-C3F3-091A-1ABC-65212E4EB924}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3708FE1-C3F3-091A-1ABC-65212E4EB924}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3708FE1-C3F3-091A-1ABC-65212E4EB924}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3708FE1-C3F3-091A-1ABC-65212E4EB924}.Release|Any CPU.Build.0 = Release|Any CPU
+		{598FEE19-3DFB-0293-24F8-A839924CE667}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{598FEE19-3DFB-0293-24F8-A839924CE667}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{598FEE19-3DFB-0293-24F8-A839924CE667}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{598FEE19-3DFB-0293-24F8-A839924CE667}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AACF845-0B4A-4FD0-B6D5-2DE2A0DB72F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AACF845-0B4A-4FD0-B6D5-2DE2A0DB72F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AACF845-0B4A-4FD0-B6D5-2DE2A0DB72F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AACF845-0B4A-4FD0-B6D5-2DE2A0DB72F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1A8E625-C543-4806-AC65-6B1E0CA6899E}
+	EndGlobalSection
+EndGlobal

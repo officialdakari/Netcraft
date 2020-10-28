@@ -152,6 +152,7 @@ namespace Minecraft2D
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Netcraft";
+            this.Load += new System.EventHandler(this.LoginForm1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

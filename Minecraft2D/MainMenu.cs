@@ -30,19 +30,19 @@ namespace Minecraft2D
         protected int labelDirection = 1;
         protected int labelChangeDelay = 0;
         protected int labelCurDelay = 0;
+        protected int textPos = 0;
+        Lang lang;
         protected bool labelWithCur = true;
         protected int indexPos = 0;
         protected int direction = 1;
         protected Color[] colors = new[] { Color.Red, Color.Orange, Color.Goldenrod, Color.Gold, Color.Yellow, Color.GreenYellow, Color.LightGreen, Color.Green, Color.LightBlue, Color.Blue, Color.DarkBlue, Color.BlueViolet, Color.Violet };
 
-        private Random randomString = new Random();
-
-        protected string[] strings = {"Minecraft 2D!", "Hello, World!", "Fix it please!", "Converted from VB.net to C#", "By GladCypress3030 and TheNonameee.", "Amazing picture :)", "Good job!", "Jeb dream"};
+        protected string[] strings = {"Netcraft In 2D", "By GladCypress3030 and TheNonamee", "Converted to C#", "Join our Discord!"};
         protected string labelText;
 
         private void SetTitle()
         {
-            labelText = strings[randomString.Next(strings.Length)];
+            labelText = strings[0];
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -57,19 +57,23 @@ namespace Minecraft2D
                 labelCurDelay -= 1;
             }
             
-            string t = ">" + Strings.Left(labelText, labelPos) + (labelWithCur ? "|" : "");
+            string t = ">" + Strings.Left(labelText, labelPos) + (labelWithCur ? "[]" : "");
             if (labelChangeDelay == 0)
             {
                 labelPos += labelDirection;
                 if (labelPos == 0)
                 {
                     labelDirection = 1;
+                    textPos++;
+                    if (textPos == strings.Length) textPos = 0;
+                    labelText = strings[textPos];
                     labelChangeDelay = 20;
                 }
                 else if (labelPos == labelText.Length)
                 {
                     labelDirection = -1;
                     labelChangeDelay = 20;
+                    if (textPos == strings.Length) textPos = 0;
                 }
                 else
                 {
@@ -102,7 +106,12 @@ namespace Minecraft2D
             Hide();
         }
 
-        public readonly string Ver = "1.3-ALPHA-U26102020";
+        public readonly string Ver = "1.3-ALPHA-U27102020";
+        internal static MainMenu instance;
+        public static MainMenu GetInstance()
+        {
+            return instance;
+        }
 
         private void MainMenu_LocationChanged(object sender, EventArgs e)
         {
@@ -123,23 +132,20 @@ namespace Minecraft2D
 
         private void MainMenu_Load(object sender, EventArgs e)
         {
-<<<<<<< HEAD
-            if(Debugger.IsAttached)
-            {
-                FancyMessage.Show("Данное приложение не может работать под отладкой. Пожалуйста, отсоедините отладчик чтобы продолжить.", "Error", FancyMessage.Icon.Error);
-                for(var i=0;i<1000;i++)
-                {
-                    Debug.WriteLine("Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger. --- Please disconnect the debugger.");
-                }
-                Environment.Exit(-912);
-            }
-=======
+            instance = this;
+            lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
+            DoLang();
             SetTitle();
->>>>>>> a606c1582fa1dd992edd36c2019db0a1b78582c1
             Label5.Text = $"Netcraft {Ver}";
             CheckForIllegalCrossThreadCalls = false;
             foreach (Control c in Controls)
                 c.KeyDown += OnKey;
+        }
+
+        private void DoLang()
+        {
+            _Button2.Text = lang.get("menu.button.official_server");
+            _Button1.Text = lang.get("menu.button.network_game");
         }
 
         private void Button4_Click(object sender, EventArgs e)
@@ -187,8 +193,15 @@ namespace Minecraft2D
             currentPinger.Send("ping");
         }
 
+        private delegate void onPingComplete();
+
         private void _onPingComplete()
         {
+            if(InvokeRequired)
+            {
+                Invoke(new onPingComplete(_onPingComplete));
+                return;
+            }
             {
                 var withBlock = currentPinger;
                 LabelName.Text = withBlock.Name;
@@ -218,11 +231,18 @@ namespace Minecraft2D
             }
         }
 
+        int firstLoad = 1;
+
         private void MainMenu_VisibleChanged(object sender, EventArgs e)
         {
             if(Visible)
             {
-                Form1.GetInstance().Close();
+                if(firstLoad == 1)
+                {
+                    firstLoad = 0;
+                    return;
+                }
+                Form1.GetInstance().Dispose();
             }
         }
     }

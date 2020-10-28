@@ -8,7 +8,7 @@ namespace NCore.netcraft.server.api.exceptions
         {
             get
             {
-                return "Watchdog detected thread death; A thread unexpectedly stopped";
+                return "Watchdog detected main thread death";
             }
         }
     }

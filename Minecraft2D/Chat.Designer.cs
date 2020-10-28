@@ -71,7 +71,7 @@ namespace Minecraft2D
             this._Button1.Name = "_Button1";
             this._Button1.Size = new System.Drawing.Size(86, 26);
             this._Button1.TabIndex = 2;
-            this._Button1.Text = "Отправить";
+            this._Button1.Text = "chat.button.send";
             this._Button1.UseVisualStyleBackColor = true;
             this._Button1.Click += new System.EventHandler(this.Button1_Click);
             // 
@@ -86,7 +86,7 @@ namespace Minecraft2D
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Chat";
-            this.Text = "Чат";
+            this.Text = "chat.title";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Chat_FormClosing);
             this.Load += new System.EventHandler(this.Chat_Load);
             this.ResumeLayout(false);

@@ -43,6 +43,7 @@
             this.iconLabel1.Name = "iconLabel1";
             this.iconLabel1.Size = new System.Drawing.Size(81, 77);
             this.iconLabel1.TabIndex = 0;
+            this.iconLabel1.Text = "i";
             this.iconLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.iconLabel1.UseCompatibleTextRendering = true;
             // 

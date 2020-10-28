@@ -37,164 +37,165 @@ namespace Minecraft2D
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            _Button1 = new Button();
-            _Button1.Click += new EventHandler(Button1_Click);
-            Label1 = new Label();
-            GroupBox1 = new GroupBox();
-            CheckBox2 = new CheckBox();
-            _CheckBox1 = new CheckBox();
-            _CheckBox1.CheckedChanged += new EventHandler(CheckBox1_CheckedChanged);
-            _Button2 = new Button();
-            _Button2.Click += new EventHandler(Button2_Click);
-            _Button3 = new Button();
-            _Button3.Click += new EventHandler(Button3_Click);
-            GroupBox1.SuspendLayout();
-            SuspendLayout();
+            this.BackButton = new System.Windows.Forms.Button();
+            this.Label1 = new System.Windows.Forms.Label();
+            this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.CheckBox2 = new System.Windows.Forms.CheckBox();
+            this._CheckBox1 = new System.Windows.Forms.CheckBox();
+            this.SettingsButton = new System.Windows.Forms.Button();
+            this.ExitButton = new System.Windows.Forms.Button();
+            this.GroupBox1.SuspendLayout();
+            this.SuspendLayout();
             // 
-            // Button1
+            // BackButton
             // 
-            _Button1.BackColor = Color.White;
-            _Button1.FlatAppearance.BorderColor = Color.Lime;
-            _Button1.FlatAppearance.MouseDownBackColor = Color.Lime;
-            _Button1.FlatAppearance.MouseOverBackColor = Color.FromArgb(Conversions.ToInteger(Conversions.ToByte(255)), Conversions.ToInteger(Conversions.ToByte(128)), Conversions.ToInteger(Conversions.ToByte(0)));
-            _Button1.FlatStyle = FlatStyle.Flat;
-            _Button1.ForeColor = Color.Black;
-            _Button1.Location = new Point(478, 92);
-            _Button1.Name = "_Button1";
-            _Button1.Size = new Size(310, 36);
-            _Button1.TabIndex = 0;
-            _Button1.Text = "Вернуться в игру";
-            _Button1.UseVisualStyleBackColor = false;
+            this.BackButton.BackColor = System.Drawing.Color.White;
+            this.BackButton.FlatAppearance.BorderColor = System.Drawing.Color.Lime;
+            this.BackButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Lime;
+            this.BackButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.BackButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BackButton.ForeColor = System.Drawing.Color.Black;
+            this.BackButton.Location = new System.Drawing.Point(478, 92);
+            this.BackButton.Name = "BackButton";
+            this.BackButton.Size = new System.Drawing.Size(310, 36);
+            this.BackButton.TabIndex = 0;
+            this.BackButton.Text = "settings.button.back";
+            this.BackButton.UseVisualStyleBackColor = false;
+            this.BackButton.Click += new System.EventHandler(this.Button1_Click);
             // 
             // Label1
             // 
-            Label1.BackColor = Color.Transparent;
-            Label1.ForeColor = Color.White;
-            Label1.Location = new Point(475, 9);
-            Label1.Name = "Label1";
-            Label1.Size = new Size(313, 62);
-            Label1.TabIndex = 1;
-            Label1.Text = "Игра приостановлена";
-            Label1.TextAlign = ContentAlignment.MiddleCenter;
+            this.Label1.BackColor = System.Drawing.Color.Transparent;
+            this.Label1.ForeColor = System.Drawing.Color.White;
+            this.Label1.Location = new System.Drawing.Point(475, 9);
+            this.Label1.Name = "Label1";
+            this.Label1.Size = new System.Drawing.Size(313, 62);
+            this.Label1.TabIndex = 1;
+            this.Label1.Text = "Игра приостановлена";
+            this.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // GroupBox1
             // 
-            GroupBox1.BackColor = Color.Transparent;
-            GroupBox1.Controls.Add(CheckBox2);
-            GroupBox1.Controls.Add(_CheckBox1);
-            GroupBox1.Location = new Point(12, 62);
-            GroupBox1.Name = "GroupBox1";
-            GroupBox1.Size = new Size(411, 224);
-            GroupBox1.TabIndex = 2;
-            GroupBox1.TabStop = false;
-            GroupBox1.Visible = false;
+            this.GroupBox1.BackColor = System.Drawing.Color.Transparent;
+            this.GroupBox1.Controls.Add(this.CheckBox2);
+            this.GroupBox1.Controls.Add(this._CheckBox1);
+            this.GroupBox1.Location = new System.Drawing.Point(12, 62);
+            this.GroupBox1.Name = "GroupBox1";
+            this.GroupBox1.Size = new System.Drawing.Size(411, 224);
+            this.GroupBox1.TabIndex = 2;
+            this.GroupBox1.TabStop = false;
+            this.GroupBox1.Visible = false;
             // 
             // CheckBox2
             // 
-            CheckBox2.AutoSize = true;
-            CheckBox2.BackColor = Color.Transparent;
-            CheckBox2.ForeColor = Color.White;
-            CheckBox2.Location = new Point(6, 72);
-            CheckBox2.Name = "CheckBox2";
-            CheckBox2.Size = new Size(176, 22);
-            CheckBox2.TabIndex = 1;
-            CheckBox2.Text = "Выделение контура";
-            CheckBox2.UseVisualStyleBackColor = false;
+            this.CheckBox2.AutoSize = true;
+            this.CheckBox2.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox2.ForeColor = System.Drawing.Color.White;
+            this.CheckBox2.Location = new System.Drawing.Point(6, 72);
+            this.CheckBox2.Name = "CheckBox2";
+            this.CheckBox2.Size = new System.Drawing.Size(157, 22);
+            this.CheckBox2.TabIndex = 1;
+            this.CheckBox2.Text = "Block Highlighting";
+            this.CheckBox2.UseVisualStyleBackColor = false;
             // 
-            // CheckBox1
+            // _CheckBox1
             // 
-            _CheckBox1.AutoSize = true;
-            _CheckBox1.BackColor = Color.Transparent;
-            _CheckBox1.ForeColor = Color.White;
-            _CheckBox1.Location = new Point(6, 44);
-            _CheckBox1.Name = "_CheckBox1";
-            _CheckBox1.Size = new Size(340, 22);
-            _CheckBox1.TabIndex = 0;
-            _CheckBox1.Text = "Сенсорный режим (Кнопки перемещения)";
-            _CheckBox1.UseVisualStyleBackColor = false;
+            this._CheckBox1.AutoSize = true;
+            this._CheckBox1.BackColor = System.Drawing.Color.Transparent;
+            this._CheckBox1.ForeColor = System.Drawing.Color.White;
+            this._CheckBox1.Location = new System.Drawing.Point(6, 44);
+            this._CheckBox1.Name = "_CheckBox1";
+            this._CheckBox1.Size = new System.Drawing.Size(245, 22);
+            this._CheckBox1.TabIndex = 0;
+            this._CheckBox1.Text = "Button controls (Sensor mode)";
+            this._CheckBox1.UseVisualStyleBackColor = false;
+            this._CheckBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
             // 
-            // Button2
+            // SettingsButton
             // 
-            _Button2.BackColor = Color.White;
-            _Button2.FlatAppearance.BorderColor = Color.Lime;
-            _Button2.FlatAppearance.MouseDownBackColor = Color.Lime;
-            _Button2.FlatAppearance.MouseOverBackColor = Color.FromArgb(Conversions.ToInteger(Conversions.ToByte(255)), Conversions.ToInteger(Conversions.ToByte(128)), Conversions.ToInteger(Conversions.ToByte(0)));
-            _Button2.FlatStyle = FlatStyle.Flat;
-            _Button2.ForeColor = Color.Black;
-            _Button2.Location = new Point(478, 134);
-            _Button2.Name = "_Button2";
-            _Button2.Size = new Size(310, 36);
-            _Button2.TabIndex = 3;
-            _Button2.Text = "Настройки";
-            _Button2.UseVisualStyleBackColor = false;
+            this.SettingsButton.BackColor = System.Drawing.Color.White;
+            this.SettingsButton.FlatAppearance.BorderColor = System.Drawing.Color.Lime;
+            this.SettingsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Lime;
+            this.SettingsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.SettingsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SettingsButton.ForeColor = System.Drawing.Color.Black;
+            this.SettingsButton.Location = new System.Drawing.Point(478, 134);
+            this.SettingsButton.Name = "SettingsButton";
+            this.SettingsButton.Size = new System.Drawing.Size(310, 36);
+            this.SettingsButton.TabIndex = 3;
+            this.SettingsButton.Text = "settings.button.settings";
+            this.SettingsButton.UseVisualStyleBackColor = false;
+            this.SettingsButton.Click += new System.EventHandler(this.Button2_Click);
             // 
-            // Button3
+            // ExitButton
             // 
-            _Button3.BackColor = Color.White;
-            _Button3.FlatAppearance.BorderColor = Color.Red;
-            _Button3.FlatAppearance.MouseDownBackColor = Color.Lime;
-            _Button3.FlatAppearance.MouseOverBackColor = Color.FromArgb(Conversions.ToInteger(Conversions.ToByte(255)), Conversions.ToInteger(Conversions.ToByte(128)), Conversions.ToInteger(Conversions.ToByte(0)));
-            _Button3.FlatStyle = FlatStyle.Flat;
-            _Button3.ForeColor = Color.Black;
-            _Button3.Location = new Point(478, 176);
-            _Button3.Name = "_Button3";
-            _Button3.Size = new Size(310, 36);
-            _Button3.TabIndex = 4;
-            _Button3.Text = "Выйти из игры";
-            _Button3.UseVisualStyleBackColor = false;
+            this.ExitButton.BackColor = System.Drawing.Color.White;
+            this.ExitButton.FlatAppearance.BorderColor = System.Drawing.Color.Red;
+            this.ExitButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Lime;
+            this.ExitButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.ExitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ExitButton.ForeColor = System.Drawing.Color.Black;
+            this.ExitButton.Location = new System.Drawing.Point(478, 176);
+            this.ExitButton.Name = "ExitButton";
+            this.ExitButton.Size = new System.Drawing.Size(310, 36);
+            this.ExitButton.TabIndex = 4;
+            this.ExitButton.Text = "settings.button.exit";
+            this.ExitButton.UseVisualStyleBackColor = false;
+            this.ExitButton.Click += new System.EventHandler(this.Button3_Click);
             // 
             // Gamesettings
             // 
-            AutoScaleDimensions = new SizeF(9.0f, 18.0f);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Tan;
-            BackgroundImageLayout = ImageLayout.Zoom;
-            ClientSize = new Size(800, 372);
-            ControlBox = false;
-            Controls.Add(_Button3);
-            Controls.Add(_Button2);
-            Controls.Add(GroupBox1);
-            Controls.Add(Label1);
-            Controls.Add(_Button1);
-            Font = new Font("Arial", 11.25f, FontStyle.Bold, GraphicsUnit.Point, Conversions.ToByte(204));
-            ForeColor = Color.Black;
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(4);
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "Gamesettings";
-            StartPosition = FormStartPosition.CenterParent;
-            TransparencyKey = Color.Tan;
-            GroupBox1.ResumeLayout(false);
-            GroupBox1.PerformLayout();
-            VisibleChanged += new EventHandler(Gamesettings_VisibleChanged);
-            FormClosing += new FormClosingEventHandler(Gamesettings_FormClosing);
-            Load += new EventHandler(Gamesettings_Load);
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Tan;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.ClientSize = new System.Drawing.Size(800, 372);
+            this.ControlBox = false;
+            this.Controls.Add(this.ExitButton);
+            this.Controls.Add(this.SettingsButton);
+            this.Controls.Add(this.GroupBox1);
+            this.Controls.Add(this.Label1);
+            this.Controls.Add(this.BackButton);
+            this.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ForeColor = System.Drawing.Color.Black;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(4);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "Gamesettings";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.TransparencyKey = System.Drawing.Color.Tan;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Gamesettings_FormClosing);
+            this.Load += new System.EventHandler(this.Gamesettings_Load);
+            this.VisibleChanged += new System.EventHandler(this.Gamesettings_VisibleChanged);
+            this.GroupBox1.ResumeLayout(false);
+            this.GroupBox1.PerformLayout();
+            this.ResumeLayout(false);
+
         }
 
-        private Button _Button1;
+        private Button BackButton;
 
         internal Button Button1
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return _Button1;
+                return BackButton;
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (_Button1 != null)
+                if (BackButton != null)
                 {
-                    _Button1.Click -= Button1_Click;
+                    BackButton.Click -= Button1_Click;
                 }
 
-                _Button1 = value;
-                if (_Button1 != null)
+                BackButton = value;
+                if (BackButton != null)
                 {
-                    _Button1.Click += Button1_Click;
+                    BackButton.Click += Button1_Click;
                 }
             }
         }
@@ -227,54 +228,54 @@ namespace Minecraft2D
             }
         }
 
-        private Button _Button2;
+        private Button SettingsButton;
 
         internal Button Button2
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return _Button2;
+                return SettingsButton;
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (_Button2 != null)
+                if (SettingsButton != null)
                 {
-                    _Button2.Click -= Button2_Click;
+                    SettingsButton.Click -= Button2_Click;
                 }
 
-                _Button2 = value;
-                if (_Button2 != null)
+                SettingsButton = value;
+                if (SettingsButton != null)
                 {
-                    _Button2.Click += Button2_Click;
+                    SettingsButton.Click += Button2_Click;
                 }
             }
         }
 
-        private Button _Button3;
+        private Button ExitButton;
 
         internal Button Button3
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return _Button3;
+                return ExitButton;
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (_Button3 != null)
+                if (ExitButton != null)
                 {
-                    _Button3.Click -= Button3_Click;
+                    ExitButton.Click -= Button3_Click;
                 }
 
-                _Button3 = value;
-                if (_Button3 != null)
+                ExitButton = value;
+                if (ExitButton != null)
                 {
-                    _Button3.Click += Button3_Click;
+                    ExitButton.Click += Button3_Click;
                 }
             }
         }

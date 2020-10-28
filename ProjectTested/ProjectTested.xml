@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ProjectTested</name>
+    </assembly>
+    <members>
+        <member name="T:ProjectTested.My.Resources.Resources">
+            <summary>
+            A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:ProjectTested.My.Resources.Resources.ResourceManager">
+            <summary>
+            Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:ProjectTested.My.Resources.Resources.Culture">
+            <summary>
+            Overrides the current thread's CurrentUICulture property for all
+            resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="M:ProjectTested.GameClient.Connect(System.String,System.Int32)">
+            <summary>
+            Пытается подключиться к указанному серверу по указанному порту.
+            </summary>
+            <param name="ip">IP-адрес сервера</param>
+            <param name="port">Порт сервера</param>
+        </member>
+    </members>
+</doc>

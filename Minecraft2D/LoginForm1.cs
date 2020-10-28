@@ -5,6 +5,7 @@ namespace Minecraft2D
 {
     public partial class LoginForm1
     {
+        Lang lang;
         public LoginForm1()
         {
             InitializeComponent();
@@ -30,6 +31,14 @@ namespace Minecraft2D
         {
             Close();
             DialogResult = DialogResult.Cancel;
+        }
+
+        private void LoginForm1_Load(object sender, EventArgs e)
+        {
+            lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
+            _OK.Text = lang.get("button.ok");
+            _Cancel.Text = lang.get("button.cancel");
+            UsernameLabel.Text = lang.get("text.playername");
         }
     }
 }

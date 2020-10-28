@@ -8,10 +8,10 @@ namespace Minecraft2D
         public Gamesettings()
         {
             InitializeComponent();
-            _Button1.Name = "Button1";
+            BackButton.Name = "Button1";
             _CheckBox1.Name = "CheckBox1";
-            _Button2.Name = "Button2";
-            _Button3.Name = "Button3";
+            SettingsButton.Name = "Button2";
+            ExitButton.Name = "Button3";
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -38,9 +38,8 @@ namespace Minecraft2D
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            ProcessSuspend.ResumeProcess(My.MyProject.Forms.Form1.ServerProcess);
-            My.MyProject.Forms.Form1.ServerProcess.CloseMainWindow();
-            Environment.Exit(0);
+            My.MyProject.Forms.MainMenu.Show();
+            Hide();
         }
 
         public new void Move()
@@ -64,10 +63,16 @@ namespace Minecraft2D
                 ProcessSuspend.ResumeProcess(My.MyProject.Forms.Form1.ServerProcess);
             My.MyProject.Forms.Form1.Ticker.Start();
         }
+        Lang lang;
 
         private void Gamesettings_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
+            lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
+            BackButton.Text = lang.get("settings.button.back");
+            SettingsButton.Text = lang.get("settings.button.settings");
+            ExitButton.Text = lang.get("settings.button.exit");
+            Label1.Text = lang.get("settings.text.paused");
         }
     }
 }

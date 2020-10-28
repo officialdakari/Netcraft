@@ -41,10 +41,10 @@ namespace Minecraft2D
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.Timer1 = new System.Windows.Forms.Timer(this.components);
             this._Ticker = new System.Windows.Forms.Timer(this.components);
-            this._Button1 = new System.Windows.Forms.Button();
+            this.InventoryButton = new System.Windows.Forms.Button();
             this._ListBox1 = new System.Windows.Forms.ListBox();
             this._Timer2 = new System.Windows.Forms.Timer(this.components);
-            this._Button2 = new System.Windows.Forms.Button();
+            this.ChatButton = new System.Windows.Forms.Button();
             this._Timer3 = new System.Windows.Forms.Timer(this.components);
             this._ProgressBar1 = new System.Windows.Forms.ProgressBar();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -54,9 +54,9 @@ namespace Minecraft2D
             this._ButtonLeft = new System.Windows.Forms.Button();
             this._ButtonJump = new System.Windows.Forms.Button();
             this._ButtonRight = new System.Windows.Forms.Button();
-            this._Button3 = new System.Windows.Forms.Button();
+            this.MenuButton = new System.Windows.Forms.Button();
             this._ButtonAttack = new System.Windows.Forms.Button();
-            this._Button4 = new System.Windows.Forms.Button();
+            this.CraftButton = new System.Windows.Forms.Button();
             this._ListBox2 = new System.Windows.Forms.ListBox();
             this.R1 = new Minecraft2D.TransparentPicBox();
             ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).BeginInit();
@@ -72,19 +72,19 @@ namespace Minecraft2D
             this._Ticker.Interval = 10;
             this._Ticker.Tick += new System.EventHandler(this.Ticker_Tick);
             // 
-            // _Button1
+            // InventoryButton
             // 
-            this._Button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._Button1.BackColor = System.Drawing.SystemColors.Control;
-            this._Button1.Location = new System.Drawing.Point(1008, 0);
-            this._Button1.Name = "_Button1";
-            this._Button1.Size = new System.Drawing.Size(75, 23);
-            this._Button1.TabIndex = 2;
-            this._Button1.Text = "Инвентарь";
-            this._Button1.UseVisualStyleBackColor = false;
-            this._Button1.Click += new System.EventHandler(this.Button1_Click);
-            this._Button1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this._Button1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            this.InventoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.InventoryButton.BackColor = System.Drawing.SystemColors.Control;
+            this.InventoryButton.Location = new System.Drawing.Point(1008, 0);
+            this.InventoryButton.Name = "InventoryButton";
+            this.InventoryButton.Size = new System.Drawing.Size(75, 23);
+            this.InventoryButton.TabIndex = 2;
+            this.InventoryButton.Text = "game.button.inventory";
+            this.InventoryButton.UseVisualStyleBackColor = false;
+            this.InventoryButton.Click += new System.EventHandler(this.Button1_Click);
+            this.InventoryButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.InventoryButton.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             // 
             // _ListBox1
             // 
@@ -106,18 +106,18 @@ namespace Minecraft2D
             this._Timer2.Interval = 10;
             this._Timer2.Tick += new System.EventHandler(this.Timer2_Tick);
             // 
-            // _Button2
+            // ChatButton
             // 
-            this._Button2.BackColor = System.Drawing.SystemColors.Control;
-            this._Button2.Location = new System.Drawing.Point(3, 0);
-            this._Button2.Name = "_Button2";
-            this._Button2.Size = new System.Drawing.Size(75, 23);
-            this._Button2.TabIndex = 4;
-            this._Button2.Text = "Чат";
-            this._Button2.UseVisualStyleBackColor = false;
-            this._Button2.Click += new System.EventHandler(this.Button2_Click);
-            this._Button2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this._Button2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            this.ChatButton.BackColor = System.Drawing.SystemColors.Control;
+            this.ChatButton.Location = new System.Drawing.Point(3, 0);
+            this.ChatButton.Name = "ChatButton";
+            this.ChatButton.Size = new System.Drawing.Size(75, 23);
+            this.ChatButton.TabIndex = 4;
+            this.ChatButton.Text = "game.button.chat";
+            this.ChatButton.UseVisualStyleBackColor = false;
+            this.ChatButton.Click += new System.EventHandler(this.Button2_Click);
+            this.ChatButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.ChatButton.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             // 
             // _Timer3
             // 
@@ -228,19 +228,19 @@ namespace Minecraft2D
             this._ButtonRight.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Button6_MouseDown);
             this._ButtonRight.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Button6_MouseUp);
             // 
-            // _Button3
+            // MenuButton
             // 
-            this._Button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._Button3.BackColor = System.Drawing.SystemColors.Control;
-            this._Button3.Location = new System.Drawing.Point(1008, 29);
-            this._Button3.Name = "_Button3";
-            this._Button3.Size = new System.Drawing.Size(75, 23);
-            this._Button3.TabIndex = 12;
-            this._Button3.Text = "Пауза";
-            this._Button3.UseVisualStyleBackColor = false;
-            this._Button3.Click += new System.EventHandler(this.Button3_Click_1);
-            this._Button3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this._Button3.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            this.MenuButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.MenuButton.BackColor = System.Drawing.SystemColors.Control;
+            this.MenuButton.Location = new System.Drawing.Point(1008, 29);
+            this.MenuButton.Name = "MenuButton";
+            this.MenuButton.Size = new System.Drawing.Size(75, 23);
+            this.MenuButton.TabIndex = 12;
+            this.MenuButton.Text = "game.button.pause";
+            this.MenuButton.UseVisualStyleBackColor = false;
+            this.MenuButton.Click += new System.EventHandler(this.Button3_Click_1);
+            this.MenuButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.MenuButton.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             // 
             // _ButtonAttack
             // 
@@ -260,18 +260,18 @@ namespace Minecraft2D
             this._ButtonAttack.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this._ButtonAttack.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             // 
-            // _Button4
+            // CraftButton
             // 
-            this._Button4.BackColor = System.Drawing.SystemColors.Control;
-            this._Button4.Location = new System.Drawing.Point(3, 25);
-            this._Button4.Name = "_Button4";
-            this._Button4.Size = new System.Drawing.Size(75, 23);
-            this._Button4.TabIndex = 16;
-            this._Button4.Text = "Крафт";
-            this._Button4.UseVisualStyleBackColor = false;
-            this._Button4.Click += new System.EventHandler(this.Button4_Click_1);
-            this._Button4.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this._Button4.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            this.CraftButton.BackColor = System.Drawing.SystemColors.Control;
+            this.CraftButton.Location = new System.Drawing.Point(3, 25);
+            this.CraftButton.Name = "CraftButton";
+            this.CraftButton.Size = new System.Drawing.Size(75, 23);
+            this.CraftButton.TabIndex = 16;
+            this.CraftButton.Text = "game.button.craft";
+            this.CraftButton.UseVisualStyleBackColor = false;
+            this.CraftButton.Click += new System.EventHandler(this.Button4_Click_1);
+            this.CraftButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.CraftButton.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             // 
             // _ListBox2
             // 
@@ -301,19 +301,19 @@ namespace Minecraft2D
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.ClientSize = new System.Drawing.Size(1086, 580);
             this.Controls.Add(this._ListBox2);
-            this.Controls.Add(this._Button4);
+            this.Controls.Add(this.CraftButton);
             this.Controls.Add(this.R1);
             this.Controls.Add(this._localPlayer);
             this.Controls.Add(this._ButtonAttack);
-            this.Controls.Add(this._Button3);
+            this.Controls.Add(this.MenuButton);
             this.Controls.Add(this._ButtonRight);
             this.Controls.Add(this._ButtonJump);
             this.Controls.Add(this._ButtonLeft);
             this.Controls.Add(this._Warning);
             this.Controls.Add(this._ProgressBar1);
-            this.Controls.Add(this._Button2);
+            this.Controls.Add(this.ChatButton);
             this.Controls.Add(this._ListBox1);
-            this.Controls.Add(this._Button1);
+            this.Controls.Add(this.InventoryButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(9999, 619);
@@ -361,32 +361,32 @@ namespace Minecraft2D
             }
         }
 
-        private Button _Button1;
+        private Button InventoryButton;
 
         internal Button Button1
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return _Button1;
+                return InventoryButton;
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (_Button1 != null)
+                if (InventoryButton != null)
                 {
-                    _Button1.KeyDown -= Form1_KeyDown;
-                    _Button1.KeyUp -= Form1_KeyUp;
-                    _Button1.Click -= Button1_Click;
+                    InventoryButton.KeyDown -= Form1_KeyDown;
+                    InventoryButton.KeyUp -= Form1_KeyUp;
+                    InventoryButton.Click -= Button1_Click;
                 }
 
-                _Button1 = value;
-                if (_Button1 != null)
+                InventoryButton = value;
+                if (InventoryButton != null)
                 {
-                    _Button1.KeyDown += Form1_KeyDown;
-                    _Button1.KeyUp += Form1_KeyUp;
-                    _Button1.Click += Button1_Click;
+                    InventoryButton.KeyDown += Form1_KeyDown;
+                    InventoryButton.KeyUp += Form1_KeyUp;
+                    InventoryButton.Click += Button1_Click;
                 }
             }
         }
@@ -449,32 +449,32 @@ namespace Minecraft2D
             }
         }
 
-        private Button _Button2;
+        private Button ChatButton;
 
         internal Button Button2
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return _Button2;
+                return ChatButton;
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (_Button2 != null)
+                if (ChatButton != null)
                 {
-                    _Button2.KeyDown -= Form1_KeyDown;
-                    _Button2.KeyUp -= Form1_KeyUp;
-                    _Button2.Click -= Button2_Click;
+                    ChatButton.KeyDown -= Form1_KeyDown;
+                    ChatButton.KeyUp -= Form1_KeyUp;
+                    ChatButton.Click -= Button2_Click;
                 }
 
-                _Button2 = value;
-                if (_Button2 != null)
+                ChatButton = value;
+                if (ChatButton != null)
                 {
-                    _Button2.KeyDown += Form1_KeyDown;
-                    _Button2.KeyUp += Form1_KeyUp;
-                    _Button2.Click += Button2_Click;
+                    ChatButton.KeyDown += Form1_KeyDown;
+                    ChatButton.KeyUp += Form1_KeyUp;
+                    ChatButton.Click += Button2_Click;
                 }
             }
         }
@@ -659,32 +659,32 @@ namespace Minecraft2D
             }
         }
 
-        private Button _Button3;
+        private Button MenuButton;
 
         internal Button Button3
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return _Button3;
+                return MenuButton;
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (_Button3 != null)
+                if (MenuButton != null)
                 {
-                    _Button3.KeyDown -= Form1_KeyDown;
-                    _Button3.KeyUp -= Form1_KeyUp;
-                    _Button3.Click -= Button3_Click_1;
+                    MenuButton.KeyDown -= Form1_KeyDown;
+                    MenuButton.KeyUp -= Form1_KeyUp;
+                    MenuButton.Click -= Button3_Click_1;
                 }
 
-                _Button3 = value;
-                if (_Button3 != null)
+                MenuButton = value;
+                if (MenuButton != null)
                 {
-                    _Button3.KeyDown += Form1_KeyDown;
-                    _Button3.KeyUp += Form1_KeyUp;
-                    _Button3.Click += Button3_Click_1;
+                    MenuButton.KeyDown += Form1_KeyDown;
+                    MenuButton.KeyUp += Form1_KeyUp;
+                    MenuButton.Click += Button3_Click_1;
                 }
             }
         }
@@ -748,32 +748,32 @@ namespace Minecraft2D
         }
 
         internal TransparentPicBox R1;
-        private Button _Button4;
+        private Button CraftButton;
 
         internal Button Button4
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return _Button4;
+                return CraftButton;
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (_Button4 != null)
+                if (CraftButton != null)
                 {
-                    _Button4.KeyDown -= Form1_KeyDown;
-                    _Button4.KeyUp -= Form1_KeyUp;
-                    _Button4.Click -= Button4_Click_1;
+                    CraftButton.KeyDown -= Form1_KeyDown;
+                    CraftButton.KeyUp -= Form1_KeyUp;
+                    CraftButton.Click -= Button4_Click_1;
                 }
 
-                _Button4 = value;
-                if (_Button4 != null)
+                CraftButton = value;
+                if (CraftButton != null)
                 {
-                    _Button4.KeyDown += Form1_KeyDown;
-                    _Button4.KeyUp += Form1_KeyUp;
-                    _Button4.Click += Button4_Click_1;
+                    CraftButton.KeyDown += Form1_KeyDown;
+                    CraftButton.KeyUp += Form1_KeyUp;
+                    CraftButton.Click += Button4_Click_1;
                 }
             }
         }

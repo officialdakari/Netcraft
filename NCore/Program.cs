@@ -118,7 +118,7 @@ namespace NCore
         }
 
         private static Thread loopThread;
-        internal const string NETCRAFT_VERSION = "1.3-ALPHA-U26102020";
+        internal const string NETCRAFT_VERSION = "1.3-ALPHA-U27102020";
         internal const string NCORE_VERSION = "0.4";
 
         private static void ThreadLoop()
@@ -221,6 +221,8 @@ namespace NCore
                 threads.Add(Thread.CurrentThread);
         }
 
+        
+
         public static void watchdogThreadLoop()
         {
             ThreadAdd();
@@ -233,6 +235,11 @@ namespace NCore
                     {
                         if (!th.IsAlive)
                         {
+                            if(th.ManagedThreadId == 1)
+                            {
+                                CrashReport(new netcraft.server.api.exceptions.ThreadDeathException());
+                                return;
+                            }
                             Log($"Watchdog detected thread death. Thread unexpectedly stopped working. Thread ID: {th.ManagedThreadId}", "ERROR");
                             threads.Remove(th);
                         }
@@ -268,18 +275,26 @@ namespace NCore
         {
             ThreadAdd();
             Log($"PID: {Process.GetCurrentProcess().Id} | Netcraft Version: {NETCRAFT_VERSION}");
+            Console.WriteLine("███╗░░██╗███████╗████████╗░█████╗░██████╗░░█████╗░███████╗████████╗\n████╗░██║██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝\n██╔██╗██║█████╗░░░░░██║░░░██║░░╚═╝██████╔╝███████║█████╗░░░░░██║░░░\n██║╚████║██╔══╝░░░░░██║░░░██║░░██╗██╔══██╗██╔══██║██╔══╝░░░░░██║░░░\n██║░╚███║███████╗░░░██║░░░╚█████╔╝██║░░██║██║░░██║██║░░░░░░░░██║░░░\n╚═╝░░╚══╝╚══════╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░░░░╚═╝░░░");
             if (Thread.CurrentThread.ManagedThreadId != 1)
             {
                 CrashReport(new Exception("The main thread ID was not 1"));
             }
 
+            Log("Сервер запускается. Пожалуйста подождите...");
+
+            Log("Step 1: Создание потока loop.");
             loopThread = new Thread(ThreadLoop);
             loopThread.Name = "Loop";
             loopThread.Start();
+            Log("Step 1: loop поток создан и запущен.");
+            Log("Step 2: Создание потока watchdog.");
             threadWatchdog = new Thread(watchdogThreadLoop);
             threadWatchdog.Start();
+            Log("Step 2: watchdog поток создан и запущен.");
             Thread.CurrentThread.Name = "Main";
-            Console.Title = "NCore (Netcraft Version 1.2)";
+
+            Log("Step 3: Загрузка списка банов и паролей игроков.");
             LoadBanlist();
             foreach (var i in File.ReadAllText("./auth.txt", Encoding.UTF8).Split(Constants.vbCrLf))
             {
@@ -289,40 +304,57 @@ namespace NCore
                     continue;
                 playerPasswords.Add(i.Split("=")[0], i.Split("=").Last());
             }
+            Log("Step 3: Готово.");
 
+            Log("Step 4: Загрузка конфигурации и встроенных команд.");
             LoadConfig();
             LoadCommands();
+            Log("Step 4: Готово.");
+
             Netcraft.dobc += eventhandler_a;
+
+            Log("Step 5: Загрузка плагинов.");
+            int pluginLoadErrors = 0;
+            int all = 0;
+            int pluginLoadSuccess = 0;
             foreach (var s in Directory.GetFiles("./plugins"))
             {
-                if (!(s.Split(".").Last() == "dll"))
-                {
-                    continue;
-                }
+                if (s.Split(".").Last() != "dll") continue;
+
+                all++;
 
                 var p = PluginManager.Load(s);
                 string result = p.OnLoad();
-                if (result is object)
+                if (result != null)
                 {
+                    pluginLoadErrors++;
                     Log($"[Plugin Loader] Ошибка при загрузке плагина {p.Name}. Результат загрузки:{Constants.vbCrLf}{result}", "ERROR");
                     PluginManager.Plugins.Remove(p);
                     continue;
                 }
 
                 Log($"[Plugin Loader] Плагин загружен успешно: {p.Name}");
+                pluginLoadSuccess++;
             }
+            Log($"Step 5: Плагины загружены. Всего плагинов: {all.ToString()}; Успешно: {pluginLoadSuccess.ToString()}; Не загружено (ошибка): {pluginLoadErrors.ToString()}");
 
+            Log("Step 6: Загрузка мира...");
             if (File.Exists(Conversions.ToString(worldfile)))
             {
                 World = sv.Load(File.ReadAllText(Conversions.ToString(worldfile), encoding: Encoding.UTF8));
+                Log("Step 6: Мир загружен.");
             }
             else
             {
+                Log("Step 6: Мир не найден, генерация нового мира.");
                 World = WorldGenerator.Generate();
                 File.WriteAllText(Conversions.ToString(worldfile), sv.Save(World), Encoding.UTF8);
+                Log("Step 6: Мир создан и загружен.");
             }
 
+            Log("Step 7: Запуск TCP сервера.");
             Start();
+            Log("Step 7: TCP сервер запущен.");
             while (true)
             {
                 string m = Console.ReadLine();
@@ -757,12 +789,12 @@ namespace NCore
                         {
                             if (mto.Y - n.Position.Y > 0)
                             {
-                                n.MovedInAir = 0;
+                                if(n.MovedInAir != 50) n.MovedInAir--;
                             }
 
                             if (!n.IsOnGround)
                             {
-                                n.MovedInAir += 1;
+                                n.MovedInAir++;
                                 if (n.MovedInAir == 50)
                                 {
                                     Log($"{n.Username} переместился неправильно (Полёт)! {v.X},{v.Y}", "WARNING");
@@ -807,6 +839,8 @@ namespace NCore
                             }
                         }
                     }
+
+                    n.Position = mto;
 
                     if (mto.Y > n.Position.Y)
                     {
@@ -856,7 +890,6 @@ namespace NCore
                         }
                     }
 
-                    n.Position = mto;
                     if (n.IsSpectator)
                         return;
                     if (n.Position.Y > 619)
@@ -1454,7 +1487,6 @@ namespace NCore
             if (Listening == false)
             {
                 Listning.Start();
-                Log("Сервер NetCraft 1.1 запускается");
                 Listning.BeginAcceptTcpClient(new AsyncCallback(AcceptClient), Listning);
                 Listening = true;
             }

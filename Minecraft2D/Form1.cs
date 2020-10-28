@@ -22,23 +22,24 @@ namespace Minecraft2D
         public Form1()
         {
             InitializeComponent();
-            _Button1.Name = "Button1";
+            InventoryButton.Name = "Button1";
             _ListBox1.Name = "ListBox1";
-            _Button2.Name = "Button2";
+            ChatButton.Name = "Button2";
             _ProgressBar1.Name = "ProgressBar1";
             _localPlayer.Name = "localPlayer";
             _Warning.Name = "Warning";
             _ButtonLeft.Name = "ButtonLeft";
             _ButtonJump.Name = "ButtonJump";
             _ButtonRight.Name = "ButtonRight";
-            _Button3.Name = "Button3";
+            MenuButton.Name = "Button3";
             _ButtonAttack.Name = "ButtonAttack";
-            _Button4.Name = "Button4";
+            CraftButton.Name = "Button4";
             _ListBox2.Name = "ListBox2";
         }
 
         private TcpClient client;
         private StreamWriter sWriter;
+        private bool connected = false;
 
         public delegate void OnMessageReceivedEventHandler(string msg);
 
@@ -54,8 +55,11 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                FancyMessage.Show($"Соединение потеряно:\r\n\r\n{ex.ToString()}", "Отключение от удалённого сервера", FancyMessage.Icon.Error);
-                Environment.Exit(0);   
+                if (connected)
+                {
+                    FancyMessage.Show($"{lang.get("text.error.connection_lost")}:\r\n\r\n{ex.ToString()}", "Connection lost", FancyMessage.Icon.Error);
+                    Close();
+                }
             }
         }
 
@@ -75,8 +79,11 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                FancyMessage.Show("Не удалось отправить пакет серверу:\r\n\r\n" + ex.ToString(), "Ошибка при отправке пакета", FancyMessage.Icon.Error);
-                Environment.Exit(0);
+                if (connected)
+                {
+                    FancyMessage.Show($"{lang.get("text.error.packet_send_error")}:\r\n\r\n" + ex.ToString(), "Can't send packet", FancyMessage.Icon.Error);
+                    Close();
+                }
             }
         }
         /// <summary>
@@ -91,16 +98,18 @@ namespace Minecraft2D
             {
                 client = new TcpClient(ip, port);
                 client.GetStream().BeginRead(new byte[] { 0 }, 0, 0, new AsyncCallback(Read), null);
+                connected = true;
             }
             catch (Exception ex)
             {
-                FancyMessage.Show($"Не удалось подключиться к серверу:\r\n\r\n{ex.ToString()}", "Ошибка при соединении", FancyMessage.Icon.Error);
+                FancyMessage.Show($"{lang.get("text.error.unable_connect")}:\r\n\r\n{ex.ToString()}", "Unable to connect", FancyMessage.Icon.Error);
                 Close();
             }
         }
 
         public void Disconnect()
         {
+            connected = false;
             client.Client.Close();
             client = null;
         }
@@ -203,9 +212,21 @@ namespace Minecraft2D
         {
             return instance;
         }
+
+        private void DoLang()
+        {
+            ChatButton.Text = lang.get("game.button.chat");
+            CraftButton.Text = lang.get("game.button.craft");
+            InventoryButton.Text = lang.get("game.button.inventory");
+            MenuButton.Text = lang.get("game.button.pause");
+        }
+
+        Lang lang;
         private void Form1_Load(object sender, EventArgs e)
         {
             instance = this;
+            lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
+            DoLang();
             dRPC = new DiscordRPC.DiscordRpcClient("763782798838071346");
             Button4.SendToBack();
             playerSkinFlip.RotateFlip(RotateFlipType.Rotate180FlipY);
@@ -225,8 +246,6 @@ namespace Minecraft2D
             
             Button1.BringToFront();
             localPlayer.SendToBack();
-            // RichTextBox1.SendToBack()
-            // ListBox1.BackColor = Color.FromArgb(50, 0, 0, 0)
             R1.BringToFront();
             ListBox1.BringToFront();
             Text = "NetCraft " + My.MyProject.Forms.MainMenu.Ver;
@@ -243,26 +262,26 @@ namespace Minecraft2D
             Thread.Sleep(900);
             SendSinglePacket("world");
             My.MyProject.Forms.Chat.Show();
+            WriteChat("Client message: Вы вошли на сервер");
             try
             {
                 if (dRPC.IsInitialized)
                 {
 
                     presence = new DiscordRPC.RichPresence();
-                    presence.Details = $"Имя игрока: {pName}";
+                    presence.Details = lang.get("rpc.playername").Replace("{0}", pName);
                     if (!IsOfficialServer)
                     {
-                        presence.State = "Играет в сетевой игре";
+                        presence.State = lang.get("rpc.playing.network_game");
                     }
                     else
                     {
-                        presence.State = "Играет на официальном сервере";
+                        presence.State = lang.get("rpc.playing.official_server");
                     }
 
-                    var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party()); // .WithSecrets(New DiscordRPC.Secrets())
+                    var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party());
                     pr.Assets.LargeImageKey = "logonc";
                     pr.Assets.LargeImageText = "NetCraft " + My.MyProject.Forms.MainMenu.Ver;
-                    // dRPC.RegisterUriScheme(Nothing, Nothing)
 
                     dRPC.SetPresence(presence);
                     dRPC.Invoke();
@@ -270,7 +289,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                FancyMessage.Show("Не удалось загрузить Discord Rich Presence");
+                FancyMessage.Show(lang.get("rpc.failed"));
             }
 
             foreach (var i in Enum.GetNames(typeof(Material)))
@@ -517,17 +536,17 @@ namespace Minecraft2D
 
             if (a[0] == "msgerror")
             {
-                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Сообщение от сервера", FancyMessage.Icon.Error);
+                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Error);
             }
 
             if (a[0] == "msgwarn")
             {
-                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Сообщение от сервера", FancyMessage.Icon.Warning);
+                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Warning);
             }
 
             if (a[0] == "msg")
             {
-                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Сообщение от сервера", FancyMessage.Icon.Info);
+                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Info);
             }
 
             if (a[0] == "chat")
@@ -755,7 +774,7 @@ namespace Minecraft2D
                 }
                 catch (Exception ex)
                 {
-                    FancyMessage.Show($"Ошибка при установке текстуры предмета в руке игрока {Utils.IIf(a[1] == "@", "Локальный игрок", a[1]).ToString()} на {a[2]}.\r\n\r\n{ex.ToString()}", "Exception", FancyMessage.Icon.Warning);
+                    FancyMessage.Show($"Error while setting texture in hand of player {Utils.IIf(a[1] == "@", "local", a[1]).ToString()} to: \"{a[2]}\".\r\n\r\n{ex.ToString()}", "Exception", FancyMessage.Icon.Warning);
                 }
 
                 try
@@ -964,7 +983,7 @@ namespace Minecraft2D
                 b.KeyDown += Form1_KeyDown;
                 b.KeyUp += Form1_KeyUp;
                 b.Click += AttackPlayer;
-                ToolTip1.SetToolTip(b, "Игрок: " + name);
+                ToolTip1.SetToolTip(b, String.Format(lang.get("game.tooltip.playername"), name));
                 playerEntities.Add(b);
                 players.Add(new EntityPlayer(name, "", new Point(x, y), b));
             }
@@ -1272,7 +1291,7 @@ namespace Minecraft2D
 
                 if (JumpStep > -1)
                 {
-                    bool collision = false;
+                    bool grounded = true;
                     JumpStep += 1;
                     localPlayer.Top -= 10;
                     if (JumpStep == 5)
@@ -1295,19 +1314,17 @@ namespace Minecraft2D
 
                                 if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
                                     continue;
-                                if (b.Top + 5 > localPlayer.Top)
-                                    continue;
-                                collision = true;
+                                grounded = true;
                                 break;
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        // Stop
+
                     }
 
-                    if (!collision)
+                    if (grounded)
                     {
                         UpdatePlayerPosition();
                     }
@@ -1412,10 +1429,7 @@ namespace Minecraft2D
 
         private void Ticker_Tick(object sender, EventArgs e)
         {
-            // If Visible Then Tick()
-            // RichTextBox1.BackColor = Color.FromArgb(0, 0, 0, 0)
             Ticker.Stop();
-            // Ticker.Start()
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -1528,17 +1542,6 @@ namespace Minecraft2D
         {
             SendSinglePacket("update_inventory");
             ListBox1.Visible = !ListBox1.Visible;
-            if (ListBox1.Visible)
-            {
-            }
-            // RichTextBox1.Hide()
-            // Button2.Hide()
-            // TextBox1.Hide()
-            else
-            {
-                // RichTextBox1.Show()
-                // Button2.Show()
-            }
         }
 
         private void ListBox1_MouseDown(object sender, MouseEventArgs e)
@@ -1688,10 +1691,30 @@ namespace Minecraft2D
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (FancyMessage.Show("Вы уверены что хотите выйти из игры?", "Подтвердите действие", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) != FancyMessage.Result.OK) return;
+            if (FancyMessage.Show(lang.get("text.question.confirm_exit"), "Netcraft", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) != FancyMessage.Result.OK)
+            {
+                e.Cancel = true;
+                return;
+            }
+            leave();
             e.Cancel = true;
+        }
+
+        internal void leave()
+        {
+            WriteChat("Client message: Вы вышли с сервера");
+            cTicker.Abort();
+            foreach(Panel b in blocks)
+            {
+                Controls.Remove(b);
+            }
+            blocks.Clear();
             dRPC.ClearPresence();
-            Environment.Exit(0);
+            Hide();
+            presence = null;
+            MainMenu.instance.Show();
+            My.MyProject.Forms.Chat.Close();
+            Disconnect();
         }
 
         public bool IsBlink { get; set; } = false;

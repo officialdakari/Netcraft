@@ -18,10 +18,13 @@ namespace Minecraft2D
             e.Cancel = true;
             Hide();
         }
-
+        Lang lang;
         private void Chat_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
+            lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
+            Text = lang.get("chat.title");
+            Button1.Text = lang.get("chat.button.send");
         }
 
         public delegate void xUpdateChat(string Addtext);

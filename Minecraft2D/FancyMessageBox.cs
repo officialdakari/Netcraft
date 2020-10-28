@@ -26,10 +26,13 @@ namespace Minecraft2D
 
         internal const int CANCEL_BUTTON_X = 360;
         internal const int CANCEL_BUTTON_Y = 173;
+        Lang lang;
 
         private void FancyMessageBox_Load(object sender, EventArgs e)
         {
-
+            lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
+            button1.Text = lang.get("button.ok");
+            button2.Text = lang.get("button.cancel");
         }
 
         private void button1_Click(object sender, EventArgs e)
