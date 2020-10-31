@@ -1,23 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Minecraft2D;
+using System.Text;
 
-namespace Minecraft2D
+namespace NetcraftNetwork
 {
-
     internal static class Utils
     {
-        internal const string LANGUAGE = "башкирский";
         public static object IIf(bool expession, object valueIfTrue, object valueIfFalse)
         {
-            if(expession == true)
+            if (expession == true)
             {
                 return valueIfTrue;
-            } else
+            }
+            else
             {
                 return valueIfFalse;
             }
-            return null;
+        }
+
+        public static string Left(string a, int b)
+        {
+            return a.Substring(0, Math.Min(b, a.Length));
         }
 
         public static string GetValue(string var, string cfg, string ifNull = null)
@@ -34,18 +38,5 @@ namespace Minecraft2D
 
             return ifNull;
         }
-
-        internal static string InputBox(string text)
-        {
-            LoginForm1 i = new LoginForm1();
-            Lang lang = Lang.FromFile($"./lang/{LANGUAGE}.txt");
-            i.UsernameLabel.Text = lang.get(text);
-            if(i.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                return i.UsernameTextBox.Text;
-            }
-            return null;
-        }
     }
-
 }

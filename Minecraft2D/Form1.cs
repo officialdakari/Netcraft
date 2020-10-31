@@ -14,6 +14,7 @@ using global::System.Threading;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
+using Microsoft.VisualBasic.Devices;
 
 namespace Minecraft2D
 {
@@ -57,8 +58,9 @@ namespace Minecraft2D
             {
                 if (connected)
                 {
-                    FancyMessage.Show($"{lang.get("text.error.connection_lost")}:\r\n\r\n{ex.ToString()}", "Connection lost", FancyMessage.Icon.Error);
+                    connected = false;
                     Close();
+                    FancyMessage.Show($"{lang.get("text.error.connection_lost")}:\r\n\r\n{ex.ToString()}", "Connection lost", FancyMessage.Icon.Error);
                 }
             }
         }
@@ -66,7 +68,7 @@ namespace Minecraft2D
         public void handlePackets(string[] x)
         {
             foreach (var a in x)
-                Packet(a);
+                Packet(a.Replace("\r", "\r\n"));
         }
 
         public void Send(string str)
@@ -81,7 +83,7 @@ namespace Minecraft2D
             {
                 if (connected)
                 {
-                    FancyMessage.Show($"{lang.get("text.error.packet_send_error")}:\r\n\r\n" + ex.ToString(), "Can't send packet", FancyMessage.Icon.Error);
+                    //FancyMessage.Show($"{lang.get("text.error.packet_send_error")}:\r\n\r\n" + ex.ToString(), "Can't send packet", FancyMessage.Icon.Error);
                     Close();
                 }
             }
@@ -102,6 +104,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
+                connected = false;
                 FancyMessage.Show($"{lang.get("text.error.unable_connect")}:\r\n\r\n{ex.ToString()}", "Unable to connect", FancyMessage.Icon.Error);
                 Close();
             }
@@ -117,8 +120,6 @@ namespace Minecraft2D
         private readonly List<Panel> blocks = new List<Panel>();
         private readonly List<PictureBox> playerEntities = new List<PictureBox>();
         private readonly List<EntityPlayer> players = new List<EntityPlayer>();
-        internal DiscordRPC.DiscordRpcClient dRPC;
-        internal DiscordRPC.RichPresence presence;
         private string pName;
 
         public bool IsOfficialServer { get; set; } = false;
@@ -221,22 +222,33 @@ namespace Minecraft2D
             MenuButton.Text = lang.get("game.button.pause");
         }
 
+        private delegate void eScroll();
+        private void EnableScroll()
+        {
+            if(InvokeRequired)
+            {
+                Invoke(new eScroll(this.EnableScroll));
+            } else
+            {
+                this.AutoScroll = false;
+                this.HorizontalScroll.Enabled = true;
+                this.HorizontalScroll.Visible = true;
+                this.VerticalScroll.Enabled = true;
+                this.VerticalScroll.Visible = true;
+                this.AutoScroll = true;
+            }
+        }
+
         Lang lang;
         private void Form1_Load(object sender, EventArgs e)
         {
             instance = this;
+            
+
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             DoLang();
-            dRPC = new DiscordRPC.DiscordRpcClient("763782798838071346");
             Button4.SendToBack();
             playerSkinFlip.RotateFlip(RotateFlipType.Rotate180FlipY);
-            try
-            {
-                dRPC.Initialize();
-            }
-            catch (Exception ex)
-            {
-            }
 
             if (!Directory.Exists(@".\mods"))
             {
@@ -255,51 +267,60 @@ namespace Minecraft2D
             }
 
             Connect(ip, port);
-            if (My.MyProject.Forms.LoginForm1.ShowDialog() != DialogResult.OK)
-                Environment.Exit(0);
-            pName = My.MyProject.Forms.LoginForm1.UsernameTextBox.Text;
+            if(!connected)
+            {
+                Close();
+                return;
+            }
+            pName = Utils.InputBox("text.playername");
+            if (pName == null) Close();
             SendPacket("setname", pName);
             Thread.Sleep(900);
             SendSinglePacket("world");
             My.MyProject.Forms.Chat.Show();
             WriteChat("Client message: Вы вошли на сервер");
-            try
-            {
-                if (dRPC.IsInitialized)
-                {
-
-                    presence = new DiscordRPC.RichPresence();
-                    presence.Details = lang.get("rpc.playername").Replace("{0}", pName);
-                    if (!IsOfficialServer)
-                    {
-                        presence.State = lang.get("rpc.playing.network_game");
-                    }
-                    else
-                    {
-                        presence.State = lang.get("rpc.playing.official_server");
-                    }
-
-                    var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party());
-                    pr.Assets.LargeImageKey = "logonc";
-                    pr.Assets.LargeImageText = "NetCraft " + My.MyProject.Forms.MainMenu.Ver;
-
-                    dRPC.SetPresence(presence);
-                    dRPC.Invoke();
-                }
-            }
-            catch (Exception ex)
-            {
-                FancyMessage.Show(lang.get("rpc.failed"));
-            }
-
+            initializeMove();
             foreach (var i in Enum.GetNames(typeof(Material)))
                 ListBox2.Items.Add(i.ToLower());
             cTicker = new Thread(tickLoop);
             cTicker.Start();
-            mThread = new Thread(moveLoop);
-            mThread.Start();
             foreach (var pluginPath in Directory.GetFiles(@".\mods"))
                 PluginManager.Load(pluginPath);
+            try
+            {
+                MainMenu.GetInstance().presence.Details = String.Format(lang.get("rpc.playername"), pName);
+                if (!IsOfficialServer)
+                {
+                    MainMenu.GetInstance().presence.State = lang.get("rpc.playing.network_game");
+                }
+                else
+                {
+                    MainMenu.GetInstance().presence.State = lang.get("rpc.playing.official_server");
+                }
+                MainMenu.GetInstance().dRPC.SetPresence(MainMenu.GetInstance().presence);
+            }
+            catch (Exception)
+            {
+
+            }
+            audioPlay();
+        }
+
+        internal void audioPlay()
+        {
+            My.MyProject.Computer.Audio.Play("./resources/game_music_loop.wav", AudioPlayMode.BackgroundLoop);
+        }
+
+        internal void audioStop()
+        {
+            My.MyProject.Computer.Audio.Stop();
+        }
+
+        private async void initializeMove()
+        {
+
+            mThread = new Thread(moveLoop);
+            mThread.Start();
         }
 
         public void tickLoop()
@@ -374,9 +395,10 @@ namespace Minecraft2D
                     b.Tag = a[4];
                 }
 
+                b.BackColor = BackColor;
                 b.Name = a[1] + "B" + a[2];
                 b.Size = new Size(32, 32);
-                b.Location = new Point(Conversions.ToInteger(a[1]) * 32, Conversions.ToInteger(a[2]) * 32);
+                b.Location = new Point((Conversions.ToInteger(a[1]) * 32) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) * 32 - VerticalScroll.Value);
                 if (a[3] == "iron_ore")
                 {
                     b.BackgroundImageLayout = ImageLayout.Stretch;
@@ -496,12 +518,12 @@ namespace Minecraft2D
 
             if (a[0] == "removeblock")
             {
-                BreakBlock(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
+                BreakBlock(Conversions.ToInteger(a[1]) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) - VerticalScroll.Value);
             }
 
             if (a[0] == "addplayer")
             {
-                CreatePlayer(a[1], 0, 0);
+                CreatePlayer(a[1], 0 - HorizontalScroll.Value, 0);
             }
 
             if (a[0] == "removeplayer")
@@ -511,17 +533,18 @@ namespace Minecraft2D
 
             if (a[0] == "updateplayerposition")
             {
-                MovePlayer(a[1], Conversions.ToInteger(a[2]), Conversions.ToInteger(a[3]));
+                MovePlayer(a[1], Conversions.ToInteger(a[2]) - HorizontalScroll.Value, Conversions.ToInteger(a[3]) - VerticalScroll.Value);
             }
 
-            if (a[0] == "startticking")
+            if (a[0] == "completeload")
             {
-                Ticker.Start();
+                EnableScroll();
             }
 
             if (a[0] == "teleport")
             {
-                TeleportLocalPlayer(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
+                TeleportLocalPlayer(Conversions.ToInteger(a[1]) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) - VerticalScroll.Value);
+                UpdatePlayerPosition();
             }
 
             if (a[0] == "clearinventory")
@@ -787,7 +810,7 @@ namespace Minecraft2D
             }
         }
 
-        public int moveInterval = 30;
+        public int moveInterval = 10;
 
         public delegate void xsetSkyColor(Color a);
 
@@ -977,8 +1000,8 @@ namespace Minecraft2D
                 b.Image = playerSkin;
                 b.SizeMode = PictureBoxSizeMode.StretchImage;
                 b.Size = localPlayer.Size;
-                b.Left = x;
-                b.Top = y;
+                b.Left = x - HorizontalScroll.Value;
+                b.Top = y - VerticalScroll.Value;
                 b.BackColor = Color.Transparent;
                 b.KeyDown += Form1_KeyDown;
                 b.KeyUp += Form1_KeyUp;
@@ -1171,12 +1194,12 @@ namespace Minecraft2D
             {
                 if (e.Button == MouseButtons.Right)
                 {
-                    SendPacket("furnace", Operators.DivideObject(((Control)sender).Left, 32).ToString(), Operators.DivideObject(((Control)sender).Top, 32).ToString());
+                    SendPacket("furnace", Operators.DivideObject(((Control)sender).Left + HorizontalScroll.Value, 32).ToString(), Operators.DivideObject(((Control)sender).Top + VerticalScroll.Value, 32).ToString());
                 }
             }
             else if (e.Button == MouseButtons.Right)
             {
-                SendPacket("rightclick", Operators.DivideObject(((Control)sender).Left, 32).ToString(), Operators.DivideObject(((Control)sender).Top, 32).ToString());
+                SendPacket("rightclick", Operators.DivideObject(((Control)sender).Left + HorizontalScroll.Value, 32).ToString(), Operators.DivideObject(((Control)sender).Top + VerticalScroll.Value, 32).ToString());
             }
             // MsgBox((sender.left / 32).ToString + " " + (sender.top / 32).ToString)
         }
@@ -1185,7 +1208,7 @@ namespace Minecraft2D
         {
             // Dim a As String() = {sender.Name.Split("B")(0), sender.Name.Split("B")(1)}
             // Invoke(New xSendPacket(AddressOf SendPacket), "block_break", a)
-            this.SendPacket("block_break", Operators.DivideObject(((Control)sender).Left, 32).ToString() + "?" + Operators.DivideObject(((Control)sender).Top, 32).ToString()); // sender.Name.Split("B")(0), sender.Name.Split("B")(1))
+            this.SendPacket("block_break", Operators.DivideObject(((Control)sender).Left + HorizontalScroll.Value, 32).ToString() + "?" + Operators.DivideObject(((Control)sender).Top + VerticalScroll.Value, 32).ToString()); // sender.Name.Split("B")(0), sender.Name.Split("B")(1))
                                                                                                                                                           // Text = sender.Name.Split("B")(0) + " " + sender.Name.Split("B")(1)
         }
 
@@ -1204,109 +1227,33 @@ namespace Minecraft2D
 
         public int walking = 0;
 
+        private void moveThreadLoop1()
+        {
+            
+        }
+
         private void moveLoop()
         {
             while (true)
             {
-                if (My.MyProject.Forms.Gamesettings.Visible)
+                try
                 {
-                    CreateGraphics().FillRectangle(new SolidBrush(Color.FromArgb(100, 0, 0, 0)), 0, 0, Width, Height);
-                }
 
-                Thread.Sleep(moveInterval);
-                if (walking == 1)
-                {
-                    localPlayer.Left -= 1;
-                    bool collision = false;
-                    try
-                    {
-                        foreach (var b in blocks)
-                        {
-                            if (b.Bounds.IntersectsWith(localPlayer.Bounds))
-                            {
-                                if (b.Top > localPlayer.Top + localPlayer.Height - 5)
-                                    continue;
-                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
-                                {
-                                    continue;
-                                }
+                    Thread.Sleep(moveInterval);
 
-                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
-                                    continue;
-                                collision = true;
-                                break;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-
-                    if (collision)
-                    {
-                        localPlayer.Left += 1;
-                    }
-                    else
-                    {
-                        UpdatePlayerPosition();
-                    }
-                }
-                else if (walking == 2)
-                {
-                    localPlayer.Left += 1;
-                    bool collision = false;
-                    try
-                    {
-                        foreach (var b in blocks)
-                        {
-                            if (b.Bounds.IntersectsWith(localPlayer.Bounds))
-                            {
-                                if (b.Top > localPlayer.Top + localPlayer.Height - 5)
-                                    continue;
-                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
-                                {
-                                    continue;
-                                }
-
-                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
-                                    continue;
-                                collision = true;
-                                break;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-
-                    if (collision)
+                    if (walking == 1)
                     {
                         localPlayer.Left -= 1;
-                    }
-                    else
-                    {
-                        UpdatePlayerPosition();
-                    }
-                }
-
-                if (JumpStep > -1)
-                {
-                    bool grounded = true;
-                    JumpStep += 1;
-                    localPlayer.Top -= 10;
-                    if (JumpStep == 5)
-                    {
-                        JumpStep = -1;
-                    }
-
-                    try
-                    {
-                        foreach (var b in blocks)
+                        bool collision = false;
+                        try
                         {
-                            if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32)
-                                continue;
-                            if (b.Bounds.IntersectsWith(localPlayer.Bounds))
+                            foreach (var b in blocks)
                             {
+                                if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
+                                if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
+                                if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
+                                if (b.Top > localPlayer.Top + localPlayer.Height - 10)
+                                    continue;
                                 if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
                                 {
                                     continue;
@@ -1314,25 +1261,118 @@ namespace Minecraft2D
 
                                 if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
                                     continue;
-                                grounded = true;
-                                break;
+                                if (b.Bounds.IntersectsWith(localPlayer.Bounds))
+                                {
+                                    collision = true;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
+                        catch (InvalidOperationException ex)
+                        {
+                        }
 
+                        if (collision)
+                        {
+                            localPlayer.Left += 1;
+                        }
+                        else
+                        {
+                            UpdatePlayerPosition();
+                        }
+                    }
+                    else if (walking == 2)
+                    {
+                        localPlayer.Left += 1;
+                        bool collision = false;
+                        try
+                        {
+                            foreach (var b in blocks)
+                            {
+                                if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
+                                if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
+                                if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
+                                if (b.Top > localPlayer.Top + localPlayer.Height - 10)
+                                    continue;
+                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
+                                {
+                                    continue;
+                                }
+
+                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
+                                    continue;
+                                if (b.Bounds.IntersectsWith(localPlayer.Bounds))
+                                {
+                                    collision = true;
+                                    break;
+                                }
+                            }
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                        }
+
+                        if (collision)
+                        {
+                            localPlayer.Left -= 1;
+                        }
+                        else
+                        {
+                            UpdatePlayerPosition();
+                        }
                     }
 
-                    if (grounded)
+                    if (JumpStep > -1)
                     {
-                        UpdatePlayerPosition();
+                        bool grounded = true;
+                        JumpStep += 1;
+                        localPlayer.Top -= 10;
+                        if (JumpStep == 5)
+                        {
+                            JumpStep = -1;
+                        }
+
+                        try
+                        {
+                            foreach (var b in blocks)
+                            {
+                                if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
+                                if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
+                                if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
+                                if (b.Top > localPlayer.Top + localPlayer.Height - 10)
+                                    continue;
+                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
+                                {
+                                    continue;
+                                }
+
+                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
+                                    continue;
+                                if (b.Bounds.IntersectsWith(localPlayer.Bounds))
+                                {
+                                    grounded = true;
+                                    break;
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+
+                        if (grounded)
+                        {
+                            UpdatePlayerPosition();
+                        }
+                        else
+                        {
+                            localPlayer.Top += 10;
+                            JumpStep = -1;
+                        }
                     }
-                    else
-                    {
-                        localPlayer.Top += 10;
-                        JumpStep = -1;
-                    }
+                } catch(Exception e)
+                {
+
                 }
             }
         }
@@ -1340,7 +1380,7 @@ namespace Minecraft2D
         public void UpdatePlayerPosition()
         {
             if (!IsBlink)
-                SendPacket("entityplayermove", localPlayer.Left.ToString(), localPlayer.Top.ToString());
+                SendPacket("entityplayermove", (localPlayer.Left + HorizontalScroll.Value).ToString(), (localPlayer.Top + VerticalScroll.Value).ToString());
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -1379,15 +1419,7 @@ namespace Minecraft2D
 
                 return;
             }
-
-            if (e.Control)
-            {
-                moveInterval = 10;
-            }
-            else
-            {
-                moveInterval = 30;
-            }
+            
 
             if (e.KeyCode == Keys.D)
             {
@@ -1426,10 +1458,14 @@ namespace Minecraft2D
                 walking = 0;
             }
         }
-
+        private List<Panel> nearestBlocks = new List<Panel>();
         private void Ticker_Tick(object sender, EventArgs e)
         {
+            nearestBlocks.Clear();
+            
+
             Ticker.Stop();
+            Ticker.Start();
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -1488,19 +1524,21 @@ namespace Minecraft2D
                 if (!NoClip)
                 {
                     bool collision = false;
+
                     foreach (var b in blocks)
                     {
-                        if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32)
+                        if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
+                        if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
+                        if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
+                        if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
+                        {
+                            continue;
+                        }
+
+                        if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
                             continue;
                         if (b.Bounds.IntersectsWith(localPlayer.Bounds))
                         {
-                            if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
-                            {
-                                continue;
-                            }
-
-                            if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
-                                continue;
                             collision = true;
                             break;
                         }
@@ -1524,17 +1562,22 @@ namespace Minecraft2D
             bool collision = false;
             foreach (var b in blocks)
             {
+                if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
+                if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
+                if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
+                if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
+                {
+                    continue;
+                }
+
+                if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
+                    continue;
                 if (b.Bounds.IntersectsWith(localPlayer.Bounds))
                 {
-                    if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
-                        continue;
-                    if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
-                        continue;
                     collision = true;
                     break;
                 }
             }
-
             return collision;
         }
 
@@ -1558,11 +1601,11 @@ namespace Minecraft2D
         {
             if (e.Button == MouseButtons.Right)
             {
-                SendPacket("block_place", e.X.ToString(), e.Y.ToString());
+                SendPacket("block_place", (e.X + HorizontalScroll.Value).ToString(), (e.Y - VerticalScroll.Value).ToString());
             }
             else if (e.Button == MouseButtons.Middle)
             {
-                SendPacket("block_place_bg", e.X.ToString(), e.Y.ToString());
+                SendPacket("block_place_bg", (e.X + HorizontalScroll.Value).ToString(), (e.Y - VerticalScroll.Value).ToString());
             }
         }
 
@@ -1625,54 +1668,7 @@ namespace Minecraft2D
             }
         }
 
-        private void Timer2_Tick(object sender, EventArgs e)
-        {
-            if (Conversions.ToString(JumpStep < 5) + (JumpStep > -1) == "TrueTrue")
-            {
-                if (JumpStep == -1)
-                {
-                    Timer2.Stop();
-                    return;
-                }
-
-                bool collision = false;
-                localPlayer.Top -= 10;
-                foreach (var b in blocks)
-                {
-                    if (b.Bounds.IntersectsWith(localPlayer.Bounds))
-                    {
-                        if (b.Top > localPlayer.Top)
-                            continue;
-                        if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
-                            continue;
-                        if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
-                            continue;
-                        collision = true;
-                        break;
-                    }
-                }
-
-                if (!collision)
-                {
-                    UpdatePlayerPosition();
-                }
-                else
-                {
-                    localPlayer.Top += 10;
-                }
-
-                JumpStep += 1;
-                Timer2.Stop();
-                Timer2.Start();
-                return;
-            }
-            else
-            {
-                JumpStep = -1;
-            }
-
-            Timer2.Stop();
-        }
+        
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
@@ -1686,11 +1682,23 @@ namespace Minecraft2D
 
         private void Timer3_Tick(object sender, EventArgs e)
         {
+            EnableScroll();
             Timer3.Stop();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (!connected)
+            {
+                MainMenu.GetInstance().Show();
+                My.MyProject.Forms.Chat.Close();
+                Hide();
+                e.Cancel = true;
+                MainMenu.GetInstance().presence.State = "";
+                MainMenu.GetInstance().presence.Details = lang.get("rpc.menu");
+                MainMenu.GetInstance().dRPC.SetPresence(MainMenu.GetInstance().presence);
+                return;
+            }
             if (FancyMessage.Show(lang.get("text.question.confirm_exit"), "Netcraft", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) != FancyMessage.Result.OK)
             {
                 e.Cancel = true;
@@ -1709,9 +1717,11 @@ namespace Minecraft2D
                 Controls.Remove(b);
             }
             blocks.Clear();
-            dRPC.ClearPresence();
+            MainMenu.GetInstance().presence.State = "";
+            MainMenu.GetInstance().presence.Details = lang.get("rpc.menu");
+            MainMenu.GetInstance().dRPC.SetPresence(MainMenu.GetInstance().presence);
             Hide();
-            presence = null;
+            
             MainMenu.instance.Show();
             My.MyProject.Forms.Chat.Close();
             Disconnect();
@@ -1853,8 +1863,33 @@ namespace Minecraft2D
             Test();
         }
 
-        
+        private void hScrollBar1_Scroll_1(object sender, ScrollEventArgs e)
+        {
 
+        }
+
+        private void Form1_Scroll(object sender, ScrollEventArgs e)
+        {
+            InventoryButton.Location = new Point(1001, 0);
+            MenuButton.Location = new Point(1001, 29);
+            ListBox1.Location = new Point(601, 0);
+            ProgressBar1.Location = new Point(84, 0);
+            ChatButton.Location = new Point(0, 0);
+            CraftButton.Location = new Point(0, 29);
+        }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+
+            Text = "Netcraft";
+            localPlayer.Update();
+            Update();
+            localPlayer.Hide();
+            localPlayer.Show();
+
+            Timer1.Stop();
+            Timer1.Start();
+        }
     }
 
     internal class Encode

@@ -7,6 +7,8 @@ using global::System.Net.Sockets;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using System.Text;
+using System.Collections.Specialized;
+using System.Threading;
 
 namespace Minecraft2D
 {
@@ -37,7 +39,7 @@ namespace Minecraft2D
         protected int direction = 1;
         protected Color[] colors = new[] { Color.Red, Color.Orange, Color.Goldenrod, Color.Gold, Color.Yellow, Color.GreenYellow, Color.LightGreen, Color.Green, Color.LightBlue, Color.Blue, Color.DarkBlue, Color.BlueViolet, Color.Violet };
 
-        protected string[] strings = {"Netcraft In 2D", "By GladCypress3030 and TheNonamee", "Converted to C#", "Join our Discord!"};
+        protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "Netcraft Is In 2D", "By GladCypress3030 and TheNonamee", "Converted to C#", "Join our Discord!"};
         protected string labelText;
 
         private void SetTitle()
@@ -57,7 +59,7 @@ namespace Minecraft2D
                 labelCurDelay -= 1;
             }
             
-            string t = ">" + Strings.Left(labelText, labelPos) + (labelWithCur ? "[]" : "");
+            string t = "> " + Strings.Left(labelText, labelPos) + (labelWithCur ? "[]" : "");
             if (labelChangeDelay == 0)
             {
                 labelPos += labelDirection;
@@ -100,13 +102,17 @@ namespace Minecraft2D
                 Interaction.MsgBox("Нет подключения к Интернету :(");
                 return;
             }
-
+            if(blocklist.Contains(TextBox1.Text.ToLower()))
+            {
+                FancyMessage.Show(lang.get("text.error.blocked_server"), "Netcraft", FancyMessage.Icon.Error);
+                return;
+            }
             My.MyProject.Forms.Form1.ip = TextBox1.Text;
             My.MyProject.Forms.Form1.Show();
             Hide();
         }
 
-        public readonly string Ver = "1.3-ALPHA-U27102020";
+        public readonly string Ver = "1.3-ALPHA";
         internal static MainMenu instance;
         public static MainMenu GetInstance()
         {
@@ -129,17 +135,79 @@ namespace Minecraft2D
         }
 
         private bool isModified = false;
+        Client client;
+        StringCollection blocklist = new StringCollection();
+        internal DiscordRPC.DiscordRpcClient dRPC;
+        internal DiscordRPC.RichPresence presence;
 
         private void MainMenu_Load(object sender, EventArgs e)
         {
             instance = this;
+
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             DoLang();
             SetTitle();
+            dRPC = new DiscordRPC.DiscordRpcClient("763782798838071346");
+            try
+            {
+                dRPC.Initialize();
+            }
+            catch (Exception ex)
+            {
+            }
+            try
+            {
+                if (dRPC.IsInitialized)
+                {
+
+                    presence = new DiscordRPC.RichPresence();
+                    presence.Details = lang.get("rpc.menu");
+                    
+
+                    var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party());
+                    pr.Assets.LargeImageKey = "logonc";
+                    pr.Assets.LargeImageText = "NetCraft " + My.MyProject.Forms.MainMenu.Ver;
+
+                    dRPC.SetPresence(presence);
+                    dRPC.Invoke();
+                }
+            }
+            catch (Exception ex)
+            {
+                FancyMessage.Show(lang.get("rpc.failed"));
+            }
             Label5.Text = $"Netcraft {Ver}";
             CheckForIllegalCrossThreadCalls = false;
             foreach (Control c in Controls)
                 c.KeyDown += OnKey;
+            _Timer1.Start();
+        }
+
+        private void packetreceived(string p)
+        {
+            string[] u = p.Split('?');
+            if(u[0] == "msg")
+            {
+                FancyMessage.Show(String.Format(lang.get(u[1]), (object[])u.Skip(2).ToArray()));
+            }
+            if(u[0]=="name")
+            {
+                string n = Utils.InputBox("net.requestname");
+                while (n == null)
+                {
+                    n = Utils.InputBox("net.requestname");
+                }
+                client.f("name?" + n);
+                Thread.Sleep(30);
+                client.f("blacklist");
+            }
+            if(u[0]=="bl")
+            {
+                foreach(string i in u.Skip(1).ToArray())
+                {
+                    blocklist.Add(i.ToLower());
+                }
+            }
         }
 
         private void DoLang()
@@ -220,12 +288,14 @@ namespace Minecraft2D
             }
         }
 
+        
+
         int clicks;
 
         private void Label3_MouseClick(object sender, MouseEventArgs e)
         {
             clicks++;
-            if(clicks == 10)
+            if(clicks == 5)
             {
                 FancyMessage.Show("Зачем кликать по этой штуке тем более 10 раз?");
             }
@@ -243,6 +313,17 @@ namespace Minecraft2D
                     return;
                 }
                 Form1.GetInstance().Dispose();
+            }
+        }
+
+        private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(FancyMessage.Show(lang.get("text.question.confirm_exit"), "Netcraft", FancyMessage.Icon.Info, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
+            {
+                Environment.Exit(0);
+            } else
+            {
+                e.Cancel = true;
             }
         }
     }

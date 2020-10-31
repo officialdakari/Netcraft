@@ -12,7 +12,7 @@ namespace NCore
         {
             var world = new WorldServer();
             int a = 0;
-            for (int i = 0; i <= 40; i++)
+            for (int i = 0; i <= 63; i++)
             {
                 int YHeight = new Random().Next(1, 14);
                 for (int o = 0; o <= 24; o++)

@@ -17,6 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUtilsN", "AdminUtilsN\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCheat", "NetCheat\NetCheat.csproj", "{7AACF845-0B4A-4FD0-B6D5-2DE2A0DB72F4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetcraftNetwork", "NetcraftNetwork\NetcraftNetwork.csproj", "{6E16A6FE-A993-4F70-A1B0-981A8D84B4F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCBot", "NCBot\NCBot.csproj", "{860A465D-45EF-4699-A244-967238D6508D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{7AACF845-0B4A-4FD0-B6D5-2DE2A0DB72F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AACF845-0B4A-4FD0-B6D5-2DE2A0DB72F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AACF845-0B4A-4FD0-B6D5-2DE2A0DB72F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E16A6FE-A993-4F70-A1B0-981A8D84B4F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E16A6FE-A993-4F70-A1B0-981A8D84B4F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E16A6FE-A993-4F70-A1B0-981A8D84B4F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E16A6FE-A993-4F70-A1B0-981A8D84B4F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{860A465D-45EF-4699-A244-967238D6508D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{860A465D-45EF-4699-A244-967238D6508D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{860A465D-45EF-4699-A244-967238D6508D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{860A465D-45EF-4699-A244-967238D6508D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

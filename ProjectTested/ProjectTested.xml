@@ -20,12 +20,5 @@
             resource lookups using this strongly typed resource class.
             </summary>
         </member>
-        <member name="M:ProjectTested.GameClient.Connect(System.String,System.Int32)">
-            <summary>
-            Пытается подключиться к указанному серверу по указанному порту.
-            </summary>
-            <param name="ip">IP-адрес сервера</param>
-            <param name="port">Порт сервера</param>
-        </member>
     </members>
 </doc>

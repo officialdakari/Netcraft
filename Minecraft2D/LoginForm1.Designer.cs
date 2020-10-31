@@ -103,7 +103,7 @@ namespace Minecraft2D
             this.UsernameLabel.Name = "UsernameLabel";
             this.UsernameLabel.Size = new System.Drawing.Size(220, 23);
             this.UsernameLabel.TabIndex = 0;
-            this.UsernameLabel.Text = "Имя игрока";
+            this.UsernameLabel.Text = "text.playername";
             this.UsernameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // UsernameTextBox

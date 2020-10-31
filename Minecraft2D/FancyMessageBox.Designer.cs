@@ -32,18 +32,19 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // iconLabel1
             // 
-            this.iconLabel1.BackColor = System.Drawing.Color.White;
+            this.iconLabel1.BackColor = System.Drawing.Color.Transparent;
             this.iconLabel1.Font = new System.Drawing.Font("Webdings", 40.75F);
-            this.iconLabel1.ForeColor = System.Drawing.Color.Blue;
+            this.iconLabel1.ForeColor = System.Drawing.Color.Gold;
             this.iconLabel1.Location = new System.Drawing.Point(12, 26);
             this.iconLabel1.Name = "iconLabel1";
-            this.iconLabel1.Size = new System.Drawing.Size(81, 77);
+            this.iconLabel1.Size = new System.Drawing.Size(81, 97);
             this.iconLabel1.TabIndex = 0;
-            this.iconLabel1.Text = "i";
+            this.iconLabel1.Text = "ê";
             this.iconLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.iconLabel1.UseCompatibleTextRendering = true;
             // 
@@ -97,6 +98,18 @@
             this.button2.Visible = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Arial", 40.75F, System.Drawing.FontStyle.Bold);
+            this.label2.ForeColor = System.Drawing.Color.Gold;
+            this.label2.Location = new System.Drawing.Point(12, 26);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(81, 97);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "!";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label2.Visible = false;
+            // 
             // FancyMessageBox
             // 
             this.AcceptButton = this.button1;
@@ -105,6 +118,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.button2;
             this.ClientSize = new System.Drawing.Size(669, 284);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
@@ -127,5 +141,6 @@
         internal System.Windows.Forms.Button button1;
         internal System.Windows.Forms.Button button2;
         internal System.Windows.Forms.Label iconLabel1;
+        internal System.Windows.Forms.Label label2;
     }
 }

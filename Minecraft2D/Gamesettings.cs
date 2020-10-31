@@ -22,13 +22,7 @@ namespace Minecraft2D
 
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
-            {
-                var withBlock = My.MyProject.Forms.Form1;
-                withBlock.ButtonJump.Visible = CheckBox1.Checked;
-                withBlock.ButtonLeft.Visible = CheckBox1.Checked;
-                withBlock.ButtonRight.Visible = CheckBox1.Checked;
-                withBlock.ButtonAttack.Visible = CheckBox1.Checked;
-            }
+            
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -73,6 +67,22 @@ namespace Minecraft2D
             SettingsButton.Text = lang.get("settings.button.settings");
             ExitButton.Text = lang.get("settings.button.exit");
             Label1.Text = lang.get("settings.text.paused");
+        }
+
+        private void _CheckBox1_Click(object sender, EventArgs e)
+        {
+            FancyMessage.Show("Temporarily removed.");
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if(checkBox1.Checked)
+            {
+                Form1.GetInstance().audioPlay();
+            } else
+            {
+                Form1.GetInstance().audioStop();
+            }
         }
     }
 }

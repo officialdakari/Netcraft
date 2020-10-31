@@ -76,14 +76,18 @@ namespace Minecraft2D
                 case Icon.Info:
                     msg.iconLabel1.Text = FancyMessageBox.INFO_TEXT;
                     msg.iconLabel1.ForeColor = Color.Blue;
+                    My.MyProject.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Question);
                     break;
                 case Icon.Warning:
-                    msg.iconLabel1.Text = FancyMessageBox.WARNING_TEXT;
+                    msg.iconLabel1.Hide();
+                    msg.label2.Show();
                     msg.iconLabel1.ForeColor = Color.Gold;
+                    My.MyProject.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Exclamation);
                     break;
                 case Icon.Error:
                     msg.iconLabel1.Text = FancyMessageBox.ERROR_TEXT;
                     msg.iconLabel1.ForeColor = Color.Red;
+                    My.MyProject.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Asterisk);
                     break;
             }
             if(buttons == Buttons.OKCancel)

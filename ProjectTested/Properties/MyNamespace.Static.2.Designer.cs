@@ -42,7 +42,7 @@ namespace ProjectTested.My
         public static string get_AttributeValue(IEnumerable<XElement> source, XName name)
         {
             foreach (XElement item in source)
-                return Conversions.ToString(item.Attribute(name));
+                return Microsoft.VisualBasic.CompilerServices.Conversions.ToString(item.Attribute(name));
             return null;
         }
 
@@ -57,7 +57,7 @@ namespace ProjectTested.My
 
         public static string get_AttributeValue(XElement source, XName name)
         {
-            return Conversions.ToString(source.Attribute(name));
+            return Microsoft.VisualBasic.CompilerServices.Conversions.ToString(source.Attribute(name));
         }
 
         public static void set_AttributeValue(XElement source, XName name, string value)

@@ -44,6 +44,7 @@ namespace Minecraft2D
             this._CheckBox1 = new System.Windows.Forms.CheckBox();
             this.SettingsButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.GroupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,6 +78,7 @@ namespace Minecraft2D
             // GroupBox1
             // 
             this.GroupBox1.BackColor = System.Drawing.Color.Transparent;
+            this.GroupBox1.Controls.Add(this.checkBox1);
             this.GroupBox1.Controls.Add(this.CheckBox2);
             this.GroupBox1.Controls.Add(this._CheckBox1);
             this.GroupBox1.Location = new System.Drawing.Point(12, 62);
@@ -100,6 +102,7 @@ namespace Minecraft2D
             // 
             // _CheckBox1
             // 
+            this._CheckBox1.AutoCheck = false;
             this._CheckBox1.AutoSize = true;
             this._CheckBox1.BackColor = System.Drawing.Color.Transparent;
             this._CheckBox1.ForeColor = System.Drawing.Color.White;
@@ -110,6 +113,7 @@ namespace Minecraft2D
             this._CheckBox1.Text = "Button controls (Sensor mode)";
             this._CheckBox1.UseVisualStyleBackColor = false;
             this._CheckBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
+            this._CheckBox1.Click += new System.EventHandler(this._CheckBox1_Click);
             // 
             // SettingsButton
             // 
@@ -142,6 +146,21 @@ namespace Minecraft2D
             this.ExitButton.Text = "settings.button.exit";
             this.ExitButton.UseVisualStyleBackColor = false;
             this.ExitButton.Click += new System.EventHandler(this.Button3_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.ForeColor = System.Drawing.Color.White;
+            this.checkBox1.Location = new System.Drawing.Point(6, 100);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(69, 22);
+            this.checkBox1.TabIndex = 2;
+            this.checkBox1.Text = "Music";
+            this.checkBox1.UseVisualStyleBackColor = false;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
             // 
             // Gamesettings
             // 
@@ -281,5 +300,6 @@ namespace Minecraft2D
         }
 
         internal CheckBox CheckBox2;
+        internal CheckBox checkBox1;
     }
 }

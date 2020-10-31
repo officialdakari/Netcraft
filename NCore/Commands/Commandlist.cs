@@ -22,7 +22,7 @@ namespace NCore
                     var sc = new System.Collections.Specialized.StringCollection();
                     foreach (var a in Netcraft.GetOnlinePlayers())
                         sc.Add(a.Username);
-                    p.PacketQueue.AddQueue($"chat?{string.Join(", ", Conversions.ToString(sc.Cast<string>().ToArray()))}");
+                    p.PacketQueue.AddQueue($"chat?{string.Join(", ", sc.Cast<string>().ToArray())}");
                     p.PacketQueue.SendQueue();
                 }
                 else
@@ -31,7 +31,7 @@ namespace NCore
                     var sc = new System.Collections.Specialized.StringCollection();
                     foreach (var a in Netcraft.GetOnlinePlayers())
                         sc.Add(a.Username);
-                    sender.SendMessage(string.Join(", ", Conversions.ToString(sc.Cast<string>().ToArray())));
+                    sender.SendMessage(string.Join(", ", sc.Cast<string>().ToArray()));
                 }
 
                 return true;

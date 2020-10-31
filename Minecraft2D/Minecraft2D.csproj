@@ -27,7 +27,7 @@
     <DocumentationFile>bin\Debug\Netcraft.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <WarningLevel>0</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -95,6 +95,7 @@
       <DependentUpon>FancyMessageBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Lang.cs" />
+    <Compile Include="networkClient.cs" />
     <Compile Include="PluginAbstract.cs" />
     <Compile Include="Properties\Application.Designer.cs" />
     <Compile Include="Properties\MyNamespace.Dynamic.Designer.cs" />
@@ -350,6 +351,7 @@
     <None Include="Resources\gold_block.png" />
     <None Include="Resources\diamond_block.png" />
     <None Include="Resources\iron_block.png" />
+    <None Include="Resources\game_music_loop.mp3" />
     <Content Include="Resources\iron_ore.png" />
     <None Include="Resources\platformPack_tile016.png" />
     <None Include="Resources\platformPack_tile004.png" />

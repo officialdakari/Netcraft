@@ -118,7 +118,7 @@ namespace NCore
         }
 
         private static Thread loopThread;
-        internal const string NETCRAFT_VERSION = "1.3-ALPHA-U27102020";
+        internal const string NETCRAFT_VERSION = "1.3-ALPHA";
         internal const string NCORE_VERSION = "0.4";
 
         private static void ThreadLoop()
@@ -283,6 +283,11 @@ namespace NCore
 
             Log("Сервер запускается. Пожалуйста подождите...");
 
+            Log("Так выглядит информация.");
+            Log("Так выглядит предупреждение", "WARNING");
+            Log("Так выглядит важная информация", "SEVERE");
+            Log("Так выглядит ошибка", "ERROR");
+
             Log("Step 1: Создание потока loop.");
             loopThread = new Thread(ThreadLoop);
             loopThread.Name = "Loop";
@@ -342,6 +347,23 @@ namespace NCore
             if (File.Exists(Conversions.ToString(worldfile)))
             {
                 World = sv.Load(File.ReadAllText(Conversions.ToString(worldfile), encoding: Encoding.UTF8));
+                List<Block> blocksToRemove = new List<Block>();
+                foreach(Block b in World.Blocks)
+                {
+                    if(b.Position.X > 64)
+                    {
+                        blocksToRemove.Add(b);
+                    }
+                    if(b.Position.Y > 17)
+                    {
+                        blocksToRemove.Add(b);
+                    }
+                }
+                foreach(Block b in blocksToRemove)
+                {
+                    World.Blocks.Remove(b);
+                }
+                if (blocksToRemove.Count > 0) Log($"Удалено {blocksToRemove.Count} блоков на запрещённых местах.", "WARNING");
                 Log("Step 6: Мир загружен.");
             }
             else
@@ -355,6 +377,8 @@ namespace NCore
             Log("Step 7: Запуск TCP сервера.");
             Start();
             Log("Step 7: TCP сервер запущен.");
+
+            Log("Сервер успешно запущен.");
             while (true)
             {
                 string m = Console.ReadLine();
@@ -388,9 +412,9 @@ namespace NCore
                     }
                     catch (Exception ex)
                     {
-                        Log("Произошла внутренняя ошибка при выполнении данной команды.");
-                        LogError(ex);
-                        return;
+                        Log("Произошла внутренняя ошибка при выполнении данной команды.\r\n" + ex.ToString());
+                        y = true;
+                        break;
                     }
 
                     if (!y)
@@ -486,15 +510,20 @@ namespace NCore
         internal static void Log(string arg0, string arg1 = "INFO")
         {
             ThreadAdd();
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"{DateTime.Now.ToString()} [");
             if (arg1 == "ERROR")
-                Console.ForegroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.DarkRed;
             if (arg1 == "SEVERE")
-                Console.ForegroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.DarkRed;
             if (arg1 == "WARNING")
-                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
             if (arg1 == "INFO")
-                Console.ForegroundColor = ConsoleColor.White;
-            UpdateList($"[{DateTime.Now} {arg1}] [Thread {Thread.CurrentThread.ManagedThreadId}]: {arg0}");
+                Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(arg1);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"] {arg0}\n");
+            //UpdateList($"[{DateTime.Now} {arg1}] [Thread {Thread.CurrentThread.ManagedThreadId}]: {arg0}");
             toAppend += $"[{DateTime.Now} {arg1}] [Thread {Thread.CurrentThread.ManagedThreadId}]: {arg0}" + Constants.vbCrLf;
             Console.ForegroundColor = ConsoleColor.White;
         }
@@ -502,17 +531,7 @@ namespace NCore
         internal static void LogPlugin(string arg0, Plugin arg2, string arg1 = "INFO")
         {
             ThreadAdd();
-            if (arg1 == "ERROR")
-                Console.ForegroundColor = ConsoleColor.Red;
-            if (arg1 == "SEVERE")
-                Console.ForegroundColor = ConsoleColor.Red;
-            if (arg1 == "WARNING")
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            if (arg1 == "INFO")
-                Console.ForegroundColor = ConsoleColor.White;
-            UpdateList($"[{DateTime.Now} {arg1}] [Thread {Thread.CurrentThread.ManagedThreadId}] ({arg2.Name}): {arg0}");
-            toAppend += $"[{DateTime.Now} {arg1}] [Thread {Thread.CurrentThread.ManagedThreadId}] ({arg2.Name}): {arg0}" + Constants.vbCrLf;
-            Console.ForegroundColor = ConsoleColor.White;
+            Log($"{arg2.Name}: {arg0}", arg1);
         }
 
         public static void LogError(Exception ex)
@@ -697,7 +716,7 @@ namespace NCore
                             if (IsNothing(p.SelectedItem))
                                 continue;
                             Thread.Sleep(100);
-                            n.Send((Conversions.ToDouble("itemset?" + p.Username + "?") + (double)p.SelectedItem.Type).ToString());
+                            n.Send("itemset?" + p.Username + "?" + p.SelectedItem.Type.ToString());
                         }
                         catch (Exception ex)
                         {
@@ -705,6 +724,8 @@ namespace NCore
                         }
                     }
                     n.IsLoaded = true;
+                    Thread.Sleep(100);
+                    n.Send("completeload");
                     Thread.Sleep(100);
                     if(enableAuth == 1) n.Chat("Пожалуйста введите свой пароль в чат для авторизации. Это никто не увидит.");
                     if (everyBodyAdmin == 1)
@@ -797,8 +818,13 @@ namespace NCore
                                 n.MovedInAir++;
                                 if (n.MovedInAir == 50)
                                 {
-                                    Log($"{n.Username} переместился неправильно (Полёт)! {v.X},{v.Y}", "WARNING");
-                                    n.Kick("Flying is not enabled on this server");
+                                    n.AntiFlyWarnings++;
+                                    n.Message($"You have been warned!\r\rHacked client detected!\rPlease disable your hacks (Flight) to continue playing on this server, otherwise you will get kicked.", 1);
+                                    Log($"{n.Username} переместился неправильно (Полёт)! [{v.X}, {v.Y}] [{n.AntiFlyWarnings.ToString()} warnings]", "WARNING");
+                                    if(n.AntiFlyWarnings == 10)
+                                    {
+                                        n.Kick("Flying is not enabled on this server");
+                                    }
                                     return;
                                 }
                             }
@@ -1397,11 +1423,9 @@ namespace NCore
 
         public static void CrashReport(Exception ex)
         {
-            ThreadAdd();
             string crashText = "Netcraft Crash Report" + Constants.vbCrLf + $"Server crashed at {DateTime.Now.ToString()}" + Constants.vbCrLf + $"{ex.GetType().ToString()}: {ex.Message}{Constants.vbCrLf}== STACK TRACE =={Constants.vbCrLf}{ex.InnerException.StackTrace}{Constants.vbCrLf}{Constants.vbCrLf}" + $"Exception.TargetSite: {ex.TargetSite}" + Constants.vbCrLf + $"Exception.Source: {ex.Source}";
-            File.WriteAllText(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, @"\crash-reports\"), DateTime.Now.ToString().Replace(" ", "_").Replace(".", "-").Replace(":", "-")), ".txt")), crashText);
-            // Console.WriteLine($"OOPS!! THE SERVER IS CRASHED{vbCrLf}{vbCrLf}Crash report is saved.{vbCrLf}{vbCrLf}{crashText}")
-            Console.Error.WriteLine("OOPS! The server is crashed" + Constants.vbCrLf + Constants.vbCrLf + crashText);
+            File.WriteAllText("./crash-reports/" + DateTime.Now.ToString().Replace(" ", "_").Replace(".", "-").Replace(":", "-") +  ".txt", crashText);
+            Environment.Exit(-1);
         }
 
         public static double DistanceBetween(double x1, double y1, double x2, double y2)
@@ -1514,8 +1538,8 @@ namespace NCore
 
         public static void SendCommandFeedback(string a, CommandSender b)
         {
-            Log($"{b.GetName()}: {a}");
-            Send($"chat?{b.GetName()}: {a}");
+            Log($"[{b.GetName()}: {a}]");
+            Send($"chat?[{b.GetName()}: {a}]");
         }
 
         public static string Left(string a, int b)

@@ -38,7 +38,7 @@ namespace Minecraft2D
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             _OK.Text = lang.get("button.ok");
             _Cancel.Text = lang.get("button.cancel");
-            UsernameLabel.Text = lang.get("text.playername");
+            
         }
     }
 }

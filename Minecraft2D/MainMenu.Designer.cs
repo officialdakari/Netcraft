@@ -57,14 +57,15 @@ namespace Minecraft2D
             this.Label6 = new System.Windows.Forms.Label();
             this.PictureBox2 = new System.Windows.Forms.PictureBox();
             this.PictureBox1 = new System.Windows.Forms.PictureBox();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // _Timer1
             // 
-            this._Timer1.Enabled = true;
             this._Timer1.Interval = 50;
             this._Timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
@@ -76,7 +77,7 @@ namespace Minecraft2D
             this._Button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkOrange;
             this._Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._Button1.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this._Button1.Location = new System.Drawing.Point(478, 159);
+            this._Button1.Location = new System.Drawing.Point(478, 146);
             this._Button1.Name = "_Button1";
             this._Button1.Size = new System.Drawing.Size(310, 36);
             this._Button1.TabIndex = 1;
@@ -87,7 +88,7 @@ namespace Minecraft2D
             // TextBox1
             // 
             this.TextBox1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TextBox1.Location = new System.Drawing.Point(500, 201);
+            this.TextBox1.Location = new System.Drawing.Point(500, 188);
             this.TextBox1.Name = "TextBox1";
             this.TextBox1.Size = new System.Drawing.Size(202, 27);
             this.TextBox1.TabIndex = 2;
@@ -98,7 +99,7 @@ namespace Minecraft2D
             this.Label2.AutoSize = true;
             this.Label2.BackColor = System.Drawing.Color.Transparent;
             this.Label2.ForeColor = System.Drawing.Color.White;
-            this.Label2.Location = new System.Drawing.Point(478, 208);
+            this.Label2.Location = new System.Drawing.Point(475, 195);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(19, 13);
             this.Label2.TabIndex = 3;
@@ -114,7 +115,7 @@ namespace Minecraft2D
             this._Button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._Button3.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this._Button3.ForeColor = System.Drawing.Color.White;
-            this._Button3.Location = new System.Drawing.Point(713, 297);
+            this._Button3.Location = new System.Drawing.Point(722, 3);
             this._Button3.Name = "_Button3";
             this._Button3.Size = new System.Drawing.Size(75, 30);
             this._Button3.TabIndex = 5;
@@ -124,14 +125,14 @@ namespace Minecraft2D
             // 
             // Label3
             // 
-            this.Label3.BackColor = System.Drawing.Color.Black;
+            this.Label3.BackColor = System.Drawing.Color.Transparent;
             this.Label3.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Label3.ForeColor = System.Drawing.Color.Lime;
-            this.Label3.Location = new System.Drawing.Point(12, 340);
+            this.Label3.Location = new System.Drawing.Point(3, 43);
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(690, 23);
             this.Label3.TabIndex = 6;
-            this.Label3.Text = ">";
+            this.Label3.Text = ">Some text here[]";
             this.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.Label3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Label3_MouseClick);
             // 
@@ -145,7 +146,7 @@ namespace Minecraft2D
             this._Button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._Button4.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this._Button4.ForeColor = System.Drawing.Color.White;
-            this._Button4.Location = new System.Drawing.Point(713, 333);
+            this._Button4.Location = new System.Drawing.Point(722, 39);
             this._Button4.Name = "_Button4";
             this._Button4.Size = new System.Drawing.Size(75, 30);
             this._Button4.TabIndex = 7;
@@ -161,7 +162,7 @@ namespace Minecraft2D
             this._Button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkOrange;
             this._Button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._Button2.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this._Button2.Location = new System.Drawing.Point(478, 112);
+            this._Button2.Location = new System.Drawing.Point(478, 104);
             this._Button2.Name = "_Button2";
             this._Button2.Size = new System.Drawing.Size(310, 36);
             this._Button2.TabIndex = 8;
@@ -189,7 +190,7 @@ namespace Minecraft2D
             this._Button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkOrange;
             this._Button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._Button5.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this._Button5.Location = new System.Drawing.Point(708, 201);
+            this._Button5.Location = new System.Drawing.Point(708, 188);
             this._Button5.Name = "_Button5";
             this._Button5.Size = new System.Drawing.Size(80, 27);
             this._Button5.TabIndex = 11;
@@ -204,7 +205,7 @@ namespace Minecraft2D
             this.Panel1.Controls.Add(this.LabelPlayers);
             this.Panel1.Controls.Add(this.LabelDesc);
             this.Panel1.Controls.Add(this.LabelName);
-            this.Panel1.Location = new System.Drawing.Point(120, 112);
+            this.Panel1.Location = new System.Drawing.Point(117, 104);
             this.Panel1.Name = "Panel1";
             this.Panel1.Size = new System.Drawing.Size(352, 111);
             this.Panel1.TabIndex = 12;
@@ -212,13 +213,13 @@ namespace Minecraft2D
             // 
             // LabelPlayers
             // 
-            this.LabelPlayers.AutoSize = true;
             this.LabelPlayers.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
-            this.LabelPlayers.Location = new System.Drawing.Point(306, 85);
+            this.LabelPlayers.Location = new System.Drawing.Point(21, 86);
             this.LabelPlayers.Name = "LabelPlayers";
-            this.LabelPlayers.Size = new System.Drawing.Size(41, 19);
+            this.LabelPlayers.Size = new System.Drawing.Size(326, 19);
             this.LabelPlayers.TabIndex = 15;
             this.LabelPlayers.Text = "-1/-1";
+            this.LabelPlayers.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // LabelDesc
             // 
@@ -256,7 +257,7 @@ namespace Minecraft2D
             // 
             this.PictureBox2.BackColor = System.Drawing.Color.Transparent;
             this.PictureBox2.Image = global::Minecraft2D.My.Resources.Resources.c_edition;
-            this.PictureBox2.Location = new System.Drawing.Point(478, 65);
+            this.PictureBox2.Location = new System.Drawing.Point(478, 70);
             this.PictureBox2.Name = "PictureBox2";
             this.PictureBox2.Size = new System.Drawing.Size(310, 18);
             this.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -267,20 +268,32 @@ namespace Minecraft2D
             // 
             this.PictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.PictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("PictureBox1.Image")));
-            this.PictureBox1.Location = new System.Drawing.Point(478, 9);
+            this.PictureBox1.Location = new System.Drawing.Point(478, 5);
             this.PictureBox1.Name = "PictureBox1";
             this.PictureBox1.Size = new System.Drawing.Size(310, 59);
             this.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PictureBox1.TabIndex = 14;
             this.PictureBox1.TabStop = false;
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.Label3);
+            this.panel2.Controls.Add(this._Button3);
+            this.panel2.Controls.Add(this._Button4);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 299);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(800, 73);
+            this.panel2.TabIndex = 16;
+            // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BackgroundImage = global::Minecraft2D.Properties.Resources.planks_oak;
             this.ClientSize = new System.Drawing.Size(800, 372);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.PictureBox2);
             this.Controls.Add(this.PictureBox1);
             this.Controls.Add(this.Label6);
@@ -288,9 +301,6 @@ namespace Minecraft2D
             this.Controls.Add(this._Button5);
             this.Controls.Add(this.Label5);
             this.Controls.Add(this._Button2);
-            this.Controls.Add(this._Button4);
-            this.Controls.Add(this.Label3);
-            this.Controls.Add(this._Button3);
             this.Controls.Add(this.Label2);
             this.Controls.Add(this.TextBox1);
             this.Controls.Add(this._Button1);
@@ -300,6 +310,7 @@ namespace Minecraft2D
             this.Name = "MainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "NetCraft";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainMenu_FormClosing);
             this.Load += new System.EventHandler(this.MainMenu_Load);
             this.LocationChanged += new System.EventHandler(this.MainMenu_LocationChanged);
             this.VisibleChanged += new System.EventHandler(this.MainMenu_VisibleChanged);
@@ -307,6 +318,7 @@ namespace Minecraft2D
             this.Panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -479,5 +491,6 @@ namespace Minecraft2D
         internal Label Label6;
         internal PictureBox PictureBox1;
         internal PictureBox PictureBox2;
+        private Panel panel2;
     }
 }

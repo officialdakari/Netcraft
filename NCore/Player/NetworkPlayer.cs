@@ -44,6 +44,7 @@ namespace NCore
         public int FallDistance { get; set; } = 0;
         public int MovedInAir { get; set; } = 0;
         public bool IsAuthorized { get; set; } = false;
+        public int AntiFlyWarnings { get; set; } = 0;
 
         public string GetIp()
         {
@@ -791,8 +792,9 @@ namespace NCore
                 Netcraft.Broadcast($"{Username} был выгнан из игры. Причина: {kickMessage}");
             }
 
-            if(IsLoaded) NCore.Log($"Kicked {Username} from the game: {kickMessage}");
-            Send("msg?" + kickMessage);
+            if(IsLoaded) NCore.Log($"{Username} был выгнан из игры: {kickMessage}");
+            Message("Вас выгнали из игры:\r\r" + kickMessage, 2);
+            b?.Invoke(this);
             d.Client.Close();
             d = null;
         }

@@ -43,7 +43,6 @@ namespace Minecraft2D
             this._Ticker = new System.Windows.Forms.Timer(this.components);
             this.InventoryButton = new System.Windows.Forms.Button();
             this._ListBox1 = new System.Windows.Forms.ListBox();
-            this._Timer2 = new System.Windows.Forms.Timer(this.components);
             this.ChatButton = new System.Windows.Forms.Button();
             this._Timer3 = new System.Windows.Forms.Timer(this.components);
             this._ProgressBar1 = new System.Windows.Forms.ProgressBar();
@@ -65,11 +64,14 @@ namespace Minecraft2D
             // 
             // Timer1
             // 
-            this.Timer1.Interval = 30;
+            this.Timer1.Enabled = true;
+            this.Timer1.Interval = 500;
+            this.Timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // _Ticker
             // 
-            this._Ticker.Interval = 10;
+            this._Ticker.Enabled = true;
+            this._Ticker.Interval = 15000;
             this._Ticker.Tick += new System.EventHandler(this.Ticker_Tick);
             // 
             // InventoryButton
@@ -100,12 +102,6 @@ namespace Minecraft2D
             this._ListBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox1_MouseDoubleClick);
             this._ListBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ListBox1_MouseDown);
             // 
-            // _Timer2
-            // 
-            this._Timer2.Enabled = true;
-            this._Timer2.Interval = 10;
-            this._Timer2.Tick += new System.EventHandler(this.Timer2_Tick);
-            // 
             // ChatButton
             // 
             this.ChatButton.BackColor = System.Drawing.SystemColors.Control;
@@ -122,6 +118,7 @@ namespace Minecraft2D
             // _Timer3
             // 
             this._Timer3.Enabled = true;
+            this._Timer3.Interval = 10000;
             this._Timer3.Tick += new System.EventHandler(this.Timer3_Tick);
             // 
             // _ProgressBar1
@@ -179,7 +176,7 @@ namespace Minecraft2D
             this._ButtonLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this._ButtonLeft.BackColor = System.Drawing.SystemColors.Control;
             this._ButtonLeft.Font = new System.Drawing.Font("Wingdings", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this._ButtonLeft.Location = new System.Drawing.Point(8, 507);
+            this._ButtonLeft.Location = new System.Drawing.Point(8, 503);
             this._ButtonLeft.Name = "_ButtonLeft";
             this._ButtonLeft.Size = new System.Drawing.Size(70, 61);
             this._ButtonLeft.TabIndex = 9;
@@ -197,7 +194,7 @@ namespace Minecraft2D
             this._ButtonJump.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this._ButtonJump.BackColor = System.Drawing.SystemColors.Control;
             this._ButtonJump.Font = new System.Drawing.Font("Wingdings", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this._ButtonJump.Location = new System.Drawing.Point(1008, 507);
+            this._ButtonJump.Location = new System.Drawing.Point(1008, 503);
             this._ButtonJump.Name = "_ButtonJump";
             this._ButtonJump.Size = new System.Drawing.Size(70, 61);
             this._ButtonJump.TabIndex = 10;
@@ -215,7 +212,7 @@ namespace Minecraft2D
             this._ButtonRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this._ButtonRight.BackColor = System.Drawing.SystemColors.Control;
             this._ButtonRight.Font = new System.Drawing.Font("Wingdings", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this._ButtonRight.Location = new System.Drawing.Point(84, 507);
+            this._ButtonRight.Location = new System.Drawing.Point(84, 503);
             this._ButtonRight.Name = "_ButtonRight";
             this._ButtonRight.Size = new System.Drawing.Size(70, 61);
             this._ButtonRight.TabIndex = 11;
@@ -249,7 +246,7 @@ namespace Minecraft2D
             this._ButtonAttack.Enabled = false;
             this._ButtonAttack.Font = new System.Drawing.Font("Webdings", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this._ButtonAttack.ForeColor = System.Drawing.Color.Red;
-            this._ButtonAttack.Location = new System.Drawing.Point(932, 507);
+            this._ButtonAttack.Location = new System.Drawing.Point(932, 503);
             this._ButtonAttack.Name = "_ButtonAttack";
             this._ButtonAttack.Size = new System.Drawing.Size(70, 61);
             this._ButtonAttack.TabIndex = 13;
@@ -314,6 +311,8 @@ namespace Minecraft2D
             this.Controls.Add(this.ChatButton);
             this.Controls.Add(this._ListBox1);
             this.Controls.Add(this.InventoryButton);
+            this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(9999, 619);
@@ -323,6 +322,7 @@ namespace Minecraft2D
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
+            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.Form1_Scroll);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
@@ -423,31 +423,7 @@ namespace Minecraft2D
             }
         }
 
-        private Timer _Timer2;
-
-        internal Timer Timer2
-        {
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return _Timer2;
-            }
-
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                if (_Timer2 != null)
-                {
-                    _Timer2.Tick -= Timer2_Tick;
-                }
-
-                _Timer2 = value;
-                if (_Timer2 != null)
-                {
-                    _Timer2.Tick += Timer2_Tick;
-                }
-            }
-        }
+        
 
         private Button ChatButton;
 
