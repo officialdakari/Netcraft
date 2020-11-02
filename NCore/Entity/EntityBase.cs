@@ -65,7 +65,7 @@ namespace NCore.Entity
             }
             if(collision)
             {
-                NCore.Log($"{Name} ({this.GetType().ToString()}) moved wrongly!");
+                NCore.GetNCore().Log($"{Name} ({this.GetType().ToString()}) moved wrongly!", "ERROR");
                 return false;
             }
             Position = to;

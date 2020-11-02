@@ -31,13 +31,13 @@ namespace NCore
                 {
                     local_a.Chat("Вы теперь администратор");
                     sender.SendMessage($"Выданы права администратора: {local_a.Username}");
-                    NCore.Log($"{sender.GetName()} выдал права администратора: {local_a.Username}");
+                    NCore.GetNCore().Log($"{sender.GetName()} выдал права администратора: {local_a.Username}");
                 }
                 else
                 {
                     local_a.Chat("Вы больше не администратор");
                     sender.SendMessage($"Сняты права администратора: {local_a.Username}");
-                    NCore.Log($"{sender.GetName()} снял права администратора: {local_a.Username}");
+                    NCore.GetNCore().Log($"{sender.GetName()} снял права администратора: {local_a.Username}");
                 }
 
                 return true;

@@ -23,7 +23,7 @@ namespace NCore
             {
                 if (args[0] == "confirm")
                 {
-                    NCore.StopServer();
+                    NCore.GetNCore().StopServer();
                     return true;
                 }
             }

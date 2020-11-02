@@ -18,7 +18,7 @@ namespace NCore
                 if (sender.IsPlayer)
                 {
                     NetworkPlayer p = (NetworkPlayer)sender;
-                    p.PacketQueue.AddQueue($"chat?Сейчас {NCore.clientList.Count} из {NCore.maxPlayers} игроков на сервере:");
+                    p.PacketQueue.AddQueue($"chat?Сейчас {NCore.GetNCore().players.Count} из {NCore.GetNCore().maxPlayers} игроков на сервере:");
                     var sc = new System.Collections.Specialized.StringCollection();
                     foreach (var a in Netcraft.GetOnlinePlayers())
                         sc.Add(a.Username);
@@ -27,7 +27,7 @@ namespace NCore
                 }
                 else
                 {
-                    sender.SendMessage($"Сейчас {NCore.clientList.Count} из {NCore.maxPlayers} игроков на сервере:");
+                    sender.SendMessage($"Сейчас {NCore.GetNCore().players.Count} из {NCore.GetNCore().maxPlayers} игроков на сервере:");
                     var sc = new System.Collections.Specialized.StringCollection();
                     foreach (var a in Netcraft.GetOnlinePlayers())
                         sc.Add(a.Username);

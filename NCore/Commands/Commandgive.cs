@@ -34,14 +34,14 @@ namespace NCore
 
                     p = (NetworkPlayer)sender;
                     p.Give(t);
-                    NCore.SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) игроку " + p.Username, sender);
+                    NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) игроку " + p.Username, sender);
                     return true;
                 }
                 else if (args[0] == "@a")
                 {
                     foreach (var g in Netcraft.GetOnlinePlayers())
                         g.Give(t);
-                    NCore.SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) {Netcraft.GetOnlinePlayers().Count} игрокам", sender);
+                    NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) {Netcraft.GetOnlinePlayers().Count} игрокам", sender);
                     return true;
                 }
                 else if (args[0] == "@r")
@@ -50,7 +50,7 @@ namespace NCore
                     List<NetworkPlayer> g = Netcraft.GetOnlinePlayers();
                     p = g[rnd.Next(0, g.Count - 1)];
                     p.Give(t);
-                    NCore.SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) игроку " + p.Username, sender);
+                    NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) игроку " + p.Username, sender);
                     return true;
                 }
                 else
@@ -63,7 +63,7 @@ namespace NCore
                     }
 
                     p.Give(t);
-                    NCore.SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) игроку " + p.Username, sender);
+                    NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) игроку " + p.Username, sender);
                     return true;
                 }
             }
@@ -83,14 +83,14 @@ namespace NCore
 
                     p = (NetworkPlayer)sender;
                     p.Give(t, count);
-                    NCore.SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) игроку " + p.Username, sender);
+                    NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) игроку " + p.Username, sender);
                     return true;
                 }
                 else if (args[0] == "@a")
                 {
                     foreach (var g in Netcraft.GetOnlinePlayers())
                         g.Give(t, count);
-                    NCore.SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) {Netcraft.GetOnlinePlayers().Count} игрокам", sender);
+                    NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) {Netcraft.GetOnlinePlayers().Count} игрокам", sender);
                     return true;
                 }
                 else if (args[0] == "@r")
@@ -99,7 +99,7 @@ namespace NCore
                     var g = Netcraft.GetOnlinePlayers();
                     p = g[rnd.Next(0, g.Count - 1)];
                     p.Give(t, count);
-                    NCore.SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) игроку " + p.Username, sender);
+                    NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) игроку " + p.Username, sender);
                     return true;
                 }
                 else
@@ -112,7 +112,7 @@ namespace NCore
                     }
 
                     p.Give(t, count);
-                    NCore.SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) игроку " + p.Username, sender);
+                    NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) игроку " + p.Username, sender);
                     return true;
                 }
             }

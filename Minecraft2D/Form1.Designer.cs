@@ -58,6 +58,7 @@ namespace Minecraft2D
             this.CraftButton = new System.Windows.Forms.Button();
             this._ListBox2 = new System.Windows.Forms.ListBox();
             this.R1 = new Minecraft2D.TransparentPicBox();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.R1)).BeginInit();
             this.SuspendLayout();
@@ -96,6 +97,7 @@ namespace Minecraft2D
             this._ListBox1.Name = "_ListBox1";
             this._ListBox1.Size = new System.Drawing.Size(392, 264);
             this._ListBox1.TabIndex = 3;
+            this._ListBox1.UseTabStops = false;
             this._ListBox1.Visible = false;
             this._ListBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this._ListBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
@@ -291,12 +293,105 @@ namespace Minecraft2D
             this.R1.TabIndex = 15;
             this.R1.TabStop = false;
             // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "bedrock.png");
+            this.imageList1.Images.SetKeyName(1, "BLOCK.png");
+            this.imageList1.Images.SetKeyName(2, "bucket.png");
+            this.imageList1.Images.SetKeyName(3, "c-edition.png");
+            this.imageList1.Images.SetKeyName(4, "coal.png");
+            this.imageList1.Images.SetKeyName(5, "coal_ore.png");
+            this.imageList1.Images.SetKeyName(6, "cobblestone.png");
+            this.imageList1.Images.SetKeyName(7, "cobblestone4.png");
+            this.imageList1.Images.SetKeyName(8, "diamond.png");
+            this.imageList1.Images.SetKeyName(9, "DIAMOND_AXE.png");
+            this.imageList1.Images.SetKeyName(10, "DIAMOND_AXE_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(11, "diamond_block.png");
+            this.imageList1.Images.SetKeyName(12, "diamond_ore.png");
+            this.imageList1.Images.SetKeyName(13, "DIAMOND_PICKAXE.png");
+            this.imageList1.Images.SetKeyName(14, "DIAMOND_PICKAXE_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(15, "DIAMOND_SHOVEL.png");
+            this.imageList1.Images.SetKeyName(16, "DIAMOND_SHOVEL_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(17, "DIAMOND_SWORD.png");
+            this.imageList1.Images.SetKeyName(18, "DIAMOND_SWORD_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(19, "dirt.png");
+            this.imageList1.Images.SetKeyName(20, "dirt1.png");
+            this.imageList1.Images.SetKeyName(21, "furnace_front.png");
+            this.imageList1.Images.SetKeyName(22, "furnace_front_off.png");
+            this.imageList1.Images.SetKeyName(23, "furnace_front_on.png");
+            this.imageList1.Images.SetKeyName(24, "glass.png");
+            this.imageList1.Images.SetKeyName(25, "GLASSBLOCK.png");
+            this.imageList1.Images.SetKeyName(26, "GOLD.png");
+            this.imageList1.Images.SetKeyName(27, "gold_block.png");
+            this.imageList1.Images.SetKeyName(28, "gold_ore.png");
+            this.imageList1.Images.SetKeyName(29, "grass_block_side.png");
+            this.imageList1.Images.SetKeyName(30, "grass_side.png");
+            this.imageList1.Images.SetKeyName(31, "Grid_Sapling.png");
+            this.imageList1.Images.SetKeyName(32, "IRON.png");
+            this.imageList1.Images.SetKeyName(33, "IRON_AXE.png");
+            this.imageList1.Images.SetKeyName(34, "IRON_AXE_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(35, "iron_block.png");
+            this.imageList1.Images.SetKeyName(36, "iron_ore.png");
+            this.imageList1.Images.SetKeyName(37, "IRON_PICKAXE.png");
+            this.imageList1.Images.SetKeyName(38, "IRON_PICKAXE_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(39, "IRON_SHOVEL.png");
+            this.imageList1.Images.SetKeyName(40, "IRON_SHOVEL_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(41, "IRON_SWORD.png");
+            this.imageList1.Images.SetKeyName(42, "IRON_SWORD_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(43, "lava_bucket.png");
+            this.imageList1.Images.SetKeyName(44, "lava_still.png");
+            this.imageList1.Images.SetKeyName(45, "leaves.jpg");
+            this.imageList1.Images.SetKeyName(46, "log_oak.png");
+            this.imageList1.Images.SetKeyName(47, "NCLogo.png");
+            this.imageList1.Images.SetKeyName(48, "netcraft.png");
+            this.imageList1.Images.SetKeyName(49, "oak_log.png");
+            this.imageList1.Images.SetKeyName(50, "oak_sapling.png");
+            this.imageList1.Images.SetKeyName(51, "OBSIDIAN.png");
+            this.imageList1.Images.SetKeyName(52, "obsidian1.png");
+            this.imageList1.Images.SetKeyName(53, "planks.png");
+            this.imageList1.Images.SetKeyName(54, "planks_oak.png");
+            this.imageList1.Images.SetKeyName(55, "platformPack_tile001.png");
+            this.imageList1.Images.SetKeyName(56, "platformPack_tile004.png");
+            this.imageList1.Images.SetKeyName(57, "platformPack_tile016.png");
+            this.imageList1.Images.SetKeyName(58, "platformPack_tile034.png");
+            this.imageList1.Images.SetKeyName(59, "Player1Texture.png");
+            this.imageList1.Images.SetKeyName(60, "Player2Texture.png");
+            this.imageList1.Images.SetKeyName(61, "sand.png");
+            this.imageList1.Images.SetKeyName(62, "SANDBLOCK.png");
+            this.imageList1.Images.SetKeyName(63, "sprite.png");
+            this.imageList1.Images.SetKeyName(64, "STICK.png");
+            this.imageList1.Images.SetKeyName(65, "STONE.png");
+            this.imageList1.Images.SetKeyName(66, "STONE_AXE.png");
+            this.imageList1.Images.SetKeyName(67, "STONE_AXE_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(68, "STONE_PICKAXE.png");
+            this.imageList1.Images.SetKeyName(69, "STONE_PICKAXE_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(70, "STONE_SHOVEL.png");
+            this.imageList1.Images.SetKeyName(71, "STONE_SHOVEL_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(72, "STONE_SWORD.png");
+            this.imageList1.Images.SetKeyName(73, "STONE_SWORD_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(74, "stone1.png");
+            this.imageList1.Images.SetKeyName(75, "tnt_side.png");
+            this.imageList1.Images.SetKeyName(76, "vbnet-edition.png");
+            this.imageList1.Images.SetKeyName(77, "water_bucket.png");
+            this.imageList1.Images.SetKeyName(78, "water_still.png");
+            this.imageList1.Images.SetKeyName(79, "WOOD.png");
+            this.imageList1.Images.SetKeyName(80, "WOODEN_AXE.png");
+            this.imageList1.Images.SetKeyName(81, "WOODEN_AXE_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(82, "WOODEN_PICKAXE.png");
+            this.imageList1.Images.SetKeyName(83, "WOODEN_PICKAXE_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(84, "WOODEN_SHOVEL.png");
+            this.imageList1.Images.SetKeyName(85, "WOODEN_SHOVEL_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(86, "WOODEN_SWORD.png");
+            this.imageList1.Images.SetKeyName(87, "WOODEN_SWORD_FLIPPED.png");
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.ClientSize = new System.Drawing.Size(1086, 580);
+            this.ClientSize = new System.Drawing.Size(1086, 576);
             this.Controls.Add(this._ListBox2);
             this.Controls.Add(this.CraftButton);
             this.Controls.Add(this.R1);
@@ -311,8 +406,9 @@ namespace Minecraft2D
             this.Controls.Add(this.ChatButton);
             this.Controls.Add(this._ListBox1);
             this.Controls.Add(this.InventoryButton);
+            this.Cursor = System.Windows.Forms.Cursors.Cross;
             this.DoubleBuffered = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(9999, 619);
@@ -323,9 +419,11 @@ namespace Minecraft2D
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.Form1_Scroll);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.Move += new System.EventHandler(this.Form1_Move);
             ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.R1)).EndInit();
@@ -755,6 +853,7 @@ namespace Minecraft2D
         }
 
         private ListBox _ListBox2;
+        private ImageList imageList1;
 
         internal ListBox ListBox2
         {

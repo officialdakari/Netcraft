@@ -86,10 +86,6 @@ namespace ProjectTested
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            MessageBox.Show(Convert.ToBase64String(Encoding.ASCII.GetBytes("ban tebe esli uznal etot kod")));
-            append(Convert.ToBase64String(Encoding.ASCII.GetBytes("ban tebe esli uznal etot kod")));
-            Clipboard.SetText(Convert.ToBase64String(Encoding.ASCII.GetBytes("ban tebe esli uznal etot kod")));
-
             CheckForIllegalCrossThreadCalls = false;
             instance = this;
         }

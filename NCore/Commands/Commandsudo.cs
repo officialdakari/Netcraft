@@ -26,7 +26,7 @@ namespace NCore
                     return true;
                 }
 
-                NCore.MessageReceived($"chat?{string.Join(" ", args.Skip(1).ToArray())}", p);
+                NCore.GetNCore().MessageReceived($"chat?{string.Join(" ", args.Skip(1).ToArray())}", p);
                 sender.SendMessage("Успешно выполнено sudo.");
                 return true;
             }

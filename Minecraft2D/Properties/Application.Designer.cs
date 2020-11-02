@@ -8,7 +8,9 @@
 // </auto-generated>
 // ------------------------------------------------------------------------------
 
+using System;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace Minecraft2D.My
 {
@@ -26,7 +28,7 @@ namespace Minecraft2D.My
             IsSingleInstance = false;
             EnableVisualStyles = false;
             SaveMySettingsOnExit = true;
-            ShutdownStyle = Microsoft.VisualBasic.ApplicationServices.ShutdownMode.AfterMainFormCloses;
+            ShutdownStyle = Microsoft.VisualBasic.ApplicationServices.ShutdownMode.AfterMainFormCloses; // исправить
         }
 
         [DebuggerStepThrough()]

@@ -25,7 +25,7 @@ namespace NCore
             }
             catch (Exception ex)
             {
-                NCore.LogError(ex);
+                NCore.GetNCore().LogError(ex);
             }
         }
     }

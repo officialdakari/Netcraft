@@ -43,7 +43,8 @@ namespace Minecraft2D
         private bool connected = false;
 
         public delegate void OnMessageReceivedEventHandler(string msg);
-
+        internal string toNotice = null;
+        internal int toNoticeType = 2;
         public delegate void _xUpdate(string str);
 
         private void Read(IAsyncResult ar)
@@ -59,8 +60,8 @@ namespace Minecraft2D
                 if (connected)
                 {
                     connected = false;
+                    toNotice = $"{lang.get("text.error.connection_lost")}:\r\n\r\n{ex.ToString()}";
                     Close();
-                    FancyMessage.Show($"{lang.get("text.error.connection_lost")}:\r\n\r\n{ex.ToString()}", "Connection lost", FancyMessage.Icon.Error);
                 }
             }
         }
@@ -83,6 +84,7 @@ namespace Minecraft2D
             {
                 if (connected)
                 {
+                    toNotice = $"{lang.get("text.error.packet_send_error")}:\r\n\r\n{ex.ToString()}";
                     //FancyMessage.Show($"{lang.get("text.error.packet_send_error")}:\r\n\r\n" + ex.ToString(), "Can't send packet", FancyMessage.Icon.Error);
                     Close();
                 }
@@ -168,33 +170,34 @@ namespace Minecraft2D
         public Image playerSkin { get; set; } = My.Resources.Resources.sprite;
         public Image playerSkinFlip { get; set; } = My.Resources.Resources.sprite;
 
-        public enum Material
+        public enum Craftable
         {
-            PLANKS, // DONE
-            WOODEN_PICKAXE, // DONE
-            WOODEN_SWORD, // DONE
-            WOODEN_AXE, // DONE
-            WOODEN_SHOVEL, // DONE
-            STONE_PICKAXE, // DONE
-            STONE_SWORD, // DONE
-            STONE_AXE, // DONE
-            STONE_SHOVEL, // DONE
-            IRON_PICKAXE, // DONE
-            IRON_SWORD, // DONE
-            IRON_AXE, // DONE
-            IRON_SHOVEL, // DONE
-            DIAMOND_PICKAXE, // DONE
-            DIAMOND_SWORD, // DONE
-            DIAMOND_AXE, // DONE
-            DIAMOND_SHOVEL, // DONE
-            STICK, // DONE
-            FURNACE, // DONE :D
-            IRON, // Done
-            GOLD, // Done
-            DIAMOND, // Done
-            IRON_BLOCK, // Done
-            GOLD_BLOCK, // DONE!!!
-            DIAMOND_BLOCK // Done :)
+            PLANKS,
+            WOODEN_PICKAXE,
+            WOODEN_SWORD,
+            WOODEN_AXE, 
+            WOODEN_SHOVEL,
+            STONE_PICKAXE,
+            STONE_SWORD, 
+            STONE_AXE,
+            STONE_SHOVEL,
+            IRON_PICKAXE,
+            IRON_SWORD,
+            IRON_AXE,
+            IRON_SHOVEL, 
+            DIAMOND_PICKAXE,
+            DIAMOND_SWORD,
+            DIAMOND_AXE, 
+            DIAMOND_SHOVEL, 
+            STICK,
+            FURNACE,
+            IRON,
+            GOLD,
+            DIAMOND,
+            IRON_BLOCK,
+            GOLD_BLOCK,
+            DIAMOND_BLOCK,
+            BUCKET
         }
 
         public Control GetControl(string name)
@@ -280,7 +283,7 @@ namespace Minecraft2D
             My.MyProject.Forms.Chat.Show();
             WriteChat("Client message: Вы вошли на сервер");
             initializeMove();
-            foreach (var i in Enum.GetNames(typeof(Material)))
+            foreach (var i in Enum.GetNames(typeof(Craftable)))
                 ListBox2.Items.Add(i.ToLower());
             cTicker = new Thread(tickLoop);
             cTicker.Start();
@@ -304,6 +307,10 @@ namespace Minecraft2D
 
             }
             audioPlay();
+            foreach(Control c in Controls)
+            {
+                c.MouseMove += Form1_MouseMove;
+            }
         }
 
         internal void audioPlay()
@@ -478,6 +485,7 @@ namespace Minecraft2D
                 {
                     b.BackgroundImageLayout = ImageLayout.Stretch;
                     b.BackgroundImage = My.Resources.Resources.furnace_front_off;
+                    b.Tag += b.Tag.ToString() + "?furnace";
                 }
                 else if (a[3] == "iron_block")
                 {
@@ -493,7 +501,6 @@ namespace Minecraft2D
                 {
                     b.BackgroundImageLayout = ImageLayout.Stretch;
                     b.BackgroundImage = My.Resources.Resources.gold_block;
-                    b.Tag += "furnace";
                 }
                 else if (a[3] == "coal_ore")
                 {
@@ -504,6 +511,21 @@ namespace Minecraft2D
                 {
                     b.BackgroundImageLayout = ImageLayout.Stretch;
                     b.BackgroundImage = My.Resources.Resources.Grid_Sapling;
+                }
+                else if(a[3] == "tnt")
+                {
+                    b.BackgroundImageLayout = ImageLayout.Stretch;
+                    b.BackgroundImage = My.Resources.Resources.tnt_side;
+                }
+                else if(a[3] == "lava")
+                {
+                    b.BackgroundImageLayout = ImageLayout.Stretch;
+                    b.BackgroundImage = My.Resources.Resources.lava_still;
+                }
+                else if (a[3] == "chest")
+                {
+                    b.BackgroundImageLayout = ImageLayout.Stretch;
+                    b.BackgroundImage = My.Resources.Resources.chest;
                 }
                 else
                 {
@@ -518,17 +540,19 @@ namespace Minecraft2D
 
             if (a[0] == "removeblock")
             {
-                BreakBlock(Conversions.ToInteger(a[1]) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) - VerticalScroll.Value);
+                BreakBlock(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
             }
 
             if (a[0] == "addplayer")
             {
                 CreatePlayer(a[1], 0 - HorizontalScroll.Value, 0);
+                Console.WriteLine($"Player added: {a[1]}");
             }
 
             if (a[0] == "removeplayer")
             {
                 DelPlayer(a[1]);
+                Console.WriteLine($"Player removed: {a[1]}");
             }
 
             if (a[0] == "updateplayerposition")
@@ -545,6 +569,7 @@ namespace Minecraft2D
             {
                 TeleportLocalPlayer(Conversions.ToInteger(a[1]) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) - VerticalScroll.Value);
                 UpdatePlayerPosition();
+                Console.WriteLine(String.Format("Local player teleported: {0}, {1}", a[1], a[2]));
             }
 
             if (a[0] == "clearinventory")
@@ -560,25 +585,30 @@ namespace Minecraft2D
             if (a[0] == "msgerror")
             {
                 FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Error);
+                Console.WriteLine($"Error message from server: {string.Join("?", a.Skip(1).ToArray())}");
             }
 
             if (a[0] == "msgwarn")
             {
                 FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Warning);
+                Console.WriteLine($"Warning message from server: {string.Join("?", a.Skip(1).ToArray())}");
             }
 
             if (a[0] == "msg")
             {
                 FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Info);
+                Console.WriteLine($"Info message from server: {string.Join("?", a.Skip(1).ToArray())}");
             }
 
             if (a[0] == "chat")
             {
                 WriteChat(string.Join("?", a.Skip(1).ToArray()));
+                Console.WriteLine($"Chat: {string.Join("?", a.Skip(1).ToArray())}");
             }
             if (a[0] == "health")
             {
                 SetHealth(Conversions.ToInteger(a[1]));
+                Console.WriteLine("Health update: " + a[1]);
             }
 
             if (a[0] == "noclip")
@@ -600,6 +630,16 @@ namespace Minecraft2D
             {
                 BackColor = Color.FromName(a[1]);
                 Update();
+            }
+
+            if(a[0] == "chestopen")
+            {
+                ChestWindow cw = new ChestWindow();
+                cw.listBox1.Items.AddRange(ListBox1.Items);
+                cw.listBox2.Items.AddRange(a.Skip(1).ToArray());
+                cw.ShowDialog();
+                cw.Close();
+                cw.Dispose();
             }
 
             if (a[0] == "itemset")
@@ -692,6 +732,11 @@ namespace Minecraft2D
                     }
 
                     // REM - Блоки
+                    if (a[2] == "GRASS_BLOCK")
+                    {
+                        SetItem(a[1], My.Resources.Resources.grass_side, My.Resources.Resources.grass_side, a[2]);
+                    }
+
                     if (a[2] == "WOOD")
                     {
                         SetItem(a[1], My.Resources.Resources.log_oak, My.Resources.Resources.log_oak, a[2]);
@@ -747,6 +792,11 @@ namespace Minecraft2D
                         SetItem(a[1], My.Resources.Resources.Grid_Sapling, My.Resources.Resources.Grid_Sapling, a[2]);
                     }
 
+                    if (a[2] == "CHEST")
+                    {
+                        SetItem(a[1], My.Resources.Resources.chest, My.Resources.Resources.chest, a[2]);
+                    }
+
                     // REM - Драгоценные блоки
                     if (a[2] == "IRON_BLOCK")
                     {
@@ -761,6 +811,16 @@ namespace Minecraft2D
                     if (a[2] == "GOLD_BLOCK")
                     {
                         SetItem(a[1], My.Resources.Resources.gold_block, My.Resources.Resources.gold_block, a[2]);
+                    }
+
+                    if (a[2] == "GOLD_ORE")
+                    {
+                        SetItem(a[1], My.Resources.Resources.gold_ore, My.Resources.Resources.gold_ore, a[2]);
+                    }
+
+                    if (a[2] == "IRON_ORE")
+                    {
+                        SetItem(a[1], My.Resources.Resources.iron_ore, My.Resources.Resources.iron_ore, a[2]);
                     }
 
                     // REM - Разное
@@ -787,6 +847,26 @@ namespace Minecraft2D
                     if (a[2] == "DIAMOND")
                     {
                         SetItem(a[1], My.Resources.Resources.DIAMOND, My.Resources.Resources.DIAMOND, a[2]);
+                    }
+
+                    if (a[2] == "TNT")
+                    {
+                        SetItem(a[1], My.Resources.Resources.tnt_side, My.Resources.Resources.tnt_side, a[2]);
+                    }
+
+                    if (a[2] == "BUCKET")
+                    {
+                        SetItem(a[1], My.Resources.Resources.bucket, My.Resources.Resources.bucket, a[2]);
+                    }
+
+                    if (a[2] == "WATER_BUCKET")
+                    {
+                        SetItem(a[1], My.Resources.Resources.water_bucket, My.Resources.Resources.water_bucket, a[2]);
+                    }
+
+                    if (a[2] == "LAVA_BUCKET")
+                    {
+                        SetItem(a[1], My.Resources.Resources.lava_bucket, My.Resources.Resources.lava_bucket, a[2]);
                     }
 
                     // REM - Nothing
@@ -963,6 +1043,7 @@ namespace Minecraft2D
                 b.MouseDown += OnBlockClick;
                 b.KeyDown += Form1_KeyDown;
                 b.KeyUp += Form1_KeyUp;
+                b.MouseMove += Form1_MouseMove;
                 b.MouseEnter += blockMouseEnter;
                 b.MouseLeave += blockMouseLeave;
             }
@@ -1194,12 +1275,14 @@ namespace Minecraft2D
             {
                 if (e.Button == MouseButtons.Right)
                 {
-                    SendPacket("furnace", Operators.DivideObject(((Control)sender).Left + HorizontalScroll.Value, 32).ToString(), Operators.DivideObject(((Control)sender).Top + VerticalScroll.Value, 32).ToString());
+                    Control c = ((Control)sender);
+                    SendPacket("furnace", c.Name.Split('B')[0], c.Name.Split('B')[1]);
                 }
             }
             else if (e.Button == MouseButtons.Right)
             {
-                SendPacket("rightclick", Operators.DivideObject(((Control)sender).Left + HorizontalScroll.Value, 32).ToString(), Operators.DivideObject(((Control)sender).Top + VerticalScroll.Value, 32).ToString());
+                Control c = ((Control)sender);
+                SendPacket("rightclick", c.Name.Split('B')[0], c.Name.Split('B')[1]);
             }
             // MsgBox((sender.left / 32).ToString + " " + (sender.top / 32).ToString)
         }
@@ -1516,7 +1599,13 @@ namespace Minecraft2D
             }
             else
             {
-                Warning.Text = "";
+                try
+                {
+                    Warning.Text = "";
+                } catch(Exception)
+                {
+
+                }
             }
 
             try
@@ -1691,6 +1780,10 @@ namespace Minecraft2D
             if (!connected)
             {
                 MainMenu.GetInstance().Show();
+                if(toNotice != null)
+                {
+                    MainMenu.GetInstance().notice(toNotice, toNoticeType);
+                }
                 My.MyProject.Forms.Chat.Close();
                 Hide();
                 e.Cancel = true;
@@ -1837,10 +1930,7 @@ namespace Minecraft2D
 
         private void localPlayer_Paint(object sender, PaintEventArgs e)
         {
-            var r = new Rectangle(0, 0, localPlayer.Width, localPlayer.Height);
-            Bitmap i = (Bitmap)My.Resources.Resources.Player1Texture.Clone();
-            i.MakeTransparent();
-            localPlayer.CreateGraphics().DrawImage(i, r);
+            
         }
 
        
@@ -1861,6 +1951,7 @@ namespace Minecraft2D
         private void _localPlayer_Move(object sender, EventArgs e)
         {
             Test();
+            
         }
 
         private void hScrollBar1_Scroll_1(object sender, ScrollEventArgs e)
@@ -1883,12 +1974,84 @@ namespace Minecraft2D
 
             Text = "Netcraft";
             localPlayer.Update();
-            Update();
+            //Update();
             localPlayer.Hide();
             localPlayer.Show();
 
             Timer1.Stop();
             Timer1.Start();
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = CreateGraphics();
+            g.Clear(BackColor);
+            //if (Debugger.IsAttached)
+            //{
+            //    for (int i = 1; i < 64; i++)
+            //    {
+            //        //Draw verticle line
+            //        g.DrawLine(Pens.Red,
+            //            (this.ClientSize.Width / 32) * i,
+            //            0,
+            //            (this.ClientSize.Width / 32) * i,
+            //            this.ClientSize.Height);
+
+            //        //Draw horizontal line
+            //        g.DrawLine(Pens.Red,
+            //            0,
+            //            (this.ClientSize.Height / 32) * i,
+            //            this.ClientSize.Width,
+            //            (this.ClientSize.Height / 32) * i);
+            //    }
+            //}
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            Point p1 = new Point(localPlayer.Left + localPlayer.Width / 2, localPlayer.Top + 15);
+            Point p2 = PointToClient(Cursor.Position);
+            if(DistanceBetween(p1, p2) > 192)
+            {
+
+                double dcur = DistanceBetween(p1, p2);
+                var coff = dcur / 192;
+                Point p21 = new Point(p2.X - p1.X, p2.Y - p1.Y);
+                var p3 = new Point((int)(p21.X / coff), (int)(p21.Y / coff)) + (Size)p1;
+
+
+                g.DrawLine(Pens.Yellow, p1, p3);
+                g.DrawLine(Pens.Red, p2, p3);
+            } else
+            {
+                g.DrawLine(Pens.Yellow, p1, p2);
+            }
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            Form1_Paint(this, new PaintEventArgs(CreateGraphics(), Bounds));
+        }
+        
+        public static void Cmd(string label)
+        {
+            string[] args = label.Split(' ');
+            string cmd = args[0].ToLower();
+            if (cmd == "help")
+            {
+                Console.WriteLine("help => shows this list\r\nsetwalking <int: value> => set player walking");
+                return;
+            }
+            if(cmd == "setwalking")
+            {
+                GetInstance().walking = int.Parse(args[1]);
+                return;
+            }
+        }
+
+        public static void consoleThread()
+        {
+            while(true)
+            {
+                Cmd(Console.ReadLine());
+            }
         }
     }
 

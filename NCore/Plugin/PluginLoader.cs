@@ -20,7 +20,7 @@ namespace NCore
             }
             catch (Exception ex)
             {
-                NCore.CrashReport(ex);
+                NCore.GetNCore().CrashReport(ex);
             }
 
             return default;
@@ -36,7 +36,7 @@ namespace NCore
             }
             catch (Exception ex)
             {
-                NCore.CrashReport(ex);
+                NCore.GetNCore().CrashReport(ex);
             }
 
             return default;
@@ -46,7 +46,7 @@ namespace NCore
         {
             p.OnUnload();
             Plugins.Remove(p);
-            NCore.Log($"Плагин выгружен: {p.Name}");
+            NCore.GetNCore().Log($"Плагин выгружен: {p.Name}");
         }
     }
 }

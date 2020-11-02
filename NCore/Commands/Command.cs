@@ -70,7 +70,7 @@ namespace NCore
                 return;
             }
 
-            NCore.Log(m);
+            NCore.GetNCore().Log(m);
         }
     }
 }

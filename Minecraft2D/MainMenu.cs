@@ -139,11 +139,50 @@ namespace Minecraft2D
         StringCollection blocklist = new StringCollection();
         internal DiscordRPC.DiscordRpcClient dRPC;
         internal DiscordRPC.RichPresence presence;
+        // 0 = ignore, exit, 1 = exit, 2 = ignore
+        public void notice(string t, int type = 0)
+        {
+            panel3.Dock = DockStyle.Fill;
+            panel3.Show();
+            panel3.BringToFront();
+            textBox2.Text = t;
+            if(type == 0)
+            {
+                button1.Show();
+                button2.Show();
+            }
+            if(type == 1)
+            {
+                button1.Hide();
+                button2.Show();
+            }
+            if(type == 2)
+            {
+                button1.Show();
+                button2.Hide();
+            }
+            panel2.Hide();
+            My.MyProject.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Hand);
+        }
 
+        void OnUnhandledException(object sender, ThreadExceptionEventArgs e)
+        {
+            Form1.GetInstance().toNotice = $"OOPS, NETCRAFT IS CRASHED...\r\n\r\nAn unhandled exception in Netcraft occured.\r\n\r\nInformation:\r\n[Game version] {MainMenu.GetInstance().Ver}\r\n[Your OS: Platform] {Environment.OSVersion.Platform}\r\n[Your OS: ServicePack] {Environment.OSVersion.ServicePack}\r\n[Your OS: Version] {Environment.OSVersion.VersionString}\r\n" +
+                "\r\nException information\r\n" + e.Exception.ToString();
+            
+            Form1.GetInstance().toNoticeType = 1;
+            Form1.GetInstance().Close();
+        }
+        string cfg;
         private void MainMenu_Load(object sender, EventArgs e)
         {
             instance = this;
-
+             
+            Application.ThreadException += My.MyApplication.threadException;
+            AppDomain.CurrentDomain.UnhandledException += My.MyApplication.threadException;
+            cfg = File.ReadAllText("./options.txt", Encoding.UTF8);
+            
+            Utils.LANGUAGE = Utils.GetValue("lang", cfg, "башкирский");
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             DoLang();
             SetTitle();
@@ -297,7 +336,7 @@ namespace Minecraft2D
             clicks++;
             if(clicks == 5)
             {
-                FancyMessage.Show("Зачем кликать по этой штуке тем более 10 раз?");
+                throw new Exception("црн г туувув ещ сдшсл ершы еуче еут ешьуы,,,, 'nj ntcnjdsq rhfi z c.lf gjcnfdbk/// ,jkmit yt yf;bvfq");
             }
         }
 
@@ -325,6 +364,22 @@ namespace Minecraft2D
             {
                 e.Cancel = true;
             }
+        }
+
+        private void button2_Click_2(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            panel3.Hide();
+            panel2.Show();
+        }
+
+        private void Label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

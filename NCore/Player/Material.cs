@@ -40,6 +40,13 @@ namespace NCore
         FURNACE, // DONE :D
         COAL, // DONE :)
         LEAVES, // Also done.
-        SAPLING // Easy
+        SAPLING, // Easy
+        TNT, // DONE
+        IRON_ORE, // DONE
+        GOLD_ORE, // DONE
+        BUCKET, // ok
+        WATER_BUCKET, // ok
+        LAVA_BUCKET,
+        CHEST // ok
     }
 }

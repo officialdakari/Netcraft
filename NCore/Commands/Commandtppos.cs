@@ -27,7 +27,7 @@ namespace NCore
                 NetworkPlayer p = (NetworkPlayer)sender;
                 string x = args[0];
                 string y = args[1];
-                NCore.SendCommandFeedback($"{p.Username} телепортирован на [{x},{y}] ({NCore.DistanceBetweenPoint(NCore.Normalize(p.Position), NCore.Normalize(new System.Drawing.Point(Conversions.ToInteger(x), Conversions.ToInteger(y))))} блоков отсюда)", sender);
+                NCore.GetNCore().SendCommandFeedback($"{p.Username} телепортирован на [{x},{y}] ({NCore.DistanceBetweenPoint(NCore.Normalize(p.Position), NCore.Normalize(new System.Drawing.Point(Conversions.ToInteger(x), Conversions.ToInteger(y))))} блоков отсюда)", sender);
                 p.Teleport(Conversions.ToInteger(x), Conversions.ToInteger(y));
             }
 

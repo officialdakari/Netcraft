@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 
@@ -27,15 +28,15 @@ namespace Minecraft2D.My
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static void Main(string[] Args)
         {
-            try
-            {
-                Application.SetCompatibleTextRenderingDefault(UseCompatibleTextRendering);
-            }
-            finally
-            {
-            }
-
-            MyProject.Application.Run(Args);
+            Application.SetCompatibleTextRenderingDefault(UseCompatibleTextRendering);
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            Application.ThreadException += MyApplication.threadException;
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyApplication.threadException);
+            MyApplication.SetErrorMode(SetErrorMode(ErrorModes.SYSTEM_DEFAULT) | ErrorModes.SEM_NOGPFAULTERRORBOX | ErrorModes.SEM_FAILCRITICALERRORS | ErrorModes.SEM_NOOPENFILEERRORBOX);
+            Application.Run(new MainMenu());
+            Thread consoleThread = new Thread(Form1.consoleThread);
+            consoleThread.Start();
+            //MyProject.Application.Run(Args);
         }
         /* TODO ERROR: Skipped EndIfDirectiveTrivia */
         /* TODO ERROR: Skipped ElifDirectiveTrivia *//* TODO ERROR: Skipped DisabledTextTrivia *//* TODO ERROR: Skipped ElifDirectiveTrivia *//* TODO ERROR: Skipped DisabledTextTrivia *//* TODO ERROR: Skipped EndIfDirectiveTrivia */

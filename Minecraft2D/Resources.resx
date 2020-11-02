@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="COBBLESTONE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="cobblestone4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\COBBLESTONE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DIRT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="dirt1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\DIRT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IRON" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -220,9 +220,6 @@
   <data name="bedrock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\bedrock.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="cobblestone4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\cobblestone4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="DIAMOND" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\DIAMOND.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -253,20 +250,11 @@
   <data name="DIAMOND_SWORD_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\DIAMOND_SWORD_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="dirt1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\dirt1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="grass_side" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\grass_side.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="iron_ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\iron_ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="leaves" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\leaves.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="log_oak" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\log_oak.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="OBSIDIAN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\OBSIDIAN.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -319,9 +307,6 @@
   <data name="coal_ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\coal_ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="furnace_front_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\furnace_front_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="furnace_front_on" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\furnace_front_on.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -337,9 +322,6 @@
   <data name="iron_block" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\iron_block.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Grid_Sapling" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Grid_Sapling.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="NCLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\NCLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -348,5 +330,35 @@
   </data>
   <data name="c_edition" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\c-edition.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tnt_side" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\tnt_side.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bucket" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\bucket.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="furnace_front_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\furnace_front.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="grass_side" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\grass_block_side.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Grid_Sapling" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\oak_sapling.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lava_bucket" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lava_bucket.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lava_still" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lava_still.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="log_oak" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\oak_log.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="water_bucket" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\water_bucket.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="chest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\chest.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

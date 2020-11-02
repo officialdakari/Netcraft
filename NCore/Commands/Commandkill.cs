@@ -27,7 +27,7 @@ namespace NCore
                     return true;
                 }
 
-                NCore.SendCommandFeedback(args[0] + " убит", sender);
+                NCore.GetNCore().SendCommandFeedback(args[0] + " убит", sender);
                 return true;
             }
 

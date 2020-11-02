@@ -24,6 +24,9 @@ namespace NCore
         SAND,
         GLASS,
         FURNACE,
-        SAPLING
+        SAPLING,
+        TNT,
+        LAVA,
+        CHEST
     }
 }

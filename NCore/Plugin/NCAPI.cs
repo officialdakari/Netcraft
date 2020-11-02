@@ -34,17 +34,17 @@ namespace NCore.netcraft
 
                 public void Info(string arg0)
                 {
-                    NCore.LogPlugin(arg0, plugin);
+                    NCore.GetNCore().LogPlugin(arg0, plugin);
                 }
 
                 public void Warning(string arg0)
                 {
-                    NCore.LogPlugin(arg0, plugin, "WARNING");
+                    NCore.GetNCore().LogPlugin(arg0, plugin, "WARNING");
                 }
 
                 public void Severe(string arg0)
                 {
-                    NCore.LogPlugin(arg0, plugin, "ERROR");
+                    NCore.GetNCore().LogPlugin(arg0, plugin, "ERROR");
                 }
             }
 
@@ -192,7 +192,7 @@ namespace NCore.netcraft
                     }
 
                     field_a.Add(a.ToLower());
-                    NCore.SaveBanlist();
+                    NCore.GetNCore().SaveBanlist();
                 }
 
                 public static void UnbanPlayer(string a)
@@ -204,7 +204,7 @@ namespace NCore.netcraft
                     }
 
                     field_a.Remove(a.ToLower());
-                    NCore.SaveBanlist();
+                    NCore.GetNCore().SaveBanlist();
                 }
 
                 public static List<string> GetBannedPlayers()
@@ -236,7 +236,7 @@ namespace NCore.netcraft
 
                 public static WorldServer GetWorld()
                 {
-                    return NCore.World;
+                    return NCore.GetNCore().World;
                 }
 
                 public static NetworkPlayer GetPlayer(string arg0)
@@ -263,7 +263,7 @@ namespace NCore.netcraft
                 public static StringCollection GetPlayersData()
                 {
                     var s = new StringCollection();
-                    foreach (var g in System.IO.Directory.GetFiles(Conversions.ToString(Operators.AddObject(Application.StartupPath, "/playerdata/"))))
+                    foreach (var g in System.IO.Directory.GetFiles("./playerdata/"))
                         s.Add(g);
                     return s;
                 }

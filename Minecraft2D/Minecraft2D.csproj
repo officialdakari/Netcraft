@@ -27,7 +27,7 @@
     <DocumentationFile>bin\Debug\Netcraft.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <WarningLevel>0</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -88,6 +88,15 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChestWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChestWindow.Designer.cs">
+      <DependentUpon>ChestWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FancyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FancyMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -169,6 +178,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Chat.resx">
       <DependentUpon>Chat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChestWindow.resx">
+      <DependentUpon>ChestWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FancyMessageBox.resx">
       <DependentUpon>FancyMessageBox.cs</DependentUpon>
@@ -273,9 +285,6 @@
     <None Include="Resources\WOOD.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\COBBLESTONE.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\STONE.png" />
   </ItemGroup>
   <ItemGroup>
@@ -306,26 +315,32 @@
     <None Include="Resources\IRON_SWORD_FLIPPED.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\DIRT.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\log_oak.png" />
+    <None Include="Resources\chest.png" />
+    <None Include="Resources\lava_bucket.png" />
+    <None Include="Resources\lava_still.png" />
+    <None Include="Resources\bucket.png" />
+    <None Include="Resources\water_bucket.png" />
+    <None Include="Resources\oak_sapling.png" />
+    <None Include="Resources\diamond.png" />
+    <None Include="Resources\coal.png" />
+    <None Include="Resources\stone1.png" />
+    <None Include="Resources\sand.png" />
     <None Include="Resources\planks_oak.png" />
+    <None Include="Resources\obsidian1.png" />
+    <None Include="Resources\oak_log.png" />
+    <None Include="Resources\iron_ore.png" />
+    <None Include="Resources\log_oak.png" />
+    <None Include="Resources\tnt_side.png" />
     <None Include="Resources\NCLogo.png" />
     <None Include="Resources\netcraft.png" />
     <None Include="Resources\vbnet-edition.png" />
     <None Include="Resources\sprite.png" />
-    <None Include="Resources\sand.png" />
     <None Include="Resources\SANDBLOCK.png" />
     <None Include="Resources\water_still.png" />
-    <None Include="Resources\stone1.png" />
-    <None Include="Resources\obsidian1.png" />
     <None Include="Resources\OBSIDIAN.png" />
     <None Include="Resources\platformPack_tile034.png" />
     <None Include="Resources\leaves.jpg" />
-    <None Include="Resources\bedrock.png" />
     <None Include="Resources\cobblestone4.png" />
-    <None Include="Resources\DIAMOND.png" />
     <None Include="Resources\DIAMOND_AXE_FLIPPED.png" />
     <None Include="Resources\DIAMOND_PICKAXE.png" />
     <None Include="Resources\DIAMOND_PICKAXE_FLIPPED.png" />
@@ -334,25 +349,28 @@
     <None Include="Resources\DIAMOND_SWORD.png" />
     <None Include="Resources\DIAMOND_SWORD_FLIPPED.png" />
     <None Include="Resources\DIAMOND_AXE.png" />
-    <None Include="Resources\diamond_ore.png" />
     <None Include="Resources\grass_side.png" />
     <None Include="Resources\dirt1.png" />
     <None Include="Resources\GLASSBLOCK.png" />
-    <None Include="Resources\glass.png" />
-    <None Include="Resources\gold_ore.png" />
     <None Include="Resources\GOLD.png" />
     <None Include="Resources\furnace_front_on.png" />
     <None Include="Resources\furnace_front_off.png" />
-    <None Include="Resources\coal.png" />
-    <None Include="Resources\coal_ore.png" />
     <None Include="Resources\Grid_Sapling.png" />
     <None Include="Resources\c-edition.png" />
     <Content Include="logoNC.ico" />
-    <None Include="Resources\gold_block.png" />
-    <None Include="Resources\diamond_block.png" />
-    <None Include="Resources\iron_block.png" />
     <None Include="Resources\game_music_loop.mp3" />
-    <Content Include="Resources\iron_ore.png" />
+    <None Include="Resources\bedrock.png" />
+    <None Include="Resources\coal_ore.png" />
+    <None Include="Resources\cobblestone.png" />
+    <None Include="Resources\diamond_block.png" />
+    <None Include="Resources\diamond_ore.png" />
+    <None Include="Resources\dirt.png" />
+    <None Include="Resources\furnace_front.png" />
+    <None Include="Resources\glass.png" />
+    <None Include="Resources\gold_block.png" />
+    <None Include="Resources\gold_ore.png" />
+    <None Include="Resources\grass_block_side.png" />
+    <None Include="Resources\iron_block.png" />
     <None Include="Resources\platformPack_tile016.png" />
     <None Include="Resources\platformPack_tile004.png" />
     <None Include="Resources\platformPack_tile001.png" />

@@ -16,13 +16,12 @@ namespace NCore
     {
         public NetworkPlayer(TcpClient forClient) : base("", false)
         {
-            // LastNotSpectatorPosition
             field_01931 = Position;
             d = forClient;
             d.GetStream().BeginRead(new byte[] { 0 }, 0, 0, (_) => e(), null);
             var argarg0 = this;
             PacketQueue = new SendQueueType(ref argarg0);
-            World = NCore.World;
+            World = NCore.GetNCore().World;
             ip = ((IPEndPoint)d.Client.RemoteEndPoint).Address.ToString();
             PlayerRectangle = new Rectangle(Position, new Size(47, 92));
         }
@@ -45,6 +44,7 @@ namespace NCore
         public int MovedInAir { get; set; } = 0;
         public bool IsAuthorized { get; set; } = false;
         public int AntiFlyWarnings { get; set; } = 0;
+        public BlockChest OpenChest { get; set; } = null;
 
         public string GetIp()
         {
@@ -58,7 +58,7 @@ namespace NCore
         {
             IsSpectator = true;
             field_01931 = Position;
-            NCore.Send("removeplayer?" + Username, Username);
+            NCore.GetNCore().Send("removeplayer?" + Username, Username);
             SetNoClip(true);
         }
 
@@ -66,8 +66,20 @@ namespace NCore
         {
             IsSpectator = false;
             Teleport(field_01931.X, field_01931.Y);
-            NCore.Send("addplayer?" + Username, Username);
+            NCore.GetNCore().Send("addplayer?" + Username, Username);
             SetNoClip(false);
+        }
+
+        public void Chest(BlockChest chest)
+        {
+            OpenChest = chest;
+            string items = "";
+            foreach(ItemStack item in chest.items)
+            {
+                items += $"{item.Type.ToString()} x {item.Count.ToString()}?";
+            }
+            items = items.TrimEnd('?');
+            Send("chestopen?" + items);
         }
 
         public void SetNoClip(bool arg0)
@@ -114,7 +126,7 @@ namespace NCore
 
         public void UpdateHealth(int h, string d = "died")
         {
-            h = (int)Math.Round((decimal)h);
+            this.Health = h;
             var ev = new netcraft.server.api.events.PlayerHealthEventArgs(this, Health, h);
             netcraft.server.api.NCSApi.REPlayerHealthEvent(ev);
             if (ev.GetCancelled())
@@ -170,8 +182,11 @@ namespace NCore
 
             netcraft.server.api.Netcraft.Broadcast(ev.GetDeathMessage());
             Teleport(ev.GetSpawn().X, ev.GetSpawn().Y);
+            //Position = ev.GetSpawn();
+            //PacketQueue.AddQueue($"teleport?{ev.GetSpawn().X.ToString()}?{ev.GetSpawn().Y.ToString()}");
             Health = 100;
-            Send("health?100");
+            PacketQueue.AddQueue("health?100");
+            PacketQueue.SendQueue();
         }
 
         public void Teleport(int x, int y)
@@ -197,6 +212,18 @@ namespace NCore
 
                 RemoveItem(Material.PLANKS, 2);
                 Give(Material.STICK, 4);
+            }
+
+            if (m == Material.BUCKET)
+            {
+                if (PlayerInventory.CountOf(Material.IRON) < 3)
+                {
+                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    return;
+                }
+
+                RemoveItem(Material.IRON, 3);
+                Give(Material.BUCKET, 3);
             }
 
             if (m == Material.PLANKS)
@@ -490,6 +517,10 @@ namespace NCore
                 t = "diamond_block";
             if (m == EnumBlockType.GOLD_BLOCK)
                 t = "gold_block";
+            if (m == EnumBlockType.TNT)
+                t = "tnt";
+            if (m == EnumBlockType.CHEST)
+                t = "chest";
             if (m == EnumBlockType.SAPLING)
             {
                 t = "sapling";
@@ -498,6 +529,11 @@ namespace NCore
             if (m == EnumBlockType.WATER)
             {
                 t = "water";
+                nonsolid = true;
+            }
+            if (m == EnumBlockType.LAVA)
+            {
+                t = "lava";
                 nonsolid = true;
             }
 
@@ -553,6 +589,10 @@ namespace NCore
                 t = "diamond_block";
             if (m == EnumBlockType.GOLD_BLOCK)
                 t = "gold_block";
+            if (m == EnumBlockType.TNT)
+                t = "tnt";
+            if (m == EnumBlockType.CHEST)
+                t = "chest";
             if (m == EnumBlockType.SAPLING)
             {
                 t = "sapling";
@@ -561,6 +601,11 @@ namespace NCore
             if (m == EnumBlockType.WATER)
             {
                 t = "water";
+                nonsolid = true;
+            }
+            if (m == EnumBlockType.LAVA)
+            {
+                t = "lava";
                 nonsolid = true;
             }
 
@@ -597,6 +642,20 @@ namespace NCore
                 RemoveItem(b);
                 RemoveItem(c);
                 Give(Material.STONE);
+            }
+
+            if (c == Material.IRON_ORE)
+            {
+                RemoveItem(b);
+                RemoveItem(c);
+                Give(Material.IRON, 3);
+            }
+
+            if (c == Material.GOLD_ORE)
+            {
+                RemoveItem(b);
+                RemoveItem(c);
+                Give(Material.GOLD, 3);
             }
         }
 
@@ -679,7 +738,7 @@ namespace NCore
         {
             get
             {
-                foreach (var o in NCore.World.Blocks)
+                foreach (var o in NCore.GetNCore().World.Blocks)
                 {
                     var bpos = new Point(o.Position.X * 32, o.Position.Y * 32);
                     var brec = new Rectangle(bpos, new Size(32, 32));
@@ -726,23 +785,23 @@ namespace NCore
             }
             catch (ObjectDisposedException ex)
             {
-                NCore.LogError(ex);
+                NCore.GetNCore().LogError(ex);
             }
             catch (ArgumentNullException ex)
             {
-                NCore.LogError(ex);
+                NCore.GetNCore().LogError(ex);
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                NCore.LogError(ex);
+                NCore.GetNCore().LogError(ex);
             }
             catch (ArgumentException ex)
             {
-                NCore.LogError(ex);
+                NCore.GetNCore().LogError(ex);
             }
             catch (OutOfMemoryException ex)
             {
-                NCore.LogError(ex);
+                NCore.GetNCore().LogError(ex);
             }
             catch (NullReferenceException ex)
             {
@@ -751,7 +810,7 @@ namespace NCore
                     b?.Invoke(this);
                 }
 
-                NCore.LogError(ex);
+                NCore.GetNCore().LogError(ex);
             }
             catch (InvalidOperationException ex)
             {
@@ -792,11 +851,11 @@ namespace NCore
                 Netcraft.Broadcast($"{Username} был выгнан из игры. Причина: {kickMessage}");
             }
 
-            if(IsLoaded) NCore.Log($"{Username} был выгнан из игры: {kickMessage}");
+            if(IsLoaded) NCore.GetNCore().Log($"{Username} был выгнан из игры: {kickMessage}");
             Message("Вас выгнали из игры:\r\r" + kickMessage, 2);
-            b?.Invoke(this);
             d.Client.Close();
             d = null;
+            if (d.Client.Connected) Disconnect();
         }
     }
     /* TODO ERROR: Skipped WarningDirectiveTrivia */

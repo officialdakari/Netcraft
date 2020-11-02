@@ -7,7 +7,7 @@ namespace Minecraft2D
 
     internal static class Utils
     {
-        internal const string LANGUAGE = "башкирский";
+        internal static string LANGUAGE = "башкирский";
         public static object IIf(bool expession, object valueIfTrue, object valueIfFalse)
         {
             if(expession == true)

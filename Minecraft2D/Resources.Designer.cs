@@ -73,9 +73,29 @@ namespace Minecraft2D.My.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap bucket {
+            get {
+                object obj = ResourceManager.GetObject("bucket", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap c_edition {
             get {
                 object obj = ResourceManager.GetObject("c_edition", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap chest {
+            get {
+                object obj = ResourceManager.GetObject("chest", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -96,16 +116,6 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap coal_ore {
             get {
                 object obj = ResourceManager.GetObject("coal_ore", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap COBBLESTONE {
-            get {
-                object obj = ResourceManager.GetObject("COBBLESTONE", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -226,16 +236,6 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap DIAMOND_SWORD_FLIPPED {
             get {
                 object obj = ResourceManager.GetObject("DIAMOND_SWORD_FLIPPED", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap DIRT {
-            get {
-                object obj = ResourceManager.GetObject("DIRT", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -446,6 +446,26 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap IRON_SWORD_FLIPPED {
             get {
                 object obj = ResourceManager.GetObject("IRON_SWORD_FLIPPED", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap lava_bucket {
+            get {
+                object obj = ResourceManager.GetObject("lava_bucket", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap lava_still {
+            get {
+                object obj = ResourceManager.GetObject("lava_still", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -723,9 +743,29 @@ namespace Minecraft2D.My.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap tnt_side {
+            get {
+                object obj = ResourceManager.GetObject("tnt_side", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap vbnet_edition {
             get {
                 object obj = ResourceManager.GetObject("vbnet_edition", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap water_bucket {
+            get {
+                object obj = ResourceManager.GetObject("water_bucket", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
