@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace NCore
 {
@@ -7,7 +8,7 @@ namespace NCore
         public List<ItemStack> Items;
         public NetworkPlayer Owner;
 
-        public void AddItem(ItemStack arg0)
+        public async Task AddItem(ItemStack arg0)
         {
             Items.Add(arg0);
         }

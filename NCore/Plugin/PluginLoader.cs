@@ -13,7 +13,8 @@ namespace NCore
             try
             {
                 var p = Assembly.LoadFrom(path);
-                Plugin pl = ((Plugin)GetObject(p, "Plugin")).Create();
+                Plugin pl = ((Plugin)GetObject(p, "Plugin"));
+                pl.Create();
                 pl.Assembly = p;
                 Plugins.Add(pl);
                 return pl;

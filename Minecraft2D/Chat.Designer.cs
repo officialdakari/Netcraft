@@ -61,15 +61,15 @@ namespace Minecraft2D
             this._TextBox1.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this._TextBox1.Location = new System.Drawing.Point(0, 348);
             this._TextBox1.Name = "_TextBox1";
-            this._TextBox1.Size = new System.Drawing.Size(469, 26);
+            this._TextBox1.Size = new System.Drawing.Size(424, 26);
             this._TextBox1.TabIndex = 1;
             this._TextBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox1_KeyDown);
             // 
             // _Button1
             // 
-            this._Button1.Location = new System.Drawing.Point(475, 348);
+            this._Button1.Location = new System.Drawing.Point(430, 348);
             this._Button1.Name = "_Button1";
-            this._Button1.Size = new System.Drawing.Size(86, 26);
+            this._Button1.Size = new System.Drawing.Size(131, 26);
             this._Button1.TabIndex = 2;
             this._Button1.Text = "chat.button.send";
             this._Button1.UseVisualStyleBackColor = true;

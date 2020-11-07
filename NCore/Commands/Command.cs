@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic.CompilerServices;
+using System.Threading.Tasks;
 
 namespace NCore
 {
@@ -24,7 +25,7 @@ namespace NCore
             }
         }
 
-        public abstract bool OnCommand(CommandSender sender, Command cmd, string[] args, string label);
+        public abstract Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label);
     }
 
     public class CommandSender
@@ -61,12 +62,12 @@ namespace NCore
             }
         }
 
-        public void SendMessage(string m)
+        public async Task SendMessage(string m)
         {
             if (IsPlayer)
             {
                 NetworkPlayer p = (NetworkPlayer)this;
-                p.Chat(m);
+                await p.Chat(m);
                 return;
             }
 

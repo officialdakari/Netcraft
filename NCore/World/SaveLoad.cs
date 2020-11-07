@@ -58,7 +58,8 @@ namespace NCore
                 foreach (string i in items)
                 {
                     try
-                    { 
+                    {
+                        if (i.Length < 1) continue;
                         ItemStack item = new ItemStack((Material)Enum.Parse(typeof(Material), i.Split('$')[0]), int.Parse(i.Split('$')[1]));
                         b.items.Add(item);
                     }

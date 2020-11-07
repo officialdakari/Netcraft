@@ -1,4 +1,6 @@
 ﻿using NCore.netcraft.server.api;
+using System.Threading.Tasks;
+
 namespace NCore
 {
     public class Commandbroadcast : Command
@@ -7,17 +9,17 @@ namespace NCore
         {
         }
 
-        public override bool OnCommand(CommandSender sender, Command cmd, string[] args, string label)
+        public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             if (!sender.GetAdmin())
             {
-                sender.SendMessage("У Вас недостаточно прав!");
+                await sender.SendMessage("У Вас недостаточно прав!");
                 return true;
             }
 
             if (args.Length > 0)
             {
-                Netcraft.Broadcast("[Broadcast] " + string.Join(" ", args));
+                await Netcraft.Broadcast("[Broadcast] " + string.Join(" ", args));
                 return true;
             }
 

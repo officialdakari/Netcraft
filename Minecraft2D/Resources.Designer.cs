@@ -83,6 +83,16 @@ namespace Minecraft2D.My.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap buttonbg {
+            get {
+                object obj = ResourceManager.GetObject("buttonbg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap c_edition {
             get {
                 object obj = ResourceManager.GetObject("c_edition", resourceCulture);
@@ -126,6 +136,16 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap cobblestone4 {
             get {
                 object obj = ResourceManager.GetObject("cobblestone4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap cooked_beef {
+            get {
+                object obj = ResourceManager.GetObject("cooked_beef", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -486,6 +506,16 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap log_oak {
             get {
                 object obj = ResourceManager.GetObject("log_oak", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap menubackground {
+            get {
+                object obj = ResourceManager.GetObject("menubackground", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

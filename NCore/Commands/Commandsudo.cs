@@ -1,5 +1,6 @@
 ﻿using NCore.netcraft.server.api;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NCore
 {
@@ -9,11 +10,11 @@ namespace NCore
         {
         }
 
-        public override bool OnCommand(CommandSender sender, Command cmd, string[] args, string label)
+        public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             if (!sender.GetAdmin())
             {
-                sender.SendMessage("У Вас недостаточно прав!");
+                await sender.SendMessage("У Вас недостаточно прав!");
                 return true;
             }
 
@@ -22,12 +23,12 @@ namespace NCore
                 var p = Netcraft.GetPlayer(args[0]);
                 if (NCore.IsNothing(p))
                 {
-                    sender.SendMessage("Игрок не найден!");
+                    await sender.SendMessage("Игрок не найден!");
                     return true;
                 }
 
                 NCore.GetNCore().MessageReceived($"chat?{string.Join(" ", args.Skip(1).ToArray())}", p);
-                sender.SendMessage("Успешно выполнено sudo.");
+                await sender.SendMessage("Успешно выполнено sudo.");
                 return true;
             }
 

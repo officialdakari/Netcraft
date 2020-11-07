@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using global::System.Collections.Specialized;
 using Microsoft.VisualBasic;
 
@@ -9,23 +10,23 @@ namespace NCore
         private NetworkPlayer field1;
         private StringCollection field2 = new StringCollection();
 
-        public void SendQueue()
+        public async Task SendQueue()
         {
             string a = "";
             foreach (string f in field2)
                 a += f + Constants.vbLf;
             // a = a.TrimEnd(vbCrLf)
             // Console.WriteLine("[DEBUG] Send packet " + a)
-            field1.Send(a);
+            await field1.Send(a);
             field2.Clear();
         }
 
-        public void AddQueue(string arg0)
+        public async Task AddQueue(string arg0)
         {
             field2.Add(arg0);
         }
 
-        public void RemoveQueue(string arg0)
+        public async Task RemoveQueue(string arg0)
         {
             if (!field2.Contains(arg0))
             {

@@ -1,5 +1,6 @@
 ﻿using NCore;
 using NCore.netcraft.server.api;
+using System.Threading.Tasks;
 
 namespace NCore
 {
@@ -9,11 +10,11 @@ namespace NCore
         {
         }
 
-        public override bool OnCommand(CommandSender sender, Command cmd, string[] args, string label)
+        public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             if (!sender.GetAdmin())
             {
-                sender.SendMessage("У Вас недостаточно прав!");
+                await sender.SendMessage("У Вас недостаточно прав!");
                 return true;
             }
 
@@ -22,21 +23,21 @@ namespace NCore
                 var local_a = Netcraft.GetPlayer(args[0]);
                 if (NCore.IsNothing(local_a))
                 {
-                    sender.SendMessage("Игрок не найден");
+                    await sender.SendMessage("Игрок не найден");
                     return true;
                 }
 
                 local_a.IsAdmin = !local_a.IsAdmin;
                 if (local_a.IsAdmin)
                 {
-                    local_a.Chat("Вы теперь администратор");
-                    sender.SendMessage($"Выданы права администратора: {local_a.Username}");
+                    await local_a.Chat("Вы теперь администратор");
+                    await sender.SendMessage($"Выданы права администратора: {local_a.Username}");
                     NCore.GetNCore().Log($"{sender.GetName()} выдал права администратора: {local_a.Username}");
                 }
                 else
                 {
-                    local_a.Chat("Вы больше не администратор");
-                    sender.SendMessage($"Сняты права администратора: {local_a.Username}");
+                    await local_a.Chat("Вы больше не администратор");
+                    await sender.SendMessage($"Сняты права администратора: {local_a.Username}");
                     NCore.GetNCore().Log($"{sender.GetName()} снял права администратора: {local_a.Username}");
                 }
 

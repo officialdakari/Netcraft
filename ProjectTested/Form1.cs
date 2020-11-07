@@ -263,7 +263,7 @@ namespace ProjectTested
             if (a[0] == "chat")
             {
                 var m = string.Join("?", a.Skip(1).ToArray());
-                Console.WriteLine($"[CHAT] > {m}");
+                //Console.WriteLine($"[CHAT] > {m}");
                 ChatMessage?.Invoke(m);
             }
             if (a[0] == "blockchange")

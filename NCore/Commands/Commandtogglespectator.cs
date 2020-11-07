@@ -1,4 +1,5 @@
 ﻿using NCore;
+using System.Threading.Tasks;
 
 namespace NCore
 {
@@ -8,11 +9,11 @@ namespace NCore
         {
         }
 
-        public override bool OnCommand(CommandSender sender, Command cmd, string[] args, string label)
+        public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             if (!sender.GetAdmin())
             {
-                sender.SendMessage("У Вас недостаточно прав!");
+                await sender.SendMessage("У Вас недостаточно прав!");
                 return true;
             }
 
@@ -26,11 +27,11 @@ namespace NCore
                 NetworkPlayer p = (NetworkPlayer)sender;
                 if (p.IsSpectator)
                 {
-                    p.Survival();
+                    await p.Survival();
                 }
                 else
                 {
-                    p.Spectator();
+                    await p.Spectator();
                 }
 
                 return true;

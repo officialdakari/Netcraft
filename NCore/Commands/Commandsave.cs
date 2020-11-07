@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NCore.Commands
 {
@@ -11,17 +12,17 @@ namespace NCore.Commands
 
         }
 
-        public override bool OnCommand(CommandSender sender, Command cmd, string[] args, string label)
+        public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             if(!sender.GetAdmin())
             {
-                sender.SendMessage("У Вас недостаточно прав");
+                await sender.SendMessage("У Вас недостаточно прав");
                 return true;
             }
             if(args.Length == 0)
             {
                 System.IO.File.WriteAllText("./world.txt", new SaveLoad().Save(NCore.GetNCore().World), Encoding.UTF8);
-                sender.SendMessage("Игра успешно сохранена");
+                await sender.SendMessage("Игра успешно сохранена");
                 NCore.GetNCore().Log(sender.GetName() + " сохранил игру");
                 return true;
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using global::System.Drawing;
 using global::System.IO;
 using global::System.Net;
@@ -32,6 +33,8 @@ namespace NCore
         public Inventory PlayerInventory { get; set; }
         public ItemStack SelectedItem { get; set; }
         public int Health { get; set; } = 100;
+        public int Hunger { get; set; } = 20;
+        public int Saturation { get; set; } = 5;
         public bool IsAdmin { get; set; } = false;
         public SendQueueType PacketQueue { get; set; }
         public WorldServer World { get; set; }
@@ -54,23 +57,23 @@ namespace NCore
         private string ip;
         private Point field_01931;
 
-        public void Spectator()
+        public async Task Spectator()
         {
             IsSpectator = true;
             field_01931 = Position;
-            NCore.GetNCore().Send("removeplayer?" + Username, Username);
-            SetNoClip(true);
+            await NCore.GetNCore().Send("removeplayer?" + Username, Username);
+            await SetNoClip(true);
         }
 
-        public void Survival()
+        public async Task Survival()
         {
             IsSpectator = false;
             Teleport(field_01931.X, field_01931.Y);
-            NCore.GetNCore().Send("addplayer?" + Username, Username);
-            SetNoClip(false);
+            await NCore.GetNCore().Send("addplayer?" + Username, Username);
+            await SetNoClip(false);
         }
 
-        public void Chest(BlockChest chest)
+        public async Task Chest(BlockChest chest)
         {
             OpenChest = chest;
             string items = "";
@@ -79,19 +82,19 @@ namespace NCore
                 items += $"{item.Type.ToString()} x {item.Count.ToString()}?";
             }
             items = items.TrimEnd('?');
-            Send("chestopen?" + items);
+            await Send("chestopen?" + items);
         }
 
-        public void SetNoClip(bool arg0)
+        public async Task SetNoClip(bool arg0)
         {
             if (arg0)
             {
-                Send("noclip");
+                await Send("noclip");
                 NoClip = true;
             }
             else
             {
-                Send("clip");
+                await Send("clip");
                 NoClip = false;
             }
         }
@@ -108,23 +111,23 @@ namespace NCore
         // ListClient
         private TcpClient d;
 
-        public void Give(Material m, int count = 1)
+        public async Task Give(Material m, int count = 1)
         {
             foreach (var g in PlayerInventory.Items)
             {
                 if (g.Type == m)
                 {
                     g.Count += count;
-                    UpdateInventory();
+                    await UpdateInventory();
                     return;
                 }
             }
 
             PlayerInventory.AddItem(new ItemStack(m, count));
-            UpdateInventory();
+            await UpdateInventory();
         }
 
-        public void UpdateHealth(int h, string d = "died")
+        public async Task UpdateHealth(int h, string d = "died")
         {
             this.Health = h;
             var ev = new netcraft.server.api.events.PlayerHealthEventArgs(this, Health, h);
@@ -138,37 +141,43 @@ namespace NCore
             }
 
             Health = h;
-            Send("health?" + h.ToString());
+            await Send("health?" + h.ToString());
         }
 
-        public void DoWarning(string n)
+        public async Task UpdateHunger(int h)
         {
-            Send("dowarn?" + n);
+            this.Hunger = h;
+            await Send("hunger?" + (h > 20 ? "20" : h.ToString()));
         }
 
-        public void Damage(int d, NetworkPlayer damager = null)
+        public async Task DoWarning(string n)
+        {
+            await Send("dowarn?" + n);
+        }
+
+        public async Task Damage(int d, NetworkPlayer damager = null)
         {
             if (NCore.IsNothing(damager))
             {
-                UpdateHealth(Health - d, "damaged to death");
+                await UpdateHealth(Health - d, "damaged to death");
             }
             else
             {
-                UpdateHealth(Health - d, $"был убит {damager.Username}");
+                await UpdateHealth(Health - d, $"был убит {damager.Username}");
             }
         }
 
-        public void SendSkyColorChange(Color color)
+        public async Task SendSkyColorChange(Color color)
         {
-            Send($"sky?{color.Name}");
+            await Send($"sky?{color.Name}");
         }
 
-        public void Damage(int d, string a = "died")
+        public async Task Damage(int d, string a = "died")
         {
-            UpdateHealth(Health - d, a);
+            await UpdateHealth(Health - d, a);
         }
 
-        public void Kill(string deathMessage = "died")
+        public async Task Kill(string deathMessage = "died")
         {
             // Form1.Send("chat?" + Username + " " + deathMessage)
             var ev = new netcraft.server.api.events.PlayerDeathEventArgs(this, Conversions.ToString(Operators.AddObject(Username + " ", deathMessage)), new Point(0, 0));
@@ -176,306 +185,319 @@ namespace NCore
             if (ev.GetCancelled())
             {
                 Health = 1;
-                Send("health?1");
+                await Send("health?1");
                 return;
             }
 
             netcraft.server.api.Netcraft.Broadcast(ev.GetDeathMessage());
             Teleport(ev.GetSpawn().X, ev.GetSpawn().Y);
-            //Position = ev.GetSpawn();
-            //PacketQueue.AddQueue($"teleport?{ev.GetSpawn().X.ToString()}?{ev.GetSpawn().Y.ToString()}");
+            Position = ev.GetSpawn();
+            await PacketQueue.AddQueue($"teleport?{ev.GetSpawn().X.ToString()}?{ev.GetSpawn().Y.ToString()}");
             Health = 100;
-            PacketQueue.AddQueue("health?100");
-            PacketQueue.SendQueue();
+            await PacketQueue.AddQueue("health?100");
+            await PacketQueue.SendQueue();
+            await UpdateHunger(20);
         }
 
-        public void Teleport(int x, int y)
+        public async Task Teleport(int x, int y)
         {
             Position = new Point(x, y);
-            Send("teleport?" + x.ToString() + "?" + y.ToString());
+            await Send("teleport?" + x.ToString() + "?" + y.ToString());
         }
 
-        public void Chat(string arg0)
+        public async Task Chat(string arg0)
         {
-            Send("chat?" + arg0);
+            await Send("chat?" + arg0);
         }
 
-        public void Craft(Material m)
+        public async Task Craft(Material m)
         {
             if (m == Material.STICK)
             {
                 if (PlayerInventory.CountOf(Material.PLANKS) < 2)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.PLANKS, 2);
-                Give(Material.STICK, 4);
+                await RemoveItem(Material.PLANKS, 2);
+                await Give(Material.STICK, 4);
             }
 
             if (m == Material.BUCKET)
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 3)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.IRON, 3);
-                Give(Material.BUCKET, 3);
+                await RemoveItem(Material.IRON, 3);
+                await Give(Material.BUCKET, 3);
             }
 
             if (m == Material.PLANKS)
             {
                 if (PlayerInventory.CountOf(Material.WOOD) < 1)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.WOOD);
-                Give(Material.PLANKS, 4);
+                await RemoveItem(Material.WOOD);
+                await Give(Material.PLANKS, 4);
             }
 
             if (m == Material.STONE_AXE)
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 3)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.STICK, 2);
-                RemoveItem(Material.COBBLESTONE, 3);
-                Give(Material.STONE_AXE);
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.COBBLESTONE, 3);
+                await Give(Material.STONE_AXE);
             }
 
             if (m == Material.STONE_PICKAXE)
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 3)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.STICK, 2);
-                RemoveItem(Material.COBBLESTONE, 3);
-                Give(Material.STONE_PICKAXE);
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.COBBLESTONE, 3);
+                await Give(Material.STONE_PICKAXE);
             }
 
             if (m == Material.STONE_SHOVEL)
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 1)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.STICK, 2);
-                RemoveItem(Material.COBBLESTONE, 1);
-                Give(Material.STONE_SHOVEL);
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.COBBLESTONE, 1);
+                await Give(Material.STONE_SHOVEL);
             }
 
             if (m == Material.STONE_SWORD)
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 2)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 1)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.STICK, 2);
-                RemoveItem(Material.COBBLESTONE, 3);
-                Give(Material.STONE_SWORD);
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.COBBLESTONE, 3);
+                await Give(Material.STONE_SWORD);
             }
 
             if (m == Material.IRON_AXE)
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 3)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.STICK, 2);
-                RemoveItem(Material.IRON, 3);
-                Give(Material.IRON_AXE);
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.IRON, 3);
+                await Give(Material.IRON_AXE);
             }
 
             if (m == Material.IRON_PICKAXE)
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 3)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.STICK, 2);
-                RemoveItem(Material.IRON, 3);
-                Give(Material.IRON_PICKAXE);
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.IRON, 3);
+                await Give(Material.IRON_PICKAXE);
             }
 
             if (m == Material.IRON_SHOVEL)
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 1)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.STICK, 2);
-                RemoveItem(Material.IRON, 1);
-                Give(Material.IRON_SHOVEL);
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.IRON, 1);
+                await Give(Material.IRON_SHOVEL);
             }
 
             if (m == Material.IRON_SWORD)
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 2)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 1)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.STICK, 2);
-                RemoveItem(Material.IRON, 3);
-                Give(Material.IRON_SWORD);
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.IRON, 3);
+                await Give(Material.IRON_SWORD);
             }
 
             if (m == Material.FURNACE)
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 8)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.COBBLESTONE, 8);
-                Give(Material.FURNACE);
+                await RemoveItem(Material.COBBLESTONE, 8);
+                await Give(Material.FURNACE);
+            }
+
+            if (m == Material.CHEST)
+            {
+                if (PlayerInventory.CountOf(Material.PLANKS) < 8)
+                {
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    return;
+                }
+
+                await RemoveItem(Material.PLANKS, 8);
+                await Give(Material.CHEST);
             }
 
             if (m == Material.IRON_BLOCK)
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 9)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.IRON, 9);
-                Give(Material.IRON_BLOCK);
+                await RemoveItem(Material.IRON, 9);
+                await Give(Material.IRON_BLOCK);
             }
 
             if (m == Material.DIAMOND_BLOCK)
             {
                 if (PlayerInventory.CountOf(Material.DIAMOND) < 9)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.DIAMOND, 9);
-                Give(Material.DIAMOND_BLOCK);
+                await RemoveItem(Material.DIAMOND, 9);
+                await Give(Material.DIAMOND_BLOCK);
             }
 
             if (m == Material.GOLD_BLOCK)
             {
                 if (PlayerInventory.CountOf(Material.GOLD) < 9)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.GOLD, 9);
-                Give(Material.GOLD_BLOCK);
+                await RemoveItem(Material.GOLD, 9);
+                await Give(Material.GOLD_BLOCK);
             }
 
             if (m == Material.IRON)
             {
                 if (PlayerInventory.CountOf(Material.IRON_BLOCK) < 1)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.IRON_BLOCK, 1);
-                Give(Material.IRON, 9);
+                await RemoveItem(Material.IRON_BLOCK, 1);
+                await Give(Material.IRON, 9);
             }
 
             if (m == Material.GOLD)
             {
                 if (PlayerInventory.CountOf(Material.GOLD_BLOCK) < 1)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.GOLD_BLOCK, 1);
-                Give(Material.GOLD, 9);
+                await RemoveItem(Material.GOLD_BLOCK, 1);
+                await Give(Material.GOLD, 9);
             }
 
             if (m == Material.DIAMOND)
             {
                 if (PlayerInventory.CountOf(Material.DIAMOND_BLOCK) < 1)
                 {
-                    Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
                     return;
                 }
 
-                RemoveItem(Material.DIAMOND_BLOCK, 1);
-                Give(Material.DIAMOND, 9);
+                await RemoveItem(Material.DIAMOND_BLOCK, 1);
+                await Give(Material.DIAMOND, 9);
             }
         }
 
-        public void SendBlockChange(int x, int y, EnumBlockType m, bool nonsolid = false, bool packetQueue = false, bool isBackground = false)
+        public async Task SendBlockChange(int x, int y, EnumBlockType m, bool nonsolid = false, bool packetQueue = false, bool isBackground = false)
         {
             var color = default(Color);
             string t = "";
@@ -539,15 +561,15 @@ namespace NCore
 
             if (!packetQueue)
             {
-                Send($"blockchange?{x}?{y}?" + (!string.IsNullOrEmpty(t) ? t : color.Name) + (isBackground ? "?bg" : "?fg") + (nonsolid ? "-non-solid" : "solid"));
+                await Send($"blockchange?{x}?{y}?" + (!string.IsNullOrEmpty(t) ? t : color.Name) + (isBackground ? "?bg" : "?fg") + (nonsolid ? "-non-solid" : "solid"));
             }
             else
             {
-                PacketQueue.AddQueue($"blockchange?{x}?{y}?" + (!string.IsNullOrEmpty(t) ? t : color.Name) + (isBackground ? "?bg" : "?fg") + (nonsolid ? "-non-solid" : "solid"));
+                await PacketQueue.AddQueue($"blockchange?{x}?{y}?" + (!string.IsNullOrEmpty(t) ? t : color.Name) + (isBackground ? "?bg" : "?fg") + (nonsolid ? "-non-solid" : "solid"));
             }
         }
 
-        public void SendBlockChange(Point x, EnumBlockType m, bool nonsolid = false, bool packetQueue = false, bool isBackground = false)
+        public async Task SendBlockChange(Point x, EnumBlockType m, bool nonsolid = false, bool packetQueue = false, bool isBackground = false)
         {
             var color = default(Color);
             string t = "";
@@ -611,19 +633,19 @@ namespace NCore
 
             if (!packetQueue)
             {
-                Send($"blockchange?{x.X}?{x.Y}?" + (!string.IsNullOrEmpty(t) ? t : color.Name) + (isBackground ? "?bg" : "?fg") + (nonsolid ? "-non-solid" : "solid"));
+                await Send($"blockchange?{x.X}?{x.Y}?" + (!string.IsNullOrEmpty(t) ? t : color.Name) + (isBackground ? "?bg" : "?fg") + (nonsolid ? "-non-solid" : "solid"));
             }
             else
             {
-                PacketQueue.AddQueue($"blockchange?{x.X}?{x.Y}?" + (!string.IsNullOrEmpty(t) ? t : color.Name) + (isBackground ? "?bg" : "?fg") + (nonsolid ? "-non-solid" : "solid"));
+                await PacketQueue.AddQueue($"blockchange?{x.X}?{x.Y}?" + (!string.IsNullOrEmpty(t) ? t : color.Name) + (isBackground ? "?bg" : "?fg") + (nonsolid ? "-non-solid" : "solid"));
             }
         }
 
-        public void Furnace(Block a, Material b, Material c)
+        public async Task Furnace(Block a, Material b, Material c)
         {
             if (a.Type != EnumBlockType.FURNACE)
             {
-                Kick("Invalid packet");
+                await Kick("Invalid packet");
                 return;
             }
 
@@ -631,44 +653,44 @@ namespace NCore
                 return;
             if (c == Material.SAND)
             {
-                RemoveItem(b);
-                RemoveItem(c);
-                Give(Material.GLASS);
+                await RemoveItem(b);
+                await RemoveItem(c);
+                await Give(Material.GLASS);
                 return;
             }
 
             if (c == Material.COBBLESTONE)
             {
-                RemoveItem(b);
-                RemoveItem(c);
-                Give(Material.STONE);
+                await RemoveItem(b);
+                await RemoveItem(c);
+                await Give(Material.STONE);
             }
 
             if (c == Material.IRON_ORE)
             {
-                RemoveItem(b);
-                RemoveItem(c);
-                Give(Material.IRON, 3);
+                await RemoveItem(b);
+                await RemoveItem(c);
+                await Give(Material.IRON, 3);
             }
 
             if (c == Material.GOLD_ORE)
             {
-                RemoveItem(b);
-                RemoveItem(c);
-                Give(Material.GOLD, 3);
+                await RemoveItem(b);
+                await RemoveItem(c);
+                await Give(Material.GOLD, 3);
             }
         }
 
-        public void UpdateInventory()
+        public async Task UpdateInventory()
         {
-            Send("clearinventory");
-            Thread.Sleep(100);
+            await Send("clearinventory");
+            Task.Delay(100);
             foreach (var i in PlayerInventory.Items)
-                PacketQueue.AddQueue("additem?" + i.Type.ToString() + " x " + i.Count.ToString());
-            PacketQueue.SendQueue();
+                await PacketQueue.AddQueue("additem?" + i.Type.ToString() + " x " + i.Count.ToString());
+            await PacketQueue.SendQueue();
         }
 
-        public void RemoveItem(Material m, int count = 1)
+        public async Task RemoveItem(Material m, int count = 1)
         {
             var itemsToRemove = new List<ItemStack>();
             foreach (var item in PlayerInventory.Items)
@@ -694,16 +716,16 @@ namespace NCore
                 {
                     if ((i.UUID ?? "") != (UUID ?? ""))
                     {
-                        i.Send($"itemset?{Username}?nothing");
+                        await i.Send($"itemset?{Username}?nothing");
                     }
                     else
                     {
-                        i.Send($"itemset?@?nothing");
+                        await i.Send($"itemset?@?nothing");
                     }
                 }
             }
 
-            UpdateInventory();
+            await UpdateInventory();
         }
 
         public void Disconnect()
@@ -718,18 +740,18 @@ namespace NCore
         /// </summary>
         /// <param name="text">Текст сообщения</param>
         /// <param name="type">тип сообщения. 0 - информация, 1 - предупреждение, 2 - ошибка.</param>
-        public void Message(string text, int type)
+        public async Task Message(string text, int type)
         {
             switch(type)
             {
                 case 0:
-                    Send("msg?" + text);
+                    await Send("msg?" + text);
                     break;
                 case 1:
-                    Send("msgwarn?" + text);
+                    await Send("msgwarn?" + text);
                     break;
                 case 2:
-                    Send("msgerror?" + text);
+                    await Send("msgerror?" + text);
                     break;
             }
         }
@@ -766,7 +788,7 @@ namespace NCore
             }
         }
 
-        private void e()
+        private async Task e()
         {
             PlayerRectangle = new Rectangle(Position, new Size(47, 92));
             try
@@ -831,7 +853,7 @@ namespace NCore
             }
         }
 
-        public void Send(string Messsage)
+        public async Task Send(string Messsage)
         {
             try
             {
@@ -844,18 +866,18 @@ namespace NCore
             }
         }
 
-        public void Kick(string kickMessage = "You have been kicked out from server.", bool bcKick = false)
+        public async Task Kick(string kickMessage = "You have been kicked out from server.", bool bcKick = false)
         {
             if (bcKick)
             {
-                Netcraft.Broadcast($"{Username} был выгнан из игры. Причина: {kickMessage}");
+                await Netcraft.Broadcast($"{Username} был выгнан из игры. Причина: {kickMessage}");
             }
 
             if(IsLoaded) NCore.GetNCore().Log($"{Username} был выгнан из игры: {kickMessage}");
-            Message("Вас выгнали из игры:\r\r" + kickMessage, 2);
+            await Send("msgkick?" + kickMessage);
             d.Client.Close();
             d = null;
-            if (d.Client.Connected) Disconnect();
+            if (d != null && d.Client.Connected) Disconnect();
         }
     }
     /* TODO ERROR: Skipped WarningDirectiveTrivia */

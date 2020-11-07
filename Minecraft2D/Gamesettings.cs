@@ -44,15 +44,18 @@ namespace Minecraft2D
         private void Gamesettings_VisibleChanged(object sender, EventArgs e)
         {
             if (!Visible)
+            {
+                Form1.GetInstance().Show();
                 return;
-            CenterToParent();
-            My.MyProject.Forms.Form1.Ticker.Stop();
+            }
+            Form1.GetInstance().Hide();
         }
 
         private void Gamesettings_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
             Hide();
+            Form1.GetInstance().Location = Location;
             if (My.MyProject.Forms.Form1.IsOfficialServer)
                 ProcessSuspend.ResumeProcess(My.MyProject.Forms.Form1.ServerProcess);
             My.MyProject.Forms.Form1.Ticker.Start();
@@ -62,6 +65,8 @@ namespace Minecraft2D
         private void Gamesettings_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
+            Location = Form1.GetInstance().Location;
+            Size = Form1.GetInstance().Size;
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             BackButton.Text = lang.get("settings.button.back");
             SettingsButton.Text = lang.get("settings.button.settings");

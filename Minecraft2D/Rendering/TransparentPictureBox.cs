@@ -31,7 +31,6 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                Update();
             }
         }
     }

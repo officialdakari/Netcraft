@@ -14,6 +14,7 @@ using global::System.Threading;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using NCore.netcraft.server.api;
+using System.Threading.Tasks;
 
 namespace NCore
 {
@@ -121,13 +122,26 @@ namespace NCore
         private Thread loopThread;
         internal const string NETCRAFT_VERSION = "1.3-ALPHA";
         internal const string NCORE_VERSION = "0.4";
+        int hungerDecreaseDelay = 200;
 
-        private void ThreadLoop()
+        private async void ThreadLoop()
         {
             while (true)
             {
                 Thread.Sleep(100);
                 logAppendDelay -= 1;
+                hungerDecreaseDelay -= 1;
+                if(hungerDecreaseDelay == 0)
+                {
+                    hungerDecreaseDelay = 300;
+                    foreach(NetworkPlayer player in players)
+                    {
+                        if(player.IsLoaded)
+                        {
+                            if (player.Hunger > 0) await player.UpdateHunger(player.Hunger - 1 + player.Saturation);
+                        }
+                    }
+                }
                 if (logAppendDelay == 0)
                 {
                     logAppendDelay = 40;
@@ -148,74 +162,82 @@ namespace NCore
                         if (b.Type == EnumBlockType.SAPLING)
                         {
                             World.Blocks.Remove(b);
-                            Send("removeblock?" + b.Position.X.ToString() + "?" + b.Position.Y.ToString());
-                            TreeGenerator.GrowthTree(b.Position, World, b.IsBackground);
+                            await Send("removeblock?" + b.Position.X.ToString() + "?" + b.Position.Y.ToString());
+                            await TreeGenerator.GrowthTree(b.Position, World, b.IsBackground);
                             Log($"Tree growth at [{b.Position.X.ToString() + ", " + b.Position.Y.ToString()}]");
                             break;
                         }
                     }
                 }
-                foreach(Block b in World.Blocks)
+                try
                 {
-                    if(b.Type == EnumBlockType.CHEST)
+                    foreach (NetworkPlayer n in players)
                     {
-                        if(World.GetChestAt(b.Position) == null)
+                        if (n.Hunger == 0) await n.Damage(5, "died");
+                        foreach (var b in World.Blocks)
                         {
-                            BlockChest chest = new BlockChest(b.Position, b.IsBackground);
-                            World.Chests.Add(chest);
-                        }
-                    } else { continue; }
-                }
-                foreach(BlockChest b in World.Chests)
-                {
-                    List<ItemStack> itemsToRemove = new List<ItemStack>();
-                    foreach(ItemStack i in b.items)
-                    {
-                        if(i.Count < 1)
-                        {
-                            itemsToRemove.Add(i);
-                        }
-                    }
-                    foreach(ItemStack i in itemsToRemove)
-                    {
-                        b.items.Remove(i);
-                    }
-                    if(itemsToRemove.Count > 0) Log($"Removed {itemsToRemove.Count} zero-count items in chest at [{b.Position.X.ToString()},{b.Position.Y.ToString()}]", "WARNING");
-                }
-                foreach (NetworkPlayer n in players)
-                {
-
-                    foreach (var b in World.Blocks)
-                    {
-                        var bpos = new Point(b.Position.X * 32, b.Position.Y * 32);
-                        var brec = new Rectangle(bpos, new Size(32, 32));
-                        if (DistanceBetweenPoint(bpos, n.Position) > 10 * 32)
-                            continue;
-                        if (bpos.Y > n.Position.Y + 85)
-                            continue;
-                        if (b.IsBackground)
-                            continue;
-                        if (b.Type == EnumBlockType.WATER)
-                            continue;
-                        if (b.Type == EnumBlockType.SAPLING)
-                            continue;
-                        if (brec.IntersectsWith(n.PlayerRectangle))
-                        {
-                            if (n.NoClip)
-                                break;
-                            if (b.Type == EnumBlockType.LAVA)
+                            var bpos = new Point(b.Position.X * 32, b.Position.Y * 32);
+                            var brec = new Rectangle(bpos, new Size(32, 32));
+                            if (DistanceBetweenPoint(bpos, n.Position) > 10 * 32)
+                                continue;
+                            if (bpos.Y > n.Position.Y + 85)
+                                continue;
+                            if (b.IsBackground)
+                                continue;
+                            if (b.Type == EnumBlockType.WATER)
+                                continue;
+                            if (b.Type == EnumBlockType.SAPLING)
+                                continue;
+                            if (brec.IntersectsWith(n.PlayerRectangle))
                             {
-                                n.Damage(10, "решил(а) поплавать в лаве");
-                                break;
-                            }
+                                if (n.NoClip)
+                                    break;
+                                if (b.Type == EnumBlockType.LAVA)
+                                {
+                                    await n.Damage(10, "решил(а) поплавать в лаве");
+                                    break;
+                                }
 
-                        }
-                        else
-                        {
-                            continue;
+                            }
+                            else
+                            {
+                                continue;
+                            }
                         }
                     }
+                    foreach (Block b in World.Blocks)
+                    {
+                        if (b.Type == EnumBlockType.CHEST)
+                        {
+                            if (World.GetChestAt(b.Position) == null)
+                            {
+                                BlockChest chest = new BlockChest(b.Position, b.IsBackground);
+                                World.Chests.Add(chest);
+                            }
+                        }
+                        else { continue; }
+                    }
+                    foreach (BlockChest b in World.Chests)
+                    {
+                        List<ItemStack> itemsToRemove = new List<ItemStack>();
+                        foreach (ItemStack i in b.items)
+                        {
+                            if (i.Count < 1)
+                            {
+                                itemsToRemove.Add(i);
+                            }
+                        }
+                        foreach (ItemStack i in itemsToRemove)
+                        {
+                            b.items.Remove(i);
+                        }
+                        if (itemsToRemove.Count > 0) Log($"Removed {itemsToRemove.Count} zero-count items in chest at [{b.Position.X.ToString()},{b.Position.Y.ToString()}]", "WARNING");
+                    }
+                } catch(Exception)
+                {
+
                 }
+                
 
                 Console.Title = $"NCore {NCORE_VERSION} (Netcraft {NETCRAFT_VERSION}) | {players.Count}/{maxPlayers.ToString()} players | {(Process.GetCurrentProcess().WorkingSet64 / 1024L / 1024L).ToString().Split(".")[0]}MB used of {Process.GetCurrentProcess().MaxWorkingSet.ToInt64() / 1024L}MB, {(Process.GetCurrentProcess().MaxWorkingSet.ToInt64() / 1024L - Process.GetCurrentProcess().WorkingSet64 / 1024L / 1024L).ToString().Split(".")[0]}MB free | Total Processor Time: {Process.GetCurrentProcess().TotalProcessorTime.ToString()} | Uptime: {(DateTime.Now - Process.GetCurrentProcess().StartTime).ToString().Split(".")[0]}";
             }
@@ -291,17 +313,13 @@ namespace NCore
             Thread.CurrentThread.Name = "Watchdog";
             while (true)
             {
+                Thread.Sleep(100);
                 try
                 {
                     foreach (var th in threads)
                     {
                         if (!th.IsAlive)
                         {
-                            if(th.ManagedThreadId == 1)
-                            {
-                                CrashReport(new netcraft.server.api.exceptions.ThreadDeathException());
-                                return;
-                            }
                             Log($"Watchdog detected thread death. Thread unexpectedly stopped working. Thread ID: {th.ManagedThreadId}", "ERROR");
                             threads.Remove(th);
                         }
@@ -340,9 +358,15 @@ namespace NCore
             Console.WriteLine("\b");
             if(result == '1')
             {
-                NCore instance = new NCore();
-                nCore = instance;
-                instance.Server();
+                try
+                {
+                    NCore instance = new NCore();
+                    nCore = instance;
+                    instance.Server();
+                } catch(Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
                 
             }
         }
@@ -355,7 +379,7 @@ namespace NCore
 
         
 
-        public void Server()
+        public async Task Server()
         {
             ThreadAdd();
             Log($"PID: {Process.GetCurrentProcess().Id} | Netcraft Version: {NETCRAFT_VERSION}");
@@ -442,6 +466,11 @@ namespace NCore
                     {
                         blocksToRemove.Add(b);
                     }
+                    if(b.Type == EnumBlockType.CHEST && b.IsBackground)
+                    {
+                        b.IsBackground = false;
+                        Log($"Moved background chest block to foreground.");
+                    }
                 }
                 foreach(Block b in blocksToRemove)
                 {
@@ -492,7 +521,7 @@ namespace NCore
                     bool y;
                     try
                     {
-                        y = toRun.OnCommand(Netcraft.ConsoleCommandSender, toRun, args, m);
+                        y = toRun.OnCommand(Netcraft.ConsoleCommandSender, toRun, args, m).GetAwaiter().GetResult();
                     }
                     catch (Exception ex)
                     {
@@ -517,7 +546,7 @@ namespace NCore
 
         public delegate void xSend(string str, string except, bool readyClientsOnly);
 
-        public void Send(string str, string except = null, bool readyClientsOnly = false)
+        public async Task Send(string str, string except = null, bool readyClientsOnly = false)
         {
             ThreadAdd();
             for (int x = 0, loopTo = players.Count - 1; x <= loopTo; x++)
@@ -533,11 +562,11 @@ namespace NCore
                     if (readyClientsOnly)
                     {
                         if (players[x].IsLoaded)
-                            players[x].Send(str);
+                            await players[x].Send(str);
                     }
                     else
                     {
-                        players[x].Send(str);
+                        await players[x].Send(str);
                     }
                 }
                 catch (Exception ex)
@@ -569,7 +598,7 @@ namespace NCore
                 Netcraft.field_a.Add(a);
         }
 
-        public void AcceptClient(IAsyncResult ar)
+        public async void AcceptClient(IAsyncResult ar)
         {
             ThreadAdd();
             try
@@ -650,10 +679,18 @@ namespace NCore
             return false;
         }
 
-        public void Kickall(string m)
+        public async Task Kickall(string m)
         {
-            foreach (var a in players)
-                a.Kick(m);
+            for(int i = 0; i < players.Count; i++)
+            {
+                try
+                {
+                    await players[i].Kick(m);
+                } catch(NullReferenceException)
+                {
+
+                }
+            }
         }
 
         public enum KickReason
@@ -667,7 +704,7 @@ namespace NCore
         private Hashtable playerPasswords = new Hashtable();
         private StringCollection loggedIn = new StringCollection();
 
-        public void MessageReceived(string str, NetworkPlayer n)
+        public async void MessageReceived(string str, NetworkPlayer n)
         {
             if (string.IsNullOrEmpty(Thread.CurrentThread.Name))
                 Thread.CurrentThread.Name = "Network Packet";
@@ -680,19 +717,19 @@ namespace NCore
                     Log($"Pinged from {n.GetIp()}");
                     if (allowQuery == 1)
                     {
-                        n.Send("name?" + name);
+                        await n.Send("name?" + name);
                         Thread.Sleep(50);
-                        n.Send("motd?" + motd);
+                        await n.Send("motd?" + motd);
                         Thread.Sleep(50);
-                        n.Send("players?" + players.Count.ToString() + "/" + maxPlayers.ToString());
+                        await n.Send("players?" + players.Count.ToString() + "/" + maxPlayers.ToString());
                     }
                     else
                     {
-                        n.Send("name?Access denied");
+                        await n.Send("name?Access denied");
                         Thread.Sleep(50);
-                        n.Send("motd?Sorry, but query is disabled for this server.");
+                        await n.Send("motd?Sorry, but query is disabled for this server.");
                         Thread.Sleep(50);
-                        n.Send("players?Denied");
+                        await n.Send("players?Denied");
                     }
 
                     n.Disconnect();
@@ -710,7 +747,7 @@ namespace NCore
                     Log($"{a[1]} [/{n.GetIp()}] подключился к серверу.");
                     if (maxPlayers + 1 == players.Count)
                     {
-                        n.Kick("Сервер заполнен!");
+                        await n.Kick("Сервер заполнен!");
                         return;
                     }
 
@@ -720,7 +757,7 @@ namespace NCore
                             continue;
                         if ((netplayer.Username ?? "") == (a[1] ?? ""))
                         {
-                            n.Kick("Игрок с таким именем уже играет на сервере.");
+                            await n.Kick("Игрок с таким именем уже играет на сервере.");
                             return;
                         }
                     }
@@ -731,13 +768,13 @@ namespace NCore
                     n.senderName = n.Username;
                     if (!Regex.Match(n.Username, "^[a-zA-Z0-9_]*").Success)
                     {
-                        n.Kick("Запрещённые символы в никнейме.");
+                        await n.Kick("Запрещённые символы в никнейме.");
                         return;
                     }
 
                     if (Netcraft.IsBanned(n.Username))
                     {
-                        n.Kick("Вы были забанены на этом сервере!");
+                        await n.Kick("Вы были забанены на этом сервере!");
                         return;
                     }
 
@@ -753,7 +790,7 @@ namespace NCore
                         CrashReport(new Exception("Invalid config property value"));
                     }
 
-                    Send("addplayer?" + a[1], n.Username);
+                    await Send("addplayer?" + a[1], n.Username);
                     n.PlayerInventory = new Inventory(n);
                     if (File.Exists(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), n.Username), ".txt"))))
                     {
@@ -761,14 +798,14 @@ namespace NCore
                     }
                     else
                     {
-                        n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_PICKAXE, 1));
-                        n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_AXE, 1));
-                        n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_SWORD, 1));
-                        n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_SHOVEL, 1));
+                        await n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_PICKAXE, 1));
+                        await n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_AXE, 1));
+                        await n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_SWORD, 1));
+                        await n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_SHOVEL, 1));
                     }
 
                     Log(n.Username + " присоединился к игре");
-                    Chat(n.Username + " заходит на сервер");
+                    await Chat(n.Username + " заходит на сервер");
 
 
                     // n.Send("blockchange?500?50?Red")
@@ -776,7 +813,7 @@ namespace NCore
 
                 if (string.IsNullOrEmpty(n.Username))
                 {
-                    n.Kick("You can't send another packets");
+                    await n.Kick("You can't send another packets");
                     return;
                 }
 
@@ -800,8 +837,8 @@ namespace NCore
                         {
                             if (IsNothing(p.SelectedItem))
                                 continue;
-                            Thread.Sleep(100);
-                            n.Send("itemset?" + p.Username + "?" + p.SelectedItem.Type.ToString());
+                            Task.Delay(100);
+                            await n.Send("itemset?" + p.Username + "?" + p.SelectedItem.Type.ToString());
                         }
                         catch (Exception ex)
                         {
@@ -809,9 +846,9 @@ namespace NCore
                         }
                     }
                     n.IsLoaded = true;
-                    Thread.Sleep(100);
+                    Task.Delay(100);
                     n.Send("completeload");
-                    Thread.Sleep(100);
+                    Task.Delay(100);
                     if(enableAuth == 1) n.Chat("Пожалуйста введите свой пароль в чат для авторизации. Это никто не увидит.");
                     if (everyBodyAdmin == 1)
                     {
@@ -839,7 +876,7 @@ namespace NCore
 
                         if (Conversions.ToBoolean(Operators.ConditionalCompareObjectEqual(playerPasswords[n.Username], a[1], false)))
                         {
-                            n.SendMessage("Вы успешно авторизовались.");
+                            await n.SendMessage("Вы успешно авторизовались.");
                             loggedIn.Add(n.Username);
                             Log($"{n.Username} logged in!");
                             n.Send("teleport?" + n.Position.X.ToString() + "?" + n.Position.Y.ToString());
@@ -850,7 +887,7 @@ namespace NCore
                         else
                         {
                             Log($"{n.Username} used wrong password", "ERROR");
-                            n.SendMessage("Вы ввели неверный пароль.");
+                            await n.SendMessage("Вы ввели неверный пароль.");
                         }
                     }
 
@@ -866,8 +903,30 @@ namespace NCore
                     }
                     catch (Exception ex)
                     {
-                        n.SendMessage("An internal error occured.");
+                        await n.SendMessage("An internal error occured.");
                     }
+                }
+
+                if(a[0] == "splititems")
+                {
+                    ItemStack toSplit = null;
+                    foreach(ItemStack i in n.PlayerInventory.Items)
+                    {
+                        if(a[1] == $"{i.Type.ToString()} x {i.Count.ToString()}")
+                        {
+                            toSplit = i;
+                            break;
+                        }
+                    }
+                    if (toSplit == null) return;
+                    toSplit.Count -= 1;
+                    if (toSplit.Count < 1)
+                    {
+                        toSplit.Count += 1;
+                        return;
+                    }
+                    n.PlayerInventory.Items.Add(new ItemStack(toSplit.Type, 1));
+                    await n.UpdateInventory();
                 }
 
                 if (a[0] == "entityplayermove")
@@ -877,7 +936,7 @@ namespace NCore
                     var ev = new netcraft.server.api.events.PlayerMoveEventArgs(n.Position, mto, n);
                     if (ev.GetCancelled())
                     {
-                        n.Send($"teleport?{n.Position.X.ToString()}?{n.Position.Y.ToString()}");
+                        await n.Send($"teleport?{n.Position.X.ToString()}?{n.Position.Y.ToString()}");
                         return;
                     }
 
@@ -887,7 +946,7 @@ namespace NCore
                         if (v.X > 10 | v.Y > 10 | v.X < -10 | v.Y < -10)
                         {
                             Log($"{n.Username} переместился слишком быстро! {v.X},{v.Y}", "WARNING");
-                            n.Send($"teleport?{n.Position.X}?{n.Position.Y}");
+                            await n.Send($"teleport?{n.Position.X}?{n.Position.Y}");
                             return;
                         }
 
@@ -907,7 +966,7 @@ namespace NCore
                                     Log($"{n.Username} переместился неправильно (Полёт)! [{v.X}, {v.Y}] [{n.AntiFlyWarnings.ToString()} warnings]", "WARNING");
                                     if(n.AntiFlyWarnings == 10)
                                     {
-                                        n.Kick("Flying is not enabled on this server");
+                                        await n.Kick("Flying is not enabled on this server");
                                     }
                                     return;
                                 }
@@ -937,11 +996,11 @@ namespace NCore
                                 Log($"{n.Username} переместился неправильно (В блок)!", "WARNING");
                                 if (v.Y > 1)
                                 {
-                                    n.Teleport(n.Position.X, n.Position.Y - 2);
+                                    await n.Teleport(n.Position.X, n.Position.Y - 2);
                                 }
                                 else
                                 {
-                                    n.Send($"teleport?{n.Position.X}?{n.Position.Y}");
+                                    await n.Send($"teleport?{n.Position.X}?{n.Position.Y}");
                                 }
                                 break;
                             }
@@ -995,7 +1054,7 @@ namespace NCore
 
                             if (n.FallDistance > 3 * 32)
                             {
-                                n.Damage(n.FallDistance / 16 / 3, "упал(а) с высокого места");
+                                await n.Damage(n.FallDistance / 16 / 3, "упал(а) с высокого места");
                                 noPosUpdate = true;
                             }
 
@@ -1011,10 +1070,10 @@ namespace NCore
                         return;
                     if (n.Position.Y > 619)
                     {
-                        n.Damage(1, "выпал(а) из мира");
+                        await n.Damage(1, "выпал(а) из мира");
                     }
 
-                    Send("updateplayerposition?" + n.Username + "?" + a[1] + "?" + a[2], n.Username);
+                    await Send("updateplayerposition?" + n.Username + "?" + a[1] + "?" + a[2], n.Username);
                 }
 
                 try
@@ -1036,7 +1095,7 @@ namespace NCore
                         {
                             if (commandsConsoleOnly == 1)
                             {
-                                n.SendMessage("Команды в игре были отключены в настройках сервера.");
+                                await n.SendMessage("Команды в игре были отключены в настройках сервера.");
                                 return;
                             }
 
@@ -1062,18 +1121,18 @@ namespace NCore
 
                             if (IsNothing(cmd))
                             {
-                                n.SendMessage("Команда не обнаружена. Введите /help для списка команд.");
+                                await n.SendMessage("Команда не обнаружена. Введите /help для списка команд.");
                                 return;
                             }
 
                             bool y;
                             try
                             {
-                                y = cmd.OnCommand(n, cmd, args, label);
+                                y = await cmd.OnCommand(n, cmd, args, label);
                             }
                             catch (Exception ex)
                             {
-                                n.SendMessage("Произошла внутренняя ошибка при выполнении данной команды.");
+                                await n.SendMessage($"Отказ (HResult: {ex.HResult.ToString()}): {ex.Message}");
                                 Log($"Command error occured in \"{cmd.Name}\" performing by {n.Username}:", "WARNING");
                                 Log(ex.ToString(), "WARNING");
                                 return;
@@ -1081,12 +1140,13 @@ namespace NCore
 
                             if (Conversions.ToBoolean(!y))
                             {
-                                n.SendMessage("Использование: " + cmd.Usage);
+                                await n.SendMessage("Использование: " + cmd.Usage);
                             }
+                            return;
                         }
                         else
                         {
-                            Send("chat?" + chatFormat.Replace("%1", n.Username).Replace("%2", message));
+                            await Send("chat?" + chatFormat.Replace("%1", n.Username).Replace("%2", message));
                             Log(chatFormat.Replace("%1", n.Username).Replace("%2", message));
                         }
                     }
@@ -1112,7 +1172,7 @@ namespace NCore
                         // Thread.Sleep(100)
                         // n.Send("additem?" + i.Type.ToString + " x " + i.Count.ToString)
                         // Next
-                        n.UpdateInventory();
+                        await n.UpdateInventory();
                     }
                 }
                 catch (Exception ex)
@@ -1130,8 +1190,8 @@ namespace NCore
                             n.SelectedItem = i;
                             try
                             {
-                                Send("itemset?" + n.Username + "?" + n.SelectedItem.Type.ToString(), n.Username);
-                                n.Send("itemset?@?" + n.SelectedItem.Type.ToString());
+                                await Send("itemset?" + n.Username + "?" + n.SelectedItem.Type.ToString(), n.Username);
+                                await n.Send("itemset?@?" + n.SelectedItem.Type.ToString());
                             }
                             catch (Exception ex)
                             {
@@ -1198,19 +1258,28 @@ namespace NCore
                         var block = World.GetBlockAt(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
                         if (block == null)
                         {
-                            n.Kick("Internal server error occured.");
+                            await n.Kick("Internal server error occured.");
                             return;
                         }
 
                         var ev = new netcraft.server.api.events.BlockRightClickEvent(n, block);
                         NCSApi.REBlockRightClickEvent(ev);
+                        if(n.SelectedItem.Type == Material.FOOD1)
+                        {
+                            n.Saturation += 1;
+                            if (n.Hunger < 20) n.UpdateHunger(n.Hunger + 1);
+                            n.RemoveItem(Material.FOOD1, 1);
+                        }
+                        if (DistanceBetweenPoint(block.Position, Normalize(n.Position)) > 6) return;
                         if(block.Type == EnumBlockType.TNT)
                         {
-                            Explode(4, block.Position);
+                            await Explode(4, block.Position);
                         }
                         if(block.Type == EnumBlockType.CHEST)
                         {
-                            n.Chest(World.GetChestAt(block.Position));
+                            await n.UpdateInventory();
+                            Task.Delay(30);
+                            await n.Chest(World.GetChestAt(block.Position));
                         }
                     }
                     catch (Exception ex)
@@ -1251,8 +1320,8 @@ namespace NCore
                                     {
                                         if (n.SelectedItem.Type == Material.BUCKET)
                                         {
-                                            n.RemoveItem(Material.BUCKET);
-                                            n.Give(Material.LAVA_BUCKET);
+                                            n.SelectedItem.Type = Material.LAVA_BUCKET;
+                                            await n.UpdateInventory();
 
                                         }
                                         else { return; }
@@ -1261,124 +1330,123 @@ namespace NCore
                                     {
                                         if (n.SelectedItem.Type == Material.BUCKET)
                                         {
-                                            n.RemoveItem(Material.BUCKET);
-                                            n.Give(Material.WATER_BUCKET);
-
+                                            n.SelectedItem.Type = Material.WATER_BUCKET;
+                                            await n.UpdateInventory();
                                         }
                                         else { return; }
                                     }
-                                    Send("removeblock?" + a[1] + "?" + a[2]);
+                                    await Send("removeblock?" + a[1] + "?" + a[2]);
                                     if (b.Type == EnumBlockType.STONE)
                                     {
                                         if (n.SelectedItem.Type == Material.WOODEN_PICKAXE)
-                                            n.Give(Material.COBBLESTONE);
+                                            await n.Give(Material.COBBLESTONE);
                                         if (n.SelectedItem.Type == Material.STONE_PICKAXE)
-                                            n.Give(Material.COBBLESTONE);
+                                            await n.Give(Material.COBBLESTONE);
                                         if (n.SelectedItem.Type == Material.IRON_PICKAXE)
-                                            n.Give(Material.COBBLESTONE);
+                                            await n.Give(Material.COBBLESTONE);
                                         if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
-                                            n.Give(Material.COBBLESTONE);
+                                            await n.Give(Material.COBBLESTONE);
                                     }
 
                                     if (b.Type == EnumBlockType.COAL_ORE)
                                     {
                                         if (n.SelectedItem.Type == Material.WOODEN_PICKAXE)
-                                            n.Give(Material.COAL, 3);
+                                            await n.Give(Material.COAL, 3);
                                         if (n.SelectedItem.Type == Material.STONE_PICKAXE)
-                                            n.Give(Material.COAL, 3);
+                                            await n.Give(Material.COAL, 3);
                                         if (n.SelectedItem.Type == Material.IRON_PICKAXE)
-                                            n.Give(Material.COAL, 3);
+                                            await n.Give(Material.COAL, 3);
                                         if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
-                                            n.Give(Material.COAL, 3);
+                                            await n.Give(Material.COAL, 3);
                                     }
 
                                     if (b.Type == EnumBlockType.IRON_ORE)
                                     {
                                         if (n.SelectedItem.Type == Material.STONE_PICKAXE)
-                                            n.Give(Material.IRON_ORE);
+                                            await n.Give(Material.IRON_ORE);
                                         if (n.SelectedItem.Type == Material.IRON_PICKAXE)
-                                            n.Give(Material.IRON_ORE);
+                                            await n.Give(Material.IRON_ORE);
                                         if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
-                                            n.Give(Material.IRON_ORE);
+                                            await n.Give(Material.IRON_ORE);
                                     }
 
                                     if (b.Type == EnumBlockType.IRON_BLOCK)
                                     {
                                         if (n.SelectedItem.Type == Material.STONE_PICKAXE)
-                                            n.Give(Material.IRON_BLOCK);
+                                            await n.Give(Material.IRON_BLOCK);
                                         if (n.SelectedItem.Type == Material.IRON_PICKAXE)
-                                            n.Give(Material.IRON_BLOCK);
+                                            await n.Give(Material.IRON_BLOCK);
                                         if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
-                                            n.Give(Material.IRON_BLOCK);
+                                            await n.Give(Material.IRON_BLOCK);
                                     }
 
                                     if (b.Type == EnumBlockType.DIAMOND_BLOCK)
                                     {
                                         if (n.SelectedItem.Type == Material.IRON_PICKAXE)
-                                            n.Give(Material.DIAMOND_BLOCK);
+                                            await n.Give(Material.DIAMOND_BLOCK);
                                         if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
-                                            n.Give(Material.DIAMOND_BLOCK);
+                                            await n.Give(Material.DIAMOND_BLOCK);
                                     }
 
                                     if (b.Type == EnumBlockType.DIAMOND_ORE)
                                     {
                                         if (n.SelectedItem.Type == Material.IRON_PICKAXE)
-                                            n.Give(Material.DIAMOND, 3);
+                                            await n.Give(Material.DIAMOND, 3);
                                         if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
-                                            n.Give(Material.DIAMOND, 3);
+                                            await n.Give(Material.DIAMOND, 3);
                                     }
 
                                     if (b.Type == EnumBlockType.DIRT)
                                     {
-                                        n.Give(Material.DIRT);
+                                        await n.Give(Material.DIRT);
                                     }
 
                                     if (b.Type == EnumBlockType.COBBLESTONE)
                                     {
                                         if (n.SelectedItem.Type == Material.WOODEN_PICKAXE)
-                                            n.Give(Material.COBBLESTONE);
+                                            await n.Give(Material.COBBLESTONE);
                                         if (n.SelectedItem.Type == Material.STONE_PICKAXE)
-                                            n.Give(Material.COBBLESTONE);
+                                            await n.Give(Material.COBBLESTONE);
                                         if (n.SelectedItem.Type == Material.IRON_PICKAXE)
-                                            n.Give(Material.COBBLESTONE);
+                                            await n.Give(Material.COBBLESTONE);
                                         if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
-                                            n.Give(Material.COBBLESTONE);
+                                            await n.Give(Material.COBBLESTONE);
                                     }
 
                                     if (b.Type == EnumBlockType.GOLD_ORE)
                                     {
                                         if (n.SelectedItem.Type == Material.IRON_PICKAXE)
-                                            n.Give(Material.GOLD_ORE);
+                                            await n.Give(Material.GOLD_ORE);
                                         if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
-                                            n.Give(Material.GOLD_ORE);
+                                            await n.Give(Material.GOLD_ORE);
                                     }
 
                                     if (b.Type == EnumBlockType.GOLD_BLOCK)
                                     {
                                         if (n.SelectedItem.Type == Material.IRON_PICKAXE)
-                                            n.Give(Material.GOLD_BLOCK);
+                                            await n.Give(Material.GOLD_BLOCK);
                                         if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
-                                            n.Give(Material.GOLD_BLOCK);
+                                            await n.Give(Material.GOLD_BLOCK);
                                     }
 
                                     if (b.Type == EnumBlockType.WOOD)
                                     {
-                                        n.Give(Material.WOOD);
+                                        await n.Give(Material.WOOD);
                                     }
 
                                     if (b.Type == EnumBlockType.PLANKS)
                                     {
-                                        n.Give(Material.PLANKS);
+                                        await n.Give(Material.PLANKS);
                                     }
 
                                     if (b.Type == EnumBlockType.SAND)
                                     {
-                                        n.Give(Material.SAND);
+                                        await n.Give(Material.SAND);
                                     }
 
                                     if (b.Type == EnumBlockType.FURNACE)
                                     {
-                                        n.Give(Material.FURNACE);
+                                        await n.Give(Material.FURNACE);
                                     }
 
                                     if (b.Type == EnumBlockType.LEAVES)
@@ -1387,17 +1455,27 @@ namespace NCore
                                         int r = rnd.Next(1, 4);
                                         if (r == 2)
                                         {
-                                            n.Give(Material.SAPLING);
+                                            await n.Give(Material.SAPLING);
                                         }
                                         else
                                         {
-                                            n.Give(Material.LEAVES);
+                                            await n.Give(Material.LEAVES);
                                         }
                                     }
 
                                     if(b.Type == EnumBlockType.TNT)
                                     {
-                                        n.Give(Material.TNT);
+                                        await n.Give(Material.TNT);
+                                    }
+
+                                    if(b.Type == EnumBlockType.CHEST)
+                                    {
+                                        BlockChest chest = World.GetChestAt(b.Position);
+                                        foreach(ItemStack i in chest.items)
+                                        {
+                                            n.PlayerInventory.Items.Add(i);
+                                        }
+                                        await n.Give(Material.CHEST);
                                     }
 
                                     World.Blocks.Remove(World.GetBlockAt(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2])));
@@ -1433,32 +1511,22 @@ namespace NCore
                         {
                             if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d) return;
                                 foreach (var g in players)
-                                g.SendBlockChange(placeAt, EnumBlockType.LAVA);
+                                await g.SendBlockChange(placeAt, EnumBlockType.LAVA);
                             World.Blocks.Add(new Block(placeAt, EnumBlockType.LAVA, false, false));
-                            n.SelectedItem.Count -= 1;
-                            if (n.SelectedItem.Count <= 0)
-                            {
-                                n.PlayerInventory.Items.Remove(n.SelectedItem);
-                                n.SelectedItem = null;
-                            }
+                            n.SelectedItem.Type = Material.BUCKET;
 
-                            n.UpdateInventory();
+                            await n.UpdateInventory();
                             return;
                         }
                         if (n.SelectedItem.Type == Material.WATER_BUCKET)
                         {
                             if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d) return;
                             foreach (var g in players)
-                                g.SendBlockChange(placeAt, EnumBlockType.WATER);
+                                await g.SendBlockChange(placeAt, EnumBlockType.WATER);
                             World.Blocks.Add(new Block(placeAt, EnumBlockType.WATER, false, false));
-                            n.SelectedItem.Count -= 1;
-                            if (n.SelectedItem.Count <= 0)
-                            {
-                                n.PlayerInventory.Items.Remove(n.SelectedItem);
-                                n.SelectedItem = null;
-                            }
+                            n.SelectedItem.Type = Material.BUCKET;
 
-                            n.UpdateInventory();
+                            await n.UpdateInventory();
                             return;
                         }
                         type = (EnumBlockType)Enum.Parse(typeof(EnumBlockType), n.SelectedItem.Type.ToString());
@@ -1481,7 +1549,7 @@ namespace NCore
                             if (c.Type != EnumBlockType.GRASS_BLOCK) return;
                         }
                         foreach (var g in players)
-                            g.SendBlockChange(placeAt, type);
+                            await g.SendBlockChange(placeAt, type);
                         World.Blocks.Add(b);
                         n.SelectedItem.Count -= 1;
                         if (n.SelectedItem.Count <= 0)
@@ -1503,35 +1571,26 @@ namespace NCore
                         {
                             if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d) return;
                             foreach (var g in players)
-                                g.SendBlockChange(placeAt, EnumBlockType.LAVA, true, false, true);
+                                await g.SendBlockChange(placeAt, EnumBlockType.LAVA, true, false, true);
                             World.Blocks.Add(new Block(placeAt, EnumBlockType.LAVA, false, true));
-                            n.SelectedItem.Count -= 1;
-                            if (n.SelectedItem.Count <= 0)
-                            {
-                                n.PlayerInventory.Items.Remove(n.SelectedItem);
-                                n.SelectedItem = null;
-                            }
+                            n.SelectedItem.Type = Material.BUCKET;
 
-                            n.UpdateInventory();
+                            await n.UpdateInventory();
                             return;
                         }
                         if (n.SelectedItem.Type == Material.WATER_BUCKET)
                         {
                             if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d) return;
                             foreach (var g in players)
-                                g.SendBlockChange(placeAt, EnumBlockType.WATER, true, false, true);
+                                await g.SendBlockChange(placeAt, EnumBlockType.WATER, true, false, true);
                             World.Blocks.Add(new Block(placeAt, EnumBlockType.WATER, false, true));
-                            n.SelectedItem.Count -= 1;
-                            if (n.SelectedItem.Count <= 0)
-                            {
-                                n.PlayerInventory.Items.Remove(n.SelectedItem);
-                                n.SelectedItem = null;
-                            }
+                            n.SelectedItem.Type = Material.BUCKET;
 
-                            n.UpdateInventory();
+                            await n.UpdateInventory();
                             return;
                         }
                         type = (EnumBlockType)Enum.Parse(typeof(EnumBlockType), n.SelectedItem.Type.ToString());
+                        if (type == EnumBlockType.CHEST) return;
                         var b = new Block(placeAt, type, false, true);
                         var ev = new netcraft.server.api.events.BlockPlaceEventArgs(n, b);
                         NCSApi.REBlockPlaceEvent(ev);
@@ -1546,7 +1605,7 @@ namespace NCore
                         }
 
                         foreach (var g in players)
-                            g.SendBlockChange(placeAt, type, isBackground: true);
+                            await g.SendBlockChange(placeAt, type, isBackground: true);
                         World.Blocks.Add(b);
                         n.SelectedItem.Count -= 1;
                         if (n.SelectedItem.Count <= 0)
@@ -1555,7 +1614,7 @@ namespace NCore
                             n.SelectedItem = null;
                         }
 
-                        n.UpdateInventory();
+                        await n.UpdateInventory();
                     }
                 }
                 catch (NullReferenceException ex)
@@ -1582,19 +1641,19 @@ namespace NCore
 
                         if (IsNothing(nd))
                         {
-                            n.Kick("Attempting to attack an invalid player");
+                            await n.Kick("Attempting to attack an invalid player");
                             return;
                         }
 
                         if ((nd.Username ?? "") == (n.Username ?? ""))
                         {
-                            n.Kick("Attempting to attack self");
+                            await n.Kick("Attempting to attack self");
                             return;
                         }
 
                         if (DistanceBetweenPoint(Normalize(n.Position), Normalize(nd.Position)) > 5d)
                         {
-                            n.DoWarning("Unreachable player!");
+                            await n.DoWarning("Unreachable player!");
                             return;
                         }
 
@@ -1602,19 +1661,19 @@ namespace NCore
                         {
                             if (n.SelectedItem.Type == Material.DIAMOND_SWORD)
                             {
-                                nd.Damage(35, n);
+                                await nd.Damage(35, n);
                             }
                             else if (n.SelectedItem.Type == Material.IRON_SWORD)
                             {
-                                nd.Damage(25, n);
+                                await nd.Damage(25, n);
                             }
                             else if (n.SelectedItem.Type == Material.STONE_SWORD)
                             {
-                                nd.Damage(20, n);
+                                await nd.Damage(20, n);
                             }
                             else if (n.SelectedItem.Type == Material.WOODEN_SWORD)
                             {
-                                nd.Damage(14, n);
+                                await nd.Damage(14, n);
                             }
                             else
                             {
@@ -1623,7 +1682,7 @@ namespace NCore
                         }
                         else
                         {
-                            nd.Damage(5, n);
+                            await nd.Damage(5, n);
                         }
                     }
                 }
@@ -1642,7 +1701,7 @@ namespace NCore
                     {
                         if (IsNothing(n.SelectedItem))
                             return;
-                        n.Furnace(World.GetBlockAt(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2])), Material.COAL, n.SelectedItem.Type);
+                        await n.Furnace(World.GetBlockAt(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2])), Material.COAL, n.SelectedItem.Type);
                     }
                 }
                 catch (Exception ex)
@@ -1654,7 +1713,7 @@ namespace NCore
             catch (Exception globalEx)
             {
                 Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{globalEx.ToString()}", "WARNING");
-                n.Kick("Internal server error occured.");
+                await n.Kick("Internal server error occured.");
                 return;
             }
         }
@@ -1680,7 +1739,7 @@ namespace NCore
             return Math.Sqrt(Math.Pow(x2 - x1, 2d) + Math.Pow(y2 - y1, 2d));
         }
 
-        public void Explode(double radius, Point point)
+        public async Task Explode(double radius, Point point)
         {
             List<Block> blocksToRemove = new List<Block>();
             foreach(Block b in World.Blocks)
@@ -1700,19 +1759,19 @@ namespace NCore
             {
                 foreach(NetworkPlayer p in players)
                 {
-                    p.PacketQueue.AddQueue($"removeblock?{b.Position.X.ToString()}?{b.Position.Y.ToString()}");
+                    await p.PacketQueue.AddQueue($"removeblock?{b.Position.X.ToString()}?{b.Position.Y.ToString()}");
                     World.Blocks.Remove(b);
                 }
             }
             foreach (NetworkPlayer p in players)
             {
-                p.PacketQueue.SendQueue();
+                await p.PacketQueue.SendQueue();
             }
             foreach (NetworkPlayer p in players)
             {
                 if(DistanceBetweenPoint(Normalize(p.Position), point) <= radius)
                 {
-                    p.Damage(10, "взорвался(-лась)");
+                    await p.Damage(10, "взорвался(-лась)");
                 }
             }
             Log($"Explosion at [{point.X},{point.Y}] with power {radius.ToString()}");
@@ -1734,9 +1793,9 @@ namespace NCore
             return expession == null;
         }
 
-        public void Chat(string arg0)
+        public async Task Chat(string arg0)
         {
-            Send("chat?" + arg0);
+            await Send("chat?" + arg0);
         }
 
         public void SaveAuth()
@@ -1747,7 +1806,7 @@ namespace NCore
             File.WriteAllText("./auth.txt", txt, Encoding.UTF8);
         }
 
-        public void ClientExited(NetworkPlayer client, bool isError = false)
+        public async void ClientExited(NetworkPlayer client, bool isError = false)
         {
             if (string.IsNullOrEmpty(Thread.CurrentThread.Name))
                 Thread.CurrentThread.Name = "Network Leave";
@@ -1759,17 +1818,17 @@ namespace NCore
                 File.WriteAllText($"./playerdata/{client.Username}.txt", PlayerInfoSaveLoad.Save(client), Encoding.UTF8);
                 if (!isError)
                 {
-                    Chat(client.Username + " покинул игру");
+                    await Chat(client.Username + " покинул игру");
                     Log(client.Username + " покинул игру");
                 }
                 else
                 {
-                    client.Kick("An internal server error occured");
-                    Chat(client.Username + " left the game due to an error.");
+                    await client.Kick("An internal server error occured");
+                    await Chat(client.Username + " left the game due to an error.");
                     Log(client.Username + " left the game due to an error.");
                 }
 
-                Send("removeplayer?" + client.Username);
+                await Send("removeplayer?" + client.Username);
                 if (loggedIn.Contains(client.Username))
                 {
                     loggedIn.Remove(client.Username);
@@ -1813,10 +1872,10 @@ namespace NCore
             File.WriteAllText(Conversions.ToString(worldfile), sv.Save(World));
         }
 
-        public void SendCommandFeedback(string a, CommandSender b)
+        public async Task SendCommandFeedback(string a, CommandSender b)
         {
             Log($"[{b.GetName()}: {a}]");
-            Send($"chat?[{b.GetName()}: {a}]");
+            await Send($"chat?[{b.GetName()}: {a}]");
         }
 
         public static string Left(string a, int b)

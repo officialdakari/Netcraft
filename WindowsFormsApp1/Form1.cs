@@ -17,46 +17,48 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
         }
-
-        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        
+        private void start()
         {
-            if(e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;
-                button1.PerformClick();
-            }
+            var BM = new Bitmap(Width, Height);
+            this.DrawToBitmap(BM, ClientRectangle);
+            this.BackgroundImage = BM;
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+            foreach (Control C in this.Controls)
+                C.Visible = false;
+            FormBorderStyle = FormBorderStyle.None;
+            this.BackColor = Color.Red;
+            this.TransparencyKey = Color.Red;
+            timer1.Start();
         }
 
-        Process proc;
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            proc.StandardInput.WriteLine(textBox1.Text);
-            textBox1.Clear();
-        }
-
-        private void proc_DataReceived(object sender, DataReceivedEventArgs e)
-        {
-            richTextBox1.AppendText(e.Data + "\r\n");
-            richTextBox1.Select(richTextBox1.TextLength, 0);
-            richTextBox1.ScrollToCaret();
+            //start();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            proc = new Process();
-            proc.StartInfo.FileName = "./Netcraft.exe";
-            proc.StartInfo.RedirectStandardError = true;
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardInput = true;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.Start();
 
-            proc.BeginErrorReadLine();
-            proc.BeginOutputReadLine();
+        }
 
-            proc.EnableRaisingEvents = true;
-            proc.ErrorDataReceived += proc_DataReceived;
-            proc.OutputDataReceived += proc_DataReceived;
+        private void timer1_Tick_1(object sender, EventArgs e)
+        {
+            if (this.Height < 40)
+            {
+                Environment.Exit(0);
+            }
+
+            Width -= 4;
+            Left += 2;
+            Height -= 4;
+            Top += 2;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace NCore
 {
@@ -8,7 +9,7 @@ namespace NCore
         {
         }
 
-        public override bool OnCommand(CommandSender sender, Command cmd, string[] args, string label)
+        public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             if (!sender.IsPlayer)
             {
@@ -21,12 +22,12 @@ namespace NCore
                 {
                     var m = Enum.Parse(typeof(Material), args[0].ToUpper());
                     NetworkPlayer p = (NetworkPlayer)sender;
-                    p.Craft((Material)m);
-                    p.Chat("Crafted!");
+                    await p.Craft((Material)m);
+                    await p.Chat("Crafted!");
                 }
                 catch (Exception ex)
                 {
-                    sender.SendMessage("An internal error occured.");
+                    await sender.SendMessage("An internal error occured.");
                 }
 
                 return true;

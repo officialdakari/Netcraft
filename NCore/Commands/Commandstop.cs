@@ -1,4 +1,6 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace NCore
 {
     public class Commandstop : Command
@@ -7,7 +9,7 @@ namespace NCore
         {
         }
 
-        public override bool OnCommand(CommandSender sender, Command cmd, string[] args, string label)
+        public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             if (!sender.GetAdmin())
             {
@@ -16,7 +18,7 @@ namespace NCore
 
             if (args.Length == 0)
             {
-                sender.SendMessage("Вы уверены что хотите выключить сервер? Введите /end confirm чтобы выключить сервер.");
+                await sender.SendMessage("Вы уверены что хотите выключить сервер? Введите /end confirm чтобы выключить сервер.");
                 return true;
             }
             else if (args.Length == 1)

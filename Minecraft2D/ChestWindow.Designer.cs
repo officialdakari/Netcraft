@@ -38,7 +38,7 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(0, 0);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(408, 450);
+            this.listBox1.Size = new System.Drawing.Size(263, 450);
             this.listBox1.TabIndex = 0;
             this.listBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDoubleClick);
             // 
@@ -46,9 +46,9 @@
             // 
             this.listBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(408, 0);
+            this.listBox2.Location = new System.Drawing.Point(263, 0);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(392, 450);
+            this.listBox2.Size = new System.Drawing.Size(537, 450);
             this.listBox2.TabIndex = 1;
             this.listBox2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox2_MouseDoubleClick);
             // 
@@ -63,9 +63,11 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ChestWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Сундук";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ChestWindow_FormClosing);
+            this.Load += new System.EventHandler(this.ChestWindow_Load);
             this.ResumeLayout(false);
 
         }

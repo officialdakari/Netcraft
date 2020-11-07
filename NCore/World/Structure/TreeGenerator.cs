@@ -1,4 +1,5 @@
 ﻿using global::System.Drawing;
+using System.Threading.Tasks;
 
 namespace NCore
 {
@@ -57,7 +58,7 @@ namespace NCore
             }
         }
 
-        public static void GrowthTree(Point pos, WorldServer w, bool bg)
+        public static async Task GrowthTree(Point pos, WorldServer w, bool bg)
         {
             for (int i = 0; i <= 6; i++)
             {
@@ -66,7 +67,7 @@ namespace NCore
                     if (w.GetBlockAt(pos) != null) continue;
                     w.Blocks.Add(new Block(pos, EnumBlockType.WOOD, false, bg));
                     foreach (var p in NCore.GetNCore().players)
-                        p.SendBlockChange(pos, EnumBlockType.WOOD, false, true, bg);
+                        await p.SendBlockChange(pos, EnumBlockType.WOOD, false, true, bg);
                 }
 
                 if (i == 1)
@@ -76,7 +77,7 @@ namespace NCore
                     if (w.GetBlockAt(pos1) != null) continue;
                     w.Blocks.Add(new Block(pos1, EnumBlockType.WOOD, false, bg));
                     foreach (var p in NCore.GetNCore().players)
-                        p.SendBlockChange(pos1, EnumBlockType.WOOD, false, true, bg);
+                        await p.SendBlockChange(pos1, EnumBlockType.WOOD, false, true, bg);
                 }
 
                 if (i == 2)
@@ -86,7 +87,7 @@ namespace NCore
                     if (w.GetBlockAt(pos1) != null) continue;
                     w.Blocks.Add(new Block(pos1, EnumBlockType.WOOD, false, bg));
                     foreach (var p in NCore.GetNCore().players)
-                        p.SendBlockChange(pos1, EnumBlockType.WOOD, false, true, bg);
+                        await p.SendBlockChange(pos1, EnumBlockType.WOOD, false, true, bg);
                 }
 
                 if (i == 3)
@@ -96,7 +97,7 @@ namespace NCore
                     if (w.GetBlockAt(pos1) != null) continue;
                     w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, bg));
                     foreach (var p in NCore.GetNCore().players)
-                        p.SendBlockChange(pos1, EnumBlockType.LEAVES, false, true, bg);
+                        await p.SendBlockChange(pos1, EnumBlockType.LEAVES, false, true, bg);
                 }
 
                 if (i == 4)
@@ -106,7 +107,7 @@ namespace NCore
                     if (w.GetBlockAt(pos1) != null) continue;
                     w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, bg));
                     foreach (var p in NCore.GetNCore().players)
-                        p.SendBlockChange(pos1, EnumBlockType.LEAVES, false, true, bg);
+                        await p.SendBlockChange(pos1, EnumBlockType.LEAVES, false, true, bg);
                 }
 
                 if (i == 5)
@@ -116,7 +117,7 @@ namespace NCore
                     if (w.GetBlockAt(pos1) != null) continue;
                     w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, bg));
                     foreach (var p in NCore.GetNCore().players)
-                        p.SendBlockChange(pos1, EnumBlockType.LEAVES, false, true, bg);
+                        await p.SendBlockChange(pos1, EnumBlockType.LEAVES, false, true, bg);
                 }
 
                 if (i == 6)
@@ -127,8 +128,8 @@ namespace NCore
                     w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, bg));
                     foreach (var p in NCore.GetNCore().players)
                     {
-                        p.SendBlockChange(pos1, EnumBlockType.LEAVES, false, true, bg);
-                        p.PacketQueue.SendQueue();
+                        await p.SendBlockChange(pos1, EnumBlockType.LEAVES, false, true, bg);
+                        await p.PacketQueue.SendQueue();
                     }
                 }
             }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
+using System.Threading.Tasks;
 
 namespace NCore.netcraft
 {
@@ -176,7 +177,7 @@ namespace NCore.netcraft
                     return field_b;
                 }
 
-                public static void BanPlayer(string a)
+                public static async Task BanPlayer(string a)
                 {
                     if (field_a.Contains(a.ToLower()))
                     {
@@ -187,7 +188,7 @@ namespace NCore.netcraft
                     {
                         if ((client.Username.ToLower() ?? "") == (a.ToLower() ?? ""))
                         {
-                            client.Kick("Вы были забанены.");
+                            await client.Kick("Вы были забанены.");
                         }
                     }
 
@@ -195,7 +196,7 @@ namespace NCore.netcraft
                     NCore.GetNCore().SaveBanlist();
                 }
 
-                public static void UnbanPlayer(string a)
+                public static async Task UnbanPlayer(string a)
                 {
                     if (!field_a.Contains(a.ToLower()))
                     {
@@ -220,7 +221,7 @@ namespace NCore.netcraft
                     return field_a.Contains(arg_a.ToLower());
                 }
 
-                public static void Broadcast(string m)
+                public static async Task Broadcast(string m)
                 {
                     // accessMainForm.Log("Broadcast: " + m)
                     // accessMainForm.Send("chat?" + m)

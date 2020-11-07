@@ -1,4 +1,6 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace NCore
 {
     public class Commandnmc : Command
@@ -7,11 +9,11 @@ namespace NCore
         {
         }
 
-        public override bool OnCommand(CommandSender sender, Command cmd, string[] args, string label)
+        public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             if (!sender.IsPlayer)
             {
-                sender.SendMessage("Только для игрока.");
+                await sender.SendMessage("Только для игрока.");
                 return true;
             }
 
@@ -21,7 +23,7 @@ namespace NCore
                 p.DisableMovementCheck = !p.DisableMovementCheck;
                 if (p.DisableMovementCheck)
                 {
-                    sender.SendMessage("Отключена проверка передвижения.");
+                    await sender.SendMessage("Отключена проверка передвижения.");
                 }
 
                 return true;

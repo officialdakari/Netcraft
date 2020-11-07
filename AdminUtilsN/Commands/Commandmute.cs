@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using NCore;
 using NCore.netcraft.server.api;
 
@@ -12,7 +13,7 @@ namespace AdminUtilsN.Commands
         public Commandmute() : base("mute", "Мьют или размьют игрока", "mute <player> <seconds> <reason>", new[] { "m" })
         {
         }
-        public override bool OnCommand(CommandSender sender, Command cmd, string[] args, string label)
+        public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             if (args.Length >= 3)
             {

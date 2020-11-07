@@ -9,9 +9,9 @@ using global::System.Runtime.InteropServices;
 // Проверьте значения атрибутов сборки
 
 [assembly: AssemblyTitle("Netcraft")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Minecraft2D")]
+[assembly: AssemblyDescription("A Minecraft-inspired game in 2D.")]
+[assembly: AssemblyCompany("Netcraft Team")]
+[assembly: AssemblyProduct("Netcraft")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: ComVisible(false)]

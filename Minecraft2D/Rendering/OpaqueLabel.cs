@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Minecraft2D
 {
-    public class OpaquePanel : Panel
+    public class OpaqueLabel : Label
     {
         protected override void OnPaintBackground(PaintEventArgs e)
         {

@@ -39,7 +39,7 @@ namespace Minecraft2D
         protected int direction = 1;
         protected Color[] colors = new[] { Color.Red, Color.Orange, Color.Goldenrod, Color.Gold, Color.Yellow, Color.GreenYellow, Color.LightGreen, Color.Green, Color.LightBlue, Color.Blue, Color.DarkBlue, Color.BlueViolet, Color.Violet };
 
-        protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "Netcraft Is In 2D", "By GladCypress3030 and TheNonamee", "Converted to C#", "Join our Discord!"};
+        protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "Press F1 for help!", "Netcraft Is In 2D", "By GladCypress3030 and TheNonameee", "Converted to C#", "Join our Discord!"};
         protected string labelText;
 
         private void SetTitle()
@@ -59,7 +59,7 @@ namespace Minecraft2D
                 labelCurDelay -= 1;
             }
             
-            string t = "> " + Strings.Left(labelText, labelPos) + (labelWithCur ? "[]" : "");
+            string t = "> " + Strings.Left(labelText, labelPos) + (labelWithCur ? "\u258C" : "");
             if (labelChangeDelay == 0)
             {
                 labelPos += labelDirection;
@@ -173,11 +173,15 @@ namespace Minecraft2D
             Form1.GetInstance().toNoticeType = 1;
             Form1.GetInstance().Close();
         }
+        void comment(string a)
+        {
+            
+        }
         string cfg;
         private void MainMenu_Load(object sender, EventArgs e)
         {
             instance = this;
-             
+            comment("ты чё декомпилировал игру быстро удаляй декомпилированный код иначе бан");
             Application.ThreadException += My.MyApplication.threadException;
             AppDomain.CurrentDomain.UnhandledException += My.MyApplication.threadException;
             cfg = File.ReadAllText("./options.txt", Encoding.UTF8);
@@ -336,7 +340,7 @@ namespace Minecraft2D
             clicks++;
             if(clicks == 5)
             {
-                throw new Exception("црн г туувув ещ сдшсл ершы еуче еут ешьуы,,,, 'nj ntcnjdsq rhfi z c.lf gjcnfdbk/// ,jkmit yt yf;bvfq");
+                throw new EasterEggFoundException();
             }
         }
 
@@ -351,7 +355,7 @@ namespace Minecraft2D
                     firstLoad = 0;
                     return;
                 }
-                Form1.GetInstance().Dispose();
+
             }
         }
 
@@ -380,6 +384,37 @@ namespace Minecraft2D
         private void Label3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void MainMenu_Paint(object sender, PaintEventArgs e)
+        {
+            //Image image = My.Resources.Resources.cobblestone4;
+            //Graphics g = CreateGraphics();
+            //g.Clear(BackColor);
+            //for (int x = 0; x < (Width / 64) * 64; x++)
+            //{
+            //    for (int y = 0; y < (Height / 64) * 64; y++)
+            //    {
+            //        Rectangle rect = new Rectangle(x * 64, y * 64, 64, 64);
+            //        g.DrawImage(image, rect);
+            //    }
+            //}
+        }
+
+        private void PictureBox2_Paint(object sender, PaintEventArgs e)
+        {
+            
+        }
+    }
+
+    public class EasterEggFoundException : Exception
+    {
+        public override string Message
+        {
+            get
+            {
+                return "y u do this?";
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿
 using NCore.netcraft.server.api;
+using System.Threading.Tasks;
 
 namespace NCore
 {
@@ -9,7 +10,7 @@ namespace NCore
         {
         }
 
-        public override bool OnCommand(CommandSender sender, Command cmd, string[] args, string label)
+        public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             if (args.Length == 0)
             {
@@ -17,13 +18,13 @@ namespace NCore
                 {
                     NetworkPlayer p = (NetworkPlayer)sender;
                     foreach (var a in Netcraft.GetCommands())
-                        p.PacketQueue.AddQueue($"chat?/{a.Usage} => {a.Description}");
-                    p.PacketQueue.SendQueue();
+                        await p.PacketQueue.AddQueue($"chat?/{a.Usage} => {a.Description}");
+                    await p.PacketQueue.SendQueue();
                     return true;
                 }
 
                 foreach (var a in Netcraft.GetCommands())
-                    sender.SendMessage(a.Usage + " => " + a.Description);
+                    await sender.SendMessage(a.Usage + " => " + a.Description);
                 return true;
             }
 

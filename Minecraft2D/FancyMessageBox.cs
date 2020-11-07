@@ -33,6 +33,23 @@ namespace Minecraft2D
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             button1.Text = lang.get("button.ok");
             button2.Text = lang.get("button.cancel");
+            MouseMove += MyForm_MouseMove;
+            
+            label1.MouseMove += MyForm_MouseMove;
+            
+            label2.MouseMove += MyForm_MouseMove;
+
+            label3.MouseMove += MyForm_MouseMove;
+
+            iconLabel1.MouseMove += MyForm_MouseMove;
+        }
+
+        private void MyForm_MouseMove(object sender, MouseEventArgs e)
+        {
+            base.Capture = false;
+            ((Control)sender).Capture = false;
+            Message m = Message.Create(base.Handle, 0xa1, new IntPtr(2), IntPtr.Zero);
+            this.WndProc(ref m);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -45,6 +62,18 @@ namespace Minecraft2D
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
     public class FancyMessage
@@ -65,17 +94,22 @@ namespace Minecraft2D
             OK = 1, Cancel = 2, None = 0
         }
 
-        public static Result Show(string text, string caption = "Netcraft", Icon icon = Icon.Info, Buttons buttons = Buttons.OK)
+        public static Result Show(string text, string caption = "", Icon icon = Icon.Info, Buttons buttons = Buttons.OK)
         {
             FancyMessageBox msg = new FancyMessageBox();
-            msg.Text = caption;
+            msg.label3.Text = caption;
             msg.label1.Text = text;
+            if(caption == "" || caption == "Netcraft")
+            {
+                msg.label1.Location = new Point(130, 48);
+                msg.label3.Hide();
+            }
 
             switch(icon)
             {
                 case Icon.Info:
                     msg.iconLabel1.Text = FancyMessageBox.INFO_TEXT;
-                    msg.iconLabel1.ForeColor = Color.Blue;
+                    msg.iconLabel1.ForeColor = Color.DodgerBlue;
                     My.MyProject.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Question);
                     break;
                 case Icon.Warning:

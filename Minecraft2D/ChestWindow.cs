@@ -27,6 +27,17 @@ namespace Minecraft2D
                     listBox2.Items.Add(listBox1.SelectedItem.ToString());
                     listBox1.Items.Remove(listBox1.SelectedItem.ToString());
                 }
+                if (e.Button == MouseButtons.Right)
+                {
+                    //string itemname = "";
+                    //int count = -1;
+                    //itemname = listBox1.SelectedItem.ToString().Split(new string[] { " x " }, StringSplitOptions.None)[0];
+                    //count = int.Parse(listBox1.SelectedItem.ToString().Split(new string[] { " x " }, StringSplitOptions.None)[1]);
+
+                    //Form1.GetInstance().SendPacket("1tochest", listBox1.SelectedItem.ToString());
+                    //listBox2.Items.Add(listBox1.SelectedItem.ToString());
+                    //listBox1.Items.Remove(listBox1.SelectedItem.ToString());
+                }
             }
         }
 
@@ -46,6 +57,11 @@ namespace Minecraft2D
         private void ChestWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             Form1.GetInstance().SendSinglePacket("closechest");
+        }
+
+        private void ChestWindow_Load(object sender, EventArgs e)
+        {
+            listBox1.Items.AddRange(Form1.GetInstance().ListBox1.Items);
         }
     }
 }

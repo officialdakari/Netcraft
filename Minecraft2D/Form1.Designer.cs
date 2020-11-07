@@ -57,8 +57,10 @@ namespace Minecraft2D
             this._ButtonAttack = new System.Windows.Forms.Button();
             this.CraftButton = new System.Windows.Forms.Button();
             this._ListBox2 = new System.Windows.Forms.ListBox();
-            this.R1 = new Minecraft2D.TransparentPicBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.debuginfo = new Minecraft2D.OpaqueLabel();
+            this.R1 = new Minecraft2D.TransparentPicBox();
             ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.R1)).BeginInit();
             this.SuspendLayout();
@@ -120,7 +122,7 @@ namespace Minecraft2D
             // _Timer3
             // 
             this._Timer3.Enabled = true;
-            this._Timer3.Interval = 10000;
+            this._Timer3.Interval = 15000;
             this._Timer3.Tick += new System.EventHandler(this.Timer3_Tick);
             // 
             // _ProgressBar1
@@ -275,23 +277,12 @@ namespace Minecraft2D
             // _ListBox2
             // 
             this._ListBox2.FormattingEnabled = true;
-            this._ListBox2.Location = new System.Drawing.Point(84, 25);
+            this._ListBox2.Location = new System.Drawing.Point(84, 51);
             this._ListBox2.Name = "_ListBox2";
             this._ListBox2.Size = new System.Drawing.Size(314, 160);
             this._ListBox2.TabIndex = 17;
             this._ListBox2.Visible = false;
             this._ListBox2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox2_MouseDoubleClick);
-            // 
-            // R1
-            // 
-            this.R1.BackColor = System.Drawing.Color.Transparent;
-            this.R1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.R1.Location = new System.Drawing.Point(54, 146);
-            this.R1.Name = "R1";
-            this.R1.Size = new System.Drawing.Size(48, 48);
-            this.R1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.R1.TabIndex = 15;
-            this.R1.TabStop = false;
             // 
             // imageList1
             // 
@@ -386,12 +377,49 @@ namespace Minecraft2D
             this.imageList1.Images.SetKeyName(86, "WOODEN_SWORD.png");
             this.imageList1.Images.SetKeyName(87, "WOODEN_SWORD_FLIPPED.png");
             // 
+            // progressBar1
+            // 
+            this.progressBar1.BackColor = System.Drawing.SystemColors.Control;
+            this.progressBar1.ForeColor = System.Drawing.Color.Yellow;
+            this.progressBar1.Location = new System.Drawing.Point(84, 25);
+            this.progressBar1.Maximum = 20;
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(149, 23);
+            this.progressBar1.TabIndex = 18;
+            this.progressBar1.Value = 20;
+            // 
+            // debuginfo
+            // 
+            this.debuginfo.AutoSize = true;
+            this.debuginfo.BackColor = System.Drawing.Color.Transparent;
+            this.debuginfo.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.debuginfo.ForeColor = System.Drawing.Color.White;
+            this.debuginfo.Location = new System.Drawing.Point(5, 53);
+            this.debuginfo.Name = "debuginfo";
+            this.debuginfo.Size = new System.Drawing.Size(197, 68);
+            this.debuginfo.TabIndex = 19;
+            this.debuginfo.Text = "Netcraft {0}\r\nServer: {1}\r\nPlayer position: x, y\r\nOnline players: a";
+            this.debuginfo.Visible = false;
+            // 
+            // R1
+            // 
+            this.R1.BackColor = System.Drawing.Color.Transparent;
+            this.R1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.R1.Location = new System.Drawing.Point(54, 146);
+            this.R1.Name = "R1";
+            this.R1.Size = new System.Drawing.Size(48, 48);
+            this.R1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.R1.TabIndex = 15;
+            this.R1.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.ClientSize = new System.Drawing.Size(1086, 576);
+            this.Controls.Add(this.debuginfo);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this._ListBox2);
             this.Controls.Add(this.CraftButton);
             this.Controls.Add(this.R1);
@@ -411,8 +439,9 @@ namespace Minecraft2D
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(9999, 619);
+            this.MaximumSize = new System.Drawing.Size(2140, 2060);
             this.Name = "Form1";
+            this.ShowIcon = false;
             this.Text = "Netcraft";
             this.Activated += new System.EventHandler(this.Form1_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
@@ -854,6 +883,8 @@ namespace Minecraft2D
 
         private ListBox _ListBox2;
         private ImageList imageList1;
+        private ProgressBar progressBar1;
+        private OpaqueLabel debuginfo;
 
         internal ListBox ListBox2
         {

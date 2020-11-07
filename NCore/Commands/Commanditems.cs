@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NCore;
 
 namespace NCore
@@ -9,12 +10,12 @@ namespace NCore
         {
         }
 
-        public override bool OnCommand(CommandSender sender, Command cmd, string[] args, string label)
+        public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             if (args.Length == 0)
             {
                 var a = Enum.GetNames(typeof(Material));
-                sender.SendMessage(string.Join(", ", a).ToLower());
+                await sender.SendMessage(string.Join(", ", a).ToLower());
                 return true;
             }
 
