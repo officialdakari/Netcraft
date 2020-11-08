@@ -825,30 +825,32 @@ namespace NCore
                     n.PacketQueue.SendQueue();
                     foreach (var p in players)
                     {
-                        if ((p.Username ?? "") == (n.Username ?? ""))
+                        if (p.UUID == n.UUID)
                             continue;
                         if (p.IsSpectator)
                             continue;
-                        Thread.Sleep(100);
-                        n.PacketQueue.AddQueue("addplayer?" + p.Username);
-                        Thread.Sleep(100);
-                        n.PacketQueue.AddQueue("moveplayer?" + p.Username + "?" + p.Position.X.ToString() + "?" + p.Position.Y.ToString());
+                        await Task.Delay(100);
+                        await n.PacketQueue.AddQueue("addplayer?" + p.Username);
+                        await Task.Delay(100);
+                        await n.PacketQueue.AddQueue("moveplayer?" + p.Username + "?" + p.Position.X.ToString() + "?" + p.Position.Y.ToString());
+                        
                         try
                         {
                             if (IsNothing(p.SelectedItem))
                                 continue;
-                            Task.Delay(100);
-                            await n.Send("itemset?" + p.Username + "?" + p.SelectedItem.Type.ToString());
+                            await Task.Delay(100);
+                            await n.PacketQueue.AddQueue("itemset?" + p.Username + "?" + p.SelectedItem.Type.ToString());
                         }
                         catch (Exception ex)
                         {
                             LogError(ex);
                         }
                     }
+                    await n.PacketQueue.SendQueue();
                     n.IsLoaded = true;
-                    Task.Delay(100);
+                    await Task.Delay(100);
                     n.Send("completeload");
-                    Task.Delay(100);
+                    await Task.Delay(100);
                     if(enableAuth == 1) n.Chat("Пожалуйста введите свой пароль в чат для авторизации. Это никто не увидит.");
                     if (everyBodyAdmin == 1)
                     {
@@ -1278,7 +1280,7 @@ namespace NCore
                         if(block.Type == EnumBlockType.CHEST)
                         {
                             await n.UpdateInventory();
-                            Task.Delay(30);
+                            await Task.Delay(30);
                             await n.Chest(World.GetChestAt(block.Position));
                         }
                     }

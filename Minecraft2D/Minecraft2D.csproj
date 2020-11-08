@@ -193,6 +193,7 @@
     <Compile Include="SplashScreen.Designer.cs">
       <DependentUpon>SplashScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stats.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

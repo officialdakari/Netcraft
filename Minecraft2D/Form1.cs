@@ -16,6 +16,7 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.VisualBasic.Devices;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
 
 namespace Minecraft2D
 {
@@ -282,6 +283,7 @@ namespace Minecraft2D
             pName = Utils.InputBox("text.playername");
             if (pName == null) Close();
             await SendPacket("setname", pName);
+            Username = pName;
             Thread.Sleep(900);
             await SendSinglePacket("world");
             My.MyProject.Forms.Chat.Show();
@@ -2174,6 +2176,26 @@ namespace Minecraft2D
             {
                 Cmd(Console.ReadLine());
             }
+        }
+
+        public string Username { get; private set; }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            List<string> players = new List<string>();
+            if (Username == null) return;
+            players.Add(Username);
+
+            this.players.All(p =>
+            {
+                players.Add(p.Name);
+                return true;
+            });
+            My.MyProject.Forms.Chat.listBox1.Items.Clear();
+            My.MyProject.Forms.Chat.listBox1.Items.AddRange(players.ToArray());
+
+            timer2.Stop();
+            timer2.Start();
         }
     }
 

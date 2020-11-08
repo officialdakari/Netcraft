@@ -59,7 +59,7 @@ namespace Minecraft2D
             this.BackButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.BackButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BackButton.ForeColor = System.Drawing.Color.White;
-            this.BackButton.Location = new System.Drawing.Point(558, 117);
+            this.BackButton.Location = new System.Drawing.Point(548, 117);
             this.BackButton.Name = "BackButton";
             this.BackButton.Size = new System.Drawing.Size(310, 36);
             this.BackButton.TabIndex = 0;
@@ -72,7 +72,7 @@ namespace Minecraft2D
             this.Label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.Label1.BackColor = System.Drawing.Color.Transparent;
             this.Label1.ForeColor = System.Drawing.Color.White;
-            this.Label1.Location = new System.Drawing.Point(555, 34);
+            this.Label1.Location = new System.Drawing.Point(545, 34);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(313, 62);
             this.Label1.TabIndex = 1;
@@ -86,7 +86,7 @@ namespace Minecraft2D
             this.GroupBox1.Controls.Add(this.checkBox1);
             this.GroupBox1.Controls.Add(this.CheckBox2);
             this.GroupBox1.Controls.Add(this._CheckBox1);
-            this.GroupBox1.Location = new System.Drawing.Point(92, 87);
+            this.GroupBox1.Location = new System.Drawing.Point(82, 87);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(411, 224);
             this.GroupBox1.TabIndex = 2;
@@ -148,7 +148,7 @@ namespace Minecraft2D
             this.SettingsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.SettingsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SettingsButton.ForeColor = System.Drawing.Color.White;
-            this.SettingsButton.Location = new System.Drawing.Point(558, 159);
+            this.SettingsButton.Location = new System.Drawing.Point(548, 159);
             this.SettingsButton.Name = "SettingsButton";
             this.SettingsButton.Size = new System.Drawing.Size(310, 36);
             this.SettingsButton.TabIndex = 3;
@@ -166,7 +166,7 @@ namespace Minecraft2D
             this.ExitButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.ExitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ExitButton.ForeColor = System.Drawing.Color.White;
-            this.ExitButton.Location = new System.Drawing.Point(558, 201);
+            this.ExitButton.Location = new System.Drawing.Point(548, 201);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(310, 36);
             this.ExitButton.TabIndex = 4;
@@ -180,7 +180,7 @@ namespace Minecraft2D
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImage = global::Minecraft2D.My.Resources.Resources.menubackground;
-            this.ClientSize = new System.Drawing.Size(960, 423);
+            this.ClientSize = new System.Drawing.Size(940, 423);
             this.ControlBox = false;
             this.Controls.Add(this.ExitButton);
             this.Controls.Add(this.SettingsButton);

@@ -40,17 +40,17 @@ namespace Minecraft2D
             this.RichTextBox1 = new System.Windows.Forms.RichTextBox();
             this._TextBox1 = new System.Windows.Forms.TextBox();
             this._Button1 = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // RichTextBox1
             // 
             this.RichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.RichTextBox1.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.RichTextBox1.Location = new System.Drawing.Point(0, 0);
             this.RichTextBox1.Name = "RichTextBox1";
             this.RichTextBox1.ReadOnly = true;
-            this.RichTextBox1.Size = new System.Drawing.Size(561, 342);
+            this.RichTextBox1.Size = new System.Drawing.Size(561, 422);
             this.RichTextBox1.TabIndex = 0;
             this.RichTextBox1.Text = "";
             this.RichTextBox1.TextChanged += new System.EventHandler(this.RichTextBox1_TextChanged);
@@ -59,7 +59,7 @@ namespace Minecraft2D
             // 
             this._TextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._TextBox1.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this._TextBox1.Location = new System.Drawing.Point(0, 348);
+            this._TextBox1.Location = new System.Drawing.Point(0, 428);
             this._TextBox1.Name = "_TextBox1";
             this._TextBox1.Size = new System.Drawing.Size(424, 26);
             this._TextBox1.TabIndex = 1;
@@ -67,7 +67,8 @@ namespace Minecraft2D
             // 
             // _Button1
             // 
-            this._Button1.Location = new System.Drawing.Point(430, 348);
+            this._Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._Button1.Location = new System.Drawing.Point(430, 428);
             this._Button1.Name = "_Button1";
             this._Button1.Size = new System.Drawing.Size(131, 26);
             this._Button1.TabIndex = 2;
@@ -75,11 +76,21 @@ namespace Minecraft2D
             this._Button1.UseVisualStyleBackColor = true;
             this._Button1.Click += new System.EventHandler(this.Button1_Click);
             // 
+            // listBox1
+            // 
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(567, 0);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(215, 457);
+            this.listBox1.TabIndex = 3;
+            // 
             // Chat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 377);
+            this.ClientSize = new System.Drawing.Size(782, 457);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this._Button1);
             this.Controls.Add(this._TextBox1);
             this.Controls.Add(this.RichTextBox1);
@@ -122,6 +133,7 @@ namespace Minecraft2D
         }
 
         private Button _Button1;
+        internal ListBox listBox1;
 
         internal Button Button1
         {

@@ -684,7 +684,7 @@ namespace NCore
         public async Task UpdateInventory()
         {
             await Send("clearinventory");
-            Task.Delay(100);
+            await Task.Delay(100);
             foreach (var i in PlayerInventory.Items)
                 await PacketQueue.AddQueue("additem?" + i.Type.ToString() + " x " + i.Count.ToString());
             await PacketQueue.SendQueue();

@@ -41,6 +41,7 @@ namespace Minecraft2D
 
         protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "Press F1 for help!", "Netcraft Is In 2D", "By GladCypress3030 and TheNonameee", "Converted to C#", "Join our Discord!"};
         protected string labelText;
+        protected int presenceUpdateDelay = 20;
 
         private void SetTitle()
         {
@@ -58,7 +59,16 @@ namespace Minecraft2D
             {
                 labelCurDelay -= 1;
             }
-            
+
+            if(presenceUpdateDelay == 0)
+            {
+                presenceUpdateDelay = 20;
+                dRPC.SetPresence(presence);
+            } else
+            {
+                presenceUpdateDelay--;
+            }
+             
             string t = "> " + Strings.Left(labelText, labelPos) + (labelWithCur ? "\u258C" : "");
             if (labelChangeDelay == 0)
             {
@@ -182,6 +192,7 @@ namespace Minecraft2D
         {
             instance = this;
             comment("ты чё декомпилировал игру быстро удаляй декомпилированный код иначе бан");
+            
             Application.ThreadException += My.MyApplication.threadException;
             AppDomain.CurrentDomain.UnhandledException += My.MyApplication.threadException;
             cfg = File.ReadAllText("./options.txt", Encoding.UTF8);
@@ -207,9 +218,10 @@ namespace Minecraft2D
                     presence.Details = lang.get("rpc.menu");
                     
 
-                    var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party());
+                    var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party()).WithTimestamps(new DiscordRPC.Timestamps());
                     pr.Assets.LargeImageKey = "logonc";
                     pr.Assets.LargeImageText = "NetCraft " + My.MyProject.Forms.MainMenu.Ver;
+                    pr.Timestamps.Start = DateTime.UtcNow;
 
                     dRPC.SetPresence(presence);
                     dRPC.Invoke();
@@ -404,6 +416,11 @@ namespace Minecraft2D
         private void PictureBox2_Paint(object sender, PaintEventArgs e)
         {
             
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+
         }
     }
 

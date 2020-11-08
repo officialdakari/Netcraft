@@ -61,6 +61,7 @@ namespace Minecraft2D
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.debuginfo = new Minecraft2D.OpaqueLabel();
             this.R1 = new Minecraft2D.TransparentPicBox();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.R1)).BeginInit();
             this.SuspendLayout();
@@ -277,7 +278,7 @@ namespace Minecraft2D
             // _ListBox2
             // 
             this._ListBox2.FormattingEnabled = true;
-            this._ListBox2.Location = new System.Drawing.Point(84, 51);
+            this._ListBox2.Location = new System.Drawing.Point(84, 53);
             this._ListBox2.Name = "_ListBox2";
             this._ListBox2.Size = new System.Drawing.Size(314, 160);
             this._ListBox2.TabIndex = 17;
@@ -411,6 +412,12 @@ namespace Minecraft2D
             this.R1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.R1.TabIndex = 15;
             this.R1.TabStop = false;
+            // 
+            // timer2
+            // 
+            this.timer2.Enabled = true;
+            this.timer2.Interval = 1000;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // Form1
             // 
@@ -885,6 +892,7 @@ namespace Minecraft2D
         private ImageList imageList1;
         private ProgressBar progressBar1;
         private OpaqueLabel debuginfo;
+        private Timer timer2;
 
         internal ListBox ListBox2
         {
