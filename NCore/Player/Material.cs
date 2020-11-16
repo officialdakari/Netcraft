@@ -48,6 +48,7 @@ namespace NCore
         WATER_BUCKET, // ok
         LAVA_BUCKET,
         CHEST, // ok
-        FOOD1 // ok
+        FOOD1, // ok
+        END_STONE
     }
 }

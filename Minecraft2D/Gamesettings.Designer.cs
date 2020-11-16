@@ -46,6 +46,7 @@ namespace Minecraft2D
             this._CheckBox1 = new System.Windows.Forms.CheckBox();
             this.SettingsButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.GroupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,7 +60,7 @@ namespace Minecraft2D
             this.BackButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.BackButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BackButton.ForeColor = System.Drawing.Color.White;
-            this.BackButton.Location = new System.Drawing.Point(548, 117);
+            this.BackButton.Location = new System.Drawing.Point(618, 140);
             this.BackButton.Name = "BackButton";
             this.BackButton.Size = new System.Drawing.Size(310, 36);
             this.BackButton.TabIndex = 0;
@@ -72,7 +73,7 @@ namespace Minecraft2D
             this.Label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.Label1.BackColor = System.Drawing.Color.Transparent;
             this.Label1.ForeColor = System.Drawing.Color.White;
-            this.Label1.Location = new System.Drawing.Point(545, 34);
+            this.Label1.Location = new System.Drawing.Point(615, 54);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(313, 62);
             this.Label1.TabIndex = 1;
@@ -86,9 +87,9 @@ namespace Minecraft2D
             this.GroupBox1.Controls.Add(this.checkBox1);
             this.GroupBox1.Controls.Add(this.CheckBox2);
             this.GroupBox1.Controls.Add(this._CheckBox1);
-            this.GroupBox1.Location = new System.Drawing.Point(82, 87);
+            this.GroupBox1.Location = new System.Drawing.Point(315, 54);
             this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(411, 224);
+            this.GroupBox1.Size = new System.Drawing.Size(294, 224);
             this.GroupBox1.TabIndex = 2;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Visible = false;
@@ -101,7 +102,7 @@ namespace Minecraft2D
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1.ForeColor = System.Drawing.Color.White;
-            this.checkBox1.Location = new System.Drawing.Point(6, 100);
+            this.checkBox1.Location = new System.Drawing.Point(6, 108);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(69, 22);
             this.checkBox1.TabIndex = 2;
@@ -115,7 +116,7 @@ namespace Minecraft2D
             this.CheckBox2.AutoSize = true;
             this.CheckBox2.BackColor = System.Drawing.Color.Transparent;
             this.CheckBox2.ForeColor = System.Drawing.Color.White;
-            this.CheckBox2.Location = new System.Drawing.Point(6, 72);
+            this.CheckBox2.Location = new System.Drawing.Point(6, 80);
             this.CheckBox2.Name = "CheckBox2";
             this.CheckBox2.Size = new System.Drawing.Size(157, 22);
             this.CheckBox2.TabIndex = 1;
@@ -129,7 +130,7 @@ namespace Minecraft2D
             this._CheckBox1.AutoSize = true;
             this._CheckBox1.BackColor = System.Drawing.Color.Transparent;
             this._CheckBox1.ForeColor = System.Drawing.Color.White;
-            this._CheckBox1.Location = new System.Drawing.Point(6, 44);
+            this._CheckBox1.Location = new System.Drawing.Point(6, 52);
             this._CheckBox1.Name = "_CheckBox1";
             this._CheckBox1.Size = new System.Drawing.Size(245, 22);
             this._CheckBox1.TabIndex = 0;
@@ -148,7 +149,7 @@ namespace Minecraft2D
             this.SettingsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.SettingsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SettingsButton.ForeColor = System.Drawing.Color.White;
-            this.SettingsButton.Location = new System.Drawing.Point(548, 159);
+            this.SettingsButton.Location = new System.Drawing.Point(618, 182);
             this.SettingsButton.Name = "SettingsButton";
             this.SettingsButton.Size = new System.Drawing.Size(310, 36);
             this.SettingsButton.TabIndex = 3;
@@ -166,13 +167,23 @@ namespace Minecraft2D
             this.ExitButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.ExitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ExitButton.ForeColor = System.Drawing.Color.White;
-            this.ExitButton.Location = new System.Drawing.Point(548, 201);
+            this.ExitButton.Location = new System.Drawing.Point(618, 224);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(310, 36);
             this.ExitButton.TabIndex = 4;
             this.ExitButton.Text = "settings.button.exit";
             this.ExitButton.UseVisualStyleBackColor = false;
             this.ExitButton.Click += new System.EventHandler(this.Button3_Click);
+            // 
+            // listBox1
+            // 
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 18;
+            this.listBox1.Location = new System.Drawing.Point(0, 0);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(251, 423);
+            this.listBox1.TabIndex = 5;
             // 
             // Gamesettings
             // 
@@ -182,6 +193,7 @@ namespace Minecraft2D
             this.BackgroundImage = global::Minecraft2D.My.Resources.Resources.menubackground;
             this.ClientSize = new System.Drawing.Size(940, 423);
             this.ControlBox = false;
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.ExitButton);
             this.Controls.Add(this.SettingsButton);
             this.Controls.Add(this.GroupBox1);
@@ -314,5 +326,6 @@ namespace Minecraft2D
 
         internal CheckBox CheckBox2;
         internal CheckBox checkBox1;
+        internal ListBox listBox1;
     }
 }

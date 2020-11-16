@@ -273,6 +273,16 @@ namespace Minecraft2D.My.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap end_stone {
+            get {
+                object obj = ResourceManager.GetObject("end_stone", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap furnace_front_off {
             get {
                 object obj = ResourceManager.GetObject("furnace_front_off", resourceCulture);

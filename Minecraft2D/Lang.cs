@@ -30,7 +30,8 @@ namespace Minecraft2D
 
         internal string get(string i)
         {
-            return formats[(object)i].ToString();
+            if (!formats.ContainsKey(i)) return i;
+            return formats[i].ToString();
         }
 
     }

@@ -5,7 +5,7 @@ namespace NCore
 {
     public class Commandbroadcast : Command
     {
-        public Commandbroadcast() : base("broadcast", "Отправляет сообщение в чат", "broadcast <сообщение>")
+        public Commandbroadcast() : base("broadcast", NCore.GetNCore().lang.get("commands.broadcast.description"), NCore.GetNCore().lang.get("commands.broadcast.usage"))
         {
         }
 
@@ -19,7 +19,7 @@ namespace NCore
 
             if (args.Length > 0)
             {
-                await Netcraft.Broadcast("[Broadcast] " + string.Join(" ", args));
+                await Netcraft.Broadcast($"[{sender.GetName()}] " + string.Join(" ", args));
                 return true;
             }
 

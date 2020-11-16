@@ -27,6 +27,7 @@ namespace NCore
         SAPLING,
         TNT,
         LAVA,
-        CHEST
+        CHEST,
+        END_STONE
     }
 }

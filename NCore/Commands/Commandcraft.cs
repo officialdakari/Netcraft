@@ -5,7 +5,7 @@ namespace NCore
 {
     public class Commandcraft : Command
     {
-        public Commandcraft() : base("craft", "Скрафтить вещь [ИГРОК]", "craft <material>")
+        public Commandcraft() : base("craft", "Craft item [deprecated; use craft menu instead]", "craft <material>")
         {
         }
 

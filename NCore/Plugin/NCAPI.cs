@@ -188,7 +188,7 @@ namespace NCore.netcraft
                     {
                         if ((client.Username.ToLower() ?? "") == (a.ToLower() ?? ""))
                         {
-                            await client.Kick("Вы были забанены.");
+                            await client.Kick(NCore.GetNCore().lang.get("error.banned"));
                         }
                     }
 

@@ -342,6 +342,7 @@
     <None Include="Resources\IRON_SWORD_FLIPPED.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\end_stone.png" />
     <None Include="Resources\buttonbg.png" />
     <None Include="Resources\menubackground.png" />
     <None Include="Resources\cooked_beef.png" />

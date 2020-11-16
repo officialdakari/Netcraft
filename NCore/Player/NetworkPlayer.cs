@@ -163,7 +163,7 @@ namespace NCore
             }
             else
             {
-                await UpdateHealth(Health - d, $"был убит {damager.Username}");
+                await UpdateHealth(Health - d, NCore.GetNCore().lang.get("deathmessage.killed", damager.Username));
             }
         }
 
@@ -216,7 +216,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.PLANKS) < 2)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -228,7 +228,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 3)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -240,7 +240,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.WOOD) < 1)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -252,13 +252,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 3)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -271,13 +271,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 3)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -290,13 +290,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 1)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -309,13 +309,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 2)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 1)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -328,13 +328,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 3)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -347,13 +347,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 3)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -366,13 +366,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 1)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -385,13 +385,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 2)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 1)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -404,7 +404,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 8)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -416,7 +416,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.PLANKS) < 8)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -428,7 +428,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 9)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -440,7 +440,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.DIAMOND) < 9)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -452,7 +452,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.GOLD) < 9)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -464,7 +464,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON_BLOCK) < 1)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -476,7 +476,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.GOLD_BLOCK) < 1)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -488,7 +488,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.DIAMOND_BLOCK) < 1)
                 {
-                    await Send("msgerror?У Вас недостаточно материалов для крафта.");
+                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -527,6 +527,8 @@ namespace NCore
                 t = "obsidian";
             if (m == EnumBlockType.SAND)
                 t = "sand";
+            if (m == EnumBlockType.END_STONE)
+                t = "endstone";
             if (m == EnumBlockType.GLASS)
                 t = "glass";
             if (m == EnumBlockType.GOLD_ORE)
@@ -593,6 +595,8 @@ namespace NCore
                 t = "coal_ore";
             if (m == EnumBlockType.IRON_ORE)
                 t = "iron_ore";
+            if (m == EnumBlockType.END_STONE)
+                t = "endstone";
             if (m == EnumBlockType.DIAMOND_ORE)
                 t = "diamond_ore";
             if (m == EnumBlockType.OBSIDIAN)
@@ -870,10 +874,10 @@ namespace NCore
         {
             if (bcKick)
             {
-                await Netcraft.Broadcast($"{Username} был выгнан из игры. Причина: {kickMessage}");
+                await Netcraft.Broadcast(NCore.GetNCore().lang.get("broadcast.kick", Username, kickMessage));
             }
 
-            if(IsLoaded) NCore.GetNCore().Log($"{Username} был выгнан из игры: {kickMessage}");
+            if(IsLoaded) NCore.GetNCore().Log($"{Username} kicked from the game: '{kickMessage}'");
             await Send("msgkick?" + kickMessage);
             d.Client.Close();
             d = null;

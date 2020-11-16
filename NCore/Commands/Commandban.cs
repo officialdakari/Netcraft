@@ -5,7 +5,7 @@ namespace NCore
 {
     public class Commandban : Command
     {
-        public Commandban() : base("ban", "Банит игрока на сервере", "ban <игрок>")
+        public Commandban() : base("ban", NCore.GetNCore().lang.get("commands.ban.description"), NCore.GetNCore().lang.get("commands.ban.usage"))
         {
         }
 
@@ -20,7 +20,7 @@ namespace NCore
             if (args.Length == 1)
             {
                 string a = args[0];
-                await Netcraft.Broadcast($"{sender.GetName()} забанил игрока {a}.");
+                await Netcraft.Broadcast(NCore.GetNCore().lang.get("commands.ban.success", sender.GetName(), a));
                 await Netcraft.BanPlayer(a);
             }
 

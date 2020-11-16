@@ -400,519 +400,541 @@ namespace Minecraft2D
 
         public async Task Packet(string p)
         {
-            var a = p.Split('?');
-            if (a[0] == "blockchange")
+            InvokePacket(p);
+        }
+        public delegate Task invokePacket(string p);
+        public async Task InvokePacket(string p)
+        {
+            if(InvokeRequired)
             {
-                var b = new PictureBox();
-                bool g = false;
-                if (a.Length == 5)
-                {
-                    b.Tag = a[4];
-                }
-
-                b.BackColor = BackColor;
-                b.Name = a[1] + "B" + a[2];
-                b.Size = new Size(32, 32);
-                b.Location = new Point((Conversions.ToInteger(a[1]) * 32) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) * 32 - VerticalScroll.Value);
-                if (a[3] == "iron_ore")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.iron_ore;
-                }
-                else if (a[3] == "grass_block")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.grass_side;
-                }
-                else if (a[3] == "dirt")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.dirt1;
-                }
-                else if (a[3] == "stone")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.stone1;
-                }
-                else if (a[3] == "bedrock")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.bedrock;
-                }
-                else if (a[3] == "wood")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.log_oak;
-                }
-                else if (a[3] == "leaves")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.leaves;
-                }
-                else if (a[3] == "cobble")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.cobblestone4;
-                }
-                else if (a[3] == "planks")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.planks_oak;
-                }
-                else if (a[3] == "diamond_ore")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.diamond_ore;
-                }
-                else if (a[3] == "gold_ore")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.gold_ore;
-                }
-                else if (a[3] == "obsidian")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.obsidian1;
-                }
-                else if (a[3] == "water")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.water_still;
-                }
-                else if (a[3] == "sand")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.sand;
-                }
-                else if (a[3] == "glass")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.glass;
-                }
-                else if (a[3] == "furnace")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.furnace_front_off;
-                    b.Tag += b.Tag.ToString() + "?furnace";
-                }
-                else if (a[3] == "iron_block")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.iron_block;
-                }
-                else if (a[3] == "diamond_block")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.diamond_block;
-                }
-                else if (a[3] == "gold_block")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.gold_block;
-                }
-                else if (a[3] == "coal_ore")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.coal_ore;
-                }
-                else if (a[3] == "sapling")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.Grid_Sapling;
-                }
-                else if(a[3] == "tnt")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.tnt_side;
-                }
-                else if(a[3] == "lava")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.lava_still;
-                }
-                else if (a[3] == "chest")
-                {
-                    b.BackgroundImageLayout = ImageLayout.Stretch;
-                    b.BackgroundImage = My.Resources.Resources.chest;
-                }
-                else
-                {
-                    b.BackColor = Color.FromName(a[3]);
-                }
-
-                b.Visible = true;
-                b.Text = "";
-                blocks.Add(b);
-                CreateBlock(b);
-            }
-
-            if(a[0] == "hunger")
+                BeginInvoke(new invokePacket(InvokePacket), p);
+            } else
             {
-                progressBar1.Value = int.Parse(a[1]);
-            }
 
-            if (a[0] == "removeblock")
-            {
-                BreakBlock(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
-            }
-
-            if (a[0] == "addplayer")
-            {
-                CreatePlayer(a[1], 0 - HorizontalScroll.Value, 0);
-                Console.WriteLine($"Player added: {a[1]}");
-            }
-
-            if (a[0] == "removeplayer")
-            {
-                DelPlayer(a[1]);
-                Console.WriteLine($"Player removed: {a[1]}");
-            }
-
-            if (a[0] == "updateplayerposition")
-            {
-                MovePlayer(a[1], Conversions.ToInteger(a[2]) - HorizontalScroll.Value, Conversions.ToInteger(a[3]) - VerticalScroll.Value);
-            }
-
-            if (a[0] == "completeload")
-            {
-                EnableScroll();
-            }
-
-            if (a[0] == "teleport")
-            {
-                TeleportLocalPlayer(Conversions.ToInteger(a[1]) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) - VerticalScroll.Value);
-                UpdatePlayerPosition();
-                Console.WriteLine(String.Format("Local player teleported: {0}, {1}", a[1], a[2]));
-            }
-
-            if (a[0] == "clearinventory")
-            {
-                Invoke(new MethodInvoker(ListBox1.Items.Clear));
-            }
-
-            if (a[0] == "additem")
-            {
-                AddItem(a[1]);
-            }
-
-            if (a[0] == "msgerror")
-            {
-                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Error);
-                Console.WriteLine($"Error message from server: {string.Join("?", a.Skip(1).ToArray())}");
-            }
-
-            if (a[0] == "msgwarn")
-            {
-                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Warning);
-                Console.WriteLine($"Warning message from server: {string.Join("?", a.Skip(1).ToArray())}");
-            }
-
-            if (a[0] == "msg")
-            {
-                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Info);
-                Console.WriteLine($"Info message from server: {string.Join("?", a.Skip(1).ToArray())}");
-            }
-
-            if (a[0] == "msgkick")
-            {
-                FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), lang.get("text.kicked"), FancyMessage.Icon.Info);
-                Console.WriteLine($"Kicked from server: {string.Join("?", a.Skip(1).ToArray())}");
-            }
-
-            if (a[0] == "chat")
-            {
-                WriteChat(string.Join("?", a.Skip(1).ToArray()));
-                Console.WriteLine($"Chat: {string.Join("?", a.Skip(1).ToArray())}");
-            }
-            if (a[0] == "health")
-            {
-                SetHealth(Conversions.ToInteger(a[1]));
-                Console.WriteLine("Health update: " + a[1]);
-            }
-
-            if (a[0] == "noclip")
-            {
-                NoClip = true;
-            }
-
-            if (a[0] == "clip")
-            {
-                NoClip = false;
-            }
-
-            if (a[0] == "dowarn")
-            {
-                DoWarning(string.Join("?", a.Skip(1).ToArray()));
-            }
-
-            if (a[0] == "sky")
-            {
-                BackColor = Color.FromName(a[1]);
-                Update();
-            }
-
-            if(a[0] == "chestopen")
-            {
-                ChestWindow cw = new ChestWindow();
-                //cw.listBox1.Items.AddRange(ListBox1.Items);
-                cw.listBox2.Items.AddRange(a.Skip(1).ToArray());
-                cw.ShowDialog();
-                chest = cw;
-                cw.Close();
-                cw.Dispose();
-                chest = null;
-            }
-
-            if (a[0] == "itemset")
-            {
-                try
+                var a = p.Split('?');
+                if (a[0] == "blockchange")
                 {
-                    // REM - Деревянные инструменты
-                    if (a[2] == "WOODEN_PICKAXE")
+                    var b = new PictureBox();
+                    bool g = false;
+                    if (a.Length == 5)
                     {
-                        SetItem(a[1], My.Resources.Resources.WOODEN_PICKAXE, My.Resources.Resources.WOODEN_PICKAXE_FLIPPED, a[2]);
+                        b.Tag = a[4];
                     }
 
-                    if (a[2] == "WOODEN_AXE")
+                    b.BackColor = BackColor;
+                    b.Name = a[1] + "B" + a[2];
+                    b.Size = new Size(32, 32);
+                    b.Location = new Point((Conversions.ToInteger(a[1]) * 32) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) * 32 - VerticalScroll.Value);
+                    if (a[3] == "iron_ore")
                     {
-                        SetItem(a[1], My.Resources.Resources.WOODEN_AXE, My.Resources.Resources.WOODEN_AXE_FLIPPED, a[2]);
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.iron_ore;
+                    }
+                    else if (a[3] == "grass_block")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.grass_side;
+                    }
+                    else if (a[3] == "dirt")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.dirt1;
+                    }
+                    else if (a[3] == "stone")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.stone1;
+                    }
+                    else if (a[3] == "bedrock")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.bedrock;
+                    }
+                    else if (a[3] == "wood")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.log_oak;
+                    }
+                    else if (a[3] == "leaves")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.leaves;
+                    }
+                    else if (a[3] == "cobble")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.cobblestone4;
+                    }
+                    else if (a[3] == "planks")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.planks_oak;
+                    }
+                    else if (a[3] == "endstone")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.end_stone;
+                    }
+                    else if (a[3] == "diamond_ore")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.diamond_ore;
+                    }
+                    else if (a[3] == "gold_ore")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.gold_ore;
+                    }
+                    else if (a[3] == "obsidian")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.obsidian1;
+                    }
+                    else if (a[3] == "water")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.water_still;
+                    }
+                    else if (a[3] == "sand")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.sand;
+                    }
+                    else if (a[3] == "glass")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.glass;
+                    }
+                    else if (a[3] == "furnace")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.furnace_front_off;
+                        b.Tag += b.Tag.ToString() + "?furnace";
+                    }
+                    else if (a[3] == "iron_block")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.iron_block;
+                    }
+                    else if (a[3] == "diamond_block")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.diamond_block;
+                    }
+                    else if (a[3] == "gold_block")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.gold_block;
+                    }
+                    else if (a[3] == "coal_ore")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.coal_ore;
+                    }
+                    else if (a[3] == "sapling")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.Grid_Sapling;
+                    }
+                    else if (a[3] == "tnt")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.tnt_side;
+                    }
+                    else if (a[3] == "lava")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.lava_still;
+                    }
+                    else if (a[3] == "chest")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.chest;
+                    }
+                    else
+                    {
+                        b.BackColor = Color.FromName(a[3]);
                     }
 
-                    if (a[2] == "WOODEN_SWORD")
-                    {
-                        SetItem(a[1], My.Resources.Resources.WOODEN_SWORD, My.Resources.Resources.WOODEN_SWORD_FLIPPED, a[2]);
-                    }
-
-                    if (a[2] == "WOODEN_SHOVEL")
-                    {
-                        SetItem(a[1], My.Resources.Resources.WOODEN_SHOVEL, My.Resources.Resources.WOODEN_SHOVEL_FLIPPED, a[2]);
-                    }
-
-
-                    // REM - Каменные инструменты
-                    if (a[2] == "STONE_PICKAXE")
-                    {
-                        SetItem(a[1], My.Resources.Resources.STONE_PICKAXE, My.Resources.Resources.STONE_PICKAXE_FLIPPED, a[2]);
-                    }
-
-                    if (a[2] == "STONE_AXE")
-                    {
-                        SetItem(a[1], My.Resources.Resources.STONE_AXE, My.Resources.Resources.STONE_AXE_FLIPPED, a[2]);
-                    }
-
-                    if (a[2] == "STONE_SWORD")
-                    {
-                        SetItem(a[1], My.Resources.Resources.STONE_SWORD, My.Resources.Resources.STONE_SWORD_FLIPPED, a[2]);
-                    }
-
-                    if (a[2] == "STONE_SHOVEL")
-                    {
-                        SetItem(a[1], My.Resources.Resources.STONE_SHOVEL, My.Resources.Resources.STONE_SHOVEL_FLIPPED, a[2]);
-                    }
-
-                    // REM - Железные инструменты
-                    if (a[2] == "IRON_PICKAXE")
-                    {
-                        SetItem(a[1], My.Resources.Resources.IRON_PICKAXE, My.Resources.Resources.IRON_PICKAXE_FLIPPED, a[2]);
-                    }
-
-                    if (a[2] == "IRON_AXE")
-                    {
-                        SetItem(a[1], My.Resources.Resources.IRON_AXE, My.Resources.Resources.IRON_AXE_FLIPPED, a[2]);
-                    }
-
-                    if (a[2] == "IRON_SWORD")
-                    {
-                        SetItem(a[1], My.Resources.Resources.IRON_SWORD, My.Resources.Resources.IRON_SWORD_FLIPPED, a[2]);
-                    }
-
-                    if (a[2] == "IRON_SHOVEL")
-                    {
-                        SetItem(a[1], My.Resources.Resources.IRON_SHOVEL, My.Resources.Resources.IRON_SHOVEL_FLIPPED, a[2]);
-                    }
-
-                    // REM - Алмазные инструменты
-                    if (a[2] == "DIAMOND_PICKAXE")
-                    {
-                        SetItem(a[1], My.Resources.Resources.DIAMOND_PICKAXE, My.Resources.Resources.DIAMOND_PICKAXE_FLIPPED, a[2]);
-                    }
-
-                    if (a[2] == "DIAMOND_AXE")
-                    {
-                        SetItem(a[1], My.Resources.Resources.DIAMOND_AXE, My.Resources.Resources.DIAMOND_AXE_FLIPPED, a[2]);
-                    }
-
-                    if (a[2] == "DIAMOND_SWORD")
-                    {
-                        SetItem(a[1], My.Resources.Resources.DIAMOND_SWORD, My.Resources.Resources.DIAMOND_SWORD_FLIPPED, a[2]);
-                    }
-
-                    if (a[2] == "DIAMOND_SHOVEL")
-                    {
-                        SetItem(a[1], My.Resources.Resources.DIAMOND_SHOVEL, My.Resources.Resources.DIAMOND_SHOVEL_FLIPPED, a[2]);
-                    }
-
-                    // REM - Блоки
-                    if (a[2] == "GRASS_BLOCK")
-                    {
-                        SetItem(a[1], My.Resources.Resources.grass_side, My.Resources.Resources.grass_side, a[2]);
-                    }
-
-                    if (a[2] == "WOOD")
-                    {
-                        SetItem(a[1], My.Resources.Resources.log_oak, My.Resources.Resources.log_oak, a[2]);
-                    }
-
-                    if (a[2] == "COBBLESTONE")
-                    {
-                        SetItem(a[1], My.Resources.Resources.cobblestone4, My.Resources.Resources.cobblestone4, a[2]);
-                    }
-
-                    if (a[2] == "STONE")
-                    {
-                        SetItem(a[1], My.Resources.Resources.stone1, My.Resources.Resources.stone1, a[2]);
-                    }
-
-                    if (a[2] == "PLANKS")
-                    {
-                        SetItem(a[1], My.Resources.Resources.planks_oak, My.Resources.Resources.planks_oak, a[2]);
-                    }
-
-                    if (a[2] == "DIRT")
-                    {
-                        SetItem(a[1], My.Resources.Resources.dirt1, My.Resources.Resources.dirt1, a[2]);
-                    }
-
-                    if (a[2] == "OBSIDIAN")
-                    {
-                        SetItem(a[1], My.Resources.Resources.obsidian1, My.Resources.Resources.obsidian1, a[2]);
-                    }
-
-                    if (a[2] == "SAND")
-                    {
-                        SetItem(a[1], My.Resources.Resources.sand, My.Resources.Resources.sand, a[2]);
-                    }
-
-                    if (a[2] == "GLASS")
-                    {
-                        SetItem(a[1], My.Resources.Resources.glass, My.Resources.Resources.glass, a[2]);
-                    }
-
-                    if (a[2] == "FURNACE")
-                    {
-                        SetItem(a[1], My.Resources.Resources.furnace_front_off, My.Resources.Resources.furnace_front_off, a[2]);
-                    }
-
-                    if (a[2] == "LEAVES")
-                    {
-                        SetItem(a[1], My.Resources.Resources.leaves, My.Resources.Resources.leaves, a[2]);
-                    }
-
-                    if (a[2] == "SAPLING")
-                    {
-                        SetItem(a[1], My.Resources.Resources.Grid_Sapling, My.Resources.Resources.Grid_Sapling, a[2]);
-                    }
-
-                    if (a[2] == "CHEST")
-                    {
-                        SetItem(a[1], My.Resources.Resources.chest, My.Resources.Resources.chest, a[2]);
-                    }
-
-                    // REM - Драгоценные блоки
-                    if (a[2] == "IRON_BLOCK")
-                    {
-                        SetItem(a[1], My.Resources.Resources.iron_block, My.Resources.Resources.iron_block, a[2]);
-                    }
-
-                    if (a[2] == "DIAMOND_BLOCK")
-                    {
-                        SetItem(a[1], My.Resources.Resources.diamond_block, My.Resources.Resources.diamond_block, a[2]);
-                    }
-
-                    if (a[2] == "GOLD_BLOCK")
-                    {
-                        SetItem(a[1], My.Resources.Resources.gold_block, My.Resources.Resources.gold_block, a[2]);
-                    }
-
-                    if (a[2] == "GOLD_ORE")
-                    {
-                        SetItem(a[1], My.Resources.Resources.gold_ore, My.Resources.Resources.gold_ore, a[2]);
-                    }
-
-                    if (a[2] == "IRON_ORE")
-                    {
-                        SetItem(a[1], My.Resources.Resources.iron_ore, My.Resources.Resources.iron_ore, a[2]);
-                    }
-
-                    // REM - Еда
-                    if(a[2] == "FOOD1")
-                    {
-                        SetItem(a[1], My.Resources.Resources.cooked_beef, My.Resources.Resources.cooked_beef, a[2]);
-                    }
-
-                    // REM - Разное
-                    if (a[2] == "STICK")
-                    {
-                        SetItem(a[1], My.Resources.Resources.STICK, My.Resources.Resources.STICK, a[2]);
-                    }
-
-                    if (a[2] == "COAL")
-                    {
-                        SetItem(a[1], My.Resources.Resources.coal, My.Resources.Resources.coal, a[2]);
-                    }
-
-                    if (a[2] == "IRON")
-                    {
-                        SetItem(a[1], My.Resources.Resources.IRON, My.Resources.Resources.IRON, a[2]);
-                    }
-
-                    if (a[2] == "GOLD")
-                    {
-                        SetItem(a[1], My.Resources.Resources.GOLD, My.Resources.Resources.GOLD, a[2]);
-                    }
-
-                    if (a[2] == "DIAMOND")
-                    {
-                        SetItem(a[1], My.Resources.Resources.DIAMOND, My.Resources.Resources.DIAMOND, a[2]);
-                    }
-
-                    if (a[2] == "TNT")
-                    {
-                        SetItem(a[1], My.Resources.Resources.tnt_side, My.Resources.Resources.tnt_side, a[2]);
-                    }
-
-                    if (a[2] == "BUCKET")
-                    {
-                        SetItem(a[1], My.Resources.Resources.bucket, My.Resources.Resources.bucket, a[2]);
-                    }
-
-                    if (a[2] == "WATER_BUCKET")
-                    {
-                        SetItem(a[1], My.Resources.Resources.water_bucket, My.Resources.Resources.water_bucket, a[2]);
-                    }
-
-                    if (a[2] == "LAVA_BUCKET")
-                    {
-                        SetItem(a[1], My.Resources.Resources.lava_bucket, My.Resources.Resources.lava_bucket, a[2]);
-                    }
-
-                    // REM - Nothing
-                    if (a[2] == "nothing")
-                    {
-                        SetItem(a[1], null, null, a[2]);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    FancyMessage.Show($"Error while setting texture in hand of player {Utils.IIf(a[1] == "@", "local", a[1]).ToString()} to: \"{a[2]}\".\r\n\r\n{ex.ToString()}", "Exception", FancyMessage.Icon.Warning);
+                    b.Visible = true;
+                    b.Text = "";
+                    blocks.Add(b);
+                    CreateBlock(b);
                 }
 
-                try
+                if (a[0] == "hunger")
                 {
+                    progressBar1.Value = int.Parse(a[1]);
                 }
-                catch (Exception ex)
+
+                if (a[0] == "removeblock")
                 {
-                    throw ex;
+                    BreakBlock(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
+                }
+
+                if (a[0] == "addplayer")
+                {
+                    CreatePlayer(a[1], 0 - HorizontalScroll.Value, 0);
+                    Console.WriteLine($"Player added: {a[1]}");
+                }
+
+                if (a[0] == "removeplayer")
+                {
+                    DelPlayer(a[1]);
+                    Console.WriteLine($"Player removed: {a[1]}");
+                }
+
+                if (a[0] == "updateplayerposition")
+                {
+                    MovePlayer(a[1], Conversions.ToInteger(a[2]) - HorizontalScroll.Value, Conversions.ToInteger(a[3]) - VerticalScroll.Value);
+                }
+
+                if (a[0] == "completeload")
+                {
+                    EnableScroll();
+                }
+
+                if (a[0] == "teleport")
+                {
+                    TeleportLocalPlayer(Conversions.ToInteger(a[1]) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) - VerticalScroll.Value);
+                    UpdatePlayerPosition();
+                    Console.WriteLine(String.Format("Local player teleported: {0}, {1}", a[1], a[2]));
+                }
+
+                if (a[0] == "clearinventory")
+                {
+                    Invoke(new MethodInvoker(ListBox1.Items.Clear));
+                }
+
+                if (a[0] == "additem")
+                {
+                    AddItem(a[1]);
+                }
+
+                if (a[0] == "msgerror")
+                {
+                    FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Error);
+                    Console.WriteLine($"Error message from server: {string.Join("?", a.Skip(1).ToArray())}");
+                }
+
+                if (a[0] == "msgwarn")
+                {
+                    FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Warning);
+                    Console.WriteLine($"Warning message from server: {string.Join("?", a.Skip(1).ToArray())}");
+                }
+
+                if (a[0] == "msg")
+                {
+                    FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), "Netcraft", FancyMessage.Icon.Info);
+                    Console.WriteLine($"Info message from server: {string.Join("?", a.Skip(1).ToArray())}");
+                }
+
+                if (a[0] == "msgkick")
+                {
+                    FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), lang.get("text.kicked"), FancyMessage.Icon.Info);
+                    Console.WriteLine($"Kicked from server: {string.Join("?", a.Skip(1).ToArray())}");
+                }
+
+                if (a[0] == "chat")
+                {
+                    WriteChat(string.Join("?", a.Skip(1).ToArray()));
+                    Console.WriteLine($"Chat: {string.Join("?", a.Skip(1).ToArray())}");
+                }
+                if (a[0] == "health")
+                {
+                    SetHealth(Conversions.ToInteger(a[1]));
+                    Console.WriteLine("Health update: " + a[1]);
+                }
+
+                if (a[0] == "noclip")
+                {
+                    NoClip = true;
+                }
+
+                if (a[0] == "clip")
+                {
+                    NoClip = false;
+                }
+
+                if (a[0] == "dowarn")
+                {
+                    DoWarning(string.Join("?", a.Skip(1).ToArray()));
+                }
+
+                if (a[0] == "sky")
+                {
+                    BackColor = Color.FromName(a[1]);
+                    Update();
+                }
+
+                if (a[0] == "chestopen")
+                {
+                    ChestWindow cw = new ChestWindow();
+                    //cw.listBox1.Items.AddRange(ListBox1.Items);
+                    cw.listBox2.Items.AddRange(a.Skip(1).ToArray());
+                    cw.ShowDialog();
+                    chest = cw;
+                    cw.Close();
+                    cw.Dispose();
+                    chest = null;
+                }
+
+                if (a[0] == "itemset")
+                {
+                    try
+                    {
+                        // REM - Деревянные инструменты
+                        if (a[2] == "WOODEN_PICKAXE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.WOODEN_PICKAXE, My.Resources.Resources.WOODEN_PICKAXE_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "WOODEN_AXE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.WOODEN_AXE, My.Resources.Resources.WOODEN_AXE_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "WOODEN_SWORD")
+                        {
+                            SetItem(a[1], My.Resources.Resources.WOODEN_SWORD, My.Resources.Resources.WOODEN_SWORD_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "WOODEN_SHOVEL")
+                        {
+                            SetItem(a[1], My.Resources.Resources.WOODEN_SHOVEL, My.Resources.Resources.WOODEN_SHOVEL_FLIPPED, a[2]);
+                        }
+
+
+                        // REM - Каменные инструменты
+                        if (a[2] == "STONE_PICKAXE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.STONE_PICKAXE, My.Resources.Resources.STONE_PICKAXE_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "STONE_AXE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.STONE_AXE, My.Resources.Resources.STONE_AXE_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "STONE_SWORD")
+                        {
+                            SetItem(a[1], My.Resources.Resources.STONE_SWORD, My.Resources.Resources.STONE_SWORD_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "STONE_SHOVEL")
+                        {
+                            SetItem(a[1], My.Resources.Resources.STONE_SHOVEL, My.Resources.Resources.STONE_SHOVEL_FLIPPED, a[2]);
+                        }
+
+                        // REM - Железные инструменты
+                        if (a[2] == "IRON_PICKAXE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.IRON_PICKAXE, My.Resources.Resources.IRON_PICKAXE_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "IRON_AXE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.IRON_AXE, My.Resources.Resources.IRON_AXE_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "IRON_SWORD")
+                        {
+                            SetItem(a[1], My.Resources.Resources.IRON_SWORD, My.Resources.Resources.IRON_SWORD_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "IRON_SHOVEL")
+                        {
+                            SetItem(a[1], My.Resources.Resources.IRON_SHOVEL, My.Resources.Resources.IRON_SHOVEL_FLIPPED, a[2]);
+                        }
+
+                        // REM - Алмазные инструменты
+                        if (a[2] == "DIAMOND_PICKAXE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.DIAMOND_PICKAXE, My.Resources.Resources.DIAMOND_PICKAXE_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "DIAMOND_AXE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.DIAMOND_AXE, My.Resources.Resources.DIAMOND_AXE_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "DIAMOND_SWORD")
+                        {
+                            SetItem(a[1], My.Resources.Resources.DIAMOND_SWORD, My.Resources.Resources.DIAMOND_SWORD_FLIPPED, a[2]);
+                        }
+
+                        if (a[2] == "DIAMOND_SHOVEL")
+                        {
+                            SetItem(a[1], My.Resources.Resources.DIAMOND_SHOVEL, My.Resources.Resources.DIAMOND_SHOVEL_FLIPPED, a[2]);
+                        }
+
+                        // REM - Блоки
+                        if (a[2] == "GRASS_BLOCK")
+                        {
+                            SetItem(a[1], My.Resources.Resources.grass_side, My.Resources.Resources.grass_side, a[2]);
+                        }
+
+                        if (a[2] == "WOOD")
+                        {
+                            SetItem(a[1], My.Resources.Resources.log_oak, My.Resources.Resources.log_oak, a[2]);
+                        }
+
+                        if (a[2] == "COBBLESTONE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.cobblestone4, My.Resources.Resources.cobblestone4, a[2]);
+                        }
+
+                        if (a[2] == "STONE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.stone1, My.Resources.Resources.stone1, a[2]);
+                        }
+
+                        if (a[2] == "END_STONE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.end_stone, My.Resources.Resources.end_stone, a[2]);
+                        }
+
+                        if (a[2] == "PLANKS")
+                        {
+                            SetItem(a[1], My.Resources.Resources.planks_oak, My.Resources.Resources.planks_oak, a[2]);
+                        }
+
+                        if (a[2] == "DIRT")
+                        {
+                            SetItem(a[1], My.Resources.Resources.dirt1, My.Resources.Resources.dirt1, a[2]);
+                        }
+
+                        if (a[2] == "OBSIDIAN")
+                        {
+                            SetItem(a[1], My.Resources.Resources.obsidian1, My.Resources.Resources.obsidian1, a[2]);
+                        }
+
+                        if (a[2] == "SAND")
+                        {
+                            SetItem(a[1], My.Resources.Resources.sand, My.Resources.Resources.sand, a[2]);
+                        }
+
+                        if (a[2] == "GLASS")
+                        {
+                            SetItem(a[1], My.Resources.Resources.glass, My.Resources.Resources.glass, a[2]);
+                        }
+
+                        if (a[2] == "FURNACE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.furnace_front_off, My.Resources.Resources.furnace_front_off, a[2]);
+                        }
+
+                        if (a[2] == "LEAVES")
+                        {
+                            SetItem(a[1], My.Resources.Resources.leaves, My.Resources.Resources.leaves, a[2]);
+                        }
+
+                        if (a[2] == "SAPLING")
+                        {
+                            SetItem(a[1], My.Resources.Resources.Grid_Sapling, My.Resources.Resources.Grid_Sapling, a[2]);
+                        }
+
+                        if (a[2] == "CHEST")
+                        {
+                            SetItem(a[1], My.Resources.Resources.chest, My.Resources.Resources.chest, a[2]);
+                        }
+
+                        // REM - Драгоценные блоки
+                        if (a[2] == "IRON_BLOCK")
+                        {
+                            SetItem(a[1], My.Resources.Resources.iron_block, My.Resources.Resources.iron_block, a[2]);
+                        }
+
+                        if (a[2] == "DIAMOND_BLOCK")
+                        {
+                            SetItem(a[1], My.Resources.Resources.diamond_block, My.Resources.Resources.diamond_block, a[2]);
+                        }
+
+                        if (a[2] == "GOLD_BLOCK")
+                        {
+                            SetItem(a[1], My.Resources.Resources.gold_block, My.Resources.Resources.gold_block, a[2]);
+                        }
+
+                        if (a[2] == "GOLD_ORE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.gold_ore, My.Resources.Resources.gold_ore, a[2]);
+                        }
+
+                        if (a[2] == "IRON_ORE")
+                        {
+                            SetItem(a[1], My.Resources.Resources.iron_ore, My.Resources.Resources.iron_ore, a[2]);
+                        }
+
+                        // REM - Еда
+                        if (a[2] == "FOOD1")
+                        {
+                            SetItem(a[1], My.Resources.Resources.cooked_beef, My.Resources.Resources.cooked_beef, a[2]);
+                        }
+
+                        // REM - Разное
+                        if (a[2] == "STICK")
+                        {
+                            SetItem(a[1], My.Resources.Resources.STICK, My.Resources.Resources.STICK, a[2]);
+                        }
+
+                        if (a[2] == "COAL")
+                        {
+                            SetItem(a[1], My.Resources.Resources.coal, My.Resources.Resources.coal, a[2]);
+                        }
+
+                        if (a[2] == "IRON")
+                        {
+                            SetItem(a[1], My.Resources.Resources.IRON, My.Resources.Resources.IRON, a[2]);
+                        }
+
+                        if (a[2] == "GOLD")
+                        {
+                            SetItem(a[1], My.Resources.Resources.GOLD, My.Resources.Resources.GOLD, a[2]);
+                        }
+
+                        if (a[2] == "DIAMOND")
+                        {
+                            SetItem(a[1], My.Resources.Resources.DIAMOND, My.Resources.Resources.DIAMOND, a[2]);
+                        }
+
+                        if (a[2] == "TNT")
+                        {
+                            SetItem(a[1], My.Resources.Resources.tnt_side, My.Resources.Resources.tnt_side, a[2]);
+                        }
+
+                        if (a[2] == "BUCKET")
+                        {
+                            SetItem(a[1], My.Resources.Resources.bucket, My.Resources.Resources.bucket, a[2]);
+                        }
+
+                        if (a[2] == "WATER_BUCKET")
+                        {
+                            SetItem(a[1], My.Resources.Resources.water_bucket, My.Resources.Resources.water_bucket, a[2]);
+                        }
+
+                        if (a[2] == "LAVA_BUCKET")
+                        {
+                            SetItem(a[1], My.Resources.Resources.lava_bucket, My.Resources.Resources.lava_bucket, a[2]);
+                        }
+
+                        // REM - Nothing
+                        if (a[2] == "nothing")
+                        {
+                            SetItem(a[1], null, null, a[2]);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        FancyMessage.Show($"Error while setting texture in hand of player {Utils.IIf(a[1] == "@", "local", a[1]).ToString()} to: \"{a[2]}\".\r\n\r\n{ex.ToString()}", "Exception", FancyMessage.Icon.Warning);
+                    }
+
+                    try
+                    {
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
                 }
             }
         }
@@ -2193,6 +2215,8 @@ namespace Minecraft2D
             });
             My.MyProject.Forms.Chat.listBox1.Items.Clear();
             My.MyProject.Forms.Chat.listBox1.Items.AddRange(players.ToArray());
+            My.MyProject.Forms.Gamesettings.listBox1.Items.Clear();
+            My.MyProject.Forms.Gamesettings.listBox1.Items.AddRange(players.ToArray());
 
             timer2.Stop();
             timer2.Start();

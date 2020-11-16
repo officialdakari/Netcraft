@@ -6,7 +6,7 @@ namespace NCore
 {
     public class Commandhelp : Command
     {
-        public Commandhelp() : base("help", "Показывает список команд", "help", new[] { "?" })
+        public Commandhelp() : base("help", NCore.GetNCore().lang.get("commands.help.description"), "help", new string[] { "?" })
         {
         }
 

@@ -38,6 +38,40 @@ namespace NCore
 
     class NCore
     {
+        public class Lang
+        {
+
+            internal Hashtable formats;
+            internal static Lang FromText(string t)
+            {
+                Lang lang = new Lang();
+                lang.formats = new Hashtable(new Dictionary<string, string>());
+                t = t.Replace("\r\n", "\n");
+                foreach (string i in t.Split('\n'))
+                {
+                    lang.formats.Add(i.Split('=')[0], Config.GetValue(i.Split('=')[0], t, i.Split('=')[0]));
+                }
+                return lang;
+            }
+
+            internal static Lang FromFile(string p)
+            {
+                return FromText(System.IO.File.ReadAllText(p, Encoding.UTF8));
+            }
+
+            internal string get(string i)
+            {
+                if (!formats.ContainsKey(i)) return i;
+                return formats[i].ToString().Replace("&CRLF", "\r\n");
+            }
+
+            internal string get(string i, params string[] args)
+            {
+                if (!formats.ContainsKey(i)) return i;
+                return String.Format(formats[i].ToString(), args).Replace("&CRLF", "\r\n");
+            }
+
+        }
         internal WorldServer World { get; set; }
 
         private TcpListener Listning;
@@ -56,6 +90,7 @@ namespace NCore
         private int allowQuery = 0;
         private int commandsConsoleOnly = 0;
         private int enableAuth = -1;
+        public Lang lang;
 
         public bool IsSingleplayerServer { get; set; } = false;
 
@@ -88,6 +123,36 @@ namespace NCore
             CrashReport(e.Exception);
         }
 
+        public async Task<bool> PlaceBlock(EnumBlockType type, Point position, bool bg = false, bool unbreakable = false, bool pq = false)
+        {
+            Block b = World.GetBlockAt(position);
+            if(b == null)
+            {
+                World.Blocks.Add(new Block(position, type, bg, unbreakable));
+                foreach(NetworkPlayer n in players)
+                {
+                    await n.SendBlockChange(position, type, false, pq, bg);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> BreakBlock(Point position)
+        {
+            Block b = World.GetBlockAt(position);
+            if (b == null)
+            {
+                World.Blocks.Remove(b);
+                foreach (NetworkPlayer n in players)
+                {
+                    await n.Send($"removeblock?{position.X.ToString()}?{position.Y.ToString()}");
+                }
+                return true;
+            }
+            return false;
+        }
+
         public void LoadCommands()
         {
             Netcraft.AddCommand(new Commandhelp());
@@ -111,6 +176,8 @@ namespace NCore
             Netcraft.AddCommand(new Commandaliases());
             Netcraft.AddCommand(new Commandplugins());
             Netcraft.AddCommand(new Commands.Commandsave());
+            Netcraft.AddCommand(new Commands.Commandtell());
+            Netcraft.AddCommand(new Commands.Commandrmitem());
         }
 
         private void eventhandler_a(string m)
@@ -213,6 +280,13 @@ namespace NCore
                             {
                                 BlockChest chest = new BlockChest(b.Position, b.IsBackground);
                                 World.Chests.Add(chest);
+                            }
+                        }
+                        else if(b.Type == EnumBlockType.SAND)
+                        {
+                            if(World.GetBlockAt(b.Position.X, b.Position.Y + 1) == null)
+                            {
+
                             }
                         }
                         else { continue; }
@@ -389,25 +463,21 @@ namespace NCore
                 CrashReport(new Exception("The main thread ID was not 1"));
             }
 
-            Log("Сервер запускается. Пожалуйста подождите...");
+            lang = Lang.FromFile("./lang.txt");
 
-            Log("Так выглядит информация.");
-            Log("Так выглядит предупреждение", "WARNING");
-            Log("Так выглядит важная информация", "SEVERE");
-            Log("Так выглядит ошибка", "ERROR");
+            Log(lang.get("server.starting"));
 
-            Log("Step 1: Создание потока loop.");
+            Log("This is information");
+            Log("WARNING!", "WARNING");
+            Log("SEVERE!!!!", "SEVERE");
+            Log("ERRROROORR!!!!!!!!!", "ERROR");
             loopThread = new Thread(ThreadLoop);
             loopThread.Name = "Loop";
             loopThread.Start();
-            Log("Step 1: loop поток создан и запущен.");
-            Log("Step 2: Создание потока watchdog.");
             threadWatchdog = new Thread(watchdogThreadLoop);
             threadWatchdog.Start();
-            Log("Step 2: watchdog поток создан и запущен.");
             Thread.CurrentThread.Name = "Main";
-
-            Log("Step 3: Загрузка списка банов и паролей игроков.");
+            
             LoadBanlist();
             foreach (var i in File.ReadAllText("./auth.txt", Encoding.UTF8).Split(Constants.vbCrLf))
             {
@@ -417,16 +487,10 @@ namespace NCore
                     continue;
                 playerPasswords.Add(i.Split("=")[0], i.Split("=").Last());
             }
-            Log("Step 3: Готово.");
-
-            Log("Step 4: Загрузка конфигурации и встроенных команд.");
             LoadConfig();
             LoadCommands();
-            Log("Step 4: Готово.");
-
             Netcraft.dobc += eventhandler_a;
-
-            Log("Step 5: Загрузка плагинов.");
+            
             int pluginLoadErrors = 0;
             int all = 0;
             int pluginLoadSuccess = 0;
@@ -441,17 +505,15 @@ namespace NCore
                 if (result != null)
                 {
                     pluginLoadErrors++;
-                    Log($"[Plugin Loader] Ошибка при загрузке плагина {p.Name}. Результат загрузки:{Constants.vbCrLf}{result}", "ERROR");
+                    Log(lang.get("pluginloader.error", p.Name, result), "ERROR");
                     PluginManager.Plugins.Remove(p);
                     continue;
                 }
 
-                Log($"[Plugin Loader] Плагин загружен успешно: {p.Name}");
+                Log(lang.get("pluginloader.success", p.Name));
                 pluginLoadSuccess++;
             }
-            Log($"Step 5: Плагины загружены. Всего плагинов: {all.ToString()}; Успешно: {pluginLoadSuccess.ToString()}; Не загружено (ошибка): {pluginLoadErrors.ToString()}");
 
-            Log("Step 6: Загрузка мира...");
             if (File.Exists(Conversions.ToString(worldfile)))
             {
                 World = sv.Load(File.ReadAllText(Conversions.ToString(worldfile), encoding: Encoding.UTF8));
@@ -469,29 +531,24 @@ namespace NCore
                     if(b.Type == EnumBlockType.CHEST && b.IsBackground)
                     {
                         b.IsBackground = false;
-                        Log($"Moved background chest block to foreground.");
                     }
                 }
                 foreach(Block b in blocksToRemove)
                 {
                     World.Blocks.Remove(b);
                 }
-                if (blocksToRemove.Count > 0) Log($"Удалено {blocksToRemove.Count} блоков на запрещённых местах.", "WARNING");
-                Log("Step 6: Мир загружен.");
+                if (blocksToRemove.Count > 0) Log(lang.get("info.removedblocks", blocksToRemove.Count.ToString()), "WARNING");
+                
             }
             else
             {
-                Log("Step 6: Мир не найден, генерация нового мира.");
                 World = WorldGenerator.Generate();
                 File.WriteAllText(Conversions.ToString(worldfile), sv.Save(World), Encoding.UTF8);
-                Log("Step 6: Мир создан и загружен.");
             }
-
-            Log("Step 7: Запуск TCP сервера.");
+            
             Start();
-            Log("Step 7: TCP сервер запущен.");
 
-            Log("Сервер успешно запущен.");
+            Log(lang.get("server.started"));
             while (true)
             {
                 string m = Console.ReadLine();
@@ -525,14 +582,14 @@ namespace NCore
                     }
                     catch (Exception ex)
                     {
-                        Log("Произошла внутренняя ошибка при выполнении данной команды.\r\n" + ex.ToString());
+                        Log(lang.get("command.console.error", ex.ToString()));
                         y = true;
                         break;
                     }
 
                     if (!y)
                     {
-                        Log("Использование: " + toRun.Usage);
+                        Log(lang.get("command.usage", toRun.Usage));
                     }
                 }
             }
@@ -611,7 +668,7 @@ namespace NCore
                 players.Add(pClient);
                 Netcraft.clientList = players;
                 Listning.BeginAcceptTcpClient(new AsyncCallback(AcceptClient), Listning);
-                Log($"Входящее соединение с IP: {pClient.GetIp()}");
+                Log(lang.get("client.connect",  pClient.GetIp()));
             }
             catch (Exception ex)
             {
@@ -659,14 +716,14 @@ namespace NCore
 
         public void StopServer()
         {
-            Log("Stopping the server...");
+            Log(lang.get("server.stopping"));
             foreach (var plugin in PluginManager.Plugins)
             {
                 plugin.OnUnload();
-                Log($"Плагин выгружен: {plugin.Name}");
+                Log(lang.get("pluginloader.unload", plugin.Name));
             }
 
-            Kickall("Сервер выключается");
+            Kickall("Server closed");
             Listning.Stop();
             SaveWorld();
             SaveBanlist();
@@ -744,7 +801,7 @@ namespace NCore
                         return;
                     }
 
-                    Log($"{a[1]} [/{n.GetIp()}] подключился к серверу.");
+                    Log(lang.get("console.joined", a[1], n.GetIp()));
                     if (maxPlayers + 1 == players.Count)
                     {
                         await n.Kick("Сервер заполнен!");
@@ -757,7 +814,7 @@ namespace NCore
                             continue;
                         if ((netplayer.Username ?? "") == (a[1] ?? ""))
                         {
-                            await n.Kick("Игрок с таким именем уже играет на сервере.");
+                            await n.Kick(lang.get("error.alreadyplaying"));
                             return;
                         }
                     }
@@ -768,13 +825,13 @@ namespace NCore
                     n.senderName = n.Username;
                     if (!Regex.Match(n.Username, "^[a-zA-Z0-9_]*").Success)
                     {
-                        await n.Kick("Запрещённые символы в никнейме.");
+                        await n.Kick(lang.get("error.invalidnick"));
                         return;
                     }
 
                     if (Netcraft.IsBanned(n.Username))
                     {
-                        await n.Kick("Вы были забанены на этом сервере!");
+                        await n.Kick(lang.get("error.banned"));
                         return;
                     }
 
@@ -804,8 +861,8 @@ namespace NCore
                         await n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_SHOVEL, 1));
                     }
 
-                    Log(n.Username + " присоединился к игре");
-                    await Chat(n.Username + " заходит на сервер");
+                    Log(lang.get("player.joined", a[1]));
+                    await Chat(lang.get("player.joined", a[1]));
 
 
                     // n.Send("blockchange?500?50?Red")
@@ -851,7 +908,7 @@ namespace NCore
                     await Task.Delay(100);
                     n.Send("completeload");
                     await Task.Delay(100);
-                    if(enableAuth == 1) n.Chat("Пожалуйста введите свой пароль в чат для авторизации. Это никто не увидит.");
+                    if(enableAuth == 1) n.Chat(lang.get("auth.require"));
                     if (everyBodyAdmin == 1)
                     {
                         n.IsAdmin = true;
@@ -867,7 +924,7 @@ namespace NCore
                     {
                         if (!Regex.Match(a[1], "^[a-zA-Z0-9_]*").Success)
                         {
-                            n.SendMessage("Пароль может содержать символы только [a-z, A-Z, 0-9]");
+                            n.SendMessage("Invalid password.");
                         }
 
                         if (!playerPasswords.Keys.Cast<string>().ToArray().Contains(n.Username))
@@ -878,7 +935,7 @@ namespace NCore
 
                         if (Conversions.ToBoolean(Operators.ConditionalCompareObjectEqual(playerPasswords[n.Username], a[1], false)))
                         {
-                            await n.SendMessage("Вы успешно авторизовались.");
+                            await n.SendMessage(lang.get("auth.success.login"));
                             loggedIn.Add(n.Username);
                             Log($"{n.Username} logged in!");
                             n.Send("teleport?" + n.Position.X.ToString() + "?" + n.Position.Y.ToString());
@@ -889,7 +946,7 @@ namespace NCore
                         else
                         {
                             Log($"{n.Username} used wrong password", "ERROR");
-                            await n.SendMessage("Вы ввели неверный пароль.");
+                            await n.SendMessage(lang.get("auth.password.wrong"));
                         }
                     }
 
@@ -947,7 +1004,7 @@ namespace NCore
                     {
                         if (v.X > 10 | v.Y > 10 | v.X < -10 | v.Y < -10)
                         {
-                            Log($"{n.Username} переместился слишком быстро! {v.X},{v.Y}", "WARNING");
+                            Log(lang.get("move.toofast", n.Username, v.X.ToString(), v.Y.ToString()), "WARNING");
                             await n.Send($"teleport?{n.Position.X}?{n.Position.Y}");
                             return;
                         }
@@ -965,7 +1022,7 @@ namespace NCore
                                 if (n.MovedInAir == 50)
                                 {
                                     n.AntiFlyWarnings++;
-                                    Log($"{n.Username} переместился неправильно (Полёт)! [{v.X}, {v.Y}] [{n.AntiFlyWarnings.ToString()} warnings]", "WARNING");
+                                    Log(lang.get("move.wrong", n.Username, "Flight", v.X, v.Y), "WARNING");
                                     if(n.AntiFlyWarnings == 10)
                                     {
                                         await n.Kick("Flying is not enabled on this server");
@@ -995,7 +1052,7 @@ namespace NCore
                                     continue;
                                 if (n.NoClip)
                                     break;
-                                Log($"{n.Username} переместился неправильно (В блок)!", "WARNING");
+                                Log(lang.get("move.wrong", n.Username, "Into block", "Noclip", "Phase"), "WARNING");
                                 if (v.Y > 1)
                                 {
                                     await n.Teleport(n.Position.X, n.Position.Y - 2);
@@ -1056,7 +1113,7 @@ namespace NCore
 
                             if (n.FallDistance > 3 * 32)
                             {
-                                await n.Damage(n.FallDistance / 16 / 3, "упал(а) с высокого места");
+                                await n.Damage(n.FallDistance / 16 / 3, lang.get("deathmessage.fall"));
                                 noPosUpdate = true;
                             }
 
@@ -1072,7 +1129,7 @@ namespace NCore
                         return;
                     if (n.Position.Y > 619)
                     {
-                        await n.Damage(1, "выпал(а) из мира");
+                        await n.Damage(1, lang.get("deathmessage.out"));
                     }
 
                     await Send("updateplayerposition?" + n.Username + "?" + a[1] + "?" + a[2], n.Username);
@@ -1097,7 +1154,7 @@ namespace NCore
                         {
                             if (commandsConsoleOnly == 1)
                             {
-                                await n.SendMessage("Команды в игре были отключены в настройках сервера.");
+                                await n.SendMessage(lang.get("command.disabled"));
                                 return;
                             }
 
@@ -1106,7 +1163,7 @@ namespace NCore
                             string label = new string(lbl);
                             var args = arr.Skip(1).ToArray();
                             var cmd = default(Command);
-                            Log($"{n.Username} запросил команду сервера: /{label}");
+                            Log(lang.get("command.requested", n.Username, label));
                             foreach (var g in Netcraft.GetCommands())
                             {
                                 if (g.Name.ToLower() == label.Split(" ")[0].ToLower())
@@ -1123,7 +1180,7 @@ namespace NCore
 
                             if (IsNothing(cmd))
                             {
-                                await n.SendMessage("Команда не обнаружена. Введите /help для списка команд.");
+                                await n.SendMessage(lang.get("command.unknown"));
                                 return;
                             }
 
@@ -1134,7 +1191,7 @@ namespace NCore
                             }
                             catch (Exception ex)
                             {
-                                await n.SendMessage($"Отказ (HResult: {ex.HResult.ToString()}): {ex.Message}");
+                                await n.SendMessage(lang.get("command.player.error", ex.HResult.ToString(), ex.Message));
                                 Log($"Command error occured in \"{cmd.Name}\" performing by {n.Username}:", "WARNING");
                                 Log(ex.ToString(), "WARNING");
                                 return;
@@ -1142,7 +1199,7 @@ namespace NCore
 
                             if (Conversions.ToBoolean(!y))
                             {
-                                await n.SendMessage("Использование: " + cmd.Usage);
+                                await n.SendMessage(lang.get("command.usage", cmd.Usage));
                             }
                             return;
                         }
@@ -1370,6 +1427,16 @@ namespace NCore
                                             await n.Give(Material.IRON_ORE);
                                         if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
                                             await n.Give(Material.IRON_ORE);
+                                    }
+
+                                    if (b.Type == EnumBlockType.END_STONE)
+                                    {
+                                        if (n.SelectedItem.Type == Material.STONE_PICKAXE)
+                                            await n.Give(Material.END_STONE);
+                                        if (n.SelectedItem.Type == Material.IRON_PICKAXE)
+                                            await n.Give(Material.END_STONE);
+                                        if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
+                                            await n.Give(Material.END_STONE);
                                     }
 
                                     if (b.Type == EnumBlockType.IRON_BLOCK)
@@ -1773,7 +1840,7 @@ namespace NCore
             {
                 if(DistanceBetweenPoint(Normalize(p.Position), point) <= radius)
                 {
-                    await p.Damage(10, "взорвался(-лась)");
+                    await p.Damage(10, lang.get("deathmessage.exploded"));
                 }
             }
             Log($"Explosion at [{point.X},{point.Y}] with power {radius.ToString()}");
@@ -1820,8 +1887,8 @@ namespace NCore
                 File.WriteAllText($"./playerdata/{client.Username}.txt", PlayerInfoSaveLoad.Save(client), Encoding.UTF8);
                 if (!isError)
                 {
-                    await Chat(client.Username + " покинул игру");
-                    Log(client.Username + " покинул игру");
+                    await Chat(lang.get("player.left", client.Username));
+                    Log(lang.get("player.left", client.Username));
                 }
                 else
                 {

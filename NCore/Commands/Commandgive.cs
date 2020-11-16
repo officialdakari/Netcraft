@@ -9,7 +9,7 @@ namespace NCore
 {
     public class Commandgive : Command
     {
-        public Commandgive() : base("give", "Выдать предмет игроку/себе", "give <игрок|@s|@a|@r> <предмет> [кол-во]")
+        public Commandgive() : base("give", NCore.GetNCore().lang.get("commands.give.description"), NCore.GetNCore().lang.get("commands.give.usage"))
         {
         }
 
@@ -23,50 +23,7 @@ namespace NCore
 
             if (args.Length == 2)
             {
-                Material t = (Material)Enum.Parse(typeof(Material), args[1].ToUpper());
-                NetworkPlayer p;
-                if (args[0] == "@s")
-                {
-                    if (!sender.IsPlayer)
-                    {
-                        sender.SendMessage("Только для игрока!");
-                        return true;
-                    }
-
-                    p = (NetworkPlayer)sender;
-                    await p.Give(t);
-                    await NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) игроку " + p.Username, sender);
-                    return true;
-                }
-                else if (args[0] == "@a")
-                {
-                    foreach (var g in Netcraft.GetOnlinePlayers())
-                        await g.Give(t);
-                    await NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) {Netcraft.GetOnlinePlayers().Count} игрокам", sender);
-                    return true;
-                }
-                else if (args[0] == "@r")
-                {
-                    Random rnd = new Random();
-                    List<NetworkPlayer> g = Netcraft.GetOnlinePlayers();
-                    p = g[rnd.Next(0, g.Count - 1)];
-                    await p.Give(t);
-                    await NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) игроку " + p.Username, sender);
-                    return true;
-                }
-                else
-                {
-                    p = Netcraft.GetPlayer(args[0]);
-                    if (NCore.IsNothing(p))
-                    {
-                        await sender.SendMessage("Игрок не найден!");
-                        return true;
-                    }
-
-                    await p.Give(t);
-                    await NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} (1 шт.) игроку " + p.Username, sender);
-                    return true;
-                }
+                args[2] = "1";
             }
 
             if (args.Length == 3)
@@ -84,14 +41,14 @@ namespace NCore
 
                     p = (NetworkPlayer)sender;
                     await p.Give(t, count);
-                    await NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) игроку " + p.Username, sender);
+                    await NCore.GetNCore().SendCommandFeedback(NCore.GetNCore().lang.get("commands.give.success.player", t.ToString().ToLower(), args[2], p.Username), sender);
                     return true;
                 }
                 else if (args[0] == "@a")
                 {
                     foreach (var g in Netcraft.GetOnlinePlayers())
                         await g.Give(t, count);
-                    await NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) {Netcraft.GetOnlinePlayers().Count} игрокам", sender);
+                    await NCore.GetNCore().SendCommandFeedback(NCore.GetNCore().lang.get("commands.give.success.all", t.ToString().ToLower(), args[2], Netcraft.GetOnlinePlayers().Count.ToString()), sender);
                     return true;
                 }
                 else if (args[0] == "@r")
@@ -100,7 +57,7 @@ namespace NCore
                     var g = Netcraft.GetOnlinePlayers();
                     p = g[rnd.Next(0, g.Count - 1)];
                     await p.Give(t, count);
-                    await NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) игроку " + p.Username, sender);
+                    await NCore.GetNCore().SendCommandFeedback(NCore.GetNCore().lang.get("commands.give.success.player", t.ToString().ToLower(), args[2], p.Username), sender);
                     return true;
                 }
                 else
@@ -113,7 +70,7 @@ namespace NCore
                     }
 
                     await p.Give(t, count);
-                    await NCore.GetNCore().SendCommandFeedback($"Выдано {t.ToString().ToLower()} ({count} шт.) игроку " + p.Username, sender);
+                    await NCore.GetNCore().SendCommandFeedback(NCore.GetNCore().lang.get("commands.give.success.player", t.ToString().ToLower(), args[2], p.Username), sender);
                     return true;
                 }
             }

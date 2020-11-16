@@ -15,6 +15,16 @@ namespace NCore
             for (int i = 0; i <= 63; i++)
             {
                 int YHeight = new Random().Next(1, 14);
+                for(int o = 17; o < 17 * 2; o++)
+                {
+                    if(o == 24)
+                    {
+                        if(i > 2 && i < 6)
+                        {
+                            world.Blocks.Add(new Block(new Point(i, o), EnumBlockType.OBSIDIAN, true, false));
+                        }
+                    }
+                }
                 for (int o = 0; o <= 24; o++)
                 {
                     if (o == 17)

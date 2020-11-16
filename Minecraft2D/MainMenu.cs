@@ -376,6 +376,8 @@ namespace Minecraft2D
             if(FancyMessage.Show(lang.get("text.question.confirm_exit"), "Netcraft", FancyMessage.Icon.Info, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
             {
                 Environment.Exit(0);
+                dRPC.ClearPresence();
+                dRPC.Deinitialize();
             } else
             {
                 e.Cancel = true;

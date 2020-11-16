@@ -91,5 +91,48 @@ namespace Minecraft2D
         {
 
         }
+
+        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if(listBox1.SelectedItem != null)
+            {
+                string t = $"/tell {listBox1.SelectedItem.ToString()} {TextBox1.Text}";
+                TextBox1.Text = t;
+            }
+        }
+
+        private void sendAPrivateMessageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedItem != null)
+            {
+                string t = $"/tell {listBox1.SelectedItem.ToString()} {TextBox1.Text}";
+                TextBox1.Text = t;
+            }
+        }
+
+        private void kickPlayerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedItem != null)
+            {
+                string t = $"/kick {listBox1.SelectedItem.ToString()} Kicked from server";
+                TextBox1.Text = t;
+                Button1.PerformClick();
+            }
+        }
+
+        private void banPlayerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedItem != null)
+            {
+                string t = $"/ban {listBox1.SelectedItem.ToString()} Banned by admin";
+                TextBox1.Text = t;
+                Button1.PerformClick();
+            }
+        }
+
+        private void Chat_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            FancyMessage.Show(lang.get("info.help.chat"), "Help", FancyMessage.Icon.Info);
+        }
     }
 }

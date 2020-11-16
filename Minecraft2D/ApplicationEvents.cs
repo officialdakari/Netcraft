@@ -37,6 +37,11 @@ namespace Minecraft2D.My
             return base.OnUnhandledException(e);
         }
 
+        protected override void OnShutdown()
+        {
+            base.OnShutdown();
+        }
+
         internal static void threadException(object sender, System.UnhandledExceptionEventArgs e)
         {
             if(Form1.instance != null && Form1.GetInstance().Visible)
