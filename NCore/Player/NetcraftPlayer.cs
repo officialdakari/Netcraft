@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using global::System.Drawing;
 using global::System.IO;
@@ -13,9 +14,9 @@ using NCore.netcraft.server.api;
 
 namespace NCore
 {
-    public class NetworkPlayer : CommandSender
+    public class NetcraftPlayer : CommandSender
     {
-        public NetworkPlayer(TcpClient forClient) : base("", false)
+        public NetcraftPlayer(TcpClient forClient) : base("", false)
         {
             field_01931 = Position;
             d = forClient;
@@ -48,6 +49,7 @@ namespace NCore
         public bool IsAuthorized { get; set; } = false;
         public int AntiFlyWarnings { get; set; } = 0;
         public BlockChest OpenChest { get; set; } = null;
+        internal NCore.Lang lang;
 
         public string GetIp()
         {
@@ -101,11 +103,11 @@ namespace NCore
         // getMessage
         public event aEventHandler a;
 
-        public delegate void aEventHandler(string str, NetworkPlayer n);
+        public delegate void aEventHandler(string str, NetcraftPlayer n);
         // clientLogout
         public event bEventHandler b;
 
-        public delegate void bEventHandler(NetworkPlayer client);
+        public delegate void bEventHandler(NetcraftPlayer client);
         // SendMessage
         private StreamWriter c;
         // ListClient
@@ -127,7 +129,7 @@ namespace NCore
             await UpdateInventory();
         }
 
-        public async Task UpdateHealth(int h, string d = "died")
+        public async Task UpdateHealth(int h, string d = "died", string[] dmFormat = null)
         {
             this.Health = h;
             var ev = new netcraft.server.api.events.PlayerHealthEventArgs(this, Health, h);
@@ -136,7 +138,7 @@ namespace NCore
                 return;
             if (h < 1)
             {
-                Kill(d);
+                await Kill(d, dmFormat, true);
                 return;
             }
 
@@ -155,15 +157,20 @@ namespace NCore
             await Send("dowarn?" + n);
         }
 
-        public async Task Damage(int d, NetworkPlayer damager = null)
+        public async Task SendLog(string t)
+        {
+            await Send("evalresult?" + t);
+        }
+
+        public async Task Damage(int d, NetcraftPlayer damager = null)
         {
             if (NCore.IsNothing(damager))
             {
-                await UpdateHealth(Health - d, "damaged to death");
+                await UpdateHealth(Health - d, "deathmessage.out");
             }
             else
             {
-                await UpdateHealth(Health - d, NCore.GetNCore().lang.get("deathmessage.killed", damager.Username));
+                await UpdateHealth(Health - d, "");
             }
         }
 
@@ -172,15 +179,17 @@ namespace NCore
             await Send($"sky?{color.Name}");
         }
 
-        public async Task Damage(int d, string a = "died")
+        public async Task Damage(int d, string a = "died", string[] vs = null)
         {
-            await UpdateHealth(Health - d, a);
+            if (vs == null) vs = new string[] { };
+            await UpdateHealth(Health - d, a, vs);
         }
 
-        public async Task Kill(string deathMessage = "died")
+        public async Task Kill(string deathMessage = "died", string[] vs = null, bool isTranslation = false)
         {
             // Form1.Send("chat?" + Username + " " + deathMessage)
-            var ev = new netcraft.server.api.events.PlayerDeathEventArgs(this, Conversions.ToString(Operators.AddObject(Username + " ", deathMessage)), new Point(0, 0));
+            var ev = new netcraft.server.api.events.PlayerDeathEventArgs(this, null, new Point(0, 0));
+            
             netcraft.server.api.NCSApi.REPlayerDeathEvent(ev);
             if (ev.GetCancelled())
             {
@@ -188,8 +197,21 @@ namespace NCore
                 await Send("health?1");
                 return;
             }
-
-            netcraft.server.api.Netcraft.Broadcast(ev.GetDeathMessage());
+            if(isTranslation)
+            {
+                string[] v = new string[] {Username};
+                if(vs != null)
+                {
+                    foreach (var g in vs)
+                    {
+                        v = v.Append(g).ToArray();
+                    }
+                }
+                await NCore.GetNCore().BroadcastChatTranslation(deathMessage, v, null, true);
+            } else
+            {
+                await NCore.GetNCore().Chat(Username + deathMessage);
+            }
             Teleport(ev.GetSpawn().X, ev.GetSpawn().Y);
             Position = ev.GetSpawn();
             await PacketQueue.AddQueue($"teleport?{ev.GetSpawn().X.ToString()}?{ev.GetSpawn().Y.ToString()}");
@@ -216,7 +238,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.PLANKS) < 2)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -228,7 +250,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 3)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -240,7 +262,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.WOOD) < 1)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -252,13 +274,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 3)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -271,13 +293,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 3)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -290,13 +312,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 1)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -309,13 +331,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 2)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 1)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -328,13 +350,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 3)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -347,13 +369,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 3)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -366,13 +388,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 1)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 2)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -385,13 +407,13 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 2)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 if (PlayerInventory.CountOf(Material.STICK) < 1)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -404,7 +426,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.COBBLESTONE) < 8)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -416,7 +438,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.PLANKS) < 8)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -428,7 +450,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON) < 9)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -440,7 +462,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.DIAMOND) < 9)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -452,7 +474,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.GOLD) < 9)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -464,7 +486,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.IRON_BLOCK) < 1)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -476,7 +498,7 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.GOLD_BLOCK) < 1)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
@@ -488,12 +510,23 @@ namespace NCore
             {
                 if (PlayerInventory.CountOf(Material.DIAMOND_BLOCK) < 1)
                 {
-                    await Send("msgerror?" + NCore.GetNCore().lang.get("error.craft.no-materials"));
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
                     return;
                 }
 
                 await RemoveItem(Material.DIAMOND_BLOCK, 1);
                 await Give(Material.DIAMOND, 9);
+            }
+            if (m == Material.BREAD)
+            {
+                if (PlayerInventory.CountOf(Material.WHEAT) < 3)
+                {
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
+                    return;
+                }
+
+                await RemoveItem(Material.WHEAT, 3);
+                await Give(Material.BREAD, 2);
             }
         }
 
@@ -513,6 +546,12 @@ namespace NCore
                 t = "wood";
             if (m == EnumBlockType.GRASS_BLOCK)
                 t = "grass_block";
+            if (m == EnumBlockType.SNOWY_GRASS_BLOCK)
+                t = "snowygrass";
+            if (m == EnumBlockType.NETCRAFT_BLOCK)
+                t = "netcraft_block";
+            if (m == EnumBlockType.SNOWY_NETCRAFT_BLOCK)
+                t = "netcraft_block_snowy";
             if (m == EnumBlockType.COBBLESTONE)
                 t = "cobble";
             if (m == EnumBlockType.LEAVES)
@@ -531,6 +570,11 @@ namespace NCore
                 t = "endstone";
             if (m == EnumBlockType.GLASS)
                 t = "glass";
+            if (m == EnumBlockType.FIRE)
+            {
+                t = "fire";
+                nonsolid = true;
+            }
             if (m == EnumBlockType.GOLD_ORE)
                 t = "gold_ore";
             if (m == EnumBlockType.FURNACE)
@@ -543,6 +587,16 @@ namespace NCore
                 t = "gold_block";
             if (m == EnumBlockType.TNT)
                 t = "tnt";
+            if (m == EnumBlockType.SEEDS)
+            {
+                t = "wheat0";
+                nonsolid = true;
+            }
+            if (m == EnumBlockType.WHEAT)
+            {
+                t = "wheat7";
+                nonsolid = true;
+            }
             if (m == EnumBlockType.CHEST)
                 t = "chest";
             if (m == EnumBlockType.SAPLING)
@@ -587,10 +641,16 @@ namespace NCore
                 t = "wood";
             if (m == EnumBlockType.GRASS_BLOCK)
                 t = "grass_block";
+            if (m == EnumBlockType.SNOWY_GRASS_BLOCK)
+                t = "snowygrass";
             if (m == EnumBlockType.COBBLESTONE)
                 t = "cobble";
             if (m == EnumBlockType.LEAVES)
                 t = "leaves";
+            if (m == EnumBlockType.NETCRAFT_BLOCK)
+                t = "netcraft_block";
+            if (m == EnumBlockType.SNOWY_NETCRAFT_BLOCK)
+                t = "netcraft_block_snowy";
             if (m == EnumBlockType.COAL_ORE)
                 t = "coal_ore";
             if (m == EnumBlockType.IRON_ORE)
@@ -605,6 +665,21 @@ namespace NCore
                 t = "sand";
             if (m == EnumBlockType.GLASS)
                 t = "glass";
+            if (m == EnumBlockType.SEEDS)
+            {
+                t = "wheat0";
+                nonsolid = true;
+            }
+            if (m == EnumBlockType.WHEAT)
+            {
+                t = "wheat7";
+                nonsolid = true;
+            }
+            if (m == EnumBlockType.FIRE)
+            {
+                t = "fire";
+                nonsolid = true;
+            }
             if (m == EnumBlockType.GOLD_ORE)
                 t = "gold_ore";
             if (m == EnumBlockType.FURNACE)
@@ -879,8 +954,7 @@ namespace NCore
 
             if(IsLoaded) NCore.GetNCore().Log($"{Username} kicked from the game: '{kickMessage}'");
             await Send("msgkick?" + kickMessage);
-            d.Client.Close();
-            d = null;
+            b?.Invoke(this);
             if (d != null && d.Client.Connected) Disconnect();
         }
     }

@@ -59,6 +59,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 if (connected)
                 {
                     connected = false;
@@ -84,6 +85,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 if (connected)
                 {
                     toNotice = $"{lang.get("text.error.packet_send_error")}:\r\n\r\n{ex.ToString()}";
@@ -108,6 +110,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 connected = false;
                 FancyMessage.Show($"{ex.GetType().ToString()}: {ex.Message}", lang.get("text.error.unable_connect"), FancyMessage.Icon.Error);
                 Close();
@@ -126,7 +129,7 @@ namespace Minecraft2D
         private readonly List<EntityPlayer> players = new List<EntityPlayer>();
         private string pName;
 
-        public bool IsOfficialServer { get; set; } = false;
+        public bool IsSingleplayer { get; set; } = false;
 
         private Process _ServerProcess;
 
@@ -175,6 +178,7 @@ namespace Minecraft2D
 
         public enum Craftable
         {
+            BREAD,
             PLANKS,
             WOODEN_PICKAXE,
             WOODEN_SWORD,
@@ -246,8 +250,10 @@ namespace Minecraft2D
             }
         }
 
+            
+
         Lang lang;
-        private async void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
             instance = this;
             
@@ -267,10 +273,10 @@ namespace Minecraft2D
             localPlayer.SendToBack();
             R1.BringToFront();
             ListBox1.BringToFront();
-            Text = "NetCraft " + My.MyProject.Forms.MainMenu.Ver;
-            if (IsOfficialServer)
+            this.Text = "NetCraft " + MainMenu.GetInstance().Ver;
+            if (IsSingleplayer)
             {
-                Text = $"NetCraft {My.MyProject.Forms.MainMenu.Ver} (Official Server)";
+                Text = $"NetCraft {My.MyProject.Forms.MainMenu.Ver} (Singleplayer)";
             }
 
             Connect(ip, port);
@@ -282,10 +288,10 @@ namespace Minecraft2D
             }
             pName = Utils.InputBox("text.playername");
             if (pName == null) Close();
-            await SendPacket("setname", pName);
+            SendPacket("setname", pName, Utils.LANGUAGE);
             Username = pName;
             Thread.Sleep(900);
-            await SendSinglePacket("world");
+            SendSinglePacket("world");
             My.MyProject.Forms.Chat.Show();
             WriteChat("Client message: Вы вошли на сервер");
             initializeMove();
@@ -298,21 +304,22 @@ namespace Minecraft2D
             try
             {
                 MainMenu.GetInstance().presence.Details = String.Format(lang.get("rpc.playername"), pName);
-                if (!IsOfficialServer)
+                if (!IsSingleplayer)
                 {
                     MainMenu.GetInstance().presence.State = lang.get("rpc.playing.network_game");
                 }
                 else
                 {
-                    MainMenu.GetInstance().presence.State = lang.get("rpc.playing.official_server");
+                    MainMenu.GetInstance().presence.State = lang.get("rpc.playing.singleplayer");
                 }
                 MainMenu.GetInstance().dRPC.SetPresence(MainMenu.GetInstance().presence);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
+                Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
             }
-            audioPlay();
+            //audioPlay();
             foreach(Control c in Controls)
             {
                 c.MouseMove += Form1_MouseMove;
@@ -412,6 +419,14 @@ namespace Minecraft2D
             {
 
                 var a = p.Split('?');
+                if(a[0] == "evalresult")
+                {
+                    string m = string.Join("?", a.Skip(1).ToArray());
+                    log(m.Replace("\r", "\r\n") + "\r\n");
+                    //NConsole.instance.richTextBox1.AppendText(m.Replace("\r", "\r\n") + "\r\n");
+                    //NConsole.instance.richTextBox1.Select(textBox2.TextLength, 0);
+                    //NConsole.instance.richTextBox1.ScrollToCaret();
+                }
                 if (a[0] == "blockchange")
                 {
                     var b = new PictureBox();
@@ -475,10 +490,25 @@ namespace Minecraft2D
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.end_stone;
                     }
+                    else if (a[3] == "netcraft_block")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.logoNC;
+                    }
+                    else if (a[3] == "netcraft_block_snowy")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.snowylogo;
+                    }
                     else if (a[3] == "diamond_ore")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.diamond_ore;
+                    }
+                    else if (a[3] == "snowygrass")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.grass_block_snow;
                     }
                     else if (a[3] == "gold_ore")
                     {
@@ -494,6 +524,11 @@ namespace Minecraft2D
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.water_still;
+                    }
+                    else if (a[3] == "fire")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.fire_0;
                     }
                     else if (a[3] == "sand")
                     {
@@ -531,6 +566,16 @@ namespace Minecraft2D
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.coal_ore;
                     }
+                    else if (a[3] == "wheat0")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.wheat_stage0;
+                    }
+                    else if (a[3] == "wheat7")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.wheat_stage7;
+                    }
                     else if (a[3] == "sapling")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
@@ -559,7 +604,7 @@ namespace Minecraft2D
                     b.Visible = true;
                     b.Text = "";
                     blocks.Add(b);
-                    CreateBlock(b);
+                    await CreateBlock(b);
                 }
 
                 if (a[0] == "hunger")
@@ -569,24 +614,24 @@ namespace Minecraft2D
 
                 if (a[0] == "removeblock")
                 {
-                    BreakBlock(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
+                    await BreakBlock(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
                 }
 
                 if (a[0] == "addplayer")
                 {
-                    CreatePlayer(a[1], 0 - HorizontalScroll.Value, 0);
+                    await CreatePlayer(a[1], 0 - HorizontalScroll.Value, 0);
                     Console.WriteLine($"Player added: {a[1]}");
                 }
 
                 if (a[0] == "removeplayer")
                 {
-                    DelPlayer(a[1]);
+                    await DelPlayer(a[1]);
                     Console.WriteLine($"Player removed: {a[1]}");
                 }
 
                 if (a[0] == "updateplayerposition")
                 {
-                    MovePlayer(a[1], Conversions.ToInteger(a[2]) - HorizontalScroll.Value, Conversions.ToInteger(a[3]) - VerticalScroll.Value);
+                    await MovePlayer(a[1], Conversions.ToInteger(a[2]) - HorizontalScroll.Value, Conversions.ToInteger(a[3]) - VerticalScroll.Value);
                 }
 
                 if (a[0] == "completeload")
@@ -597,7 +642,7 @@ namespace Minecraft2D
                 if (a[0] == "teleport")
                 {
                     TeleportLocalPlayer(Conversions.ToInteger(a[1]) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) - VerticalScroll.Value);
-                    UpdatePlayerPosition();
+                    await UpdatePlayerPosition();
                     Console.WriteLine(String.Format("Local player teleported: {0}, {1}", a[1], a[2]));
                 }
 
@@ -608,7 +653,7 @@ namespace Minecraft2D
 
                 if (a[0] == "additem")
                 {
-                    AddItem(a[1]);
+                    await AddItem(a[1]);
                 }
 
                 if (a[0] == "msgerror")
@@ -658,7 +703,7 @@ namespace Minecraft2D
 
                 if (a[0] == "dowarn")
                 {
-                    DoWarning(string.Join("?", a.Skip(1).ToArray()));
+                    await DoWarning(string.Join("?", a.Skip(1).ToArray()));
                 }
 
                 if (a[0] == "sky")
@@ -686,254 +731,282 @@ namespace Minecraft2D
                         // REM - Деревянные инструменты
                         if (a[2] == "WOODEN_PICKAXE")
                         {
-                            SetItem(a[1], My.Resources.Resources.WOODEN_PICKAXE, My.Resources.Resources.WOODEN_PICKAXE_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.WOODEN_PICKAXE, My.Resources.Resources.WOODEN_PICKAXE_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "WOODEN_AXE")
                         {
-                            SetItem(a[1], My.Resources.Resources.WOODEN_AXE, My.Resources.Resources.WOODEN_AXE_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.WOODEN_AXE, My.Resources.Resources.WOODEN_AXE_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "WOODEN_SWORD")
                         {
-                            SetItem(a[1], My.Resources.Resources.WOODEN_SWORD, My.Resources.Resources.WOODEN_SWORD_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.WOODEN_SWORD, My.Resources.Resources.WOODEN_SWORD_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "WOODEN_SHOVEL")
                         {
-                            SetItem(a[1], My.Resources.Resources.WOODEN_SHOVEL, My.Resources.Resources.WOODEN_SHOVEL_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.WOODEN_SHOVEL, My.Resources.Resources.WOODEN_SHOVEL_FLIPPED, a[2]);
                         }
 
 
                         // REM - Каменные инструменты
                         if (a[2] == "STONE_PICKAXE")
                         {
-                            SetItem(a[1], My.Resources.Resources.STONE_PICKAXE, My.Resources.Resources.STONE_PICKAXE_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.STONE_PICKAXE, My.Resources.Resources.STONE_PICKAXE_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "STONE_AXE")
                         {
-                            SetItem(a[1], My.Resources.Resources.STONE_AXE, My.Resources.Resources.STONE_AXE_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.STONE_AXE, My.Resources.Resources.STONE_AXE_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "STONE_SWORD")
                         {
-                            SetItem(a[1], My.Resources.Resources.STONE_SWORD, My.Resources.Resources.STONE_SWORD_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.STONE_SWORD, My.Resources.Resources.STONE_SWORD_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "STONE_SHOVEL")
                         {
-                            SetItem(a[1], My.Resources.Resources.STONE_SHOVEL, My.Resources.Resources.STONE_SHOVEL_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.STONE_SHOVEL, My.Resources.Resources.STONE_SHOVEL_FLIPPED, a[2]);
                         }
 
                         // REM - Железные инструменты
                         if (a[2] == "IRON_PICKAXE")
                         {
-                            SetItem(a[1], My.Resources.Resources.IRON_PICKAXE, My.Resources.Resources.IRON_PICKAXE_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.IRON_PICKAXE, My.Resources.Resources.IRON_PICKAXE_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "IRON_AXE")
                         {
-                            SetItem(a[1], My.Resources.Resources.IRON_AXE, My.Resources.Resources.IRON_AXE_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.IRON_AXE, My.Resources.Resources.IRON_AXE_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "IRON_SWORD")
                         {
-                            SetItem(a[1], My.Resources.Resources.IRON_SWORD, My.Resources.Resources.IRON_SWORD_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.IRON_SWORD, My.Resources.Resources.IRON_SWORD_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "IRON_SHOVEL")
                         {
-                            SetItem(a[1], My.Resources.Resources.IRON_SHOVEL, My.Resources.Resources.IRON_SHOVEL_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.IRON_SHOVEL, My.Resources.Resources.IRON_SHOVEL_FLIPPED, a[2]);
                         }
 
                         // REM - Алмазные инструменты
                         if (a[2] == "DIAMOND_PICKAXE")
                         {
-                            SetItem(a[1], My.Resources.Resources.DIAMOND_PICKAXE, My.Resources.Resources.DIAMOND_PICKAXE_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.DIAMOND_PICKAXE, My.Resources.Resources.DIAMOND_PICKAXE_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "DIAMOND_AXE")
                         {
-                            SetItem(a[1], My.Resources.Resources.DIAMOND_AXE, My.Resources.Resources.DIAMOND_AXE_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.DIAMOND_AXE, My.Resources.Resources.DIAMOND_AXE_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "DIAMOND_SWORD")
                         {
-                            SetItem(a[1], My.Resources.Resources.DIAMOND_SWORD, My.Resources.Resources.DIAMOND_SWORD_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.DIAMOND_SWORD, My.Resources.Resources.DIAMOND_SWORD_FLIPPED, a[2]);
                         }
 
                         if (a[2] == "DIAMOND_SHOVEL")
                         {
-                            SetItem(a[1], My.Resources.Resources.DIAMOND_SHOVEL, My.Resources.Resources.DIAMOND_SHOVEL_FLIPPED, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.DIAMOND_SHOVEL, My.Resources.Resources.DIAMOND_SHOVEL_FLIPPED, a[2]);
                         }
 
                         // REM - Блоки
                         if (a[2] == "GRASS_BLOCK")
                         {
-                            SetItem(a[1], My.Resources.Resources.grass_side, My.Resources.Resources.grass_side, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.grass_side, My.Resources.Resources.grass_side, a[2]);
+                        }
+
+                        if (a[2] == "SNOWY_GRASS_BLOCK")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.grass_block_snow, My.Resources.Resources.grass_block_snow, a[2]);
+                        }
+
+                        if (a[2] == "NETCRAFT_BLOCK")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.logoNC, My.Resources.Resources.logoNC, a[2]);
+                        }
+
+                        if (a[2] == "SNOWY_NETCRAFT_BLOCK")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.snowylogo, My.Resources.Resources.snowylogo, a[2]);
                         }
 
                         if (a[2] == "WOOD")
                         {
-                            SetItem(a[1], My.Resources.Resources.log_oak, My.Resources.Resources.log_oak, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.log_oak, My.Resources.Resources.log_oak, a[2]);
                         }
 
                         if (a[2] == "COBBLESTONE")
                         {
-                            SetItem(a[1], My.Resources.Resources.cobblestone4, My.Resources.Resources.cobblestone4, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.cobblestone4, My.Resources.Resources.cobblestone4, a[2]);
                         }
 
                         if (a[2] == "STONE")
                         {
-                            SetItem(a[1], My.Resources.Resources.stone1, My.Resources.Resources.stone1, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.stone1, My.Resources.Resources.stone1, a[2]);
                         }
 
                         if (a[2] == "END_STONE")
                         {
-                            SetItem(a[1], My.Resources.Resources.end_stone, My.Resources.Resources.end_stone, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.end_stone, My.Resources.Resources.end_stone, a[2]);
                         }
 
                         if (a[2] == "PLANKS")
                         {
-                            SetItem(a[1], My.Resources.Resources.planks_oak, My.Resources.Resources.planks_oak, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.planks_oak, My.Resources.Resources.planks_oak, a[2]);
                         }
 
                         if (a[2] == "DIRT")
                         {
-                            SetItem(a[1], My.Resources.Resources.dirt1, My.Resources.Resources.dirt1, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.dirt1, My.Resources.Resources.dirt1, a[2]);
                         }
 
                         if (a[2] == "OBSIDIAN")
                         {
-                            SetItem(a[1], My.Resources.Resources.obsidian1, My.Resources.Resources.obsidian1, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.obsidian1, My.Resources.Resources.obsidian1, a[2]);
                         }
 
                         if (a[2] == "SAND")
                         {
-                            SetItem(a[1], My.Resources.Resources.sand, My.Resources.Resources.sand, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.sand, My.Resources.Resources.sand, a[2]);
                         }
 
                         if (a[2] == "GLASS")
                         {
-                            SetItem(a[1], My.Resources.Resources.glass, My.Resources.Resources.glass, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.glass, My.Resources.Resources.glass, a[2]);
                         }
 
                         if (a[2] == "FURNACE")
                         {
-                            SetItem(a[1], My.Resources.Resources.furnace_front_off, My.Resources.Resources.furnace_front_off, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.furnace_front_off, My.Resources.Resources.furnace_front_off, a[2]);
                         }
 
                         if (a[2] == "LEAVES")
                         {
-                            SetItem(a[1], My.Resources.Resources.leaves, My.Resources.Resources.leaves, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.leaves, My.Resources.Resources.leaves, a[2]);
                         }
 
                         if (a[2] == "SAPLING")
                         {
-                            SetItem(a[1], My.Resources.Resources.Grid_Sapling, My.Resources.Resources.Grid_Sapling, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.Grid_Sapling, My.Resources.Resources.Grid_Sapling, a[2]);
                         }
 
                         if (a[2] == "CHEST")
                         {
-                            SetItem(a[1], My.Resources.Resources.chest, My.Resources.Resources.chest, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.chest, My.Resources.Resources.chest, a[2]);
                         }
 
                         // REM - Драгоценные блоки
                         if (a[2] == "IRON_BLOCK")
                         {
-                            SetItem(a[1], My.Resources.Resources.iron_block, My.Resources.Resources.iron_block, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.iron_block, My.Resources.Resources.iron_block, a[2]);
                         }
 
                         if (a[2] == "DIAMOND_BLOCK")
                         {
-                            SetItem(a[1], My.Resources.Resources.diamond_block, My.Resources.Resources.diamond_block, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.diamond_block, My.Resources.Resources.diamond_block, a[2]);
                         }
 
                         if (a[2] == "GOLD_BLOCK")
                         {
-                            SetItem(a[1], My.Resources.Resources.gold_block, My.Resources.Resources.gold_block, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.gold_block, My.Resources.Resources.gold_block, a[2]);
                         }
 
                         if (a[2] == "GOLD_ORE")
                         {
-                            SetItem(a[1], My.Resources.Resources.gold_ore, My.Resources.Resources.gold_ore, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.gold_ore, My.Resources.Resources.gold_ore, a[2]);
                         }
 
                         if (a[2] == "IRON_ORE")
                         {
-                            SetItem(a[1], My.Resources.Resources.iron_ore, My.Resources.Resources.iron_ore, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.iron_ore, My.Resources.Resources.iron_ore, a[2]);
                         }
 
                         // REM - Еда
-                        if (a[2] == "FOOD1")
+                        if (a[2] == "COOKED_BEEF")
                         {
-                            SetItem(a[1], My.Resources.Resources.cooked_beef, My.Resources.Resources.cooked_beef, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.cooked_beef, My.Resources.Resources.cooked_beef, a[2]);
+                        }
+                        if (a[2] == "BREAD")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.bread, My.Resources.Resources.bread, a[2]);
+                        }
+
+                        // REM - Инструменты
+                        if (a[2] == "FIRE")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.flint_and_steel, My.Resources.Resources.flint_and_steel, a[2]);
                         }
 
                         // REM - Разное
                         if (a[2] == "STICK")
                         {
-                            SetItem(a[1], My.Resources.Resources.STICK, My.Resources.Resources.STICK, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.STICK, My.Resources.Resources.STICK, a[2]);
                         }
 
                         if (a[2] == "COAL")
                         {
-                            SetItem(a[1], My.Resources.Resources.coal, My.Resources.Resources.coal, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.coal, My.Resources.Resources.coal, a[2]);
                         }
 
                         if (a[2] == "IRON")
                         {
-                            SetItem(a[1], My.Resources.Resources.IRON, My.Resources.Resources.IRON, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.IRON, My.Resources.Resources.IRON, a[2]);
                         }
 
                         if (a[2] == "GOLD")
                         {
-                            SetItem(a[1], My.Resources.Resources.GOLD, My.Resources.Resources.GOLD, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.GOLD, My.Resources.Resources.GOLD, a[2]);
                         }
 
                         if (a[2] == "DIAMOND")
                         {
-                            SetItem(a[1], My.Resources.Resources.DIAMOND, My.Resources.Resources.DIAMOND, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.DIAMOND, My.Resources.Resources.DIAMOND, a[2]);
                         }
 
                         if (a[2] == "TNT")
                         {
-                            SetItem(a[1], My.Resources.Resources.tnt_side, My.Resources.Resources.tnt_side, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.tnt_side, My.Resources.Resources.tnt_side, a[2]);
                         }
 
                         if (a[2] == "BUCKET")
                         {
-                            SetItem(a[1], My.Resources.Resources.bucket, My.Resources.Resources.bucket, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.bucket, My.Resources.Resources.bucket, a[2]);
                         }
 
                         if (a[2] == "WATER_BUCKET")
                         {
-                            SetItem(a[1], My.Resources.Resources.water_bucket, My.Resources.Resources.water_bucket, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.water_bucket, My.Resources.Resources.water_bucket, a[2]);
                         }
 
                         if (a[2] == "LAVA_BUCKET")
                         {
-                            SetItem(a[1], My.Resources.Resources.lava_bucket, My.Resources.Resources.lava_bucket, a[2]);
+                            await SetItem(a[1], My.Resources.Resources.lava_bucket, My.Resources.Resources.lava_bucket, a[2]);
+                        }
+
+                        if (a[2] == "WHEAT")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.wheat, My.Resources.Resources.wheat, a[2]);
+                        }
+
+                        if (a[2] == "SEEDS")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.wheat_seeds, My.Resources.Resources.wheat_seeds, a[2]);
                         }
 
                         // REM - Nothing
                         if (a[2] == "nothing")
                         {
-                            SetItem(a[1], null, null, a[2]);
+                            await SetItem(a[1], null, null, a[2]);
                         }
                     }
                     catch (Exception ex)
                     {
-                        FancyMessage.Show($"Error while setting texture in hand of player {Utils.IIf(a[1] == "@", "local", a[1]).ToString()} to: \"{a[2]}\".\r\n\r\n{ex.ToString()}", "Exception", FancyMessage.Icon.Warning);
-                    }
-
-                    try
-                    {
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex;
+                        Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                        FancyMessage.Show($"Error while setting texture in hand of player '{Utils.IIf(a[1] == "@", "local", a[1]).ToString()}' to: \"{a[2]}\".\r\n\r\n{ex.ToString()}", "Exception", FancyMessage.Icon.Warning);
                     }
                 }
             }
@@ -960,7 +1033,7 @@ namespace Minecraft2D
             {
                 if (n == "@")
                 {
-                    SetItemInHand(i, iflipped, str);
+                    await SetItemInHand(i, iflipped, str);
                     return;
                 }
 
@@ -968,7 +1041,7 @@ namespace Minecraft2D
                 {
                     if ((p.Name ?? "") == (n ?? ""))
                     {
-                        p.SetItemInHand(i, iflipped, str);
+                        await p.SetItemInHand(i, iflipped, str);
                     }
                 }
             }
@@ -1057,9 +1130,9 @@ namespace Minecraft2D
                 }
 
                 bmp.UnlockBits(bmpData);
-            } catch (AccessViolationException)
+            } catch (Exception ex)
             {
-
+                Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
             }
         }
 
@@ -1074,7 +1147,7 @@ namespace Minecraft2D
                 Controls.Add(b);
                 try
                 {
-                    if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
+                    if (b.Tag != null && Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
                     {
                         // b.CreateGraphics.FillRectangle(New SolidBrush(Color.FromArgb(29, 0, 0, 0)), 0, 0, b.Width, b.Height)
                         // AddHandler b.Paint, AddressOf bgBlockPaint
@@ -1087,6 +1160,7 @@ namespace Minecraft2D
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 }
 
                 if (b.Tag.ToString().Contains("furnace"))
@@ -1094,7 +1168,6 @@ namespace Minecraft2D
                     // Throw New Exception
                     // AddHandler b.MouseUp, AddressOf furnaceInteract
                 }
-                blockRectangles.Add(b.Bounds);
                 b.MouseDown += OnBlockClick;
                 b.KeyDown += Form1_KeyDown;
                 b.KeyUp += Form1_KeyUp;
@@ -1104,20 +1177,31 @@ namespace Minecraft2D
             }
         }
 
+        private void B_MouseEnter(object sender, EventArgs e)
+        {
+            var c = (Control)sender;
+            var rect = ClientRectangle;
+            rect.Width = 32;
+            rect.Height = 32;
+            var clr = Color.Black;
+            int width = 1;
+
+            var g = c.CreateGraphics();
+            ControlPaint.DrawBorder(g, rect,
+                 clr, width, ButtonBorderStyle.Solid,
+                 clr, width, ButtonBorderStyle.Solid,
+                 clr, width, ButtonBorderStyle.Solid,
+                 clr, width, ButtonBorderStyle.Solid);
+        }
+
         private void blockMouseEnter(object sender, EventArgs e)
         {
-            if (!My.MyProject.Forms.Gamesettings.CheckBox2.Checked)
-                return;
-            Panel s = (Panel)sender;
-            s.BorderStyle = BorderStyle.FixedSingle;
+            B_MouseEnter(sender, e);
         }
 
         private void blockMouseLeave(object sender, EventArgs e)
         {
-            if (!My.MyProject.Forms.Gamesettings.CheckBox2.Checked)
-                return;
-            Panel s = (Panel)sender;
-            s.BorderStyle = BorderStyle.None;
+            ((Control)sender).Invalidate();
         }
 
         public delegate Task AddPlayer(string name, int x, int y);
@@ -1266,11 +1350,12 @@ namespace Minecraft2D
             {
                 try
                 {
-                    foreach (var b in blocks)
+                    for (int i = 0; i < blocks.Count; i++)
                     {
+                        if (blocks.Count < i) break;
+                        PictureBox b = blocks[i];
                         if ((b.Name ?? "") == ($"{x}B{y}" ?? ""))
                         {
-                            blockRectangles.Remove(b.Bounds);
                             blocks.Remove(b);
                             Controls.Remove(b);
                         }
@@ -1278,6 +1363,7 @@ namespace Minecraft2D
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 }
             }
         }
@@ -1333,6 +1419,7 @@ namespace Minecraft2D
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 }
             }
         }
@@ -1426,8 +1513,9 @@ namespace Minecraft2D
                                 }
                             }
                         }
-                        catch (InvalidOperationException ex)
+                        catch (Exception ex)
                         {
+                            Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                         }
 
                         if (collision)
@@ -1466,8 +1554,9 @@ namespace Minecraft2D
                                 }
                             }
                         }
-                        catch (InvalidOperationException ex)
+                        catch (Exception ex)
                         {
+                            Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                         }
 
                         if (collision)
@@ -1515,7 +1604,7 @@ namespace Minecraft2D
                         }
                         catch (Exception ex)
                         {
-
+                            Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                         }
 
                         if (grounded)
@@ -1528,9 +1617,9 @@ namespace Minecraft2D
                             JumpStep = -1;
                         }
                     }
-                } catch(Exception e)
+                } catch(Exception ex)
                 {
-
+                    Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 }
             }
         }
@@ -1701,6 +1790,7 @@ namespace Minecraft2D
 
         private int d = 60;
         private int rd = 15;
+        private bool effectPlaying = false;
 
         public async Task Tick()
         {
@@ -1735,9 +1825,10 @@ namespace Minecraft2D
                 try
                 {
                     Warning.Text = "";
-                } catch(Exception)
+                    this.Text = "Netcraft " + MainMenu.GetInstance().Ver;
+                } catch(Exception ex)
                 {
-
+                    Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 }
             }
 
@@ -1777,7 +1868,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                // Stop
+                Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
             }
         }
 
@@ -1899,6 +1990,7 @@ namespace Minecraft2D
             catch (Exception ex)
             {
                 R1.Hide();
+                Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
             }
         }
 
@@ -1930,11 +2022,10 @@ namespace Minecraft2D
                     MainMenu.GetInstance().notice(toNotice, toNoticeType);
                 }
                 My.MyProject.Forms.Chat.Close();
-                Hide();
-                e.Cancel = true;
                 MainMenu.GetInstance().presence.State = "";
                 MainMenu.GetInstance().presence.Details = lang.get("rpc.menu");
                 MainMenu.GetInstance().dRPC.SetPresence(MainMenu.GetInstance().presence);
+                leave();
                 return;
             }
             if (FancyMessage.Show(lang.get("text.question.confirm_exit"), "Netcraft", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) != FancyMessage.Result.OK)
@@ -1943,13 +2034,12 @@ namespace Minecraft2D
                 return;
             }
             leave();
-            e.Cancel = true;
         }
 
         internal void leave()
         {
             WriteChat("Client message: Вы вышли с сервера");
-            if(cTicker == null) cTicker.Abort();
+            if(cTicker != null) cTicker.Abort();
             foreach(PictureBox b in blocks)
             {
                 Controls.Remove(b);
@@ -1962,7 +2052,7 @@ namespace Minecraft2D
             
             MainMenu.instance.Show();
             My.MyProject.Forms.Chat.Close();
-            Disconnect();
+            if(client != null && client.Connected) Disconnect();
         }
 
         public bool IsBlink { get; set; } = false;
@@ -2013,7 +2103,7 @@ namespace Minecraft2D
         private void Button3_Click_1(object sender, EventArgs e)
         {
             My.MyProject.Forms.Gamesettings.Show(this);
-            if (IsOfficialServer)
+            if (IsSingleplayer)
             {
             }
 
@@ -2112,20 +2202,11 @@ namespace Minecraft2D
             ChatButton.Location = new Point(0, 0);
             CraftButton.Location = new Point(0, 29);
             debuginfo.Location = new Point(5, 53);
+            _Warning.Location = new Point(239, 0);
         }
-
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-
-            Text = "Netcraft";
-            localPlayer.Update();
-            //Update();
-            localPlayer.Hide();
-            localPlayer.Show();
-
-            Timer1.Stop();
-            Timer1.Start();
-        }
+        int effectPlayingDirection = -1;
+        int d1 = 0;
+        
 
         //KEYWORD:FRMPAINT
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -2173,6 +2254,7 @@ namespace Minecraft2D
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
+            
             Form1_Paint(this, new PaintEventArgs(CreateGraphics(), Bounds));
         }
         
@@ -2221,6 +2303,51 @@ namespace Minecraft2D
             timer2.Stop();
             timer2.Start();
         }
+
+        public void sendEval(string text)
+        {
+            SendPacket("eval", text);
+        }
+
+        delegate void logResult(string res);
+        void log(string res)
+        {
+            if(InvokeRequired)
+            {
+                Invoke(new logResult(log), res);
+            } else
+            {
+                NConsole.instance.richTextBox1.AppendText(res + "\r\n");
+                NConsole.instance.richTextBox1.Select(NConsole.instance.richTextBox1.TextLength, 0);
+                NConsole.instance.richTextBox1.ScrollToCaret();
+            }
+        }
+
+        NConsole nConsole = null;
+        private void debuginfo_Click(object sender, EventArgs e)
+        {
+            if (nConsole == null) nConsole = new NConsole();
+            nConsole.Show();
+            //panel1.Show();
+            //panel1.Location = new Point(15, 15);
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+        //private void Form1_MouseDown(object sender, Global.System.Windows.Forms.MouseEventArgs e)
+        //{
+        //    pt = new Point(e.X, e.Y); // запоминает положение курсора относительно формы
+        //}
+
+        //private void Form1_MouseMove(object sender, Global.System.Windows.Forms.MouseEventArgs e)
+        //{
+        //    if (e.Button == Windows.Forms.MouseButtons.Left) // Проверяем, нажата ли левая кнопка мыши 
+        //    {
+        //        Location = new Point(Location.X + e.X - pt.X, Location.Y + e.Y - pt.Y); // Меняем координаты формы в зависимости от положения курсора с учетом переменной pt
+        //    }
+        //}
     }
 
     internal class Encode
@@ -2246,6 +2373,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 return "";
             }
         }
@@ -2265,6 +2393,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 return "";
             }
         }

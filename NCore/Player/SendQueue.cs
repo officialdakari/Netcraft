@@ -7,7 +7,7 @@ namespace NCore
 {
     public class SendQueueType
     {
-        private NetworkPlayer field1;
+        private NetcraftPlayer field1;
         private StringCollection field2 = new StringCollection();
 
         public async Task SendQueue()
@@ -36,7 +36,7 @@ namespace NCore
             field2.Remove(arg0);
         }
 
-        public SendQueueType(ref NetworkPlayer arg0)
+        public SendQueueType(ref NetcraftPlayer arg0)
         {
             field1 = arg0;
         }

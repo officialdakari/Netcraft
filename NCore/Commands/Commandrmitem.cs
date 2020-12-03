@@ -9,71 +9,29 @@ namespace NCore.Commands
 {
     class Commandrmitem : Command
     {
-        public Commandrmitem() : base("rmitem", "Удаляет предметы из инвентаря", "rmitem <игрок|@s|@a|@r> <предмет> [кол-во]")
+        public Commandrmitem() : base("rmitem", NCore.GetNCore().lang.get("commands.rmitem.description"), NCore.GetNCore().lang.get("commands.rmitem.usage"))
         {
         }
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
+            NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
             if (!sender.GetAdmin())
             {
-                await sender.SendMessage("У Вас недостаточно прав!");
+                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
                 return true;
             }
 
             if (args.Length == 2)
             {
-                Material t = (Material)Enum.Parse(typeof(Material), args[1].ToUpper());
-                NetworkPlayer p;
-                if (args[0] == "@s")
-                {
-                    if (!sender.IsPlayer)
-                    {
-                        sender.SendMessage("Только для игрока!");
-                        return true;
-                    }
-
-                    p = (NetworkPlayer)sender;
-                    await p.RemoveItem(t);
-                    await NCore.GetNCore().SendCommandFeedback($"Удалено {t.ToString().ToLower()} (1 шт.) у " + p.Username, sender);
-                    return true;
-                }
-                else if (args[0] == "@a")
-                {
-                    foreach (var g in Netcraft.GetOnlinePlayers())
-                        await g.RemoveItem(t);
-                    await NCore.GetNCore().SendCommandFeedback($"Удалено {t.ToString().ToLower()} (1 шт.) у {Netcraft.GetOnlinePlayers().Count} игроков", sender);
-                    return true;
-                }
-                else if (args[0] == "@r")
-                {
-                    Random rnd = new Random();
-                    List<NetworkPlayer> g = Netcraft.GetOnlinePlayers();
-                    p = g[rnd.Next(0, g.Count - 1)];
-                    await p.RemoveItem(t);
-                    await NCore.GetNCore().SendCommandFeedback($"Удалено {t.ToString().ToLower()} (1 шт.) у " + p.Username, sender);
-                    return true;
-                }
-                else
-                {
-                    p = Netcraft.GetPlayer(args[0]);
-                    if (NCore.IsNothing(p))
-                    {
-                        await sender.SendMessage("Игрок не найден!");
-                        return true;
-                    }
-
-                    await p.RemoveItem(t);
-                    await NCore.GetNCore().SendCommandFeedback($"Удалено {t.ToString().ToLower()} (1 шт.) у " + p.Username, sender);
-                    return true;
-                }
+                args[2] = "1";
             }
 
             if (args.Length == 3)
             {
                 Material t = (Material)Enum.Parse(typeof(Material), args[1].ToUpper());
                 int count = Conversions.ToInteger(args[2]);
-                NetworkPlayer p;
+                NetcraftPlayer p;
                 if (args[0] == "@s")
                 {
                     if (!sender.IsPlayer)
@@ -82,16 +40,16 @@ namespace NCore.Commands
                         return true;
                     }
 
-                    p = (NetworkPlayer)sender;
+                    p = (NetcraftPlayer)sender;
                     await p.RemoveItem(t, count);
-                    await NCore.GetNCore().SendCommandFeedback($"Удалено {t.ToString().ToLower()} ({count} шт.) у " + p.Username, sender);
+                    await NCore.GetNCore().SendCommandFeedback(lang.get("commands.rmitem.success.player", t.ToString().ToLower(), count.ToString(), p.Username), sender);
                     return true;
                 }
                 else if (args[0] == "@a")
                 {
                     foreach (var g in Netcraft.GetOnlinePlayers())
                         await g.RemoveItem(t, count);
-                    await NCore.GetNCore().SendCommandFeedback($"Удалено {t.ToString().ToLower()} ({count} шт.) у {Netcraft.GetOnlinePlayers().Count} игроков", sender);
+                    await NCore.GetNCore().SendCommandFeedback(lang.get("commands.rmitem.success.multiple", t.ToString().ToLower(), count.ToString(), Netcraft.GetOnlinePlayers().Count.ToString()), sender);
                     return true;
                 }
                 else if (args[0] == "@r")
@@ -100,7 +58,7 @@ namespace NCore.Commands
                     var g = Netcraft.GetOnlinePlayers();
                     p = g[rnd.Next(0, g.Count - 1)];
                     await p.RemoveItem(t, count);
-                    await NCore.GetNCore().SendCommandFeedback($"Удалено {t.ToString().ToLower()} ({count} шт.) у " + p.Username, sender);
+                    await NCore.GetNCore().SendCommandFeedback(lang.get("commands.rmitem.success.player", t.ToString().ToLower(), count.ToString(), p.Username), sender);
                     return true;
                 }
                 else
@@ -108,12 +66,12 @@ namespace NCore.Commands
                     p = Netcraft.GetPlayer(args[0]);
                     if (NCore.IsNothing(p))
                     {
-                        await sender.SendMessage("Игрок не найден!");
+                        await sender.SendMessage(lang.get("commands.generic.player.not-found"));
                         return true;
                     }
 
                     await p.RemoveItem(t, count);
-                    await NCore.GetNCore().SendCommandFeedback($"Удалено {t.ToString().ToLower()} ({count} шт.) у " + p.Username, sender);
+                    await NCore.GetNCore().SendCommandFeedback(lang.get("commands.rmitem.success.player", t.ToString().ToLower(), count.ToString(), p.Username), sender);
                     return true;
                 }
             }

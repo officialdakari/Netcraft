@@ -5,7 +5,7 @@ namespace NCore
 {
     public class Commandversion : Command
     {
-        public Commandversion() : base("version", "Показывает версию сервера", "version")
+        public Commandversion() : base("version", NCore.GetNCore().lang.get("commands.version.description"), "version")
         {
         }
 
@@ -13,7 +13,7 @@ namespace NCore
         {
             if (args.Length == 0)
             {
-                await sender.SendMessage($"Этот сервер использует NCore {NCore.NCORE_VERSION} для Netcraft {NCore.NETCRAFT_VERSION}. Запущено {PluginManager.Plugins.Count} плагинов.");
+                await sender.SendMessage($"This server is running NCore v{NCore.NCORE_VERSION} for Netcraft v{NCore.NETCRAFT_VERSION}. There is {PluginManager.Plugins.Count} plugins.");
                 return true;
             }
 

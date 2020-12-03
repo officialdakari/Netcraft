@@ -5,9 +5,12 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using global::Ionic.Zip;
+using IWshRuntimeLibrary;
 
 namespace WindowsFormsApp1
 {
@@ -17,48 +20,43 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
         }
-        
-        private void start()
-        {
-            var BM = new Bitmap(Width, Height);
-            this.DrawToBitmap(BM, ClientRectangle);
-            this.BackgroundImage = BM;
-            this.BackgroundImageLayout = ImageLayout.Stretch;
-            foreach (Control C in this.Controls)
-                C.Visible = false;
-            FormBorderStyle = FormBorderStyle.None;
-            this.BackColor = Color.Red;
-            this.TransparencyKey = Color.Red;
-            timer1.Start();
-        }
-
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-            
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //start();
-            
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void timer1_Tick_1(object sender, EventArgs e)
-        {
-            if (this.Height < 40)
+            try
             {
-                Environment.Exit(0);
+                WebClient wc = new WebClient();
+                wc.DownloadFile("https://cdn.discordapp.com/attachments/764151189016805397/764152900514611292/NetCraft-Client-1.0-ALPHA-R09102020.zip", @".\Netcraft1.zip");
+                ZipFile z = ZipFile.Read(@".\Netcraft1.zip");
+                z.ExtractAll(@".\Netcraft1Installed");
+                z.Dispose();
+                z = null;
+                System.IO.File.Delete(@".\Netcraft1.zip");
+                CreateShortcutNetcraft();
+                MessageBox.Show("Netcraft is successfully installed");
+            } catch(Exception ex)
+            {
+                if(MessageBox.Show(ex.ToString(), "Не удалось установить", MessageBoxButtons.RetryCancel, MessageBoxIcon.Asterisk) == DialogResult.Retry)
+                {
+                    button1_Click(sender, e);
+                }
             }
+        }
 
-            Width -= 4;
-            Left += 2;
-            Height -= 4;
-            Top += 2;
+        private void CreateShortcutNetcraft()
+        {
+            object shDesktop = (object)"Desktop";
+            WshShell shell = new WshShell();
+            string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\Netcraft.lnk";
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+            shortcut.Description = "Netcraft";
+            shortcut.TargetPath = Application.StartupPath + @"\Netcraft1Installed\Minecraft2D.exe";
+            shortcut.Save();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

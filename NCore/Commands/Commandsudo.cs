@@ -6,15 +6,16 @@ namespace NCore
 {
     public class Commandsudo : Command
     {
-        public Commandsudo() : base("sudo", "Отправляет сообщение или команду как другой игрок", "sudo <игрок> <сообщение | /команда [аргументы...]>")
+        public Commandsudo() : base("sudo", NCore.GetNCore().lang.get("commands.sudo.description"), NCore.GetNCore().lang.get("commands.sudo.usage"))
         {
         }
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
+            NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
             if (!sender.GetAdmin())
             {
-                await sender.SendMessage("У Вас недостаточно прав!");
+                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
                 return true;
             }
 
@@ -23,12 +24,12 @@ namespace NCore
                 var p = Netcraft.GetPlayer(args[0]);
                 if (NCore.IsNothing(p))
                 {
-                    await sender.SendMessage("Игрок не найден!");
+                    await sender.SendMessage(lang.get("commands.generic.player.not-found"));
                     return true;
                 }
 
                 NCore.GetNCore().MessageReceived($"chat?{string.Join(" ", args.Skip(1).ToArray())}", p);
-                await sender.SendMessage("Успешно выполнено sudo.");
+                await sender.SendMessage(lang.get("commands.sudo.success", p.Username));
                 return true;
             }
 

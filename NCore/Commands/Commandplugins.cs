@@ -5,7 +5,7 @@ namespace NCore
 {
     public class Commandplugins : Command
     {
-        public Commandplugins() : base("plugins", "Показывает список плагинов", "plugins", new[] { "pl" })
+        public Commandplugins() : base("plugins", "Shows list of plugins.", "plugins", new[] { "pl" })
         {
         }
 
@@ -15,7 +15,7 @@ namespace NCore
             {
                 if (sender.IsPlayer)
                 {
-                    NetworkPlayer p = (NetworkPlayer)sender;
+                    NetcraftPlayer p = (NetcraftPlayer)sender;
                     foreach (var a in PluginManager.Plugins)
                         await p.PacketQueue.AddQueue($"chat?{a.Name} v{a.Version} => {a.Description}");
                     await p.PacketQueue.SendQueue();

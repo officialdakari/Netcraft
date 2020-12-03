@@ -6,7 +6,7 @@ namespace NCore
 {
     public class Commanditems : Command
     {
-        public Commanditems() : base("items", "Показывает список вещей в игре", "items")
+        public Commanditems() : base("items", NCore.GetNCore().lang.get("commands.items.description"), "items")
         {
         }
 

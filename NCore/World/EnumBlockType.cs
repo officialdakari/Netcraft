@@ -5,6 +5,7 @@ namespace NCore
     {
         AIR,
         GRASS_BLOCK,
+        SNOWY_GRASS_BLOCK,
         DIRT,
         STONE,
         BEDROCK,
@@ -28,6 +29,11 @@ namespace NCore
         TNT,
         LAVA,
         CHEST,
-        END_STONE
+        END_STONE,
+        FIRE,
+        NETCRAFT_BLOCK,
+        SNOWY_NETCRAFT_BLOCK,
+        SEEDS,
+        WHEAT
     }
 }

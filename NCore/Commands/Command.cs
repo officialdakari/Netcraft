@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic.CompilerServices;
+using System;
 using System.Threading.Tasks;
 
 namespace NCore
@@ -28,6 +29,15 @@ namespace NCore
         public abstract Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label);
     }
 
+    public class CommandException : Exception
+    {
+    }
+
+    public class CommandPermissionsException : CommandException
+    {
+        public override string Message => "Command sender doesn't have right permissions";
+    }
+
     public class CommandSender
     {
         internal string senderName;
@@ -53,7 +63,7 @@ namespace NCore
         {
             get
             {
-                if (this is NetworkPlayer)
+                if (this is NetcraftPlayer)
                 {
                     return true;
                 }
@@ -66,7 +76,7 @@ namespace NCore
         {
             if (IsPlayer)
             {
-                NetworkPlayer p = (NetworkPlayer)this;
+                NetcraftPlayer p = (NetcraftPlayer)this;
                 await p.Chat(m);
                 return;
             }

@@ -16,7 +16,7 @@ namespace NCore
             {
                 if (sender.IsPlayer)
                 {
-                    NetworkPlayer p = (NetworkPlayer)sender;
+                    NetcraftPlayer p = (NetcraftPlayer)sender;
                     foreach (var a in Netcraft.GetCommands())
                     {
                         foreach (var b in a.Aliases)

@@ -6,6 +6,7 @@ namespace NCore
         STONE, // DONE
         DIRT, // DONE
         GRASS_BLOCK,
+        SNOWY_GRASS_BLOCK,
         COBBLESTONE, // DONE
         BEDROCK,
         WOOD, // DONE
@@ -48,7 +49,13 @@ namespace NCore
         WATER_BUCKET, // ok
         LAVA_BUCKET,
         CHEST, // ok
-        FOOD1, // ok
-        END_STONE
+        COOKED_BEEF, // ok
+        BREAD, // yes
+        END_STONE, // ok
+        FIRE, // hmm... DONE
+        NETCRAFT_BLOCK, // yes
+        SNOWY_NETCRAFT_BLOCK, // yes...
+        WHEAT, // rendering setup done
+        SEEDS // rendering setup done
     }
 }

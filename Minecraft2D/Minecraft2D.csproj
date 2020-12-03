@@ -61,7 +61,7 @@
       <HintPath>..\packages\DiscordRichPresence.1.0.150\lib\net35\DiscordRPC.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -110,6 +110,12 @@
       <DependentUpon>FancyMessageBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Lang.cs" />
+    <Compile Include="NConsole.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NConsole.Designer.cs">
+      <DependentUpon>NConsole.cs</DependentUpon>
+    </Compile>
     <Compile Include="networkClient.cs" />
     <Compile Include="PluginAbstract.cs" />
     <Compile Include="Properties\Application.Designer.cs" />
@@ -223,6 +229,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NConsole.resx">
+      <DependentUpon>NConsole.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -342,6 +351,25 @@
     <None Include="Resources\IRON_SWORD_FLIPPED.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\bread.png" />
+    <None Include="Resources\wheat_seeds.png" />
+    <None Include="Resources\wheat.png" />
+    <None Include="Resources\wheat_stage7.png" />
+    <None Include="Resources\wheat_stage6.png" />
+    <None Include="Resources\wheat_stage5.png" />
+    <None Include="Resources\wheat_stage4.png" />
+    <None Include="Resources\wheat_stage3.png" />
+    <None Include="Resources\wheat_stage2.png" />
+    <None Include="Resources\wheat_stage1.png" />
+    <None Include="Resources\wheat_stage0.png" />
+    <None Include="Resources\bone_meal.png" />
+    <None Include="Resources\snowylogo1.png" />
+    <None Include="Resources\logoNC1.png" />
+    <None Include="Resources\snowylogo.png" />
+    <None Include="Resources\logoNC.png" />
+    <None Include="Resources\flint_and_steel.png" />
+    <None Include="Resources\fire_0.png" />
+    <None Include="Resources\grass_block_snow.png" />
     <None Include="Resources\end_stone.png" />
     <None Include="Resources\buttonbg.png" />
     <None Include="Resources\menubackground.png" />

@@ -178,7 +178,7 @@ namespace Minecraft2D
             this._Button2.Name = "_Button2";
             this._Button2.Size = new System.Drawing.Size(310, 36);
             this._Button2.TabIndex = 8;
-            this._Button2.Text = "official server";
+            this._Button2.Text = "singleplayer";
             this._Button2.UseVisualStyleBackColor = false;
             this._Button2.Click += new System.EventHandler(this.Button2_Click_1);
             // 
@@ -190,9 +190,9 @@ namespace Minecraft2D
             this.Label5.ForeColor = System.Drawing.Color.White;
             this.Label5.Location = new System.Drawing.Point(3, 7);
             this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(288, 18);
+            this.Label5.Size = new System.Drawing.Size(108, 18);
             this.Label5.TabIndex = 10;
-            this.Label5.Text = "NetCraft 1.1-ALPHA-U10102020";
+            this.Label5.Text = "nc version";
             // 
             // _Button5
             // 
@@ -395,7 +395,7 @@ namespace Minecraft2D
             this.Name = "MainMenu";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "NetCraft";
+            this.Text = "Netcraft C#";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainMenu_FormClosing);
             this.Load += new System.EventHandler(this.MainMenu_Load);
             this.LocationChanged += new System.EventHandler(this.MainMenu_LocationChanged);

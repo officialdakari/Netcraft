@@ -65,7 +65,7 @@ namespace Minecraft2D
             this.RichTextBox1.Location = new System.Drawing.Point(0, 0);
             this.RichTextBox1.Name = "RichTextBox1";
             this.RichTextBox1.ReadOnly = true;
-            this.RichTextBox1.Size = new System.Drawing.Size(660, 427);
+            this.RichTextBox1.Size = new System.Drawing.Size(660, 429);
             this.RichTextBox1.TabIndex = 0;
             this.RichTextBox1.Text = "Шрифт Courier New\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\n1234567890" +
     " !@#$%^&*()_+ []{}\"\'|/.,`:;*?<>\n";
@@ -82,7 +82,6 @@ namespace Minecraft2D
             this._TextBox1.Name = "_TextBox1";
             this._TextBox1.Size = new System.Drawing.Size(523, 19);
             this._TextBox1.TabIndex = 1;
-            this._TextBox1.Text = "Hello";
             this._TextBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox1_KeyDown);
             // 
             // _Button1
@@ -102,14 +101,13 @@ namespace Minecraft2D
             // 
             // listBox1
             // 
-            this.listBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Right;
             this.listBox1.ForeColor = System.Drawing.Color.White;
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(659, 0);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(215, 457);
+            this.listBox1.Size = new System.Drawing.Size(215, 459);
             this.listBox1.TabIndex = 3;
             this.listBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDoubleClick);
             // 
@@ -170,11 +168,11 @@ namespace Minecraft2D
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(874, 457);
+            this.ClientSize = new System.Drawing.Size(874, 459);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.RichTextBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;

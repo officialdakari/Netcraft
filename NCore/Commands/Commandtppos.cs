@@ -5,15 +5,16 @@ namespace NCore
 {
     public class Commandtppos : Command
     {
-        public Commandtppos() : base("tppos", "Телепортирует Вас на заданные координаты [ТОЛЬКО ИГРОК]", "tppos <x> <y>")
+        public Commandtppos() : base("tppos", NCore.GetNCore().lang.get("commands.tppos.description"), "tppos <x> <y>")
         {
         }
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
+            NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
             if (!sender.GetAdmin())
             {
-                await sender.SendMessage("У Вас недостаточно прав!");
+                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
                 return true;
             }
 
@@ -25,10 +26,11 @@ namespace NCore
                     return true;
                 }
 
-                NetworkPlayer p = (NetworkPlayer)sender;
+                NetcraftPlayer p = (NetcraftPlayer)sender;
                 string x = args[0];
                 string y = args[1];
-                await NCore.GetNCore().SendCommandFeedback($"{p.Username} телепортирован на [{x}, {y}] ({NCore.DistanceBetweenPoint(NCore.Normalize(p.Position), NCore.Normalize(new System.Drawing.Point(Conversions.ToInteger(x), Conversions.ToInteger(y))))} блоков отсюда)", sender);
+                await NCore.GetNCore().SendCommandFeedback(lang.get("commands.tppos.success", x, y, NCore.DistanceBetweenPoint(NCore.Normalize(p.Position), NCore.Normalize(new System.Drawing.Point(Conversions.ToInteger(x), Conversions.ToInteger(y)))).ToString()), sender);
+                //await NCore.GetNCore().SendCommandFeedback($"{p.Username} телепортирован на [{x}, {y}] ({NCore.DistanceBetweenPoint(NCore.Normalize(p.Position), NCore.Normalize(new System.Drawing.Point(Conversions.ToInteger(x), Conversions.ToInteger(y))))} блоков отсюда)", sender);
                 await p.Teleport(Conversions.ToInteger(x) * 32, Conversions.ToInteger(y) * 32);
             }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 
@@ -110,7 +111,7 @@ namespace Minecraft2D
             }
         }
 
-        public void SetItemInHand(Image i, Image iflipped, string str)
+        public async Task SetItemInHand(Image i, Image iflipped, string str)
         {
             if (!Information.IsNothing(i))
                 R1.Image = i;

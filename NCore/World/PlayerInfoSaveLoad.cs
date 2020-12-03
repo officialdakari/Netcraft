@@ -5,7 +5,7 @@ namespace NCore
 {
     public class PlayerInfoSaveLoad
     {
-        public static string Save(NetworkPlayer arg0)
+        public static string Save(NetcraftPlayer arg0)
         {
             string data = "";
             foreach (var i in arg0.PlayerInventory.Items)
@@ -15,7 +15,7 @@ namespace NCore
             return data;
         }
 
-        public static void Load(NetworkPlayer arg0, string arg1)
+        public static void Load(NetcraftPlayer arg0, string arg1)
         {
             try
             {

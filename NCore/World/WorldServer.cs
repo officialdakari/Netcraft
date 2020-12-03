@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NCore
 {
@@ -11,50 +12,17 @@ namespace NCore
 
         public Block GetBlockAt(int x, int y)
         {
-            foreach (var block in Blocks)
-            {
-                if (block.Position.X == x)
-                {
-                    if (block.Position.Y == y)
-                    {
-                        return block;
-                    }
-                }
-            }
-
-            return null;
+            return Blocks.Where(b => b.Position.X == x && b.Position.Y == y).ToArray()[0];
         }
 
         public Block GetBlockAt(System.Drawing.Point point)
         {
-            foreach (var block in Blocks)
-            {
-                if (block.Position.X == point.X)
-                {
-                    if (block.Position.Y == point.Y)
-                    {
-                        return block;
-                    }
-                }
-            }
-
-            return null;
+            return Blocks.Where(b => b.Position == point).ToArray()[0];
         }
 
         public BlockChest GetChestAt(System.Drawing.Point point)
         {
-            foreach (var block in Chests)
-            {
-                if (block.Position.X == point.X)
-                {
-                    if (block.Position.Y == point.Y)
-                    {
-                        return block;
-                    }
-                }
-            }
-
-            return null;
+            return Chests.Where(b => b.Position == point).ToArray()[0];
         }
 
         public WorldServer()

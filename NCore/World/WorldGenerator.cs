@@ -101,7 +101,7 @@ namespace NCore
                         }
                         else
                         {
-                            world.Blocks.Add(new Block(new Point(i, o), EnumBlockType.GRASS_BLOCK, false, false));
+                            world.Blocks.Add(new Block(new Point(i, o), EnumBlockType.SNOWY_GRASS_BLOCK, false, false));
                         }
                     }
 

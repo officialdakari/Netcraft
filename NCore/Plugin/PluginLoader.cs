@@ -14,7 +14,10 @@ namespace NCore
             {
                 var p = Assembly.LoadFrom(path);
                 Plugin pl = ((Plugin)GetObject(p, "Plugin"));
-                pl.Create();
+                if(pl.Create().Assembly.FullName != p.FullName)
+                {
+                    NCore.GetNCore().Log($"Not indentical assemblies (plugin: '{path}'); please contact plugin developer", "WARNING");
+                }
                 pl.Assembly = p;
                 Plugins.Add(pl);
                 return pl;

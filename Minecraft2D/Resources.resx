@@ -373,4 +373,55 @@
   <data name="end_stone" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\end_stone.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="grass_block_snow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\grass_block_snow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fire_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\fire_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="flint_and_steel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\flint_and_steel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="logoNC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\logoNC.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="snowylogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\snowylogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bone_meal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\bone_meal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bread" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\bread.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheat" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wheat.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheat_seeds" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wheat_seeds.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheat_stage0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wheat_stage0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheat_stage1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wheat_stage1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheat_stage2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wheat_stage2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheat_stage3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wheat_stage3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheat_stage4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wheat_stage4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheat_stage5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wheat_stage5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheat_stage6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wheat_stage6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wheat_stage7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wheat_stage7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

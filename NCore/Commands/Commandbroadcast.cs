@@ -11,9 +11,10 @@ namespace NCore
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
+            NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
             if (!sender.GetAdmin())
             {
-                await sender.SendMessage("У Вас недостаточно прав!");
+                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
                 return true;
             }
 

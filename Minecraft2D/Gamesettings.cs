@@ -56,7 +56,7 @@ namespace Minecraft2D
             e.Cancel = true;
             Hide();
             Form1.GetInstance().Location = Location;
-            if (My.MyProject.Forms.Form1.IsOfficialServer)
+            if (My.MyProject.Forms.Form1.IsSingleplayer)
                 ProcessSuspend.ResumeProcess(My.MyProject.Forms.Form1.ServerProcess);
             My.MyProject.Forms.Form1.Ticker.Start();
         }

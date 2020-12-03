@@ -21,7 +21,7 @@ namespace NCore
                 try
                 {
                     var m = Enum.Parse(typeof(Material), args[0].ToUpper());
-                    NetworkPlayer p = (NetworkPlayer)sender;
+                    NetcraftPlayer p = (NetcraftPlayer)sender;
                     await p.Craft((Material)m);
                     await p.Chat("Crafted!");
                 }

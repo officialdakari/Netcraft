@@ -146,7 +146,7 @@ namespace NCore.netcraft
             {
                 internal static StringCollection field_a = new StringCollection();
                 private static List<Command> field_b = new List<Command>();
-                internal static List<NetworkPlayer> clientList = new List<NetworkPlayer>();
+                internal static List<NetcraftPlayer> clientList = new List<NetcraftPlayer>();
 
                 public static CommandSender ConsoleCommandSender { get; private set; } = new CommandSender("Server", true);
 
@@ -188,7 +188,7 @@ namespace NCore.netcraft
                     {
                         if ((client.Username.ToLower() ?? "") == (a.ToLower() ?? ""))
                         {
-                            await client.Kick(NCore.GetNCore().lang.get("error.banned"));
+                            client.Kick(NCore.GetNCore().lang.get("error.banned"));
                         }
                     }
 
@@ -223,11 +223,6 @@ namespace NCore.netcraft
 
                 public static async Task Broadcast(string m)
                 {
-                    // accessMainForm.Log("Broadcast: " + m)
-                    // accessMainForm.Send("chat?" + m)
-                    // accessMainForm(m)
-                    // My.Forms.Form1.Send("chat?" + m)
-                    // My.Forms.Form1.Log(m)
                     dobc?.Invoke(m);
                 }
 
@@ -240,7 +235,7 @@ namespace NCore.netcraft
                     return NCore.GetNCore().World;
                 }
 
-                public static NetworkPlayer GetPlayer(string arg0)
+                public static NetcraftPlayer GetPlayer(string arg0)
                 {
                     foreach (var p in clientList)
                     {
@@ -253,9 +248,9 @@ namespace NCore.netcraft
                     return null;
                 }
 
-                public static List<NetworkPlayer> GetOnlinePlayers()
+                public static List<NetcraftPlayer> GetOnlinePlayers()
                 {
-                    var s = new List<NetworkPlayer>();
+                    var s = new List<NetcraftPlayer>();
                     foreach (var p in clientList)
                         s.Add(p);
                     return s;

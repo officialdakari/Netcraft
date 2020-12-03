@@ -73,6 +73,26 @@ namespace Minecraft2D.My.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap bone_meal {
+            get {
+                object obj = ResourceManager.GetObject("bone_meal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap bread {
+            get {
+                object obj = ResourceManager.GetObject("bread", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap bucket {
             get {
                 object obj = ResourceManager.GetObject("bucket", resourceCulture);
@@ -283,6 +303,26 @@ namespace Minecraft2D.My.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap fire_0 {
+            get {
+                object obj = ResourceManager.GetObject("fire_0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap flint_and_steel {
+            get {
+                object obj = ResourceManager.GetObject("flint_and_steel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap furnace_front_off {
             get {
                 object obj = ResourceManager.GetObject("furnace_front_off", resourceCulture);
@@ -346,6 +386,16 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap gold_ore {
             get {
                 object obj = ResourceManager.GetObject("gold_ore", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap grass_block_snow {
+            get {
+                object obj = ResourceManager.GetObject("grass_block_snow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -523,6 +573,16 @@ namespace Minecraft2D.My.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap logoNC {
+            get {
+                object obj = ResourceManager.GetObject("logoNC", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap menubackground {
             get {
                 object obj = ResourceManager.GetObject("menubackground", resourceCulture);
@@ -656,6 +716,16 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap SANDBLOCK {
             get {
                 object obj = ResourceManager.GetObject("SANDBLOCK", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap snowylogo {
+            get {
+                object obj = ResourceManager.GetObject("snowylogo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -816,6 +886,106 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap water_still {
             get {
                 object obj = ResourceManager.GetObject("water_still", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wheat {
+            get {
+                object obj = ResourceManager.GetObject("wheat", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wheat_seeds {
+            get {
+                object obj = ResourceManager.GetObject("wheat_seeds", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wheat_stage0 {
+            get {
+                object obj = ResourceManager.GetObject("wheat_stage0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wheat_stage1 {
+            get {
+                object obj = ResourceManager.GetObject("wheat_stage1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wheat_stage2 {
+            get {
+                object obj = ResourceManager.GetObject("wheat_stage2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wheat_stage3 {
+            get {
+                object obj = ResourceManager.GetObject("wheat_stage3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wheat_stage4 {
+            get {
+                object obj = ResourceManager.GetObject("wheat_stage4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wheat_stage5 {
+            get {
+                object obj = ResourceManager.GetObject("wheat_stage5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wheat_stage6 {
+            get {
+                object obj = ResourceManager.GetObject("wheat_stage6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wheat_stage7 {
+            get {
+                object obj = ResourceManager.GetObject("wheat_stage7", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

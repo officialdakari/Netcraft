@@ -7,7 +7,7 @@ namespace NCore.netcraft.server.api
         public class BlockBreakEventArgs
         {
             private Block a;
-            private NetworkPlayer b;
+            private NetcraftPlayer b;
             private bool c;
 
             public Block GetBlock()
@@ -15,7 +15,7 @@ namespace NCore.netcraft.server.api
                 return a;
             }
 
-            public NetworkPlayer GetPlayer()
+            public NetcraftPlayer GetPlayer()
             {
                 return b;
             }
@@ -30,7 +30,7 @@ namespace NCore.netcraft.server.api
                 return c;
             }
 
-            internal BlockBreakEventArgs(NetworkPlayer p, Block b)
+            internal BlockBreakEventArgs(NetcraftPlayer p, Block b)
             {
                 this.b = p;
                 a = b;
@@ -41,7 +41,7 @@ namespace NCore.netcraft.server.api
         public class BlockPlaceEventArgs
         {
             private Block a;
-            private NetworkPlayer b;
+            private NetcraftPlayer b;
             private bool c;
 
             public Block GetBlock()
@@ -49,7 +49,7 @@ namespace NCore.netcraft.server.api
                 return a;
             }
 
-            public NetworkPlayer GetPlayer()
+            public NetcraftPlayer GetPlayer()
             {
                 return b;
             }
@@ -64,7 +64,7 @@ namespace NCore.netcraft.server.api
                 return c;
             }
 
-            internal BlockPlaceEventArgs(NetworkPlayer p, Block b)
+            internal BlockPlaceEventArgs(NetcraftPlayer p, Block b)
             {
                 this.b = p;
                 a = b;
@@ -75,7 +75,7 @@ namespace NCore.netcraft.server.api
         public class PlayerChatEventArgs
         {
             private string a;
-            private NetworkPlayer b;
+            private NetcraftPlayer b;
             private bool c;
 
             public string GetMessage()
@@ -83,7 +83,7 @@ namespace NCore.netcraft.server.api
                 return a;
             }
 
-            public NetworkPlayer GetPlayer()
+            public NetcraftPlayer GetPlayer()
             {
                 return b;
             }
@@ -98,7 +98,7 @@ namespace NCore.netcraft.server.api
                 return c;
             }
 
-            internal PlayerChatEventArgs(NetworkPlayer p, string m)
+            internal PlayerChatEventArgs(NetcraftPlayer p, string m)
             {
                 b = p;
                 a = m;
@@ -110,7 +110,7 @@ namespace NCore.netcraft.server.api
         {
             private Point a;
             private Point b;
-            private NetworkPlayer c;
+            private NetcraftPlayer c;
             private bool d;
 
             public Point GetFrom()
@@ -123,7 +123,7 @@ namespace NCore.netcraft.server.api
                 return b;
             }
 
-            public NetworkPlayer GetPlayer()
+            public NetcraftPlayer GetPlayer()
             {
                 return c;
             }
@@ -138,7 +138,7 @@ namespace NCore.netcraft.server.api
                 d = arg0;
             }
 
-            public PlayerMoveEventArgs(Point from, Point mTo, NetworkPlayer p)
+            public PlayerMoveEventArgs(Point from, Point mTo, NetcraftPlayer p)
             {
                 d = false;
                 a = from;
@@ -149,14 +149,14 @@ namespace NCore.netcraft.server.api
 
         public class PlayerLoginEventArgs
         {
-            private NetworkPlayer player;
+            private NetcraftPlayer player;
 
-            public PlayerLoginEventArgs(NetworkPlayer player)
+            public PlayerLoginEventArgs(NetcraftPlayer player)
             {
                 this.player = player;
             }
 
-            public NetworkPlayer GetPlayer()
+            public NetcraftPlayer GetPlayer()
             {
                 return player;
             }
@@ -164,14 +164,14 @@ namespace NCore.netcraft.server.api
 
         public class PlayerJoinEventArgs
         {
-            private NetworkPlayer player;
+            private NetcraftPlayer player;
 
-            public NetworkPlayer GetPlayer()
+            public NetcraftPlayer GetPlayer()
             {
                 return player;
             }
 
-            public PlayerJoinEventArgs(NetworkPlayer p)
+            public PlayerJoinEventArgs(NetcraftPlayer p)
             {
                 player = p;
             }
@@ -179,14 +179,14 @@ namespace NCore.netcraft.server.api
 
         public class PlayerLeaveEventArgs
         {
-            private NetworkPlayer player;
+            private NetcraftPlayer player;
 
-            public NetworkPlayer GetPlayer()
+            public NetcraftPlayer GetPlayer()
             {
                 return player;
             }
 
-            public PlayerLeaveEventArgs(NetworkPlayer p)
+            public PlayerLeaveEventArgs(NetcraftPlayer p)
             {
                 player = p;
             }
@@ -194,12 +194,12 @@ namespace NCore.netcraft.server.api
 
         public class PlayerHealthEventArgs
         {
-            private NetworkPlayer a;
+            private NetcraftPlayer a;
             private int b;
             private int c;
             private bool d;
 
-            public NetworkPlayer GetPlayer()
+            public NetcraftPlayer GetPlayer()
             {
                 return a;
             }
@@ -224,7 +224,7 @@ namespace NCore.netcraft.server.api
                 d = arg0;
             }
 
-            public PlayerHealthEventArgs(NetworkPlayer p, int oldHealth, int newHealth)
+            public PlayerHealthEventArgs(NetcraftPlayer p, int oldHealth, int newHealth)
             {
                 a = p;
                 b = oldHealth;
@@ -235,12 +235,12 @@ namespace NCore.netcraft.server.api
 
         public class PlayerDeathEventArgs
         {
-            private NetworkPlayer a;
+            private NetcraftPlayer a;
             private string b;
             private bool c;
             private Point d;
 
-            public PlayerDeathEventArgs(NetworkPlayer a, string b, Point d)
+            public PlayerDeathEventArgs(NetcraftPlayer a, string b, Point d)
             {
                 this.a = a;
                 this.b = b;
@@ -258,7 +258,7 @@ namespace NCore.netcraft.server.api
                 return b;
             }
 
-            public NetworkPlayer GetPlayer()
+            public NetcraftPlayer GetPlayer()
             {
                 return a;
             }
@@ -286,11 +286,11 @@ namespace NCore.netcraft.server.api
 
         public class BlockRightClickEvent
         {
-            private NetworkPlayer a;
+            private NetcraftPlayer a;
             private Block b;
             private bool c;
 
-            public BlockRightClickEvent(NetworkPlayer a, Block b)
+            public BlockRightClickEvent(NetcraftPlayer a, Block b)
             {
                 this.a = a;
                 this.b = b;
@@ -307,7 +307,7 @@ namespace NCore.netcraft.server.api
                 return c;
             }
 
-            public NetworkPlayer GetPlayer()
+            public NetcraftPlayer GetPlayer()
             {
                 return a;
             }

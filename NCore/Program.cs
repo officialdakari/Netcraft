@@ -15,6 +15,8 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using NCore.netcraft.server.api;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
 
 namespace NCore
 {
@@ -26,6 +28,8 @@ namespace NCore
             foreach (var a in cfg.Split(Constants.vbLf))
             {
                 var b = a.Split("=");
+                if (a.Length == 0) continue;
+                if (a[0] == '#') continue;
                 if ((b[0].ToLower() ?? "") == (var.ToLower() ?? ""))
                 {
                     return string.Join("=", b.Skip(1).ToArray());
@@ -36,7 +40,37 @@ namespace NCore
         }
     }
 
-    class NCore
+    public class Context
+    {
+        public NCore nCore { get; private set; }
+        
+        public Context(params object[] opt)
+        {
+            nCore = (NCore)opt[0];
+        }
+
+        public void Print(string message, string t = "INFO")
+        {
+            if (t != "INFO" &&
+                t != "WARNING" &&
+                t != "ERROR") t = "INFO";
+            nCore.Log(message, t);
+        }
+
+        public delegate void OnStartedEventHandler();
+        public event OnStartedEventHandler ServerStarted;
+        internal void started()
+        {
+            ServerStarted?.Invoke();
+        }
+
+        public async Task ExecuteScript(string name)
+        {
+            await nCore.StartScript(name);
+        }
+    }
+
+    public partial class NCore
     {
         public class Lang
         {
@@ -62,23 +96,25 @@ namespace NCore
             internal string get(string i)
             {
                 if (!formats.ContainsKey(i)) return i;
-                return formats[i].ToString().Replace("&CRLF", "\r\n");
+                return formats[i].ToString().Replace("&CRLF", "\r\n").Replace("&CR", "\r");
             }
 
             internal string get(string i, params string[] args)
             {
+                if (args == null) return get(i);
                 if (!formats.ContainsKey(i)) return i;
-                return String.Format(formats[i].ToString(), args).Replace("&CRLF", "\r\n");
+                return String.Format(formats[i].ToString(), args).Replace("&CRLF", "\r\n").Replace("&CR", "\r");
             }
 
         }
+
         internal WorldServer World { get; set; }
 
         private TcpListener Listning;
-        internal readonly List<NetworkPlayer> players = new List<NetworkPlayer>();
-        private NetworkPlayer pClient;
+        internal readonly List<NetcraftPlayer> players = new List<NetcraftPlayer>();
+        private NetcraftPlayer pClient;
         // Dim npc As EntityPlayerNPC = New EntityPlayerNPC
-        private readonly object worldfile = "./world.txt";
+        private readonly object worldfile = "./world.json";
         private readonly object configfile = "./server.properties";
         private readonly SaveLoad sv = new SaveLoad();
         internal int maxPlayers = 20;
@@ -109,6 +145,7 @@ namespace NCore
             allowQuery = Conversions.ToInteger(Config.GetValue("allow-query", nccfg, "0"));
             commandsConsoleOnly = Conversions.ToInteger(Config.GetValue("commands-console-only", nccfg, "0"));
             enableAuth = Conversions.ToInteger(Config.GetValue("enable-auth", cfg, "0"));
+            lang = Lang.FromFile($"./lang/{Config.GetValue("def-lang", cfg, "english")}.txt");
 
             if (isIllegalValue(everyBodyAdmin, 0, 1)) CrashReport(new Exception("Illegal property value"));
             if (isIllegalValue(allowFlight, 0, 1)) CrashReport(new Exception("Illegal property value"));
@@ -117,6 +154,52 @@ namespace NCore
             if (isIllegalValue(enableAuth, 0, 1)) CrashReport(new Exception("Illegal property value"));
 
         }
+
+        public string GetApplicationRoot()
+        {
+            //var exePath = Path.GetDirectoryName(System.Reflection
+            //                  .Assembly.GetExecutingAssembly().CodeBase);
+            //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
+            //var appRoot = appPathMatcher.Match(exePath).Value;
+            return $"{Directory.GetCurrentDirectory()}\\NCore.dll";
+        }
+
+        public async Task LoadScripts()
+        {
+            ctx = new Context(this);
+            Log(GetApplicationRoot());
+            foreach(string d in Directory.GetDirectories("./scripts"))
+            {
+                string n = d.Split(Path.DirectorySeparatorChar).Last() + Path.DirectorySeparatorChar + "main";
+                await StartScript(n);
+            }
+        }
+
+        public async Task StartScript(string name)
+        {
+            string i = $@"./scripts/{name}.cs";
+            string n = i.Split('/', '\\').Last().Split('.')[0];
+            ScriptOptions a = ScriptOptions.Default;
+            a = a.AddReferences(new string[] { "System", "System.Core", "System.Linq", "System.IO", "System.Text", "System.Threading", "System.Threading.Tasks",
+                GetApplicationRoot()});
+            var script = await CSharpScript.RunAsync($@"Context ctx = global::NCore.NCore.GetNCore().ctx;void Log(string message, string t = ""INFO"") {{ ctx.Print(""[{n}] "" + message, t); }}", a.WithImports("System", "System.IO", "System.Net", "System.Linq", "NCore", "NCore.netcraft.server.api", "NCore.netcraft.server.api.events"));
+            await script.ContinueWithAsync(File.ReadAllText(i));
+        }
+        Dictionary<string, ScriptState<object>> scripts = new Dictionary<string, ScriptState<object>>();
+        public async Task Eval(string scriptt, NetcraftPlayer p)
+        {
+            ScriptOptions a = ScriptOptions.Default;
+            a = a.AddReferences(new string[] { "System", "System.Core", "System.Linq", "System.IO", "System.Text", "System.Threading", "System.Threading.Tasks",
+                GetApplicationRoot()});
+            var script = await CSharpScript.RunAsync($@"private readonly NetcraftPlayer self = Netcraft.GetPlayer(""{p.Username}"");Context ctx = global::NCore.NCore.GetNCore().ctx;void Log(string message, string t = ""INFO"") {{ ctx.Print(""[EvalScript] "" + message, t); }}", a.WithImports("System", "System.IO", "System.Net", "System.Linq", "NCore", "NCore.netcraft.server.api", "NCore.netcraft.server.api.events"));
+            if(!scripts.ContainsKey(p.Username))
+            {
+                scripts.Add(p.Username, script);
+            }
+            await scripts[p.Username].ContinueWithAsync(scriptt, a);
+        }
+
+        public Context ctx;
 
         public void OnCrash(object sender, ThreadExceptionEventArgs e)
         {
@@ -129,7 +212,7 @@ namespace NCore
             if(b == null)
             {
                 World.Blocks.Add(new Block(position, type, bg, unbreakable));
-                foreach(NetworkPlayer n in players)
+                foreach(NetcraftPlayer n in players)
                 {
                     await n.SendBlockChange(position, type, false, pq, bg);
                 }
@@ -144,7 +227,7 @@ namespace NCore
             if (b == null)
             {
                 World.Blocks.Remove(b);
-                foreach (NetworkPlayer n in players)
+                foreach (NetcraftPlayer n in players)
                 {
                     await n.Send($"removeblock?{position.X.ToString()}?{position.Y.ToString()}");
                 }
@@ -163,13 +246,10 @@ namespace NCore
             Netcraft.AddCommand(new Commandtoggleadmin());
             Netcraft.AddCommand(new Commandkick());
             Netcraft.AddCommand(new Commandkill());
-            Netcraft.AddCommand(new Commandtogglespectator());
             Netcraft.AddCommand(new Commandgive());
-            Netcraft.AddCommand(new Commandnmc());
             Netcraft.AddCommand(new Commandbroadcast());
             Netcraft.AddCommand(new Commandlist());
             Netcraft.AddCommand(new Commandstop());
-            Netcraft.AddCommand(new Commandmessage());
             Netcraft.AddCommand(new Commandsudo());
             Netcraft.AddCommand(new Commandtppos());
             Netcraft.AddCommand(new Commandversion());
@@ -187,7 +267,7 @@ namespace NCore
         }
 
         private Thread loopThread;
-        internal const string NETCRAFT_VERSION = "1.3-ALPHA";
+        internal const string NETCRAFT_VERSION = "0.1.3a";
         internal const string NCORE_VERSION = "0.4";
         int hungerDecreaseDelay = 200;
 
@@ -201,7 +281,7 @@ namespace NCore
                 if(hungerDecreaseDelay == 0)
                 {
                     hungerDecreaseDelay = 300;
-                    foreach(NetworkPlayer player in players)
+                    foreach(NetcraftPlayer player in players)
                     {
                         if(player.IsLoaded)
                         {
@@ -234,11 +314,22 @@ namespace NCore
                             Log($"Tree growth at [{b.Position.X.ToString() + ", " + b.Position.Y.ToString()}]");
                             break;
                         }
+                        if(b.Type == EnumBlockType.SEEDS)
+                        {
+                            b.Type = EnumBlockType.WHEAT;
+                            await Send($"removeblock?{b.Position.X.ToString()}?{b.Position.Y.ToString()}");
+                            await Task.Delay(30);
+                            foreach (NetcraftPlayer player in players)
+                                await player.SendBlockChange(b.Position, EnumBlockType.WHEAT, true, false, b.IsBackground);
+                            Log($"Wheat growth at [{b.Position.X.ToString() + ", " + b.Position.Y.ToString()}]");
+                            //await Send($"blockchange?{b.Position.X.ToString()}?{b.Position.Y.ToString()}?wheat7?non-solid{(b.IsBackground ? "?bg" : "?fg")}");
+                            break;
+                        }
                     }
                 }
                 try
                 {
-                    foreach (NetworkPlayer n in players)
+                    foreach (NetcraftPlayer n in players)
                     {
                         if (n.Hunger == 0) await n.Damage(5, "died");
                         foreach (var b in World.Blocks)
@@ -261,7 +352,12 @@ namespace NCore
                                     break;
                                 if (b.Type == EnumBlockType.LAVA)
                                 {
-                                    await n.Damage(10, "решил(а) поплавать в лаве");
+                                    await n.Damage(10, "deathmessage.lava");
+                                    break;
+                                }
+                                if (b.Type == EnumBlockType.FIRE)
+                                {
+                                    await n.Damage(10, "deathmessage.fire");
                                     break;
                                 }
 
@@ -427,22 +523,25 @@ namespace NCore
 
         public static void Main(string[] args)
         {
-            Console.WriteLine("Что Вы хотите сделать?\r\n1 - запустить сервер");
-            char result = Console.ReadKey().KeyChar;
-            Console.WriteLine("\b");
-            if(result == '1')
-            {
-                try
-                {
-                    NCore instance = new NCore();
-                    nCore = instance;
-                    instance.Server();
-                } catch(Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
+            NCore app = new NCore();
+            nCore = app;
+            app.Server();
+            //Console.WriteLine("Что Вы хотите сделать?\r\n1 - запустить сервер");
+            //char result = Console.ReadKey().KeyChar;
+            //Console.WriteLine("\b");
+            //if(result == '1')
+            //{
+            //    try
+            //    {
+            //        NCore instance = new NCore();
+            //        nCore = instance;
+            //        instance.Server();
+            //    } catch(Exception ex)
+            //    {
+            //        Console.WriteLine(ex.ToString());
+            //    }
                 
-            }
+            //}
         }
 
         static NCore nCore;
@@ -455,143 +554,157 @@ namespace NCore
 
         public async Task Server()
         {
-            ThreadAdd();
-            Log($"PID: {Process.GetCurrentProcess().Id} | Netcraft Version: {NETCRAFT_VERSION}");
-            Console.WriteLine("███╗░░██╗███████╗████████╗░█████╗░██████╗░░█████╗░███████╗████████╗\n████╗░██║██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝\n██╔██╗██║█████╗░░░░░██║░░░██║░░╚═╝██████╔╝███████║█████╗░░░░░██║░░░\n██║╚████║██╔══╝░░░░░██║░░░██║░░██╗██╔══██╗██╔══██║██╔══╝░░░░░██║░░░\n██║░╚███║███████╗░░░██║░░░╚█████╔╝██║░░██║██║░░██║██║░░░░░░░░██║░░░\n╚═╝░░╚══╝╚══════╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░░░░╚═╝░░░");
-            if (Thread.CurrentThread.ManagedThreadId != 1)
+            try
             {
-                CrashReport(new Exception("The main thread ID was not 1"));
-            }
-
-            lang = Lang.FromFile("./lang.txt");
-
-            Log(lang.get("server.starting"));
-
-            Log("This is information");
-            Log("WARNING!", "WARNING");
-            Log("SEVERE!!!!", "SEVERE");
-            Log("ERRROROORR!!!!!!!!!", "ERROR");
-            loopThread = new Thread(ThreadLoop);
-            loopThread.Name = "Loop";
-            loopThread.Start();
-            threadWatchdog = new Thread(watchdogThreadLoop);
-            threadWatchdog.Start();
-            Thread.CurrentThread.Name = "Main";
-            
-            LoadBanlist();
-            foreach (var i in File.ReadAllText("./auth.txt", Encoding.UTF8).Split(Constants.vbCrLf))
-            {
-                if (i.Length < 2)
-                    continue;
-                if (playerPasswords.ContainsKey(i.Split("=")[0]))
-                    continue;
-                playerPasswords.Add(i.Split("=")[0], i.Split("=").Last());
-            }
-            LoadConfig();
-            LoadCommands();
-            Netcraft.dobc += eventhandler_a;
-            
-            int pluginLoadErrors = 0;
-            int all = 0;
-            int pluginLoadSuccess = 0;
-            foreach (var s in Directory.GetFiles("./plugins"))
-            {
-                if (s.Split(".").Last() != "dll") continue;
-
-                all++;
-
-                var p = PluginManager.Load(s);
-                string result = p.OnLoad();
-                if (result != null)
+                ThreadAdd();
+                Log($"PID: {Process.GetCurrentProcess().Id} | Netcraft Version: {NETCRAFT_VERSION}");
+                Console.WriteLine("███╗░░██╗███████╗████████╗░█████╗░██████╗░░█████╗░███████╗████████╗\n████╗░██║██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝\n██╔██╗██║█████╗░░░░░██║░░░██║░░╚═╝██████╔╝███████║█████╗░░░░░██║░░░\n██║╚████║██╔══╝░░░░░██║░░░██║░░██╗██╔══██╗██╔══██║██╔══╝░░░░░██║░░░\n██║░╚███║███████╗░░░██║░░░╚█████╔╝██║░░██║██║░░██║██║░░░░░░░░██║░░░\n╚═╝░░╚══╝╚══════╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░░░░╚═╝░░░");
+                if (Thread.CurrentThread.ManagedThreadId != 1)
                 {
-                    pluginLoadErrors++;
-                    Log(lang.get("pluginloader.error", p.Name, result), "ERROR");
-                    PluginManager.Plugins.Remove(p);
-                    continue;
+                    CrashReport(new Exception("The main thread ID was not 1"));
                 }
 
-                Log(lang.get("pluginloader.success", p.Name));
-                pluginLoadSuccess++;
-            }
+                LoadConfig();
+                //lang = Lang.FromFile("./lang.txt");
 
-            if (File.Exists(Conversions.ToString(worldfile)))
-            {
-                World = sv.Load(File.ReadAllText(Conversions.ToString(worldfile), encoding: Encoding.UTF8));
-                List<Block> blocksToRemove = new List<Block>();
-                foreach(Block b in World.Blocks)
-                {
-                    if(b.Position.X > 64)
-                    {
-                        blocksToRemove.Add(b);
-                    }
-                    if(b.Position.Y > 17)
-                    {
-                        blocksToRemove.Add(b);
-                    }
-                    if(b.Type == EnumBlockType.CHEST && b.IsBackground)
-                    {
-                        b.IsBackground = false;
-                    }
-                }
-                foreach(Block b in blocksToRemove)
-                {
-                    World.Blocks.Remove(b);
-                }
-                if (blocksToRemove.Count > 0) Log(lang.get("info.removedblocks", blocksToRemove.Count.ToString()), "WARNING");
-                
-            }
-            else
-            {
-                World = WorldGenerator.Generate();
-                File.WriteAllText(Conversions.ToString(worldfile), sv.Save(World), Encoding.UTF8);
-            }
-            
-            Start();
+                Log(lang.get("server.starting"));
 
-            Log(lang.get("server.started"));
-            while (true)
-            {
-                string m = Console.ReadLine();
-                var args = m.Split(" ").Skip(1).ToArray();
-                string cmd = m.Split(" ")[0];
-                var toRun = default(Command);
-                foreach (var local_a in Netcraft.GetCommands())
+                Log("This is information");
+                Log("WARNING!", "WARNING");
+                Log("SEVERE!!!!", "SEVERE");
+                Log("ERRROROORR!!!!!!!!!", "ERROR");
+                loopThread = new Thread(ThreadLoop);
+                loopThread.Name = "Loop";
+                loopThread.Start();
+                threadWatchdog = new Thread(watchdogThreadLoop);
+                threadWatchdog.Start();
+                Thread.CurrentThread.Name = "Main";
+
+                LoadBanlist();
+                foreach (var i in File.ReadAllText("./auth.txt", Encoding.UTF8).Split(Constants.vbCrLf))
                 {
-                    if ((local_a.Name.ToLower() ?? "") == (cmd.ToLower() ?? ""))
+                    if (i.Length < 2)
+                        continue;
+                    if (playerPasswords.ContainsKey(i.Split("=")[0]))
+                        continue;
+                    playerPasswords.Add(i.Split("=")[0], i.Split("=").Last());
+                }
+                LoadCommands();
+                Netcraft.dobc += eventhandler_a;
+
+                int pluginLoadErrors = 0;
+                int all = 0;
+                int pluginLoadSuccess = 0;
+                foreach (var s in Directory.GetFiles("./plugins"))
+                {
+                    if (s.Split(".").Last() != "dll") continue;
+
+                    all++;
+
+                    var p = PluginManager.Load(s);
+                    string result = p.OnLoad();
+                    if (result != null)
                     {
-                        toRun = local_a;
-                        break;
+                        pluginLoadErrors++;
+                        Log(lang.get("pluginloader.error", p.Name, result), "ERROR");
+                        PluginManager.Plugins.Remove(p);
+                        continue;
                     }
-                    if (local_a.Aliases.Contains(cmd.ToLower()))
-                    {
-                        toRun = local_a;
-                        break;
-                    }
+
+                    Log(lang.get("pluginloader.success", p.Name));
+                    pluginLoadSuccess++;
                 }
 
-                if (IsNothing(toRun))
+                if (File.Exists(Conversions.ToString(worldfile)))
                 {
-                    Log("Неизвестная команда.");
+                    World = sv.Load(File.ReadAllText(Conversions.ToString(worldfile)));
+                    List<Block> blocksToRemove = new List<Block>();
+                    foreach (Block b in World.Blocks)
+                    {
+                        if (b.Position.X > 64)
+                        {
+                            blocksToRemove.Add(b);
+                        }
+                        if (b.Position.Y > 17)
+                        {
+                            blocksToRemove.Add(b);
+                        }
+                        if (b.Type == EnumBlockType.CHEST && b.IsBackground)
+                        {
+                            b.IsBackground = false;
+                        }
+                    }
+                    foreach (Block b in blocksToRemove)
+                    {
+                        World.Blocks.Remove(b);
+                    }
+                    if (blocksToRemove.Count > 0) Log(lang.get("info.removedblocks", blocksToRemove.Count.ToString()), "WARNING");
+
                 }
                 else
                 {
-                    bool y;
-                    try
+                    World = WorldGenerator.Generate();
+                    File.WriteAllText(Conversions.ToString(worldfile), sv.Save(World));
+                }
+
+                await LoadScripts();
+
+                Start();
+
+                Log(lang.get("server.started"));
+                ctx.started();
+                while (true)
+                {
+                    string m = Console.ReadLine();
+                    var args = m.Split(" ").Skip(1).ToArray();
+                    string cmd = m.Split(" ")[0];
+                    var toRun = default(Command);
+                    foreach (var local_a in Netcraft.GetCommands())
                     {
-                        y = toRun.OnCommand(Netcraft.ConsoleCommandSender, toRun, args, m).GetAwaiter().GetResult();
-                    }
-                    catch (Exception ex)
-                    {
-                        Log(lang.get("command.console.error", ex.ToString()));
-                        y = true;
-                        break;
+                        if ((local_a.Name.ToLower() ?? "") == (cmd.ToLower() ?? ""))
+                        {
+                            toRun = local_a;
+                            break;
+                        }
+                        if (local_a.Aliases.Contains(cmd.ToLower()))
+                        {
+                            toRun = local_a;
+                            break;
+                        }
                     }
 
-                    if (!y)
+                    if (IsNothing(toRun))
                     {
-                        Log(lang.get("command.usage", toRun.Usage));
+                        Log(lang.get("command.unknown"));
+                    }
+                    else
+                    {
+                        bool y;
+                        try
+                        {
+                            y = toRun.OnCommand(Netcraft.ConsoleCommandSender, toRun, args, m).GetAwaiter().GetResult();
+                        }
+                        catch (CommandException ex)
+                        {
+                            Log(lang.get("commands.generic.error", ex.GetType().ToString(), ex.Message));
+                            return;
+                        }
+                        catch (Exception ex)
+                        {
+                            Log(lang.get("command.console.error", ex.ToString()));
+                            y = true;
+                            break;
+                        }
+
+                        if (!y)
+                        {
+                            Log(lang.get("command.usage", toRun.Usage));
+                        }
                     }
                 }
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -639,6 +752,41 @@ namespace NCore
             }
         }
 
+        public async Task BroadcastChatTranslation(string translationKey, string[] format, string except = null, bool readyClientsOnly = false)
+        {
+            ThreadAdd();
+            for (int x = 0, loopTo = players.Count - 1; x <= loopTo; x++)
+            {
+                try
+                {
+                    if (except != null)
+                    {
+                        if ((players[x].Username ?? "") == (except ?? ""))
+                            continue;
+                    }
+                    if (readyClientsOnly)
+                    {
+                        if (players[x].IsLoaded)
+                            await players[x].Chat(players[x].lang.get(translationKey, format));
+                    }
+                    else
+                    {
+                        await players[x].Chat(players[x].lang.get(translationKey, format));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        players.RemoveAt(x);
+                    }
+                    catch (Exception ex1)
+                    {
+                    }
+                }
+            }
+        }
+
         public void SaveBanlist()
         {
             ThreadAdd();
@@ -662,7 +810,7 @@ namespace NCore
             {
                 if (string.IsNullOrEmpty(Thread.CurrentThread.Name))
                     Thread.CurrentThread.Name = "Network Join";
-                pClient = new NetworkPlayer(Listning.EndAcceptTcpClient(ar));
+                pClient = new NetcraftPlayer(Listning.EndAcceptTcpClient(ar));
                 pClient.a += MessageReceived;
                 pClient.b += (_) => NCore.GetNCore().ClientExited(pClient, false);
                 players.Add(pClient);
@@ -742,7 +890,7 @@ namespace NCore
             {
                 try
                 {
-                    await players[i].Kick(m);
+                    players[i].Kick(m);
                 } catch(NullReferenceException)
                 {
 
@@ -761,7 +909,7 @@ namespace NCore
         private Hashtable playerPasswords = new Hashtable();
         private StringCollection loggedIn = new StringCollection();
 
-        public async void MessageReceived(string str, NetworkPlayer n)
+        public async void MessageReceived(string str, NetcraftPlayer n)
         {
             if (string.IsNullOrEmpty(Thread.CurrentThread.Name))
                 Thread.CurrentThread.Name = "Network Packet";
@@ -793,28 +941,33 @@ namespace NCore
                     players.Remove(n);
                     return;
                 }
-
+                Lang lang = n.lang;
+                if(str.Length < 1)
+                {
+                    n.Kick("Too short packet.");
+                    return;
+                }
                 if (a[0] == "setname")
                 {
                     if (!string.IsNullOrEmpty(n.Username))
                     {
                         return;
                     }
-
-                    Log(lang.get("console.joined", a[1], n.GetIp()));
+                    n.lang = Lang.FromFile("./lang/" + a[2] + ".txt");
+                    lang = n.lang;
+                    Log(this.lang.get("console.joined", a[1], n.GetIp()));
                     if (maxPlayers + 1 == players.Count)
                     {
-                        await n.Kick("Сервер заполнен!");
+                        n.Kick("Сервер заполнен!");
                         return;
                     }
 
                     foreach (var netplayer in players)
                     {
-                        if ((netplayer.UUID ?? "") == (n.UUID ?? ""))
-                            continue;
-                        if ((netplayer.Username ?? "") == (a[1] ?? ""))
+                        if (netplayer.UUID == n.UUID) continue;
+                        if (netplayer.Username == a[1])
                         {
-                            await n.Kick(lang.get("error.alreadyplaying"));
+                            n.Kick(lang.get("error.alreadyplaying"));
                             return;
                         }
                     }
@@ -823,15 +976,16 @@ namespace NCore
 
                     n.Username = a[1];
                     n.senderName = n.Username;
+
                     if (!Regex.Match(n.Username, "^[a-zA-Z0-9_]*").Success)
                     {
-                        await n.Kick(lang.get("error.invalidnick"));
+                        n.Kick(lang.get("error.invalidnick"));
                         return;
                     }
 
                     if (Netcraft.IsBanned(n.Username))
                     {
-                        await n.Kick(lang.get("error.banned"));
+                        n.Kick(lang.get("error.banned"));
                         return;
                     }
 
@@ -861,8 +1015,8 @@ namespace NCore
                         await n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_SHOVEL, 1));
                     }
 
-                    Log(lang.get("player.joined", a[1]));
-                    await Chat(lang.get("player.joined", a[1]));
+                    Log(this.lang.get("player.joined", a[1]));
+                    await Chat(this.lang.get("player.joined", a[1]));
 
 
                     // n.Send("blockchange?500?50?Red")
@@ -870,7 +1024,7 @@ namespace NCore
 
                 if (string.IsNullOrEmpty(n.Username))
                 {
-                    await n.Kick("You can't send another packets");
+                    n.Kick("You can't send another packets");
                     return;
                 }
 
@@ -966,6 +1120,23 @@ namespace NCore
                     }
                 }
 
+                if(a[0] == "eval")
+                {
+                    try
+                    {
+                        string m = string.Join('?', a.Skip(1).ToArray());
+                        if(!n.IsAdmin)
+                        {
+                            await n.Message("No permissions", 2);
+                            return;
+                        }
+                        await Eval(m, n);
+                    } catch(Exception ex)
+                    {
+                        await n.Send("evalresult?" + ex.ToString().Replace("\r\n", "\r").Replace("\n", "\r"));
+                    }
+                }
+
                 if(a[0] == "splititems")
                 {
                     ItemStack toSplit = null;
@@ -1022,10 +1193,10 @@ namespace NCore
                                 if (n.MovedInAir == 50)
                                 {
                                     n.AntiFlyWarnings++;
-                                    Log(lang.get("move.wrong", n.Username, "Flight", v.X, v.Y), "WARNING");
+                                    Log(lang.get("move.wrong", n.Username, "Flight", v.X.ToString(), v.Y.ToString()), "WARNING");
                                     if(n.AntiFlyWarnings == 10)
                                     {
-                                        await n.Kick("Flying is not enabled on this server");
+                                        n.Kick("Flying is not enabled on this server");
                                     }
                                     return;
                                 }
@@ -1040,6 +1211,8 @@ namespace NCore
                                 continue;
                             if (bpos.Y > n.Position.Y + 85)
                                 continue;
+                            if (n.NoClip)
+                                break;
                             if (brec.IntersectsWith(n.PlayerRectangle))
                             {
                                 if (b.IsBackground)
@@ -1048,11 +1221,15 @@ namespace NCore
                                     continue;
                                 if (b.Type == EnumBlockType.LAVA)
                                     continue;
+                                if (b.Type == EnumBlockType.FIRE)
+                                    continue;
                                 if (b.Type == EnumBlockType.SAPLING)
                                     continue;
-                                if (n.NoClip)
-                                    break;
-                                Log(lang.get("move.wrong", n.Username, "Into block", "Noclip", "Phase"), "WARNING");
+                                if (b.Type == EnumBlockType.SEEDS)
+                                    continue;
+                                if (b.Type == EnumBlockType.WHEAT)
+                                    continue;
+                                Log(lang.get("move.wrong", n.Username, "Into block", v.X.ToString(), v.Y.ToString()), "WARNING");
                                 if (v.Y > 1)
                                 {
                                     await n.Teleport(n.Position.X, n.Position.Y - 2);
@@ -1113,7 +1290,7 @@ namespace NCore
 
                             if (n.FallDistance > 3 * 32)
                             {
-                                await n.Damage(n.FallDistance / 16 / 3, lang.get("deathmessage.fall"));
+                                await n.Damage(n.FallDistance / 16 / 3, "deathmessage.fall");
                                 noPosUpdate = true;
                             }
 
@@ -1129,7 +1306,7 @@ namespace NCore
                         return;
                     if (n.Position.Y > 619)
                     {
-                        await n.Damage(1, lang.get("deathmessage.out"));
+                        await n.Damage(1, "deathmessage.out");
                     }
 
                     await Send("updateplayerposition?" + n.Username + "?" + a[1] + "?" + a[2], n.Username);
@@ -1137,11 +1314,6 @@ namespace NCore
 
                 try
                 {
-
-                    // If a(0) = "craft" Then
-                    // Dim enumMaterial = [Enum].Parse(GetType(Material), a(1))
-                    // n.Craft(enumMaterial)
-                    // End If
                     if (a[0] == "chat")
                     {
                         string message = string.Join("?", a.Skip(1).ToArray());
@@ -1188,6 +1360,11 @@ namespace NCore
                             try
                             {
                                 y = await cmd.OnCommand(n, cmd, args, label);
+                            }
+                            catch(CommandException ex)
+                            {
+                                await n.SendMessage(lang.get("commands.generic.error", ex.GetType().ToString(), ex.Message));
+                                return;
                             }
                             catch (Exception ex)
                             {
@@ -1317,17 +1494,23 @@ namespace NCore
                         var block = World.GetBlockAt(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
                         if (block == null)
                         {
-                            await n.Kick("Internal server error occured.");
+                            n.Kick("Internal server error occured.");
                             return;
                         }
 
                         var ev = new netcraft.server.api.events.BlockRightClickEvent(n, block);
                         NCSApi.REBlockRightClickEvent(ev);
-                        if(n.SelectedItem.Type == Material.FOOD1)
+                        if(n.SelectedItem.Type == Material.COOKED_BEEF)
                         {
                             n.Saturation += 1;
-                            if (n.Hunger < 20) n.UpdateHunger(n.Hunger + 1);
-                            n.RemoveItem(Material.FOOD1, 1);
+                            if (n.Hunger < 20) n.UpdateHunger(n.Hunger + 3);
+                            n.RemoveItem(Material.COOKED_BEEF, 1);
+                        }
+                        if (n.SelectedItem.Type == Material.BREAD)
+                        {
+                            n.Saturation += 2;
+                            if (n.Hunger < 20) n.UpdateHunger(n.Hunger + 4);
+                            n.RemoveItem(Material.COOKED_BEEF, 1);
                         }
                         if (DistanceBetweenPoint(block.Position, Normalize(n.Position)) > 6) return;
                         if(block.Type == EnumBlockType.TNT)
@@ -1369,6 +1552,10 @@ namespace NCore
                                     if (DistanceBetween(pos.X, pos.Y, b.Position.X, b.Position.Y) > 6d)
                                     {
                                         ev.SetCancelled(true);
+                                        if (ev.GetCancelled())
+                                        {
+                                            await n.DoWarning("Unreachable block.");
+                                        }
                                         return;
                                     }
                                     if (ev.GetCancelled())
@@ -1470,6 +1657,11 @@ namespace NCore
                                         await n.Give(Material.DIRT);
                                     }
 
+                                    if (b.Type == EnumBlockType.WHEAT)
+                                    {
+                                        await n.Give(Material.WHEAT);
+                                    }
+
                                     if (b.Type == EnumBlockType.COBBLESTONE)
                                     {
                                         if (n.SelectedItem.Type == Material.WOODEN_PICKAXE)
@@ -1496,6 +1688,16 @@ namespace NCore
                                             await n.Give(Material.GOLD_BLOCK);
                                         if (n.SelectedItem.Type == Material.DIAMOND_PICKAXE)
                                             await n.Give(Material.GOLD_BLOCK);
+                                    }
+
+                                    if (b.Type == EnumBlockType.GRASS_BLOCK)
+                                    {
+                                        await n.Give(Material.GRASS_BLOCK, 1);
+                                    }
+
+                                    if (b.Type == EnumBlockType.SNOWY_GRASS_BLOCK)
+                                    {
+                                        await n.Give(Material.SNOWY_GRASS_BLOCK, 1);
                                     }
 
                                     if (b.Type == EnumBlockType.WOOD)
@@ -1599,12 +1801,24 @@ namespace NCore
                             return;
                         }
                         type = (EnumBlockType)Enum.Parse(typeof(EnumBlockType), n.SelectedItem.Type.ToString());
+                        if(type == EnumBlockType.SEEDS)
+                        {
+                            Block under = World.GetBlockAt(placeAt.X, placeAt.Y + 1);
+                            if (under == null || under.Type != EnumBlockType.DIRT)
+                            {
+                                return;
+                            }
+                        }
                         var b = new Block(placeAt, type, false, false);
                         var ev = new netcraft.server.api.events.BlockPlaceEventArgs(n, b);
                         NCSApi.REBlockPlaceEvent(ev);
                         if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d)
                         {
                             ev.SetCancelled(true);
+                            if(ev.GetCancelled())
+                            {
+                                await n.DoWarning("Unreachable block.");
+                            }
                             return;
                         }
                         if (ev.GetCancelled())
@@ -1616,6 +1830,12 @@ namespace NCore
                             Block c = World.GetBlockAt(placeAt.X, placeAt.Y + 1);
                             if (c == null) return;
                             if (c.Type != EnumBlockType.GRASS_BLOCK) return;
+                        }
+                        if(type == EnumBlockType.FIRE)
+                        {
+                            Block c = World.GetBlockAt(placeAt.X, placeAt.Y + 1);
+                            if (c == null) return;
+                            if (c.Type == EnumBlockType.FIRE) return;
                         }
                         foreach (var g in players)
                             await g.SendBlockChange(placeAt, type);
@@ -1666,6 +1886,10 @@ namespace NCore
                         if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d)
                         {
                             ev.SetCancelled(true);
+                            if (ev.GetCancelled())
+                            {
+                                await n.DoWarning("Unreachable block.");
+                            }
                             return;
                         }
                         if (ev.GetCancelled())
@@ -1699,7 +1923,7 @@ namespace NCore
                 {
                     if (a[0] == "pvp")
                     {
-                        var nd = default(NetworkPlayer);
+                        var nd = default(NetcraftPlayer);
                         foreach (var i in players)
                         {
                             if ((i.Username ?? "") == (a[1] ?? ""))
@@ -1710,13 +1934,13 @@ namespace NCore
 
                         if (IsNothing(nd))
                         {
-                            await n.Kick("Attempting to attack an invalid player");
+                            n.Kick("Attempting to attack an invalid player");
                             return;
                         }
 
                         if ((nd.Username ?? "") == (n.Username ?? ""))
                         {
-                            await n.Kick("Attempting to attack self");
+                            n.Kick("Attempting to attack self");
                             return;
                         }
 
@@ -1782,7 +2006,7 @@ namespace NCore
             catch (Exception globalEx)
             {
                 Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{globalEx.ToString()}", "WARNING");
-                await n.Kick("Internal server error occured.");
+                n.Kick("Internal server error occured.");
                 return;
             }
         }
@@ -1826,17 +2050,17 @@ namespace NCore
             
             foreach(Block b in blocksToRemove)
             {
-                foreach(NetworkPlayer p in players)
+                foreach(NetcraftPlayer p in players)
                 {
                     await p.PacketQueue.AddQueue($"removeblock?{b.Position.X.ToString()}?{b.Position.Y.ToString()}");
                     World.Blocks.Remove(b);
                 }
             }
-            foreach (NetworkPlayer p in players)
+            foreach (NetcraftPlayer p in players)
             {
                 await p.PacketQueue.SendQueue();
             }
-            foreach (NetworkPlayer p in players)
+            foreach (NetcraftPlayer p in players)
             {
                 if(DistanceBetweenPoint(Normalize(p.Position), point) <= radius)
                 {
@@ -1875,7 +2099,7 @@ namespace NCore
             File.WriteAllText("./auth.txt", txt, Encoding.UTF8);
         }
 
-        public async void ClientExited(NetworkPlayer client, bool isError = false)
+        public async void ClientExited(NetcraftPlayer client, bool isError = false)
         {
             if (string.IsNullOrEmpty(Thread.CurrentThread.Name))
                 Thread.CurrentThread.Name = "Network Leave";
@@ -1892,7 +2116,7 @@ namespace NCore
                 }
                 else
                 {
-                    await client.Kick("An internal server error occured");
+                    client.Kick("An internal server error occured");
                     await Chat(client.Username + " left the game due to an error.");
                     Log(client.Username + " left the game due to an error.");
                 }

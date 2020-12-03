@@ -5,7 +5,7 @@ namespace NCore
 {
     public class Commandstop : Command
     {
-        public Commandstop() : base("end", "Выключает сервер", "end")
+        public Commandstop() : base("end", NCore.GetNCore().lang.get("commands.end.description"), "end")
         {
         }
 
@@ -18,7 +18,7 @@ namespace NCore
 
             if (args.Length == 0)
             {
-                await sender.SendMessage("Вы уверены что хотите выключить сервер? Введите /end confirm чтобы выключить сервер.");
+                await sender.SendMessage("Are you sure wanted to stop server? Use '/end confirm' to confirm.");
                 return true;
             }
             else if (args.Length == 1)

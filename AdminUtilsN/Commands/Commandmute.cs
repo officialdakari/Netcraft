@@ -22,7 +22,7 @@ namespace AdminUtilsN.Commands
                     sender.SendMessage("You don't have permissions to do that.");
                     return true;
                 }
-                NetworkPlayer player = Netcraft.GetPlayer(args[0]);
+                NetcraftPlayer player = Netcraft.GetPlayer(args[0]);
                 if (player == null)
                 {
                     sender.SendMessage("Player not found!");

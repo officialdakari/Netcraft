@@ -26,7 +26,7 @@ namespace AdminUtilsN
             if (!e.GetMessage().StartsWith("/"))
             {
                 string m = e.GetMessage();
-                NCore.NetworkPlayer p = e.GetPlayer();
+                NCore.NetcraftPlayer p = e.GetPlayer();
                 if (mutelist.Contains(p.Username))
                 {
                     Mute mute = null;
@@ -88,7 +88,7 @@ namespace AdminUtilsN
                 }
             }
         }
-        public void mutePlayer(NCore.NetworkPlayer player, Mute mute)
+        public void mutePlayer(NCore.NetcraftPlayer player, Mute mute)
         {
             if (player == null) throw new NullReferenceException("Ссылка на объект не указывает на экземпляр объекта.");
 
@@ -97,7 +97,7 @@ namespace AdminUtilsN
             player.Chat($"You have been muted until {mute.Mutetime.ToString()}. Reason: {mute.MuteReason}");
             Netcraft.Broadcast($"{player.Username} has been muted until {mute.Mutetime.ToString()}. Reason: {mute.MuteReason}");
         }
-        public void unmutePlayer(NCore.NetworkPlayer player)
+        public void unmutePlayer(NCore.NetcraftPlayer player)
         {
             foreach (Mute m in mutes)
             {
@@ -129,11 +129,11 @@ namespace AdminUtilsN
 
     public class Mute
     {
-        public NCore.NetworkPlayer Player { get; set; }
+        public NCore.NetcraftPlayer Player { get; set; }
         public string MuteReason { get; set; }
         public DateTime Mutetime { get; set; }
 
-        public Mute(NCore.NetworkPlayer a, string b, DateTime c)
+        public Mute(NCore.NetcraftPlayer a, string b, DateTime c)
         {
             Player = a;
             MuteReason = b;

@@ -13,15 +13,15 @@ namespace NCore
         {
         }
 
-        public void AddItem(ref NetworkPlayer player, ItemStack item)
+        public void AddItem(ref NetcraftPlayer player, ItemStack item)
         {
-            if (player.PlayerInventory.CountOf(item.Type) < 1) throw new Exception("Ошибка инвентаря, пожалуйста забаньте читера");
+            if (player.PlayerInventory.CountOf(item.Type) < 1) throw new Exception("Inventory error, please ban the cheater; Player: " + player.Username);
             player.PlayerInventory.Items.Remove(item);
             player.UpdateInventory();
             items.Add(item);
         }
 
-        public void RemoveItem(ref NetworkPlayer player, int index)
+        public void RemoveItem(ref NetcraftPlayer player, int index)
         {
             player.Give(items[index].Type, items[index].Count);
             items.RemoveAt(index);

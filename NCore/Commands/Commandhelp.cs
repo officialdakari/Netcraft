@@ -16,9 +16,18 @@ namespace NCore
             {
                 if (sender.IsPlayer)
                 {
-                    NetworkPlayer p = (NetworkPlayer)sender;
+                    NetcraftPlayer p = (NetcraftPlayer)sender;
+                    NCore.Lang lang = p.lang;
+                    string h = "";
                     foreach (var a in Netcraft.GetCommands())
-                        await p.PacketQueue.AddQueue($"chat?/{a.Usage} => {a.Description}");
+                    {
+                        string keyUsage = $"commands.{a.Name}.usage";
+                        string usage = lang.get(keyUsage);
+                        string keyDesc = $"commands.{a.Name}.description";
+                        string desc = lang.get(keyDesc);
+                        if (usage == keyUsage) usage = "/" + a.Usage;
+                        await p.PacketQueue.AddQueue($"chat?{usage} => {desc}");
+                    }
                     await p.PacketQueue.SendQueue();
                     return true;
                 }

@@ -9,6 +9,7 @@ using Microsoft.VisualBasic;
 using System.Text;
 using System.Collections.Specialized;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Minecraft2D
 {
@@ -39,7 +40,7 @@ namespace Minecraft2D
         protected int direction = 1;
         protected Color[] colors = new[] { Color.Red, Color.Orange, Color.Goldenrod, Color.Gold, Color.Yellow, Color.GreenYellow, Color.LightGreen, Color.Green, Color.LightBlue, Color.Blue, Color.DarkBlue, Color.BlueViolet, Color.Violet };
 
-        protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "Press F1 for help!", "Netcraft Is In 2D", "By GladCypress3030 and TheNonameee", "Converted to C#", "Join our Discord!"};
+        protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "Happy new year!", "Press F1 for help!", "Netcraft Is In 2D", "By GladCypress3030 and TheNonameee", "Converted to C#", "Join our Discord!"};
         protected string labelText;
         protected int presenceUpdateDelay = 20;
 
@@ -109,7 +110,7 @@ namespace Minecraft2D
         {
             if (!My.MyProject.Computer.Network.IsAvailable)
             {
-                Interaction.MsgBox("Нет подключения к Интернету :(");
+                Interaction.MsgBox("No internet connection!");
                 return;
             }
             if(blocklist.Contains(TextBox1.Text.ToLower()))
@@ -122,7 +123,7 @@ namespace Minecraft2D
             Hide();
         }
 
-        public readonly string Ver = "1.3-ALPHA";
+        public readonly string Ver = "0.1.3a";
         internal static MainMenu instance;
         public static MainMenu GetInstance()
         {
@@ -192,7 +193,7 @@ namespace Minecraft2D
         {
             instance = this;
             comment("ты чё декомпилировал игру быстро удаляй декомпилированный код иначе бан");
-            
+            Form1.instance = My.MyProject.Forms.Form1;
             Application.ThreadException += My.MyApplication.threadException;
             AppDomain.CurrentDomain.UnhandledException += My.MyApplication.threadException;
             cfg = File.ReadAllText("./options.txt", Encoding.UTF8);
@@ -205,6 +206,7 @@ namespace Minecraft2D
             try
             {
                 dRPC.Initialize();
+                dRPC.OnJoinRequested += DRPC_OnJoinRequested;
             }
             catch (Exception ex)
             {
@@ -219,8 +221,8 @@ namespace Minecraft2D
                     
 
                     var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party()).WithTimestamps(new DiscordRPC.Timestamps());
-                    pr.Assets.LargeImageKey = "logonc";
-                    pr.Assets.LargeImageText = "NetCraft " + My.MyProject.Forms.MainMenu.Ver;
+                    pr.Assets.LargeImageKey = "snowylogo";
+                    pr.Assets.LargeImageText = "Playing Netcraft v" + My.MyProject.Forms.MainMenu.Ver;
                     pr.Timestamps.Start = DateTime.UtcNow;
 
                     dRPC.SetPresence(presence);
@@ -236,6 +238,14 @@ namespace Minecraft2D
             foreach (Control c in Controls)
                 c.KeyDown += OnKey;
             _Timer1.Start();
+        }
+
+        private void DRPC_OnJoinRequested(object sender, DiscordRPC.Message.JoinRequestMessage args)
+        {
+            if(args.Type == DiscordRPC.Message.MessageType.JoinRequest)
+            {
+                //FancyMessage.Show(args.User.ID.ToString());
+            }
         }
 
         private void packetreceived(string p)
@@ -267,7 +277,7 @@ namespace Minecraft2D
 
         private void DoLang()
         {
-            _Button2.Text = lang.get("menu.button.official_server");
+            _Button2.Text = lang.get("menu.button.singleplayer");
             _Button1.Text = lang.get("menu.button.network_game");
         }
 
@@ -276,36 +286,37 @@ namespace Minecraft2D
             Process.Start("https://discord.gg/BuKCBP8");
         }
 
-        private void Button2_Click_1(object sender, EventArgs e)
+        private async void Button2_Click_1(object sender, EventArgs e)
         {
-            if (!My.MyProject.Computer.Network.IsAvailable)
-            {
-                Interaction.MsgBox("Нет подключения к Интернету :(");
-                return;
-            }
-
-            My.MyProject.Forms.Form1.IsOfficialServer = true;
-            My.MyProject.Forms.Form1.ip = "mcblockmine.ddns.net";
-            My.MyProject.Forms.Form1.Show();
-            Hide();
+            StartSingleplayer();
+            await Task.Run(async () => {
+                Task.Delay(10000);
+                BeginInvoke(new Action(() =>
+                {
+                    My.MyProject.Forms.Form1.ip = "127.0.0.1";
+                    My.MyProject.Forms.Form1.Show();
+                    Hide();
+                }));
+            });
         }
 
         public void StartSingleplayer()
         {
-            My.MyProject.Forms.Form1.IsOfficialServer = true;
-            My.MyProject.Forms.Form1.ServerProcess = new Process();
+            if(!File.Exists(@"C:\Program Files\dotnet\dotnet.exe") && !File.Exists(@"C:\Program Files (x86)\dotnet\dotnet.exe"))
             {
-                var withBlock = My.MyProject.Forms.Form1.ServerProcess;
-                withBlock.EnableRaisingEvents = true;
-                withBlock.StartInfo.Arguments = "s";
-                withBlock.StartInfo.UseShellExecute = false;
-                withBlock.StartInfo.RedirectStandardError = true;
-                withBlock.StartInfo.RedirectStandardOutput = true;
-                withBlock.StartInfo.FileName = Application.StartupPath + @"\server\NetcraftServer.exe";
-                withBlock.Start();
-                withBlock.BeginErrorReadLine();
-                withBlock.BeginOutputReadLine();
+                if(FancyMessage.Show("У Вас не установлен .NET Core. Вы хотите перейти на сайт скачивания?", "Ошибка", FancyMessage.Icon.Error, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK) {
+                    Process.Start(@"https://dotnet.microsoft.com/download/dotnet-core/2.1");
+                }
+                return;
             }
+            My.MyProject.Forms.Form1.IsSingleplayer = true;
+            My.MyProject.Forms.Form1.ServerProcess = new Process();
+            My.MyProject.Forms.Form1.ServerProcess.StartInfo.Arguments = @"/c run.cmd";
+            My.MyProject.Forms.Form1.ServerProcess.StartInfo.WorkingDirectory = @".\server\";
+            My.MyProject.Forms.Form1.ServerProcess.StartInfo.FileName = "cmd.exe";
+            My.MyProject.Forms.Form1.ServerProcess.Start();
+          //  Form1.GetInstance().ServerProcess.BeginErrorReadLine();
+            //Form1.GetInstance().ServerProcess.BeginOutputReadLine();
         }
 
         private void Button5_Click(object sender, EventArgs e)

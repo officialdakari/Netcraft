@@ -9,6 +9,7 @@ namespace NCore
         public bool Unbreakable { get; set; }
         public bool IsBackground { get; set; }
         public Rectangle Rectangle { get; set; }
+        public World.IBlockMetadata Metadata { get; set; }
 
         public Block(Point arg0, EnumBlockType arg1, bool arg2, bool arg3)
         {
@@ -16,7 +17,7 @@ namespace NCore
             Type = arg1;
             Unbreakable = arg2;
             IsBackground = arg3;
-            Rectangle = new Rectangle(Position, new Size(32, 32)); 
+            Rectangle = new Rectangle(Position, new Size(32, 32));
         }
     }
 }
