@@ -28,32 +28,56 @@ namespace NCore
             PlayerRectangle = new Rectangle(Position, new Size(47, 92));
         }
 
-        public string Username { get; set; } = null;
-        public string UUID { get; set; } = Guid.NewGuid().ToString();
+        public string Username { get; internal set; } = null;
+        public string UUID { get; internal set; } = Guid.NewGuid().ToString();
         public Point Position { get; set; } = new Point(0, 0);
-        public Inventory PlayerInventory { get; set; }
-        public ItemStack SelectedItem { get; set; }
+        public Inventory PlayerInventory { get; internal set; }
+        public ItemStack SelectedItem { get; internal set; }
         public int Health { get; set; } = 100;
         public int Hunger { get; set; } = 20;
         public int Saturation { get; set; } = 5;
         public bool IsAdmin { get; set; } = false;
-        public SendQueueType PacketQueue { get; set; }
-        public WorldServer World { get; set; }
-        public bool IsSpectator { get; set; } = false;
+        public SendQueueType PacketQueue { get; internal set; }
+        public WorldServer World { get; internal set; }
+        public bool IsSpectator { get; internal set; } = false;
         public bool DisableMovementCheck { get; set; } = false;
-        public bool IsLoaded { get; set; } = false;
-        public Rectangle PlayerRectangle { get; set; }
-        public bool NoClip { get; set; } = false;
+        public bool IsLoaded { get; internal set; } = false;
+        public Rectangle PlayerRectangle { get; internal set; }
+        public bool NoClip { get; private set; } = false;
         public int FallDistance { get; set; } = 0;
         public int MovedInAir { get; set; } = 0;
         public bool IsAuthorized { get; set; } = false;
         public int AntiFlyWarnings { get; set; } = 0;
         public BlockChest OpenChest { get; set; } = null;
         internal NCore.Lang lang;
+        public DateTime LastKeepAlivePacket { get; internal set; }
 
         public string GetIp()
         {
             return ip;
+        }
+
+        public override string ToString()
+        {
+            string t = "";
+            t += $"username='{Username}';";
+            t += $"uuid='{UUID}';";
+            t += $"position={Position.X.ToString()},{Position.Y.ToString()};";
+            t += $"selecteditem='{SelectedItem.ToString()}';";
+            t += $"world='NCore.WorldServer';";
+            t += $"isSpectator='{IsSpectator.ToString()}';";
+            t += $"nomovecheck='{DisableMovementCheck.ToString()}';";
+            t += $"isLoaded='{IsLoaded.ToString()}';";
+            t += $"playerRectangle='{PlayerRectangle.ToString()}';";
+            t += $"noclip='{NoClip.ToString()}';";
+            t += $"falldistance='{FallDistance.ToString()}';";
+            t += $"antiflywarnings='{AntiFlyWarnings.ToString()}';";
+            return t;
+        }
+
+        public TcpClient GetConnection()
+        {
+            return d;
         }
 
         private string ip;
@@ -230,6 +254,16 @@ namespace NCore
         public async Task Chat(string arg0)
         {
             await Send("chat?" + arg0);
+        }
+
+        public async Task Heal(int h = 1)
+        {
+            if(Health + h > 100)
+            {
+                await UpdateHealth(100);
+                return;
+            }
+            await UpdateHealth(Health + h);
         }
 
         public async Task Craft(Material m)
@@ -421,6 +455,85 @@ namespace NCore
                 await RemoveItem(Material.IRON, 3);
                 await Give(Material.IRON_SWORD);
             }
+
+
+
+            if (m == Material.DIAMOND_AXE)
+            {
+                if (PlayerInventory.CountOf(Material.DIAMOND) < 3)
+                {
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
+                    return;
+                }
+
+                if (PlayerInventory.CountOf(Material.STICK) < 2)
+                {
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
+                    return;
+                }
+
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.DIAMOND, 3);
+                await Give(Material.DIAMOND_AXE);
+            }
+
+            if (m == Material.DIAMOND_PICKAXE)
+            {
+                if (PlayerInventory.CountOf(Material.DIAMOND) < 3)
+                {
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
+                    return;
+                }
+
+                if (PlayerInventory.CountOf(Material.STICK) < 2)
+                {
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
+                    return;
+                }
+
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.DIAMOND, 3);
+                await Give(Material.DIAMOND_PICKAXE);
+            }
+
+            if (m == Material.DIAMOND_SHOVEL)
+            {
+                if (PlayerInventory.CountOf(Material.DIAMOND) < 1)
+                {
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
+                    return;
+                }
+
+                if (PlayerInventory.CountOf(Material.STICK) < 2)
+                {
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
+                    return;
+                }
+
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.DIAMOND, 1);
+                await Give(Material.DIAMOND_SHOVEL);
+            }
+
+            if (m == Material.DIAMOND_SWORD)
+            {
+                if (PlayerInventory.CountOf(Material.DIAMOND) < 2)
+                {
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
+                    return;
+                }
+
+                if (PlayerInventory.CountOf(Material.STICK) < 1)
+                {
+                    await Send("msgerror?" + lang.get("error.craft.no-materials"));
+                    return;
+                }
+
+                await RemoveItem(Material.STICK, 2);
+                await RemoveItem(Material.DIAMOND, 3);
+                await Give(Material.DIAMOND_SWORD);
+            }
+
 
             if (m == Material.FURNACE)
             {
@@ -614,6 +727,16 @@ namespace NCore
                 t = "lava";
                 nonsolid = true;
             }
+            if (m == EnumBlockType.RED_FLOWER)
+            {
+                t = "poppy";
+                nonsolid = true;
+            }
+            if (m == EnumBlockType.YELLOW_FLOWER)
+            {
+                t = "dandelion";
+                nonsolid = true;
+            }
 
             if (!packetQueue)
             {
@@ -709,6 +832,16 @@ namespace NCore
                 t = "lava";
                 nonsolid = true;
             }
+            if (m == EnumBlockType.RED_FLOWER)
+            {
+                t = "poppy";
+                nonsolid = true;
+            }
+            if (m == EnumBlockType.YELLOW_FLOWER)
+            {
+                t = "dandelion";
+                nonsolid = true;
+            }
 
             if (!packetQueue)
             {
@@ -743,6 +876,13 @@ namespace NCore
                 await RemoveItem(b);
                 await RemoveItem(c);
                 await Give(Material.STONE);
+            }
+
+            if(c == Material.RAW_BEEF)
+            {
+                await RemoveItem(b);
+                await RemoveItem(c);
+                await Give(Material.COOKED_BEEF);
             }
 
             if (c == Material.IRON_ORE)
@@ -781,15 +921,15 @@ namespace NCore
                     item.Count -= count;
                 }
 
-                if (item.Count < 1 | item.Count <= count)
+                if ((item.Count < 1) || (item.Count <= count))
                 {
-                    itemsToRemove.Remove(item);
+                    itemsToRemove.Add(item);
                 }
             }
 
             foreach (var item in itemsToRemove)
                 PlayerInventory.Items.Remove(item);
-            if (NCore.IsNothing(SelectedItem) | itemsToRemove.Contains(SelectedItem) | !PlayerInventory.Items.Contains(SelectedItem))
+            if (NCore.IsNothing(SelectedItem) || itemsToRemove.Contains(SelectedItem) || !PlayerInventory.Items.Contains(SelectedItem))
             {
                 foreach (var i in Netcraft.GetOnlinePlayers())
                 {

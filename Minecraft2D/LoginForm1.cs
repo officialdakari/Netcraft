@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Minecraft2D
@@ -38,7 +39,20 @@ namespace Minecraft2D
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             _OK.Text = lang.get("button.ok");
             _Cancel.Text = lang.get("button.cancel");
-            
+            UsernameTextBox.Text = "";
+        }
+
+        private void _Cancel_MouseEnter(object sender, EventArgs e)
+        {
+            ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbghover;
+            Control ctrl = (Control)sender;
+            ControlPaint.DrawBorder(ctrl.CreateGraphics(), ctrl.Bounds, Color.Red, ButtonBorderStyle.Solid);
+        }
+
+        private void _Cancel_MouseLeave(object sender, EventArgs e)
+        {
+            ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbg;
+            ((Control)sender).Invalidate();
         }
     }
 }

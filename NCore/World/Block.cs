@@ -19,5 +19,10 @@ namespace NCore
             IsBackground = arg3;
             Rectangle = new Rectangle(Position, new Size(32, 32));
         }
+
+        public override string ToString()
+        {
+            return $"position='{Position.ToString()};type='{Type.ToString()}';unbreakable='{Unbreakable.ToString()}';isBackground='{IsBackground.ToString()}';rectange='{Rectangle.ToString()}'";
+        }
     }
 }

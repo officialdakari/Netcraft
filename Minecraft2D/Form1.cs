@@ -36,13 +36,12 @@ namespace Minecraft2D
             _ButtonRight.Name = "ButtonRight";
             MenuButton.Name = "Button3";
             _ButtonAttack.Name = "ButtonAttack";
-            CraftButton.Name = "Button4";
             _ListBox2.Name = "ListBox2";
         }
 
         private TcpClient client;
         private StreamWriter sWriter;
-        private bool connected = false;
+        public bool connected { get; private set; } = false;
 
         public delegate void OnMessageReceivedEventHandler(string msg);
         internal string toNotice = null;
@@ -114,6 +113,7 @@ namespace Minecraft2D
                 connected = false;
                 FancyMessage.Show($"{ex.GetType().ToString()}: {ex.Message}", lang.get("text.error.unable_connect"), FancyMessage.Icon.Error);
                 Close();
+                MainMenu.GetInstance().Show();
             }
         }
 
@@ -228,7 +228,6 @@ namespace Minecraft2D
         private void DoLang()
         {
             ChatButton.Text = lang.get("game.button.chat");
-            CraftButton.Text = lang.get("game.button.craft");
             InventoryButton.Text = lang.get("game.button.inventory");
             MenuButton.Text = lang.get("game.button.pause");
         }
@@ -250,17 +249,53 @@ namespace Minecraft2D
             }
         }
 
-            
+        public void Darker()
+        {
+            Bitmap bmp = new Bitmap(this.ClientRectangle.Width, this.ClientRectangle.Height);
+            using (Graphics G = Graphics.FromImage(bmp))
+            {
+                G.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                G.CopyFromScreen(this.PointToScreen(new Point(0, 0)), new Point(0, 0), this.ClientRectangle.Size);
+                double percent = 0.50;
+                Color darken = Color.FromArgb((int)(255 * percent), Color.Black);
+                using (Brush brsh = new SolidBrush(darken))
+                {
+                    G.FillRectangle(brsh, this.ClientRectangle);
+                }
+            }
+            makeItDark.Image = bmp;
+            makeItDark.SizeMode = PictureBoxSizeMode.Normal;
+            makeItDark.Show();
+            makeItDark.Size = ClientSize + new Size(100, 100);
+        }    
+
+        public void Lighten()
+        {
+            makeItDark.Hide();
+        }
 
         Lang lang;
+        Dictionary<string, string> itemNames = new Dictionary<string, string>();
         private void Form1_Load(object sender, EventArgs e)
         {
             instance = this;
-            
+
+            invClose1.BringToFront();
+            itemNames.Add("WOODEN_PICKAXE", "Wooden Pickaxe");
+            itemNames.Add("WOODEN_AXE", "Wooden Axe");
+            itemNames.Add("WOODEN_SHOVEL", "Wooden Shovel");
+            chatPanel1.KeyDown += Form1_KeyDown;
+            chatPanel1.KeyUp += Form1_KeyDown;
+            makeItDark.KeyDown += Form1_KeyDown;
+            makeItDark.KeyUp += Form1_KeyDown;
+            foreach (Control ac in chatPanel1.Controls)
+            {
+                ac.KeyDown += Form1_KeyDown;
+                ac.KeyUp += Form1_KeyUp;
+            }
 
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             DoLang();
-            Button4.SendToBack();
             playerSkinFlip.RotateFlip(RotateFlipType.Rotate180FlipY);
 
             if (!Directory.Exists(@".\mods"))
@@ -269,7 +304,6 @@ namespace Minecraft2D
             }
 
             
-            Button1.BringToFront();
             localPlayer.SendToBack();
             R1.BringToFront();
             ListBox1.BringToFront();
@@ -282,6 +316,7 @@ namespace Minecraft2D
             Connect(ip, port);
             if(!connected)
             {
+                MainMenu.GetInstance().Show();
                 leave();
                 Close();
                 return;
@@ -292,7 +327,6 @@ namespace Minecraft2D
             Username = pName;
             Thread.Sleep(900);
             SendSinglePacket("world");
-            My.MyProject.Forms.Chat.Show();
             WriteChat("Client message: Вы вошли на сервер");
             initializeMove();
             foreach (var i in Enum.GetNames(typeof(Craftable)))
@@ -369,10 +403,16 @@ namespace Minecraft2D
                 Invoke(new xChat(WriteChat), arg0);
                 return;
             }
+            try
+            {
+                richTextBox1.AppendText(arg0 + "\r\n");
+            } catch(Exception)
+            {
 
-            My.MyProject.Forms.Chat.RichTextBox1.AppendText(arg0 + Constants.vbCrLf);
-            My.MyProject.Forms.Chat.RichTextBox1.Select(My.MyProject.Forms.Chat.RichTextBox1.TextLength, 0);
-            My.MyProject.Forms.Chat.RichTextBox1.ScrollToCaret();
+            }
+            //My.MyProject.Forms.Chat.RichTextBox1.AppendText(arg0 + Constants.vbCrLf);
+            //My.MyProject.Forms.Chat.RichTextBox1.Select(My.MyProject.Forms.Chat.RichTextBox1.TextLength, 0);
+            //My.MyProject.Forms.Chat.RichTextBox1.ScrollToCaret();
         }
 
         public delegate void xHealth(int arg0);
@@ -449,6 +489,16 @@ namespace Minecraft2D
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.grass_side;
+                    }
+                    else if (a[3] == "dandelion")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.dandelion;
+                    }
+                    else if (a[3] == "poppy")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.poppy;
                     }
                     else if (a[3] == "dirt")
                     {
@@ -926,6 +976,10 @@ namespace Minecraft2D
                         }
 
                         // REM - Еда
+                        if (a[2] == "RAW_BEEF")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.beef, My.Resources.Resources.beef, a[2]);
+                        }
                         if (a[2] == "COOKED_BEEF")
                         {
                             await SetItem(a[1], My.Resources.Resources.cooked_beef, My.Resources.Resources.cooked_beef, a[2]);
@@ -950,6 +1004,16 @@ namespace Minecraft2D
                         if (a[2] == "COAL")
                         {
                             await SetItem(a[1], My.Resources.Resources.coal, My.Resources.Resources.coal, a[2]);
+                        }
+
+                        if (a[2] == "RED_FLOWER")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.poppy, My.Resources.Resources.poppy, a[2]);
+                        }
+
+                        if (a[2] == "YELLOW_FLOWER")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.dandelion, My.Resources.Resources.dandelion, a[2]);
                         }
 
                         if (a[2] == "IRON")
@@ -1012,7 +1076,7 @@ namespace Minecraft2D
             }
         }
 
-        public int moveInterval = 10;
+        public int moveInterval = 5;
 
         public delegate Task xsetSkyColor(Color a);
 
@@ -1149,14 +1213,18 @@ namespace Minecraft2D
                 {
                     if (b.Tag != null && Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
                     {
-                        // b.CreateGraphics.FillRectangle(New SolidBrush(Color.FromArgb(29, 0, 0, 0)), 0, 0, b.Width, b.Height)
-                        // AddHandler b.Paint, AddressOf bgBlockPaint
-                        // b.BackgroundImage = ColorProcessing(b.BackgroundImage, 0, 0, 0, 0, 0, -1, -1, 0)
-                        var g = b.BackgroundImage.Clone();
-                        Bitmap argbmp = (Bitmap)g;
-                        ApplyBrightness(ref argbmp, -30);
-                        b.BackgroundImage = (Image)g;
+                        Bitmap bmp = new Bitmap((Image)b.BackgroundImage.Clone());
+                        setDarked(ref bmp);
+                        b.BackgroundImage = bmp;
                     }
+                //        // b.CreateGraphics.FillRectangle(New SolidBrush(Color.FromArgb(29, 0, 0, 0)), 0, 0, b.Width, b.Height)
+                //        // AddHandler b.Paint, AddressOf bgBlockPaint
+                //        // b.BackgroundImage = ColorProcessing(b.BackgroundImage, 0, 0, 0, 0, 0, -1, -1, 0)
+                //        var g = b.BackgroundImage.Clone();
+                //        Bitmap argbmp = (Bitmap)g;
+                //        ApplyBrightness(ref argbmp, -30);
+                //        b.BackgroundImage = (Image)g;
+                //    }
                 }
                 catch (Exception ex)
                 {
@@ -1174,6 +1242,26 @@ namespace Minecraft2D
                 b.MouseMove += Form1_MouseMove;
                 b.MouseEnter += blockMouseEnter;
                 b.MouseLeave += blockMouseLeave;
+                b.SendToBack();
+            }
+        }
+
+        private void B_Paint(object sender, PaintEventArgs e)
+        {
+            
+        }
+
+        void setDarked(ref Bitmap origin, double percent = 0.40)
+        {
+            using (Graphics G = Graphics.FromImage(origin))
+            {
+                G.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                
+                Color darken = Color.FromArgb((int)(255 * percent), Color.Black);
+                using (Brush brsh = new SolidBrush(darken))
+                {
+                    G.FillRectangle(brsh, new Rectangle(Point.Empty, origin.Size));
+                }
             }
         }
 
@@ -1283,30 +1371,19 @@ namespace Minecraft2D
                             p.LastWalk = 1;
                         p.Location = new Point(x, y);
                         double t = DistanceBetween((Point)Normalize(p.Location), (Point)Normalize(localPlayer.Location));
-                        if (t < 5d)
+                        if (t < 6)
                         {
-                            if (!Information.IsNothing(nearestPlayer))
-                            {
-                                double u = DistanceBetween((Point)Normalize(nearestPlayer.Location), (Point)Normalize(localPlayer.Location));
-                                if (t < u)
-                                {
-                                    nearestPlayer = p;
-                                }
-                            }
-                            else
-                            {
-                                nearestPlayer = p;
-                            }
+                            nearestPlayer = p;
                         }
                     }
                 }
 
                 if (!Information.IsNothing(nearestPlayer))
                 {
-                    if (DistanceBetween((Point)Normalize(nearestPlayer.Location), (Point)Normalize(localPlayer.Location)) > 5d)
+                    if (DistanceBetween((Point)Normalize(nearestPlayer.Location), (Point)Normalize(localPlayer.Location)) > 6)
                         nearestPlayer = null;
                 }
-
+                if (!My.MyProject.Forms.Gamesettings.CheckBox1.Checked) return;
                 if (!Information.IsNothing(nearestPlayer))
                 {
                     ButtonAttack.Show();
@@ -1485,8 +1562,7 @@ namespace Minecraft2D
                 {
 
                     Thread.Sleep(moveInterval);
-
-                    if (walking == 1)
+                    if (!invPanel.Visible && walking == 1)
                     {
                         localPlayer.Left -= 1;
                         bool collision = false;
@@ -1527,7 +1603,7 @@ namespace Minecraft2D
                             await UpdatePlayerPosition();
                         }
                     }
-                    else if (walking == 2)
+                    else if (!invPanel.Visible && walking == 2)
                     {
                         localPlayer.Left += 1;
                         bool collision = false;
@@ -1569,7 +1645,7 @@ namespace Minecraft2D
                         }
                     }
 
-                    if (JumpStep > -1)
+                    if (JumpStep > -1 && !invPanel.Visible)
                     {
                         bool grounded = true;
                         JumpStep += 1;
@@ -1647,21 +1723,15 @@ namespace Minecraft2D
                     progressBar1.Hide();
                     ProgressBar1.Hide();
                     ChatButton.Hide();
-                    CraftButton.Hide();
                     InventoryButton.Hide();
                     MenuButton.Hide();
                     debuginfo.Hide();
-                    _ListBox1.Hide();
-                    _ListBox2.Hide();
                 } else {
                     progressBar1.Show();
                     ProgressBar1.Show();
                     ChatButton.Show();
-                    CraftButton.Show();
                     InventoryButton.Show();
                     MenuButton.Show();
-                    _ListBox1.Hide();
-                    _ListBox2.Hide();
                 }
             }
 
@@ -1672,9 +1742,16 @@ namespace Minecraft2D
 
             if(e.KeyCode == Keys.F4)
             {
-                Bitmap screenGrab = new Bitmap(Bounds.Width, Bounds.Height);
-                DrawToBitmap(screenGrab, new Rectangle(Point.Empty, Size));
-                Clipboard.SetImage((Image)screenGrab);
+                //Bitmap screenGrab = new Bitmap(Bounds.Width, Bounds.Height);
+                //DrawToBitmap(screenGrab, new Rectangle(Point.Empty, Size));
+                //Clipboard.SetImage((Image)screenGrab);
+                Bitmap bmp = new Bitmap(this.ClientRectangle.Width, this.ClientRectangle.Height);
+                using (Graphics G = Graphics.FromImage(bmp))
+                {
+                    G.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                    G.CopyFromScreen(this.PointToScreen(new Point(0, 0)), new Point(0, 0), this.ClientRectangle.Size);
+                }
+                Clipboard.SetImage((Image)bmp);
             }
 
             if(e.KeyCode == Keys.Enter)
@@ -1693,6 +1770,11 @@ namespace Minecraft2D
                     }
                     Form1_Scroll(this, null);
                 }
+            }
+
+            if(e.KeyCode == Keys.C && !chatPanel1.Visible)
+            {
+                ChatButton.PerformClick();
             }
 
             if (NoClip)
@@ -1898,8 +1980,18 @@ namespace Minecraft2D
 
         private void Button1_Click(object sender, EventArgs e)
         {
+            if (chatPanel1.Visible) return;
             SendSinglePacket("update_inventory");
-            ListBox1.Visible = !ListBox1.Visible;
+            invPanel.BringToFront();
+            if(invPanel.Visible)
+            {
+                invPanel.Hide();
+                Lighten();
+            } else
+            {
+                Darker();
+                invPanel.Show();
+            }
         }
 
         private void ListBox1_MouseDown(object sender, MouseEventArgs e)
@@ -2003,7 +2095,18 @@ namespace Minecraft2D
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            My.MyProject.Forms.Chat.Show();
+            //My.MyProject.Forms.Chat.Show();
+            if (invPanel.Visible) return;
+            chatPanel1.BringToFront();
+            if(!chatPanel1.Visible)
+            {
+                Darker();
+                chatPanel1.Show();
+            } else
+            {
+                Lighten();
+                chatPanel1.Hide();
+            }
         }
 
         private void Timer3_Tick(object sender, EventArgs e)
@@ -2034,6 +2137,15 @@ namespace Minecraft2D
                 return;
             }
             leave();
+            StopServer();
+        }
+
+        public void StopServer()
+        {
+            if(IsSingleplayer)
+            {
+                ServerProcess.CloseMainWindow();
+            }
         }
 
         internal void leave()
@@ -2191,18 +2303,33 @@ namespace Minecraft2D
         {
 
         }
+
+        public void ToggleButtonControls()
+        {
+            _ButtonLeft.Visible = !_ButtonLeft.Visible;
+            _ButtonRight.Visible = !_ButtonRight.Visible;
+            _ButtonAttack.Visible = !_ButtonAttack.Visible;
+            _ButtonJump.Visible = !_ButtonJump.Visible;
+        }
+
         //KEYWORD:SCRL
         private void Form1_Scroll(object sender, ScrollEventArgs e)
         {
             InventoryButton.Location = new Point(Width - InventoryButton.Width - 30, 0);
             MenuButton.Location = new Point(Width - MenuButton.Width - 30, 29);
-            ListBox1.Location = new Point(Width - ListBox1.Width - 120, 0);
+            invPanel.Location = new Point(172, 79);
             ProgressBar1.Location = new Point(84, 0);
             progressBar1.Location = new Point(84, 25);
             ChatButton.Location = new Point(0, 0);
-            CraftButton.Location = new Point(0, 29);
+            makeItDark.Location = new Point(0, 0);
+            chatPanel1.Location = new Point(5, 124);
+            //CraftButton.Location = new Point(0, 29);
             debuginfo.Location = new Point(5, 53);
             _Warning.Location = new Point(239, 0);
+            _ButtonLeft.Location = new Point(8, 503);
+            _ButtonRight.Location = new Point(84, 503);
+            _ButtonJump.Location = new Point(1084, 500);
+            _ButtonAttack.Location = new Point(1008, 500);
         }
         int effectPlayingDirection = -1;
         int d1 = 0;
@@ -2233,23 +2360,23 @@ namespace Minecraft2D
             //    }
             //}
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            Point p1 = new Point(localPlayer.Left + localPlayer.Width / 2, localPlayer.Top + 15);
-            Point p2 = PointToClient(Cursor.Position);
-            if(DistanceBetween(p1, p2) > 192)
-            {
+            //Point p1 = new Point(localPlayer.Left + localPlayer.Width / 2, localPlayer.Top + 15);
+            //Point p2 = PointToClient(Cursor.Position);
+            //if(DistanceBetween(p1, p2) > 192)
+            //{
 
-                double dcur = DistanceBetween(p1, p2);
-                var coff = dcur / 192;
-                Point p21 = new Point(p2.X - p1.X, p2.Y - p1.Y);
-                var p3 = new Point((int)(p21.X / coff), (int)(p21.Y / coff)) + (Size)p1;
+            //    double dcur = DistanceBetween(p1, p2);
+            //    var coff = dcur / 192;
+            //    Point p21 = new Point(p2.X - p1.X, p2.Y - p1.Y);
+            //    var p3 = new Point((int)(p21.X / coff), (int)(p21.Y / coff)) + (Size)p1;
 
 
-                g.DrawLine(Pens.Yellow, p1, p3);
-                g.DrawLine(Pens.Red, p2, p3);
-            } else
-            {
-                g.DrawLine(Pens.Yellow, p1, p2);
-            }
+            //    g.DrawLine(Pens.Yellow, p1, p3);
+            //    g.DrawLine(Pens.Red, p2, p3);
+            //} else
+            //{
+            //    g.DrawLine(Pens.Yellow, p1, p2);
+            //}
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -2282,6 +2409,7 @@ namespace Minecraft2D
             }
         }
 
+        int d6 = 5;
         public string Username { get; private set; }
 
         private void timer2_Tick(object sender, EventArgs e)
@@ -2297,8 +2425,6 @@ namespace Minecraft2D
             });
             My.MyProject.Forms.Chat.listBox1.Items.Clear();
             My.MyProject.Forms.Chat.listBox1.Items.AddRange(players.ToArray());
-            My.MyProject.Forms.Gamesettings.listBox1.Items.Clear();
-            My.MyProject.Forms.Gamesettings.listBox1.Items.AddRange(players.ToArray());
 
             timer2.Stop();
             timer2.Start();
@@ -2328,6 +2454,7 @@ namespace Minecraft2D
         {
             if (nConsole == null) nConsole = new NConsole();
             nConsole.Show();
+            debuginfo.Hide();
             //panel1.Show();
             //panel1.Location = new Point(15, 15);
         }
@@ -2335,6 +2462,45 @@ namespace Minecraft2D
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
 
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            Lighten();
+            invPanel.Hide();
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            richTextBox1.Select(richTextBox1.TextLength, 0);
+            richTextBox1.ScrollToCaret();
+        }
+
+        private async void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                await Send("chat?" + textBox1.Text);
+                textBox1.Clear();
+            }
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            chatPanel1.Hide();
+            Lighten();
+            Focus();
+        }
+
+        private void MenuButton_MouseEnter(object sender, EventArgs e)
+        {
+            ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbghover;
+        }
+
+        private void MenuButton_MouseLeave(object sender, EventArgs e)
+        {
+            ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbg;
         }
         //private void Form1_MouseDown(object sender, Global.System.Windows.Forms.MouseEventArgs e)
         //{

@@ -253,9 +253,6 @@
   <data name="iron_ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\iron_ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="leaves" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\leaves.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="OBSIDIAN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\OBSIDIAN.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -352,9 +349,6 @@
   <data name="lava_still" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\lava_still.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="log_oak" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\oak_log.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="water_bucket" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\water_bucket.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -423,5 +417,29 @@
   </data>
   <data name="wheat_stage7" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\wheat_stage7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonbghover" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\buttonbghover.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="leaves" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\leaves.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="log_oak" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\log_oak.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="oak_leaves" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\oak_leaves.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dandelion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\dandelion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="poppy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\poppy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="beef" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\beef.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Grid_Sapling1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Grid_Sapling.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

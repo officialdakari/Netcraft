@@ -24,7 +24,7 @@ namespace NCore
             }
             catch (Exception ex)
             {
-                NCore.GetNCore().CrashReport(ex);
+                NCore.CrashReport(ex);
             }
 
             return default;
@@ -40,7 +40,7 @@ namespace NCore
             }
             catch (Exception ex)
             {
-                NCore.GetNCore().CrashReport(ex);
+                NCore.CrashReport(ex);
             }
 
             return default;

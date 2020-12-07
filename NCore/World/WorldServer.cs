@@ -22,7 +22,11 @@ namespace NCore
 
         public BlockChest GetChestAt(System.Drawing.Point point)
         {
-            return Chests.Where(b => b.Position == point).ToArray()[0];
+            foreach(BlockChest c in Chests)
+            {
+                if (c.Position == point) return c;
+            }
+            return null;
         }
 
         public WorldServer()

@@ -81,6 +81,7 @@ namespace Minecraft2D
             this._Button1.BackColor = System.Drawing.Color.White;
             this._Button1.BackgroundImage = global::Minecraft2D.My.Resources.Resources.buttonbg;
             this._Button1.FlatAppearance.BorderColor = System.Drawing.Color.Red;
+            this._Button1.FlatAppearance.BorderSize = 0;
             this._Button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Lime;
             this._Button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkOrange;
             this._Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -93,10 +94,15 @@ namespace Minecraft2D
             this._Button1.Text = "multiplayer";
             this._Button1.UseVisualStyleBackColor = false;
             this._Button1.Click += new System.EventHandler(this.Button1_Click);
+            this._Button1.MouseEnter += new System.EventHandler(this._Button2_MouseEnter);
+            this._Button1.MouseLeave += new System.EventHandler(this._Button2_MouseLeave);
+            this._Button1.MouseHover += new System.EventHandler(this._Button2_MouseHover);
             // 
             // TextBox1
             // 
+            this.TextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.TextBox1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBox1.ForeColor = System.Drawing.Color.White;
             this.TextBox1.Location = new System.Drawing.Point(500, 188);
             this.TextBox1.Name = "TextBox1";
             this.TextBox1.Size = new System.Drawing.Size(202, 27);
@@ -141,7 +147,7 @@ namespace Minecraft2D
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(690, 23);
             this.Label3.TabIndex = 6;
-            this.Label3.Text = ">Hello world";
+            this.Label3.Text = "❯ Hello world";
             this.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.Label3.Click += new System.EventHandler(this.Label3_Click);
             this.Label3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Label3_MouseClick);
@@ -169,6 +175,7 @@ namespace Minecraft2D
             this._Button2.BackColor = System.Drawing.Color.White;
             this._Button2.BackgroundImage = global::Minecraft2D.My.Resources.Resources.buttonbg;
             this._Button2.FlatAppearance.BorderColor = System.Drawing.Color.Red;
+            this._Button2.FlatAppearance.BorderSize = 0;
             this._Button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Lime;
             this._Button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkOrange;
             this._Button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -181,6 +188,9 @@ namespace Minecraft2D
             this._Button2.Text = "singleplayer";
             this._Button2.UseVisualStyleBackColor = false;
             this._Button2.Click += new System.EventHandler(this.Button2_Click_1);
+            this._Button2.MouseEnter += new System.EventHandler(this._Button2_MouseEnter);
+            this._Button2.MouseLeave += new System.EventHandler(this._Button2_MouseLeave);
+            this._Button2.MouseHover += new System.EventHandler(this._Button2_MouseHover);
             // 
             // Label5
             // 

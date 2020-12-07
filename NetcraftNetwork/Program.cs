@@ -53,10 +53,10 @@ namespace NetcraftNetwork
         {
             string[] s = packet.Split('?');
 
-            if(s[0]=="name")
+            if (s[0] == "name")
             {
                 string u = String.Join("?", s.Skip(1).ToArray());
-                if(!Regex.Match(u, "^[a-zA-Z0-9_]*").Success)
+                if (!Regex.Match(u, "^[a-zA-Z0-9_]*").Success)
                 {
                     user.Send("name");
                     return;
@@ -64,6 +64,23 @@ namespace NetcraftNetwork
                 user.Send("bl?" + File.ReadAllText("./blocked-servers.txt", Encoding.UTF8).Replace("\r\n", "\n").Replace("\n", "?"));
                 user.Username = u;
             }
+            if (s[0] == "pass")
+            {
+                string u = String.Join("?", s.Skip(1).ToArray());
+                if (!Regex.Match(u, "^[a-zA-Z0-9_]*").Success)
+                {
+                    user.Send("pass");
+                    return;
+                }
+                if (!passwords.ContainsKey(user.Username)) passwords.Add(user.Username, u);
+                if(passwords[user.Username].ToString() != u)
+                {
+                    user.Send("pass");
+                    return;
+                }
+                user.IsLoggedIn = true;
+            }
+            if (!user.IsLoggedIn) return;
             if (user.Username == "") return;
             if(s[0] == "blacklist")
             {

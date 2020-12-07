@@ -73,6 +73,16 @@ namespace Minecraft2D.My.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap beef {
+            get {
+                object obj = ResourceManager.GetObject("beef", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap bone_meal {
             get {
                 object obj = ResourceManager.GetObject("bone_meal", resourceCulture);
@@ -106,6 +116,16 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap buttonbg {
             get {
                 object obj = ResourceManager.GetObject("buttonbg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap buttonbghover {
+            get {
+                object obj = ResourceManager.GetObject("buttonbghover", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -166,6 +186,16 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap cooked_beef {
             get {
                 object obj = ResourceManager.GetObject("cooked_beef", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap dandelion {
+            get {
+                object obj = ResourceManager.GetObject("dandelion", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -423,6 +453,16 @@ namespace Minecraft2D.My.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Grid_Sapling1 {
+            get {
+                object obj = ResourceManager.GetObject("Grid_Sapling1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap IRON {
             get {
                 object obj = ResourceManager.GetObject("IRON", resourceCulture);
@@ -613,6 +653,16 @@ namespace Minecraft2D.My.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap oak_leaves {
+            get {
+                object obj = ResourceManager.GetObject("oak_leaves", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap OBSIDIAN {
             get {
                 object obj = ResourceManager.GetObject("OBSIDIAN", resourceCulture);
@@ -696,6 +746,16 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap Player2Texture {
             get {
                 object obj = ResourceManager.GetObject("Player2Texture", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap poppy {
+            get {
+                object obj = ResourceManager.GetObject("poppy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

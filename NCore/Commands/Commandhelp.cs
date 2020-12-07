@@ -22,10 +22,10 @@ namespace NCore
                     foreach (var a in Netcraft.GetCommands())
                     {
                         string keyUsage = $"commands.{a.Name}.usage";
-                        string usage = lang.get(keyUsage);
+                        string usage = "/" + lang.get(keyUsage);
                         string keyDesc = $"commands.{a.Name}.description";
                         string desc = lang.get(keyDesc);
-                        if (usage == keyUsage) usage = "/" + a.Usage;
+                        if (usage == "/" + keyUsage) usage = "/" + a.Usage;
                         await p.PacketQueue.AddQueue($"chat?{usage} => {desc}");
                     }
                     await p.PacketQueue.SendQueue();

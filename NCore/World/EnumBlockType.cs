@@ -34,6 +34,8 @@ namespace NCore
         NETCRAFT_BLOCK,
         SNOWY_NETCRAFT_BLOCK,
         SEEDS,
-        WHEAT
+        WHEAT,
+        RED_FLOWER,
+        YELLOW_FLOWER
     }
 }

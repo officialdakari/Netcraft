@@ -323,6 +323,16 @@ namespace Minecraft2D.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap grass_block_snow {
+            get {
+                object obj = ResourceManager.GetObject("grass_block_snow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap grass_side {
             get {
                 object obj = ResourceManager.GetObject("grass_side", resourceCulture);
@@ -456,6 +466,16 @@ namespace Minecraft2D.Properties {
         internal static System.Drawing.Bitmap leaves {
             get {
                 object obj = ResourceManager.GetObject("leaves", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap leaves1 {
+            get {
+                object obj = ResourceManager.GetObject("leaves1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

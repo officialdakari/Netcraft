@@ -49,6 +49,7 @@ namespace NCore
         WATER_BUCKET, // ok
         LAVA_BUCKET,
         CHEST, // ok
+        RAW_BEEF,
         COOKED_BEEF, // ok
         BREAD, // yes
         END_STONE, // ok
@@ -56,6 +57,8 @@ namespace NCore
         NETCRAFT_BLOCK, // yes
         SNOWY_NETCRAFT_BLOCK, // yes...
         WHEAT, // rendering setup done
-        SEEDS // rendering setup done
+        SEEDS, // rendering setup done
+        RED_FLOWER,
+        YELLOW_FLOWER
     }
 }

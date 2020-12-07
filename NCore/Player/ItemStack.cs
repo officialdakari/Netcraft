@@ -11,5 +11,10 @@ namespace NCore
             Type = arg0;
             Count = arg1;
         }
+
+        public override string ToString()
+        {
+            return $"type={Type.ToString()};count={Count.ToString()}";
+        }
     }
 }

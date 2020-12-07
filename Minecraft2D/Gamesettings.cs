@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Minecraft2D
@@ -22,7 +23,7 @@ namespace Minecraft2D
 
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
-            
+            Form1.GetInstance().ToggleButtonControls();
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -32,6 +33,7 @@ namespace Minecraft2D
 
         private void Button3_Click(object sender, EventArgs e)
         {
+            Form1.GetInstance().Close();
             My.MyProject.Forms.MainMenu.Show();
             Hide();
         }
@@ -76,7 +78,6 @@ namespace Minecraft2D
 
         private void _CheckBox1_Click(object sender, EventArgs e)
         {
-            FancyMessage.Show("Temporarily removed.");
         }
 
         private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
@@ -88,6 +89,30 @@ namespace Minecraft2D
             {
                 Form1.GetInstance().audioStop();
             }
+        }
+
+        private void BackButton_MouseEnter(object sender, EventArgs e)
+        {
+            ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbghover;
+            var c = (Control)sender;
+            var rect = ClientRectangle;
+            rect.Width = 32;
+            rect.Height = 32;
+            var clr = Color.DodgerBlue;
+            int width = 1;
+
+            var g = c.CreateGraphics();
+            ControlPaint.DrawBorder(g, rect,
+                 clr, width, ButtonBorderStyle.Solid,
+                 clr, width, ButtonBorderStyle.Solid,
+                 clr, width, ButtonBorderStyle.Solid,
+                 clr, width, ButtonBorderStyle.Solid);
+        }
+
+        private void BackButton_MouseLeave(object sender, EventArgs e)
+        {
+            ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbg;
+            ((Control)sender).Invalidate();
         }
     }
 }

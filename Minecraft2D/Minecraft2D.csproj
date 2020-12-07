@@ -321,12 +321,6 @@
     <None Include="Resources\WOOD.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\STONE.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRON.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IRON_AXE.png" />
   </ItemGroup>
   <ItemGroup>
@@ -351,9 +345,49 @@
     <None Include="Resources\IRON_SWORD_FLIPPED.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\furnace_front.png" />
+    <None Include="Resources\IRON.png" />
+    <None Include="Resources\flint_and_steel.png" />
+    <None Include="Resources\coal.png" />
+    <None Include="Resources\bone_meal.png" />
     <None Include="Resources\bread.png" />
+    <None Include="Resources\Grid_Sapling.png" />
     <None Include="Resources\wheat_seeds.png" />
     <None Include="Resources\wheat.png" />
+    <None Include="Resources\water_bucket.png" />
+    <None Include="Resources\lava_bucket.png" />
+    <None Include="Resources\beef.png" />
+    <None Include="Resources\cooked_beef.png" />
+    <None Include="Resources\diamond.png" />
+    <None Include="Resources\GOLD.png" />
+    <None Include="Resources\dandelion.png" />
+    <None Include="Resources\poppy.png" />
+    <None Include="Resources\leaves.png" />
+    <None Include="Resources\oak_leaves.png" />
+    <None Include="Resources\log_oak.png" />
+    <None Include="Resources\water_still.png" />
+    <None Include="Resources\lava_still.png" />
+    <None Include="Resources\bedrock.png" />
+    <None Include="Resources\glass.png" />
+    <None Include="Resources\obsidian1.png" />
+    <None Include="Resources\obsidian.png" />
+    <None Include="Resources\iron_block.png" />
+    <None Include="Resources\diamond_block.png" />
+    <None Include="Resources\gold_block.png" />
+    <None Include="Resources\gold_ore.png" />
+    <None Include="Resources\diamond_ore.png" />
+    <None Include="Resources\iron_ore.png" />
+    <None Include="Resources\coal_ore.png" />
+    <None Include="Resources\stone1.png" />
+    <None Include="Resources\stone.png" />
+    <None Include="Resources\dirt1.png" />
+    <None Include="Resources\dirt.png" />
+    <None Include="Resources\planks_oak.png" />
+    <None Include="Resources\COBBLESTONE.png" />
+    <None Include="Resources\cobblestone4.png" />
+    <None Include="Resources\grass_block_snow.png" />
+    <None Include="Resources\grass_side.png" />
+    <None Include="Resources\buttonbghover.png" />
     <None Include="Resources\wheat_stage7.png" />
     <None Include="Resources\wheat_stage6.png" />
     <None Include="Resources\wheat_stage5.png" />
@@ -362,44 +396,26 @@
     <None Include="Resources\wheat_stage2.png" />
     <None Include="Resources\wheat_stage1.png" />
     <None Include="Resources\wheat_stage0.png" />
-    <None Include="Resources\bone_meal.png" />
     <None Include="Resources\snowylogo1.png" />
     <None Include="Resources\logoNC1.png" />
     <None Include="Resources\snowylogo.png" />
     <None Include="Resources\logoNC.png" />
-    <None Include="Resources\flint_and_steel.png" />
     <None Include="Resources\fire_0.png" />
-    <None Include="Resources\grass_block_snow.png" />
     <None Include="Resources\end_stone.png" />
     <None Include="Resources\buttonbg.png" />
     <None Include="Resources\menubackground.png" />
-    <None Include="Resources\cooked_beef.png" />
     <None Include="Resources\chest.png" />
-    <None Include="Resources\lava_bucket.png" />
-    <None Include="Resources\lava_still.png" />
     <None Include="Resources\bucket.png" />
-    <None Include="Resources\water_bucket.png" />
     <None Include="Resources\oak_sapling.png" />
-    <None Include="Resources\diamond.png" />
-    <None Include="Resources\coal.png" />
-    <None Include="Resources\stone1.png" />
     <None Include="Resources\sand.png" />
-    <None Include="Resources\planks_oak.png" />
-    <None Include="Resources\obsidian1.png" />
-    <None Include="Resources\oak_log.png" />
-    <None Include="Resources\iron_ore.png" />
-    <None Include="Resources\log_oak.png" />
     <None Include="Resources\tnt_side.png" />
     <None Include="Resources\NCLogo.png" />
     <None Include="Resources\netcraft.png" />
     <None Include="Resources\vbnet-edition.png" />
     <None Include="Resources\sprite.png" />
     <None Include="Resources\SANDBLOCK.png" />
-    <None Include="Resources\water_still.png" />
-    <None Include="Resources\OBSIDIAN.png" />
     <None Include="Resources\platformPack_tile034.png" />
     <None Include="Resources\leaves.jpg" />
-    <None Include="Resources\cobblestone4.png" />
     <None Include="Resources\DIAMOND_AXE_FLIPPED.png" />
     <None Include="Resources\DIAMOND_PICKAXE.png" />
     <None Include="Resources\DIAMOND_PICKAXE_FLIPPED.png" />
@@ -408,28 +424,13 @@
     <None Include="Resources\DIAMOND_SWORD.png" />
     <None Include="Resources\DIAMOND_SWORD_FLIPPED.png" />
     <None Include="Resources\DIAMOND_AXE.png" />
-    <None Include="Resources\grass_side.png" />
-    <None Include="Resources\dirt1.png" />
     <None Include="Resources\GLASSBLOCK.png" />
-    <None Include="Resources\GOLD.png" />
     <None Include="Resources\furnace_front_on.png" />
     <None Include="Resources\furnace_front_off.png" />
-    <None Include="Resources\Grid_Sapling.png" />
     <None Include="Resources\c-edition.png" />
     <Content Include="logoNC.ico" />
     <None Include="Resources\game_music_loop.mp3" />
-    <None Include="Resources\bedrock.png" />
-    <None Include="Resources\coal_ore.png" />
-    <None Include="Resources\cobblestone.png" />
-    <None Include="Resources\diamond_block.png" />
-    <None Include="Resources\diamond_ore.png" />
-    <None Include="Resources\dirt.png" />
-    <None Include="Resources\furnace_front.png" />
-    <None Include="Resources\glass.png" />
-    <None Include="Resources\gold_block.png" />
-    <None Include="Resources\gold_ore.png" />
     <None Include="Resources\grass_block_side.png" />
-    <None Include="Resources\iron_block.png" />
     <None Include="Resources\platformPack_tile016.png" />
     <None Include="Resources\platformPack_tile004.png" />
     <None Include="Resources\platformPack_tile001.png" />

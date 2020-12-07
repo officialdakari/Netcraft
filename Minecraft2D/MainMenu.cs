@@ -10,6 +10,7 @@ using System.Text;
 using System.Collections.Specialized;
 using System.Threading;
 using System.Threading.Tasks;
+using DiscordRPC;
 
 namespace Minecraft2D
 {
@@ -69,8 +70,9 @@ namespace Minecraft2D
             {
                 presenceUpdateDelay--;
             }
+            
              
-            string t = "> " + Strings.Left(labelText, labelPos) + (labelWithCur ? "\u258C" : "");
+            string t = "❯ " + Strings.Left(labelText, labelPos) + (labelWithCur ? "\u258C" : "");
             if (labelChangeDelay == 0)
             {
                 labelPos += labelDirection;
@@ -120,10 +122,10 @@ namespace Minecraft2D
             }
             My.MyProject.Forms.Form1.ip = TextBox1.Text;
             My.MyProject.Forms.Form1.Show();
-            Hide();
+            if(My.MyProject.Forms.Form1 != null && My.MyProject.Forms.Form1.connected) Hide();
         }
 
-        public readonly string Ver = "0.1.3a";
+        public readonly string Ver = "0.1.4a";
         internal static MainMenu instance;
         public static MainMenu GetInstance()
         {
@@ -197,7 +199,15 @@ namespace Minecraft2D
             Application.ThreadException += My.MyApplication.threadException;
             AppDomain.CurrentDomain.UnhandledException += My.MyApplication.threadException;
             cfg = File.ReadAllText("./options.txt", Encoding.UTF8);
-            
+            Thread uTh = new Thread(() =>
+            {
+                while(true)
+                {
+                    Thread.Sleep(1000);
+                    dRPC.SetPresence(presence);
+                    dRPC.Invoke();
+                }
+            });
             Utils.LANGUAGE = Utils.GetValue("lang", cfg, "башкирский");
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             DoLang();
@@ -205,32 +215,49 @@ namespace Minecraft2D
             dRPC = new DiscordRPC.DiscordRpcClient("763782798838071346");
             try
             {
-                dRPC.Initialize();
-                dRPC.OnJoinRequested += DRPC_OnJoinRequested;
+                dRPC.RegisterUriScheme();
+                
             }
             catch (Exception ex)
             {
             }
             try
             {
-                if (dRPC.IsInitialized)
-                {
+                dRPC.Initialize();
 
-                    presence = new DiscordRPC.RichPresence();
-                    presence.Details = lang.get("rpc.menu");
-                    
+                presence = new DiscordRPC.RichPresence();
 
-                    var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party()).WithTimestamps(new DiscordRPC.Timestamps());
-                    pr.Assets.LargeImageKey = "snowylogo";
-                    pr.Assets.LargeImageText = "Playing Netcraft v" + My.MyProject.Forms.MainMenu.Ver;
-                    pr.Timestamps.Start = DateTime.UtcNow;
+                //presence = presence.WithSecrets(new DiscordRPC.Secrets()
+                //{
+                //    JoinSecret = "MTI4NzM0OjFpMmhuZToxMjMxMjM= "
+                //});
+                //presence.Party = new Party()
+                //{
+                //    ID = Secrets.CreateFriendlySecret(new Random()),
+                //    Size = 1,
+                //    Max = 5
+                //};
+                presence.Details = lang.get("rpc.menu");
+                var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party()).WithTimestamps(new DiscordRPC.Timestamps());
+                pr.Assets.LargeImageKey = "snowylogo";
+                pr.Assets.LargeImageText = "Playing Netcraft v" + My.MyProject.Forms.MainMenu.Ver;
+                pr.Timestamps.Start = DateTime.UtcNow;
 
-                    dRPC.SetPresence(presence);
-                    dRPC.Invoke();
-                }
+                dRPC.SetPresence(pr);
+                dRPC.Invoke();
+                //dRPC.SetSubscription(EventType.Join | EventType.Spectate | EventType.JoinRequest);
+                //dRPC.UpdateParty(new DiscordRPC.Party()
+                //{
+                //    ID = Secrets.CreateFriendlySecret(new Random()),
+                //    Size = 1,
+                //    Max = 4
+                //});
+                //dRPC.OnJoinRequested += DRPC_OnJoinRequested;
+                uTh.Start();
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
                 FancyMessage.Show(lang.get("rpc.failed"));
             }
             Label5.Text = $"Netcraft {Ver}";
@@ -240,12 +267,12 @@ namespace Minecraft2D
             _Timer1.Start();
         }
 
-        private void DRPC_OnJoinRequested(object sender, DiscordRPC.Message.JoinRequestMessage args)
+        private async void DRPC_OnJoinRequested(object sender, DiscordRPC.Message.JoinRequestMessage args)
         {
-            if(args.Type == DiscordRPC.Message.MessageType.JoinRequest)
-            {
-                //FancyMessage.Show(args.User.ID.ToString());
-            }
+            Debug.WriteLine($"{args.User.Username}#{args.User.Discriminator.ToString()} tried to join the game, because this is a test, declined");
+            await Task.Delay(2000);
+            DiscordRpcClient client = (DiscordRpcClient)sender;
+            client.Respond(args, true);
         }
 
         private void packetreceived(string p)
@@ -290,7 +317,7 @@ namespace Minecraft2D
         {
             StartSingleplayer();
             await Task.Run(async () => {
-                Task.Delay(10000);
+                await Task.Delay(1000);
                 BeginInvoke(new Action(() =>
                 {
                     My.MyProject.Forms.Form1.ip = "127.0.0.1";
@@ -434,6 +461,35 @@ namespace Minecraft2D
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
 
+        }
+
+        private void _Button2_MouseEnter(object sender, EventArgs e)
+        {
+            ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbghover;
+            var c = (Control)sender;
+            var rect = ClientRectangle;
+            rect.Width = 32;
+            rect.Height = 32;
+            var clr = Color.DodgerBlue;
+            int width = 1;
+
+            var g = c.CreateGraphics();
+            ControlPaint.DrawBorder(g, rect,
+                 clr, width, ButtonBorderStyle.Solid,
+                 clr, width, ButtonBorderStyle.Solid,
+                 clr, width, ButtonBorderStyle.Solid,
+                 clr, width, ButtonBorderStyle.Solid);
+        }
+
+        private void _Button2_MouseHover(object sender, EventArgs e)
+        {
+
+        }
+
+        private void _Button2_MouseLeave(object sender, EventArgs e)
+        {
+            ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbg;
+            ((Control)sender).Invalidate();
         }
     }
 

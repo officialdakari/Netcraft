@@ -60,7 +60,7 @@ namespace ProjectTested
             foreach (var c in clients)
             {
                 string n = "Crasher" + rnd.Next(1, 999999).ToString();
-                c.Send($"setname?{n}");
+                c.Send($"setname?{n}?english");
                 c.Name = n;
             }
 

@@ -75,6 +75,16 @@ namespace Minecraft2D
         {
 
         }
+
+        private void button2_MouseEnter(object sender, EventArgs e)
+        {
+            ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbghover;
+        }
+
+        private void button2_MouseLeave(object sender, EventArgs e)
+        {
+            ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbg;
+        }
     }
     public class FancyMessage
     {

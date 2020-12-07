@@ -13,7 +13,7 @@ namespace NCore
         {
             if (args.Length == 0)
             {
-                await sender.SendMessage($"This server is running NCore v{NCore.NCORE_VERSION} for Netcraft v{NCore.NETCRAFT_VERSION}. There is {PluginManager.Plugins.Count} plugins.");
+                await sender.SendMessage($"This server is running NCore {NCore.NCORE_VERSION} for Netcraft {NCore.NETCRAFT_VERSION}. There is {PluginManager.Plugins.Count} plugins.");
                 return true;
             }
 

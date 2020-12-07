@@ -12,19 +12,11 @@ namespace NCore
         {
             var world = new WorldServer();
             int a = 0;
+            caveheight = rnd.Next(NCore.WORLDGEN_CAVE_MIN_HEIGHT, NCore.WORLDGEN_CAVE_MAX_HEIGHT);
             for (int i = 0; i <= 63; i++)
             {
                 int YHeight = new Random().Next(1, 14);
-                for(int o = 17; o < 17 * 2; o++)
-                {
-                    if(o == 24)
-                    {
-                        if(i > 2 && i < 6)
-                        {
-                            world.Blocks.Add(new Block(new Point(i, o), EnumBlockType.OBSIDIAN, true, false));
-                        }
-                    }
-                }
+                
                 for (int o = 0; o <= 24; o++)
                 {
                     if (o == 17)
@@ -111,14 +103,25 @@ namespace NCore
                         {
                             // If Not world.GetBlockAt(i, o + 1).Type = EnumBlockType.WATER Then 
                             TreeGenerator.GenerateTree(new Point(i, o), world);
+                            caveheight = rnd.Next(NCore.WORLDGEN_CAVE_MIN_HEIGHT, NCore.WORLDGEN_CAVE_MAX_HEIGHT);
                             a = i;
                         }
                     }
                 }
+                if(i == 0) pcaveheight = caveheight;
+                if (caveheight > pcaveheight + 1) caveheight = pcaveheight + 1;
+                if (caveheight < pcaveheight - 1) caveheight = pcaveheight - 1;
+                world.GetBlockAt(i, caveheight).IsBackground = true;
+                world.GetBlockAt(i, caveheight + 1).IsBackground = true;
+                world.GetBlockAt(i, caveheight - 1).IsBackground = true;
+                pcaveheight = caveheight;
             }
 
             return world;
         }
+
+        static int caveheight;
+        static int pcaveheight;
 
         public static WorldServer GenerateFlat()
         {

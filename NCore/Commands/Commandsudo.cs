@@ -29,7 +29,7 @@ namespace NCore
                 }
 
                 NCore.GetNCore().MessageReceived($"chat?{string.Join(" ", args.Skip(1).ToArray())}", p);
-                await sender.SendMessage(lang.get("commands.sudo.success", p.Username));
+                await sender.SendMessage(lang.get("commands.sudo.success", p.Username, string.Join(" ", args.Skip(1).ToArray())));
                 return true;
             }
 

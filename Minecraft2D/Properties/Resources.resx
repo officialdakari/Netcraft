@@ -256,9 +256,6 @@
   <data name="dirt1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\dirt1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="grass_side" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\grass_side.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="iron_ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\iron_ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -348,5 +345,14 @@
   </data>
   <data name="game_music_loop" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\game_music_loop.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="grass_block_snow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\grass_block_snow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="grass_side" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\grass_side.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="leaves1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\leaves.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
