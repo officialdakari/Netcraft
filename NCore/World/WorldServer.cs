@@ -9,15 +9,29 @@ namespace NCore
         public List<Block> Blocks { get; set; } = new List<Block>();
         public List<BlockChest> Chests { get; set; } = new List<BlockChest>();
         public string UUID { get; set; } = Guid.NewGuid().ToString();
+        public World.Gamerules Gamerules { get; } = new World.Gamerules();
 
         public Block GetBlockAt(int x, int y)
         {
-            return Blocks.Where(b => b.Position.X == x && b.Position.Y == y).ToArray()[0];
+            try
+            {
+                return Blocks.Where(b => b.Position.X == x && b.Position.Y == y).ToArray()[0];
+            } catch(IndexOutOfRangeException)
+            {
+                return null;
+            }
         }
 
         public Block GetBlockAt(System.Drawing.Point point)
         {
-            return Blocks.Where(b => b.Position == point).ToArray()[0];
+            try
+            {
+                return Blocks.Where(b => b.Position == point).ToArray()[0];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
         }
 
         public BlockChest GetChestAt(System.Drawing.Point point)

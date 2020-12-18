@@ -6,7 +6,7 @@ namespace NCore
 {
     public class Commandhelp : Command
     {
-        public Commandhelp() : base("help", NCore.GetNCore().lang.get("commands.help.description"), "help", new string[] { "?" })
+        public Commandhelp() : base("help", NCore.GetNCore().lang.get("commands.help.description"), "netcraft.command.help", "help", new string[] { "?" })
         {
         }
 

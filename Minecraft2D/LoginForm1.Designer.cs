@@ -115,7 +115,7 @@ namespace Minecraft2D
             this.UsernameTextBox.ForeColor = System.Drawing.Color.White;
             this.UsernameTextBox.Location = new System.Drawing.Point(12, 41);
             this.UsernameTextBox.Name = "UsernameTextBox";
-            this.UsernameTextBox.Size = new System.Drawing.Size(392, 22);
+            this.UsernameTextBox.Size = new System.Drawing.Size(392, 20);
             this.UsernameTextBox.TabIndex = 1;
             this.UsernameTextBox.Text = "Example";
             // 
@@ -175,7 +175,7 @@ namespace Minecraft2D
             this.MinimizeBox = false;
             this.Name = "LoginForm1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Netcraft";
             this.Load += new System.EventHandler(this.LoginForm1_Load);
             this.ResumeLayout(false);

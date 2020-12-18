@@ -5,18 +5,13 @@ namespace NCore
 {
     public class Commandban : Command
     {
-        public Commandban() : base("ban", NCore.GetNCore().lang.get("commands.ban.description"), NCore.GetNCore().lang.get("commands.ban.usage"))
+        public Commandban() : base("ban", NCore.GetNCore().lang.get("commands.ban.description"), "netcraft.command.ban", NCore.GetNCore().lang.get("commands.ban.usage"))
         {
         }
 
         public async override Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
-            if (!sender.GetAdmin())
-            {
-                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
-                return true;
-            }
 
             if (args.Length == 1)
             {

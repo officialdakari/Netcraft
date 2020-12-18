@@ -88,6 +88,8 @@ namespace ProjectTested
         {
             CheckForIllegalCrossThreadCalls = false;
             instance = this;
+            while (true)
+                Application.DoEvents();
         }
     }
 
@@ -253,7 +255,7 @@ namespace ProjectTested
 
         internal void updateRectangle()
         {
-            rectanglePlayer = new Rectangle(location, new Size(47, 92));
+            rectanglePlayer = new Rectangle(location, new Size(37, 72));
         }
 
         public void Packet(string x)

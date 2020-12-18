@@ -5,16 +5,12 @@ namespace NCore
 {
     public class Commandstop : Command
     {
-        public Commandstop() : base("end", NCore.GetNCore().lang.get("commands.end.description"), "end")
+        public Commandstop() : base("end", NCore.GetNCore().lang.get("commands.end.description"), "netcraft.command.end", "end")
         {
         }
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
-            if (!sender.GetAdmin())
-            {
-                return false;
-            }
 
             if (args.Length == 0)
             {

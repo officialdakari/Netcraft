@@ -5,18 +5,13 @@ namespace NCore
 {
     public class Commandbroadcast : Command
     {
-        public Commandbroadcast() : base("broadcast", NCore.GetNCore().lang.get("commands.broadcast.description"), NCore.GetNCore().lang.get("commands.broadcast.usage"))
+        public Commandbroadcast() : base("broadcast", NCore.GetNCore().lang.get("commands.broadcast.description"), "netcraft.command.broadcast", NCore.GetNCore().lang.get("commands.broadcast.usage"), new string[] { "say", "bc" })
         {
         }
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
-            if (!sender.GetAdmin())
-            {
-                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
-                return true;
-            }
 
             if (args.Length > 0)
             {

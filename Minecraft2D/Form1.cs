@@ -53,7 +53,7 @@ namespace Minecraft2D
             try
             {
                 var x = Encode.d(new StreamReader(client.GetStream()).ReadLine()).Split(Conversions.ToChar(Constants.vbLf));
-                handlePackets(x);
+                await handlePackets(x);
                 client.GetStream().BeginRead(new byte[] { 0 }, 0, 0, Read, null);
             }
             catch (Exception ex)
@@ -71,15 +71,25 @@ namespace Minecraft2D
         public async Task handlePackets(string[] x)
         {
             foreach (var a in x)
-                await Packet(a.Replace("\r", "\r\n"));
+            {
+                string data = a.Replace("\r", "\r\n");
+                bool cancel = false;
+                PacketReceive?.Invoke(ref data, ref cancel);
+                if (cancel) return;
+                await Packet(data);
+            }
         }
 
         public async Task Send(string str)
         {
             try
             {
+                string data = Encode.e(str);
+                bool cancel = false;
+                PacketSent?.Invoke(ref data, ref cancel);
+                if (cancel) return;
                 sWriter = new StreamWriter(client.GetStream());
-                sWriter.WriteLine(Encode.e(str));
+                sWriter.WriteLine(data);
                 sWriter.Flush();
             }
             catch (Exception ex)
@@ -99,11 +109,12 @@ namespace Minecraft2D
     /// <param name="ip">IP-адрес сервера</param>
     /// <param name="port">Порт сервера</param>
 
-        public void Connect(string ip, int port)
+        public async Task Connect(string ip, int port)
         {
             try
             {
-                client = new TcpClient(ip, port);
+                client = new TcpClient();
+                await client.ConnectAsync(ip, port);
                 client.GetStream().BeginRead(new byte[] { 0 }, 0, 0, new AsyncCallback(Read), null);
                 connected = true;
             }
@@ -171,6 +182,10 @@ namespace Minecraft2D
         {
             Debug.WriteLine("[ERROR DATA RECEIVED]: " + e.Data);
         }
+
+        public delegate void PacketEventHandler(ref string packet, ref bool cancelled);
+        public event PacketEventHandler PacketSent;
+        public event PacketEventHandler PacketReceive;
 
         public Image playerSkin { get; set; } = My.Resources.Resources.sprite;
         public Image playerSkinFlip { get; set; } = My.Resources.Resources.sprite;
@@ -276,14 +291,14 @@ namespace Minecraft2D
 
         Lang lang;
         Dictionary<string, string> itemNames = new Dictionary<string, string>();
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
             instance = this;
-
             invClose1.BringToFront();
             itemNames.Add("WOODEN_PICKAXE", "Wooden Pickaxe");
             itemNames.Add("WOODEN_AXE", "Wooden Axe");
             itemNames.Add("WOODEN_SHOVEL", "Wooden Shovel");
+            itemNames.Add("WOODEN_SWORD", "Wooden Sword");
             chatPanel1.KeyDown += Form1_KeyDown;
             chatPanel1.KeyUp += Form1_KeyDown;
             makeItDark.KeyDown += Form1_KeyDown;
@@ -313,7 +328,7 @@ namespace Minecraft2D
                 Text = $"NetCraft {My.MyProject.Forms.MainMenu.Ver} (Singleplayer)";
             }
 
-            Connect(ip, port);
+            await Connect(ip, port);
             if(!connected)
             {
                 MainMenu.GetInstance().Show();
@@ -322,7 +337,11 @@ namespace Minecraft2D
                 return;
             }
             pName = Utils.InputBox("text.playername");
-            if (pName == null) Close();
+            if (pName == null)
+            {
+                Close();
+                return;
+            }
             SendPacket("setname", pName, Utils.LANGUAGE);
             Username = pName;
             Thread.Sleep(900);
@@ -381,7 +400,7 @@ namespace Minecraft2D
         {
             while (true)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(5);
                 Tick();
             }
         }
@@ -426,6 +445,18 @@ namespace Minecraft2D
             else
             {
                 ProgressBar1.Value = arg0;
+            }
+        }
+
+        public void SetHunger(int arg0)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new xHealth(SetHealth), (object)arg0);
+            }
+            else
+            {
+                progressBar1.Value = arg0;
             }
         }
 
@@ -476,19 +507,21 @@ namespace Minecraft2D
                         b.Tag = a[4];
                     }
 
-                    b.BackColor = BackColor;
                     b.Name = a[1] + "B" + a[2];
+                    b.BackColor = Color.Transparent;
                     b.Size = new Size(32, 32);
                     b.Location = new Point((Conversions.ToInteger(a[1]) * 32) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) * 32 - VerticalScroll.Value);
                     if (a[3] == "iron_ore")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.iron_ore;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "grass_block")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.grass_side;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "dandelion")
                     {
@@ -504,76 +537,91 @@ namespace Minecraft2D
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.dirt1;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "stone")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.stone1;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "bedrock")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.bedrock;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "wood")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.log_oak;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "leaves")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.leaves;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "cobble")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.cobblestone4;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "planks")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.planks_oak;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "endstone")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.end_stone;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "netcraft_block")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.logoNC;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "netcraft_block_snowy")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.snowylogo;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "diamond_ore")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.diamond_ore;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "snowygrass")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.grass_block_snow;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "gold_ore")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.gold_ore;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "obsidian")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.obsidian1;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "water")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.water_still;
+                        b.BackColor = Color.Blue;
                     }
                     else if (a[3] == "fire")
                     {
@@ -584,6 +632,7 @@ namespace Minecraft2D
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.sand;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "glass")
                     {
@@ -595,26 +644,31 @@ namespace Minecraft2D
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.furnace_front_off;
                         b.Tag += b.Tag.ToString() + "?furnace";
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "iron_block")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.iron_block;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "diamond_block")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.diamond_block;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "gold_block")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.gold_block;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "coal_ore")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.coal_ore;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "wheat0")
                     {
@@ -635,11 +689,13 @@ namespace Minecraft2D
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.tnt_side;
+                        b.BackColor = BackColor;
                     }
                     else if (a[3] == "lava")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.lava_still;
+                        b.BackColor = Color.Orange;
                     }
                     else if (a[3] == "chest")
                     {
@@ -659,7 +715,7 @@ namespace Minecraft2D
 
                 if (a[0] == "hunger")
                 {
-                    progressBar1.Value = int.Parse(a[1]);
+                    SetHunger(int.Parse(a[1]));
                 }
 
                 if (a[0] == "removeblock")
@@ -1076,7 +1132,7 @@ namespace Minecraft2D
             }
         }
 
-        public int moveInterval = 5;
+        public int moveInterval = 10;
 
         public delegate Task xsetSkyColor(Color a);
 
@@ -1200,6 +1256,28 @@ namespace Minecraft2D
             }
         }
 
+        Dictionary<Keys, Action> keybinds = new Dictionary<Keys, Action>();
+
+        public void AddKeybind(Keys key, Action action)
+        {
+            if(keybinds.ContainsKey(key))
+            {
+                throw new Exception();
+                return;
+            }
+            keybinds.Add(key, action);
+        }
+
+        public void RemoveKeybind(Keys key)
+        {
+            if (!keybinds.ContainsKey(key))
+            {
+                throw new Exception();
+                return;
+            }
+            keybinds.Remove(key);
+        }
+
         public async Task CreateBlock(PictureBox b)
         {
             if (InvokeRequired)
@@ -1317,6 +1395,7 @@ namespace Minecraft2D
                 ToolTip1.SetToolTip(b, String.Format(lang.get("game.tooltip.playername"), name));
                 playerEntities.Add(b);
                 players.Add(new EntityPlayer(name, "", new Point(x, y), b));
+                b.BringToFront();
             }
         }
 
@@ -1360,7 +1439,7 @@ namespace Minecraft2D
                         p.Top = y;
                     }
                 }
-
+                
                 foreach (var p in players)
                 {
                     if ((p.Name ?? "") == (name ?? ""))
@@ -1412,7 +1491,11 @@ namespace Minecraft2D
 
         public Point Normalize(Point arg0)
         {
-            return new Point(arg0.X / 32 * 32, arg0.Y / 32 * 32);
+            int x;
+            int y;
+            x = Utils.IntDivide(arg0.X, 32);
+            y = Utils.IntDivide(arg0.Y, 32);
+            return new Point(x, y);
         }
 
         public delegate Task RemoveBlock(int x, int y);
@@ -1461,6 +1544,11 @@ namespace Minecraft2D
                 isBg = bg;
                 notSolid = ns;
             } 
+        }
+
+        public Point GetZeroScreen()
+        {
+            return PointToScreen(new Point(0, 0));
         }
 
         public delegate Task RemovePlayer(string x);
@@ -1526,12 +1614,17 @@ namespace Minecraft2D
             // MsgBox((sender.left / 32).ToString + " " + (sender.top / 32).ToString)
         }
 
+        public event BlockEvent BlockPreBreakEvent;
+        public event BlockEvent BlockBrokenEvent;
+
         private void BreakBlock(object sender)
         {
             // Dim a As String() = {sender.Name.Split("B")(0), sender.Name.Split("B")(1)}
             // Invoke(New xSendPacket(AddressOf SendPacket), "block_break", a)
+            BlockPreBreakEvent?.Invoke(((Control)sender).Location);
             this.SendPacket("block_break", Operators.DivideObject(((Control)sender).Left + HorizontalScroll.Value, 32).ToString() + "?" + Operators.DivideObject(((Control)sender).Top + VerticalScroll.Value, 32).ToString()); // sender.Name.Split("B")(0), sender.Name.Split("B")(1))
-                                                                                                                                                          // Text = sender.Name.Split("B")(0) + " " + sender.Name.Split("B")(1)
+
+            BlockBrokenEvent?.Invoke(((Control)sender).Location);                                                                                                                                    // Text = sender.Name.Split("B")(0) + " " + sender.Name.Split("B")(1)
         }
 
         public delegate Task xSendPacket(string packetType, string[] a);
@@ -1562,7 +1655,7 @@ namespace Minecraft2D
                 {
 
                     Thread.Sleep(moveInterval);
-                    if (!invPanel.Visible && walking == 1)
+                    if (!makeItDark.Visible && walking == 1)
                     {
                         localPlayer.Left -= 1;
                         bool collision = false;
@@ -1603,7 +1696,7 @@ namespace Minecraft2D
                             await UpdatePlayerPosition();
                         }
                     }
-                    else if (!invPanel.Visible && walking == 2)
+                    else if (!makeItDark.Visible && walking == 2)
                     {
                         localPlayer.Left += 1;
                         bool collision = false;
@@ -1645,7 +1738,7 @@ namespace Minecraft2D
                         }
                     }
 
-                    if (JumpStep > -1 && !invPanel.Visible)
+                    if (JumpStep > -1 && !makeItDark.Visible)
                     {
                         bool grounded = true;
                         JumpStep += 1;
@@ -1713,6 +1806,7 @@ namespace Minecraft2D
             if (e.KeyCode == Keys.F1)
             {
                 My.MyProject.Forms.HelpWindow.Show();
+                return;
             }
 
             if(e.KeyCode == Keys.F2)
@@ -1733,11 +1827,13 @@ namespace Minecraft2D
                     InventoryButton.Show();
                     MenuButton.Show();
                 }
+                return;
             }
 
             if(e.KeyCode == Keys.F3)
             {
                 debuginfo.Visible = !debuginfo.Visible;
+                return;
             }
 
             if(e.KeyCode == Keys.F4)
@@ -1750,8 +1846,10 @@ namespace Minecraft2D
                 {
                     G.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
                     G.CopyFromScreen(this.PointToScreen(new Point(0, 0)), new Point(0, 0), this.ClientRectangle.Size);
+                    G.DrawString("Netcraft " + MainMenu.GetInstance().Ver, new Font("Courier New", 12, FontStyle.Regular), new SolidBrush(Color.White), new Point(0, 0));
                 }
                 Clipboard.SetImage((Image)bmp);
+                return;
             }
 
             if(e.KeyCode == Keys.Enter)
@@ -1769,12 +1867,14 @@ namespace Minecraft2D
                         WindowState = FormWindowState.Normal;
                     }
                     Form1_Scroll(this, null);
+                    return;
                 }
             }
 
             if(e.KeyCode == Keys.C && !chatPanel1.Visible)
             {
                 ChatButton.PerformClick();
+                return;
             }
 
             if (NoClip)
@@ -1783,28 +1883,31 @@ namespace Minecraft2D
                 {
                     localPlayer.Left += 2;
                     UpdatePlayerPosition();
+                    return;
                 }
                 else if (e.KeyCode == Keys.A)
                 {
                     localPlayer.Left -= 2;
                     UpdatePlayerPosition();
+                    return;
                 }
                 else if (e.KeyCode == Keys.W)
                 {
                     localPlayer.Top -= 2;
                     UpdatePlayerPosition();
+                    return;
                 }
                 else if (e.KeyCode == Keys.S)
                 {
                     localPlayer.Top += 2;
                     UpdatePlayerPosition();
+                    return;
                 }
                 else if (e.KeyCode == Keys.E)
                 {
                     Button1.PerformClick();
+                    return;
                 }
-
-                return;
             }
             
 
@@ -1812,11 +1915,13 @@ namespace Minecraft2D
             {
                 walking = 2;
                 lastWalk = 1;
+                return;
             }
             else if (e.KeyCode == Keys.A)
             {
                 walking = 1;
                 lastWalk = 2;
+                return;
             }
             else if (e.KeyCode == Keys.W)
             {
@@ -1827,10 +1932,17 @@ namespace Minecraft2D
                 }
 
                 JumpStep = 0;
+                return;
             }
             else if (e.KeyCode == Keys.E)
             {
                 Button1.PerformClick();
+                return;
+            }
+            foreach(Keys k in keybinds.Keys)
+            {
+                if (e.KeyCode != k) continue;
+                keybinds[k]();
             }
         }
 
@@ -1873,6 +1985,7 @@ namespace Minecraft2D
         private int d = 60;
         private int rd = 15;
         private bool effectPlaying = false;
+        string targetted = "";
 
         public async Task Tick()
         {
@@ -1917,7 +2030,7 @@ namespace Minecraft2D
             try
             {
                 Point playerPos = Normalize(localPlayer.Location);
-                debuginfo.Text = $"Netcraft {MainMenu.GetInstance().Ver}\r\nServer IP: \"{ip}\"\r\nPlayer position: {playerPos.X.ToString()}, {playerPos.Y.ToString()}\r\nOnline players: {players.Count}\r\nAll blocks: {blocks.Count}";
+                debuginfo.Text = $"Netcraft {MainMenu.GetInstance().Ver}\r\nServer IP: \"{ip}\"\r\nPlayer position: {playerPos.X.ToString()}, {playerPos.Y.ToString()}\r\nOnline players: {players.Count}\r\nAll blocks: {blocks.Count}\r\nTarget: [{targetted}]";
                 if (!NoClip)
                 {
                     bool collision = false;
@@ -2018,12 +2131,32 @@ namespace Minecraft2D
         {
             if (e.Button == MouseButtons.Right)
             {
+                BlockPrePlaceEvent?.Invoke(new Point((e.X + HorizontalScroll.Value), (e.Y + VerticalScroll.Value)));
                 SendPacket("block_place", (e.X + HorizontalScroll.Value).ToString(), (e.Y + VerticalScroll.Value).ToString());
+                BlockPlacedEvent?.Invoke(new Point((e.X + HorizontalScroll.Value), (e.Y + VerticalScroll.Value)));
             }
             else if (e.Button == MouseButtons.Middle)
             {
+                BlockPrePlaceEventBg?.Invoke(new Point((e.X + HorizontalScroll.Value), (e.Y + VerticalScroll.Value)));
                 SendPacket("block_place_bg", (e.X + HorizontalScroll.Value).ToString(), (e.Y + VerticalScroll.Value).ToString());
+                BlockPlacedEventBg?.Invoke(new Point((e.X + HorizontalScroll.Value), (e.Y + VerticalScroll.Value)));
             }
+        }
+
+        public delegate void BlockEvent(Point point);
+        public event BlockEvent BlockPrePlaceEvent;
+        public event BlockEvent BlockPlacedEvent;
+        public event BlockEvent BlockPrePlaceEventBg;
+        public event BlockEvent BlockPlacedEventBg;
+
+        public async Task SendPlace(int x, int y)
+        {
+            SendPacket("block_place", (x + HorizontalScroll.Value).ToString(), (y + VerticalScroll.Value).ToString());
+        }
+
+        public async Task SendPlaceBack(int x, int y)
+        {
+            SendPacket("block_place_bg", (x + HorizontalScroll.Value).ToString(), (y + VerticalScroll.Value).ToString());
         }
 
         public int JumpStep { get; set; } = -1;
@@ -2064,17 +2197,17 @@ namespace Minecraft2D
                     return;
                 if (lastWalk == 1)
                 {
-                    lc.X += localPlayer.Width - 10;
+                    lc.X += localPlayer.Width - 5;
                     R1.Image = ItemInImage;
                 }
                 else
                 {
-                    lc.X -= R1.Width - 10;
+                    lc.X -= R1.Width - 5;
                     R1.Image = ItemInImageFlipped;
                 }
 
-                lc.Y = (int)(lc.Y + (55d - R1.Height / 2d));
-                R1.Size = new Size(32, 32);
+                lc.Y = (int)(lc.Y + (45d - R1.Height / 2d));
+                R1.Size = new Size(24, 24);
                 R1.SizeMode = PictureBoxSizeMode.StretchImage;
                 R1.BringToFront();
                 R1.Location = lc;
@@ -2125,8 +2258,8 @@ namespace Minecraft2D
                     MainMenu.GetInstance().notice(toNotice, toNoticeType);
                 }
                 My.MyProject.Forms.Chat.Close();
-                MainMenu.GetInstance().presence.State = "";
-                MainMenu.GetInstance().presence.Details = lang.get("rpc.menu");
+                MainMenu.GetInstance().presence.Details = "";
+                MainMenu.GetInstance().presence.State = lang.get("rpc.menu");
                 MainMenu.GetInstance().dRPC.SetPresence(MainMenu.GetInstance().presence);
                 leave();
                 return;
@@ -2144,7 +2277,7 @@ namespace Minecraft2D
         {
             if(IsSingleplayer)
             {
-                ServerProcess.CloseMainWindow();
+                ServerProcess.Kill();
             }
         }
 
@@ -2218,7 +2351,6 @@ namespace Minecraft2D
             if (IsSingleplayer)
             {
             }
-
             Update();
         }
 
@@ -2316,20 +2448,33 @@ namespace Minecraft2D
         private void Form1_Scroll(object sender, ScrollEventArgs e)
         {
             InventoryButton.Location = new Point(Width - InventoryButton.Width - 30, 0);
+            InventoryButton.BringToFront();
             MenuButton.Location = new Point(Width - MenuButton.Width - 30, 29);
+            MenuButton.BringToFront();
             invPanel.Location = new Point(172, 79);
             ProgressBar1.Location = new Point(84, 0);
             progressBar1.Location = new Point(84, 25);
+            progressBar1.BringToFront();
+            ProgressBar1.BringToFront();
             ChatButton.Location = new Point(0, 0);
+            ChatButton.BringToFront();
             makeItDark.Location = new Point(0, 0);
-            chatPanel1.Location = new Point(5, 124);
             //CraftButton.Location = new Point(0, 29);
             debuginfo.Location = new Point(5, 53);
             _Warning.Location = new Point(239, 0);
+            _Warning.BringToFront();
             _ButtonLeft.Location = new Point(8, 503);
+            _ButtonLeft.BringToFront();
             _ButtonRight.Location = new Point(84, 503);
+            _ButtonRight.BringToFront(); 
             _ButtonJump.Location = new Point(1084, 500);
+            _ButtonJump.BringToFront();
             _ButtonAttack.Location = new Point(1008, 500);
+            _ButtonAttack.BringToFront();
+            makeItDark.BringToFront();
+            chatPanel1.Location = new Point(5, 124);
+            chatPanel1.BringToFront();
+            invPanel.BringToFront();
         }
         int effectPlayingDirection = -1;
         int d1 = 0;
@@ -2381,9 +2526,11 @@ namespace Minecraft2D
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
-            
+            targetted = Normalize(PointToClient(Cursor.Position)).ToString();
             Form1_Paint(this, new PaintEventArgs(CreateGraphics(), Bounds));
         }
+
+        public Point ToClientPoint(Point point) => PointToClient(point);
         
         public static void Cmd(string label)
         {
@@ -2476,12 +2623,18 @@ namespace Minecraft2D
             richTextBox1.ScrollToCaret();
         }
 
+        public delegate void PreChat(string text, ref bool cancel);
+        public event PreChat PreChatEvent;
+
         private async void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                await Send("chat?" + textBox1.Text);
+                bool c = false;
+                PreChatEvent?.Invoke(textBox1.Text, ref c);
+
+                if(!c) await Send("chat?" + textBox1.Text);
                 textBox1.Clear();
             }
         }
@@ -2501,6 +2654,11 @@ namespace Minecraft2D
         private void MenuButton_MouseLeave(object sender, EventArgs e)
         {
             ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbg;
+        }
+
+        private void invPanel_Paint(object sender, PaintEventArgs e)
+        {
+
         }
         //private void Form1_MouseDown(object sender, Global.System.Windows.Forms.MouseEventArgs e)
         //{

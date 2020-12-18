@@ -25,7 +25,7 @@ namespace NCore
             PacketQueue = new SendQueueType(ref argarg0);
             World = NCore.GetNCore().World;
             ip = ((IPEndPoint)d.Client.RemoteEndPoint).Address.ToString();
-            PlayerRectangle = new Rectangle(Position, new Size(47, 92));
+            PlayerRectangle = new Rectangle(Position, new Size(37, 72));
         }
 
         public string Username { get; internal set; } = null;
@@ -47,6 +47,9 @@ namespace NCore
         public int FallDistance { get; set; } = 0;
         public int MovedInAir { get; set; } = 0;
         public bool IsAuthorized { get; set; } = false;
+        public bool UnlimitedReach { get; set; } = false;
+        public DateTime MessagePacketTimeout { get; internal set; }
+        public int MessageTimeoutWarnings { get; internal set; } = 0;
         public int AntiFlyWarnings { get; set; } = 0;
         public BlockChest OpenChest { get; set; } = null;
         internal NCore.Lang lang;
@@ -253,7 +256,7 @@ namespace NCore
 
         public async Task Chat(string arg0)
         {
-            await Send("chat?" + arg0);
+            await Send("chat?" + arg0.Replace("\n", ""));
         }
 
         public async Task Heal(int h = 1)
@@ -1009,10 +1012,15 @@ namespace NCore
 
         private async Task e()
         {
-            PlayerRectangle = new Rectangle(Position, new Size(47, 92));
+            PlayerRectangle = new Rectangle(Position, new Size(37, 72));
             try
             {
-                a?.Invoke(Encode.d(new StreamReader(d.GetStream()).ReadLine()), this);
+                string data = Encode.d(new StreamReader(d.GetStream()).ReadLine());
+                netcraft.server.api.events.PlayerPacketReceive ev = new netcraft.server.api.events.PlayerPacketReceive(this, data, false);
+                netcraft.server.api.NCSApi.REPlayerPacketReceiveEvent(ev);
+                data = ev.GetPacket();
+                if(!ev.GetCancelled())
+                    a?.Invoke(data, this);
             }
             catch (SocketException ex)
             {
@@ -1063,10 +1071,7 @@ namespace NCore
             {
                 d.GetStream().BeginRead(new byte[] { 0 }, 0, 0, new AsyncCallback((_) => e()), null);
             }
-            catch (NullReferenceException ex)
-            {
-            }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
                 b?.Invoke(this);
             }
@@ -1076,8 +1081,13 @@ namespace NCore
         {
             try
             {
+                string data = Encode.e(Messsage);
+                netcraft.server.api.events.PlayerPacketSend ev = new netcraft.server.api.events.PlayerPacketSend(this, data, false);
+                netcraft.server.api.NCSApi.REPlayerPacketSendEvent(ev);
+                if (ev.GetCancelled()) return;
+                data = ev.GetPacket();
                 c = new StreamWriter(d.GetStream());
-                c.WriteLine(Encode.e(Messsage));
+                c.WriteLine(data);
                 c.Flush();
             }
             catch (Exception ex)
@@ -1092,7 +1102,7 @@ namespace NCore
                 await Netcraft.Broadcast(NCore.GetNCore().lang.get("broadcast.kick", Username, kickMessage));
             }
 
-            if(IsLoaded) NCore.GetNCore().Log($"{Username} kicked from the game: '{kickMessage}'");
+            if(IsLoaded) NCore.GetNCore().Log($"{Username} was kicked from the game: '{kickMessage}'");
             await Send("msgkick?" + kickMessage);
             b?.Invoke(this);
             if (d != null && d.Client.Connected) Disconnect();

@@ -122,10 +122,10 @@ namespace Minecraft2D
             }
             My.MyProject.Forms.Form1.ip = TextBox1.Text;
             My.MyProject.Forms.Form1.Show();
-            if(My.MyProject.Forms.Form1 != null && My.MyProject.Forms.Form1.connected) Hide();
+            Hide();
         }
 
-        public readonly string Ver = "0.1.4a";
+        public readonly string Ver = "0.1.5a";
         internal static MainMenu instance;
         public static MainMenu GetInstance()
         {
@@ -168,6 +168,7 @@ namespace Minecraft2D
             {
                 button1.Hide();
                 button2.Show();
+                presence.State = "Game is crashed";
             }
             if(type == 2)
             {
@@ -191,9 +192,12 @@ namespace Minecraft2D
             
         }
         string cfg;
+        Client _client;
         private void MainMenu_Load(object sender, EventArgs e)
         {
             instance = this;
+            button1 = _Button1;
+            Button1 = _Button1;
             comment("ты чё декомпилировал игру быстро удаляй декомпилированный код иначе бан");
             Form1.instance = My.MyProject.Forms.Form1;
             Application.ThreadException += My.MyApplication.threadException;
@@ -208,18 +212,18 @@ namespace Minecraft2D
                     dRPC.Invoke();
                 }
             });
-            Utils.LANGUAGE = Utils.GetValue("lang", cfg, "башкирский");
+            Utils.LANGUAGE = Utils.GetValue("lang", cfg, "english");
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             DoLang();
             SetTitle();
             dRPC = new DiscordRPC.DiscordRpcClient("763782798838071346");
             try
             {
-                dRPC.RegisterUriScheme();
-                
+                dRPC.RegisterUriScheme(executable: Application.ExecutablePath);
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.ToString());
             }
             try
             {
@@ -237,10 +241,10 @@ namespace Minecraft2D
                 //    Size = 1,
                 //    Max = 5
                 //};
-                presence.Details = lang.get("rpc.menu");
+                presence.State = lang.get("rpc.menu");
                 var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party()).WithTimestamps(new DiscordRPC.Timestamps());
                 pr.Assets.LargeImageKey = "snowylogo";
-                pr.Assets.LargeImageText = "Playing Netcraft v" + My.MyProject.Forms.MainMenu.Ver;
+                pr.Assets.LargeImageText = "https://discord.gg/BuKCBP8";
                 pr.Timestamps.Start = DateTime.UtcNow;
 
                 dRPC.SetPresence(pr);
@@ -253,6 +257,8 @@ namespace Minecraft2D
                 //    Max = 4
                 //});
                 //dRPC.OnJoinRequested += DRPC_OnJoinRequested;
+                //dRPC.OnJoin += DRPC_OnJoin;
+                //dRPC.OnSpectate += DRPC_OnSpectate;
                 uTh.Start();
             }
             catch (Exception ex)
@@ -265,6 +271,16 @@ namespace Minecraft2D
             foreach (Control c in Controls)
                 c.KeyDown += OnKey;
             _Timer1.Start();
+        }
+
+        private void DRPC_OnSpectate(object sender, DiscordRPC.Message.SpectateMessage args)
+        {
+
+        }
+
+        private void DRPC_OnJoin(object sender, DiscordRPC.Message.JoinMessage args)
+        {
+
         }
 
         private async void DRPC_OnJoinRequested(object sender, DiscordRPC.Message.JoinRequestMessage args)
@@ -282,7 +298,7 @@ namespace Minecraft2D
             {
                 FancyMessage.Show(String.Format(lang.get(u[1]), (object[])u.Skip(2).ToArray()));
             }
-            if(u[0]=="name")
+            if (u[0] == "name")
             {
                 string n = Utils.InputBox("net.requestname");
                 while (n == null)
@@ -293,7 +309,16 @@ namespace Minecraft2D
                 Thread.Sleep(30);
                 client.f("blacklist");
             }
-            if(u[0]=="bl")
+            if (u[0] == "pass")
+            {
+                string n = Utils.InputBox("Password please.");
+                while (n == null)
+                {
+                    n = Utils.InputBox("Password please.");
+                }
+                client.f("pass?" + n);
+            }
+            if (u[0]=="bl")
             {
                 foreach(string i in u.Skip(1).ToArray())
                 {
@@ -331,7 +356,7 @@ namespace Minecraft2D
         {
             if(!File.Exists(@"C:\Program Files\dotnet\dotnet.exe") && !File.Exists(@"C:\Program Files (x86)\dotnet\dotnet.exe"))
             {
-                if(FancyMessage.Show("У Вас не установлен .NET Core. Вы хотите перейти на сайт скачивания?", "Ошибка", FancyMessage.Icon.Error, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK) {
+                if(FancyMessage.Show("You have not installed .NET Core. Do you wanted to open download website?", "Ошибка", FancyMessage.Icon.Error, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK) {
                     Process.Start(@"https://dotnet.microsoft.com/download/dotnet-core/2.1");
                 }
                 return;
@@ -490,6 +515,30 @@ namespace Minecraft2D
         {
             ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbg;
             ((Control)sender).Invalidate();
+        }
+
+        private void _Button5_MouseEnter(object sender, EventArgs e)
+        {
+            _Button2_MouseEnter(sender, e);
+        }
+
+        private void _Button5_MouseHover(object sender, EventArgs e)
+        {
+
+        }
+
+        private void _Button5_MouseLeave(object sender, EventArgs e)
+        {
+            _Button2_MouseLeave(sender, e);
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+        }
+
+        private void notifyIcon1_MouseDoubleClick_1(object sender, MouseEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 

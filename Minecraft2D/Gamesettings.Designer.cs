@@ -103,9 +103,9 @@ namespace Minecraft2D
             this.checkBox1.ForeColor = System.Drawing.Color.White;
             this.checkBox1.Location = new System.Drawing.Point(6, 108);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(69, 22);
+            this.checkBox1.Size = new System.Drawing.Size(109, 22);
             this.checkBox1.TabIndex = 2;
-            this.checkBox1.Text = "Music";
+            this.checkBox1.Text = "Music (bad)";
             this.checkBox1.UseVisualStyleBackColor = false;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
             // 

@@ -83,6 +83,11 @@ namespace NCore.netcraft.server.api
                 return a;
             }
 
+            public void SetMessage(string a)
+            {
+                this.a = a;
+            }
+
             public NetcraftPlayer GetPlayer()
             {
                 return b;
@@ -315,6 +320,93 @@ namespace NCore.netcraft.server.api
             public Block GetBlock()
             {
                 return b;
+            }
+        }
+
+        public class PlayerPacketSend
+        {
+            NetcraftPlayer a;
+            string b;
+            bool c;
+
+            public NetcraftPlayer GetPlayer() => a;
+            public string GetPacket() => b;
+            public bool GetCancelled() => c;
+
+            public void SetPacket(string a)
+            {
+                this.b = a;
+            }
+
+            public void SetCancelled(bool c)
+            {
+                this.c = c;
+            }
+
+            internal PlayerPacketSend(NetcraftPlayer a, string b, bool c)
+            {
+                this.a = a;
+                this.b = b;
+                this.c = c;
+            }
+        }
+
+        public class PlayerPacketReceive
+        {
+            NetcraftPlayer a;
+            string b;
+            bool c;
+
+            public NetcraftPlayer GetPlayer() => a;
+            public string GetPacket() => b;
+            public bool GetCancelled() => c;
+
+            public void SetPacket(string a)
+            {
+                this.b = a;
+            }
+
+            public void SetCancelled(bool c)
+            {
+                this.c = c;
+            }
+
+            internal PlayerPacketReceive(NetcraftPlayer a, string b, bool c)
+            {
+                this.a = a;
+                this.b = b;
+                this.c = c;
+            }
+        }
+
+        public class SandPhysicsEvent
+        {
+            Block a;
+            Point b;
+            Point c;
+            bool d;
+
+            public Point GetFrom() => b;
+            public Point GetTo() => c;
+            public Block GetBlock() => a;
+            public bool GetCancelled() => d;
+
+            public void SetTo(Point a)
+            {
+                this.c = a;
+            }
+
+            public void SetCancelled(bool d)
+            {
+                this.d = d;
+            }
+
+            internal SandPhysicsEvent(Block a, Point b, Point c)
+            {
+                this.a = a;
+                this.b = b;
+                this.c = c;
+                this.d = false;
             }
         }
     }

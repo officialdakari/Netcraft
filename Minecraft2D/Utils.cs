@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.VisualBasic.CompilerServices;
 using Minecraft2D;
 
 namespace Minecraft2D
 {
 
-    internal static class Utils
+    public static class Utils
     {
         internal static string LANGUAGE = "башкирский";
         public static object IIf(bool expession, object valueIfTrue, object valueIfFalse)
@@ -35,7 +36,7 @@ namespace Minecraft2D
             return ifNull;
         }
 
-        internal static string InputBox(string text)
+        public static string InputBox(string text)
         {
             LoginForm1 i = new LoginForm1();
             Lang lang = Lang.FromFile($"./lang/{LANGUAGE}.txt");
@@ -45,6 +46,11 @@ namespace Minecraft2D
                 return i.UsernameTextBox.Text;
             }
             return null;
+        }
+
+        public static int IntDivide(int a, int b)
+        {
+            return (int)Operators.IntDivideObject(a, b);
         }
     }
 

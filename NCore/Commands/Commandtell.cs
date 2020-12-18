@@ -8,7 +8,7 @@ namespace NCore.Commands
 {
     class Commandtell : Command
     {
-        public Commandtell() : base("tell", NCore.GetNCore().lang.get("commands.tell.description"), NCore.GetNCore().lang.get("commands.tell.usage"), new string[]{ "t", "msg", "m"})
+        public Commandtell() : base("tell", NCore.GetNCore().lang.get("commands.tell.description"), "netcraft.command.tell", NCore.GetNCore().lang.get("commands.tell.usage"), new string[]{ "t", "msg", "m"})
         {
         }
 
@@ -24,7 +24,7 @@ namespace NCore.Commands
                     await sender.SendMessage(lang.get("commands.generic.player.not-found"));
                     return true;
                 }
-                await player.Chat($"{(sender.GetAdmin() == true ? "[ADMIN] " : "")}{sender.GetName()} => {player.Username}: {message}");
+                await player.Chat($"{sender.GetName()} => {player.Username}: {message}");
                 await sender.SendMessage($"{sender.GetName()} => {player.Username}: {message}");
                 return true;
             }

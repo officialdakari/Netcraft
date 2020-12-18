@@ -10,7 +10,7 @@ namespace AdminUtilsN.Commands
 {
     class Commandmute : NCore.Command
     {
-        public Commandmute() : base("mute", "Мьют или размьют игрока", "mute <player> <seconds> <reason>", new[] { "m" })
+        public Commandmute() : base("mute", "Мьют или размьют игрока", "adminutils.mute", "mute <player> <seconds> <reason>", new[] { "m" })
         {
         }
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)

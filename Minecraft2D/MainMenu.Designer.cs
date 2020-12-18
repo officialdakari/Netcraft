@@ -63,6 +63,7 @@ namespace Minecraft2D
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.PictureBox2 = new System.Windows.Forms.PictureBox();
             this.PictureBox1 = new System.Windows.Forms.PictureBox();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.Panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -80,8 +81,7 @@ namespace Minecraft2D
             // 
             this._Button1.BackColor = System.Drawing.Color.White;
             this._Button1.BackgroundImage = global::Minecraft2D.My.Resources.Resources.buttonbg;
-            this._Button1.FlatAppearance.BorderColor = System.Drawing.Color.Red;
-            this._Button1.FlatAppearance.BorderSize = 0;
+            this._Button1.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this._Button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Lime;
             this._Button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkOrange;
             this._Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -91,6 +91,7 @@ namespace Minecraft2D
             this._Button1.Name = "_Button1";
             this._Button1.Size = new System.Drawing.Size(310, 36);
             this._Button1.TabIndex = 1;
+            this._Button1.TabStop = false;
             this._Button1.Text = "multiplayer";
             this._Button1.UseVisualStyleBackColor = false;
             this._Button1.Click += new System.EventHandler(this.Button1_Click);
@@ -107,6 +108,7 @@ namespace Minecraft2D
             this.TextBox1.Name = "TextBox1";
             this.TextBox1.Size = new System.Drawing.Size(202, 27);
             this.TextBox1.TabIndex = 2;
+            this.TextBox1.TabStop = false;
             this.TextBox1.Text = "127.0.0.1";
             // 
             // Label2
@@ -116,7 +118,7 @@ namespace Minecraft2D
             this.Label2.ForeColor = System.Drawing.Color.White;
             this.Label2.Location = new System.Drawing.Point(475, 195);
             this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(19, 13);
+            this.Label2.Size = new System.Drawing.Size(20, 13);
             this.Label2.TabIndex = 3;
             this.Label2.Text = "IP:";
             // 
@@ -134,6 +136,7 @@ namespace Minecraft2D
             this._Button3.Name = "_Button3";
             this._Button3.Size = new System.Drawing.Size(75, 30);
             this._Button3.TabIndex = 5;
+            this._Button3.TabStop = false;
             this._Button3.Text = "YouTube";
             this._Button3.UseVisualStyleBackColor = false;
             this._Button3.Click += new System.EventHandler(this.Button3_Click);
@@ -166,6 +169,7 @@ namespace Minecraft2D
             this._Button4.Name = "_Button4";
             this._Button4.Size = new System.Drawing.Size(75, 30);
             this._Button4.TabIndex = 7;
+            this._Button4.TabStop = false;
             this._Button4.Text = "Discord";
             this._Button4.UseVisualStyleBackColor = false;
             this._Button4.Click += new System.EventHandler(this.Button4_Click);
@@ -174,8 +178,7 @@ namespace Minecraft2D
             // 
             this._Button2.BackColor = System.Drawing.Color.White;
             this._Button2.BackgroundImage = global::Minecraft2D.My.Resources.Resources.buttonbg;
-            this._Button2.FlatAppearance.BorderColor = System.Drawing.Color.Red;
-            this._Button2.FlatAppearance.BorderSize = 0;
+            this._Button2.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this._Button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Lime;
             this._Button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkOrange;
             this._Button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -185,6 +188,7 @@ namespace Minecraft2D
             this._Button2.Name = "_Button2";
             this._Button2.Size = new System.Drawing.Size(310, 36);
             this._Button2.TabIndex = 8;
+            this._Button2.TabStop = false;
             this._Button2.Text = "singleplayer";
             this._Button2.UseVisualStyleBackColor = false;
             this._Button2.Click += new System.EventHandler(this.Button2_Click_1);
@@ -207,18 +211,24 @@ namespace Minecraft2D
             // _Button5
             // 
             this._Button5.BackColor = System.Drawing.Color.White;
-            this._Button5.FlatAppearance.BorderColor = System.Drawing.Color.Red;
+            this._Button5.BackgroundImage = global::Minecraft2D.My.Resources.Resources.buttonbg;
+            this._Button5.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this._Button5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Lime;
             this._Button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkOrange;
             this._Button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._Button5.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this._Button5.ForeColor = System.Drawing.Color.White;
             this._Button5.Location = new System.Drawing.Point(708, 188);
             this._Button5.Name = "_Button5";
             this._Button5.Size = new System.Drawing.Size(80, 27);
             this._Button5.TabIndex = 11;
+            this._Button5.TabStop = false;
             this._Button5.Text = "Ping";
             this._Button5.UseVisualStyleBackColor = false;
             this._Button5.Click += new System.EventHandler(this.Button5_Click);
+            this._Button5.MouseEnter += new System.EventHandler(this._Button5_MouseEnter);
+            this._Button5.MouseLeave += new System.EventHandler(this._Button5_MouseLeave);
+            this._Button5.MouseHover += new System.EventHandler(this._Button5_MouseHover);
             // 
             // Panel1
             // 
@@ -322,6 +332,7 @@ namespace Minecraft2D
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(89, 28);
             this.button2.TabIndex = 1;
+            this.button2.TabStop = false;
             this.button2.Text = "Exit";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click_2);
@@ -337,6 +348,7 @@ namespace Minecraft2D
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(89, 28);
             this.button1.TabIndex = 0;
+            this.button1.TabStop = false;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
@@ -382,12 +394,20 @@ namespace Minecraft2D
             this.PictureBox1.TabStop = false;
             this.PictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.PictureBox2_Paint);
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "Нажмите дважды сюда, чтобы закрыть Netcraft.";
+            this.notifyIcon1.Visible = true;
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick_1);
+            // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
-            this.BackgroundImage = global::Minecraft2D.My.Resources.Resources.menubackground;
+            this.BackgroundImage = global::Minecraft2D.Properties.Resources.netcraft;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(800, 372);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
@@ -598,5 +618,6 @@ namespace Minecraft2D
         private TextBox textBox2;
         internal PictureBox PictureBox2;
         internal PictureBox PictureBox1;
+        private NotifyIcon notifyIcon1;
     }
 }

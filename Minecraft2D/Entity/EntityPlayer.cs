@@ -90,17 +90,17 @@ namespace Minecraft2D
                     return;
                 if (LastWalk == 1)
                 {
-                    lc.X += Render.Width - 10;
+                    lc.X += Render.Width - 5;
                     R1.Image = ItemInImage;
                 }
                 else
                 {
-                    lc.X -= R1.Width - 10;
+                    lc.X -= R1.Width - 5;
                     R1.Image = ItemInImageFlipped;
                 }
 
-                lc.Y = (int)(lc.Y + (55d - R1.Height / 2d));
-                R1.Size = new Size(32, 32);
+                lc.Y = (int)(lc.Y + (45d - R1.Height / 2d));
+                R1.Size = new Size(24, 24);
                 R1.SizeMode = PictureBoxSizeMode.StretchImage;
                 R1.BringToFront();
                 R1.Location = lc;

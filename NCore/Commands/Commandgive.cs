@@ -9,18 +9,13 @@ namespace NCore
 {
     public class Commandgive : Command
     {
-        public Commandgive() : base("give", NCore.GetNCore().lang.get("commands.give.description"), NCore.GetNCore().lang.get("commands.give.usage"))
+        public Commandgive() : base("give", NCore.GetNCore().lang.get("commands.give.description"), "netcraft.command.give", NCore.GetNCore().lang.get("commands.give.usage"))
         {
         }
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
-            if (!sender.GetAdmin())
-            {
-                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
-                return true;
-            }
 
             if (args.Length == 2)
             {

@@ -7,18 +7,13 @@ namespace NCore
 {
     public class Commandkick : Command
     {
-        public Commandkick() : base("kick", NCore.GetNCore().lang.get("commands.kick.description"), "kick <игрок> [причина]")
+        public Commandkick() : base("kick", NCore.GetNCore().lang.get("commands.kick.description"), "netcraft.command.kick", NCore.GetNCore().lang.get("commands.kick.usage"))
         {
         }
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
-            if (!sender.GetAdmin())
-            {
-                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
-                return true;
-            }
 
             if (args.Length == 1)
             {

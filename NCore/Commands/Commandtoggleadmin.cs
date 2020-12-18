@@ -6,19 +6,13 @@ namespace NCore
 {
     public class Commandtoggleadmin : Command
     {
-        public Commandtoggleadmin() : base("toggleadmin", NCore.GetNCore().lang.get("commands.toggleadmin.description"), NCore.GetNCore().lang.get("commands.toggleadmin.usage"))
+        public Commandtoggleadmin() : base("toggleadmin", NCore.GetNCore().lang.get("commands.toggleadmin.description"), "netcraft.command.toggleadmin", NCore.GetNCore().lang.get("commands.toggleadmin.usage"))
         {
         }
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
-            if (!sender.GetAdmin())
-            {
-                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
-                return true;
-            }
-
             if (args.Length == 1)
             {
                 var local_a = Netcraft.GetPlayer(args[0]);

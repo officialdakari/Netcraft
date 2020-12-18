@@ -5,7 +5,7 @@ namespace NCore
 {
     public class Commandversion : Command
     {
-        public Commandversion() : base("version", NCore.GetNCore().lang.get("commands.version.description"), "version")
+        public Commandversion() : base("version", NCore.GetNCore().lang.get("commands.version.description"), "", "version")
         {
         }
 

@@ -8,7 +8,7 @@ namespace NCore
 {
     public class Commandlist : Command
     {
-        public Commandlist() : base("list", NCore.GetNCore().lang.get("commands.list.description"), "list")
+        public Commandlist() : base("list", NCore.GetNCore().lang.get("commands.list.description"), "netcraft.command.list", "list")
         {
         }
 

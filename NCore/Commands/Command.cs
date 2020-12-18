@@ -1,29 +1,32 @@
 ﻿using Microsoft.VisualBasic.CompilerServices;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NCore
 {
     public abstract class Command
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Usage { get; set; }
-        public string[] Aliases { get; set; }
+        public string Name { get; }
+        public string Description { get; }
+        public string Usage { get; }
+        public string[] Aliases { get; }
+        public string Permission { get; }
 
-        public Command(string a, string b, string c, string[] d = null)
+        public Command(string a, string b, string d, string c, string[] e = null)
         {
             Name = a;
             Description = b;
             Usage = c;
-            if (!NCore.IsNothing(d))
+            if (!NCore.IsNothing(e))
             {
-                Aliases = d;
+                Aliases = e;
             }
             else
             {
                 Aliases = new[] { a };
             }
+            Permission = d;
         }
 
         public abstract Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label);
@@ -59,6 +62,26 @@ namespace NCore
             return senderAdmin;
         }
 
+        public bool HasPermission(string permission)
+        {
+            if (permission == "") return true;
+            if (!IsPlayer) return true;
+            if (((NetcraftPlayer)this).IsAdmin) return true;
+            string[] perms = NCore.GetNCore().permissions.GetPermissions(GetName());
+            if (perms == null) return false;
+            foreach (string p in perms)
+            {
+                if(p.StartsWith("group."))
+                {
+                    string group = p.Substring("group.".Length);
+                    foreach(string g in NCore.GetNCore().groups[group])
+                        perms = perms.Append(g).ToArray();
+                }
+            }
+            if (perms.Contains("*")) return true;
+            return perms.Contains(permission);
+        }
+
         public bool IsPlayer
         {
             get
@@ -77,7 +100,7 @@ namespace NCore
             if (IsPlayer)
             {
                 NetcraftPlayer p = (NetcraftPlayer)this;
-                await p.Chat(m);
+                await p.Chat(m.Replace("\n", ""));
                 return;
             }
 

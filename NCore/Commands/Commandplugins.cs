@@ -5,7 +5,7 @@ namespace NCore
 {
     public class Commandplugins : Command
     {
-        public Commandplugins() : base("plugins", "Shows list of plugins.", "plugins", new[] { "pl" })
+        public Commandplugins() : base("plugins", "Shows list of plugins.", "netcraft.command.plugins", "plugins", new[] { "pl" })
         {
         }
 

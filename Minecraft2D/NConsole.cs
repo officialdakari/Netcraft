@@ -66,6 +66,9 @@ namespace Minecraft2D
                 HT.Add("self", Color.Blue);
                 HT.Add("object", Color.Blue);
                 HT.Add("var", Color.Blue);
+                HT.Add("true", Color.Blue);
+                HT.Add("false", Color.Blue);
+                HT.Add("null", Color.Blue);
                 HT.Add("void", Color.Blue);
                 HT.Add("static", Color.Blue);
                 HT.Add("new", Color.Blue);
@@ -88,7 +91,6 @@ namespace Minecraft2D
                 HT.Add("async", Color.Red);
                 HT.Add("await", Color.Red);
                 HT.Add("NetcraftPlayer", Color.Green);
-                HT.Add("NCore", Color.Green);
                 HT.Add("Block", Color.Green);
                 HT.Add("IBlockMetadata", Color.Green);
                 HT.Add("BlockChest", Color.Green);

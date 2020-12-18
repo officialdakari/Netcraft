@@ -9,18 +9,13 @@ namespace NCore.Commands
 {
     class Commandrmitem : Command
     {
-        public Commandrmitem() : base("rmitem", NCore.GetNCore().lang.get("commands.rmitem.description"), NCore.GetNCore().lang.get("commands.rmitem.usage"))
+        public Commandrmitem() : base("rmitem", NCore.GetNCore().lang.get("commands.rmitem.description"), "netcraft.command.rmitem", NCore.GetNCore().lang.get("commands.rmitem.usage"), new string[] {"removeitem", "clearitem", "clear", "clearinv" })
         {
         }
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
-            if (!sender.GetAdmin())
-            {
-                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
-                return true;
-            }
 
             if (args.Length == 2)
             {

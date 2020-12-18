@@ -17,6 +17,7 @@ using NCore.netcraft.server.api;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Newtonsoft.Json;
 
 namespace NCore
 {
@@ -68,6 +69,17 @@ namespace NCore
         {
             await nCore.StartScript(name);
         }
+
+        public async Task ResetEnvironment(NetcraftPlayer player)
+        {
+            if(nCore.scripts.ContainsKey(player.Username))
+            {
+                nCore.scripts.Remove(player.Username);
+            } else
+            {
+                throw new ArgumentNullException();
+            }
+        }
     }
 
     public partial class NCore
@@ -93,13 +105,13 @@ namespace NCore
                 return FromText(System.IO.File.ReadAllText(p, Encoding.UTF8));
             }
 
-            internal string get(string i)
+            public string get(string i)
             {
                 if (!formats.ContainsKey(i)) return i;
                 return formats[i].ToString().Replace("&CRLF", "\r\n").Replace("&CR", "\r");
             }
 
-            internal string get(string i, params string[] args)
+            public string get(string i, params string[] args)
             {
                 if (args == null) return get(i);
                 if (!formats.ContainsKey(i)) return i;
@@ -113,9 +125,8 @@ namespace NCore
         private TcpListener Listning;
         internal readonly List<NetcraftPlayer> players = new List<NetcraftPlayer>();
         private NetcraftPlayer pClient;
-        // Dim npc As EntityPlayerNPC = New EntityPlayerNPC
-        private readonly object worldfile = "./world.json";
-        private readonly object configfile = "./server.properties";
+        public const string NCORE_WORLDFILE = "./world.json"; 
+        public const string NCORE_CONFIGFILE = "./server.properties";
         private readonly SaveLoad sv = new SaveLoad();
         internal int maxPlayers = 20;
         private string chatFormat = "%1 %2";
@@ -131,26 +142,28 @@ namespace NCore
         public const int WORLDGEN_CAVE_MAX_HEIGHT = 12;
         public Lang lang;
         public TimeSpan keepAliveTimeout = new TimeSpan(0, 0, 0, 5, 0);
+        public Player.Permissions permissions;
+        public Dictionary<string, string[]> groups;
 
         public bool IsSingleplayerServer { get; private set; } = false;
 
-        private int worldloadDelay = 40;
-
         public void LoadConfig()
         {
-            string cfg = File.ReadAllText(Conversions.ToString(configfile), Encoding.UTF8);
+            string cfg = File.ReadAllText(Conversions.ToString(NCORE_CONFIGFILE), Encoding.UTF8);
             string nccfg = File.ReadAllText("./ncore.cfg", Encoding.UTF8);
             maxPlayers = Conversions.ToInteger(Config.GetValue("max-players", cfg, "-1"));
             chatFormat = Config.GetValue("chat-format", cfg, "%1 %2");
             everyBodyAdmin = Conversions.ToInteger(Config.GetValue("everybody-admin", cfg, "0"));
-            motd = Config.GetValue("server-motd", cfg, "null");
+            motd = Config.GetValue("server-motd", cfg, "null"); 
             name = Config.GetValue("server-name", cfg, "null");
             allowFlight = Conversions.ToInteger(Config.GetValue("allow-flight", cfg, "0"));
             allowQuery = Conversions.ToInteger(Config.GetValue("allow-query", nccfg, "0"));
             commandsConsoleOnly = Conversions.ToInteger(Config.GetValue("commands-console-only", nccfg, "0"));
             enableAuth = Conversions.ToInteger(Config.GetValue("enable-auth", cfg, "0"));
-            enableConsole = Conversions.ToInteger(Config.GetValue("enable-csharp-script-console", cfg, "0"));
+            enableConsole = Conversions.ToInteger(Config.GetValue("enable-csharp-script-console", nccfg, "0"));
             lang = Lang.FromFile($"./lang/{Config.GetValue("def-lang", cfg, "english")}.txt");
+            permissions = JsonConvert.DeserializeObject<Player.Permissions>(File.ReadAllText("./permissions.json", Encoding.UTF8));
+            groups = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(File.ReadAllText("./groups.json", Encoding.UTF8));
 
             if (isIllegalValue(everyBodyAdmin, 0, 1)) CrashReport(new Exception("Illegal property value"));
             if (isIllegalValue(allowFlight, 0, 1)) CrashReport(new Exception("Illegal property value"));
@@ -167,6 +180,7 @@ namespace NCore
             //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
             //var appRoot = appPathMatcher.Match(exePath).Value;
             return $"{Directory.GetCurrentDirectory()}\\NCore.dll";
+
         }
 
         public async Task LoadScripts()
@@ -190,7 +204,7 @@ namespace NCore
             var script = await CSharpScript.RunAsync($@"Context ctx = global::NCore.NCore.GetNCore().ctx;void Log(string message, string t = ""INFO"") {{ ctx.Print(""[{n}] "" + message, t); }}", a.WithImports("System", "System.IO", "System.Net", "System.Linq", "NCore", "NCore.netcraft.server.api", "NCore.netcraft.server.api.events"));
             await script.ContinueWithAsync(File.ReadAllText(i));
         }
-        Dictionary<string, ScriptState<object>> scripts = new Dictionary<string, ScriptState<object>>();
+        internal Dictionary<string, ScriptState<object>> scripts = new Dictionary<string, ScriptState<object>>();
         public async Task Eval(string scriptt, NetcraftPlayer p)
         {
             ScriptOptions a = ScriptOptions.Default;
@@ -201,7 +215,7 @@ namespace NCore
             {
                 scripts.Add(p.Username, script);
             }
-            await scripts[p.Username].ContinueWithAsync(scriptt, a);
+            scripts[p.Username] = await scripts[p.Username].ContinueWithAsync(scriptt, a);
         }
 
         public Context ctx;
@@ -247,7 +261,6 @@ namespace NCore
             Netcraft.AddCommand(new Commandban());
             Netcraft.AddCommand(new Commandunban());
             Netcraft.AddCommand(new Commanditems());
-            Netcraft.AddCommand(new Commandcraft());
             Netcraft.AddCommand(new Commandtoggleadmin());
             Netcraft.AddCommand(new Commandkick());
             Netcraft.AddCommand(new Commandkill());
@@ -263,6 +276,10 @@ namespace NCore
             Netcraft.AddCommand(new Commands.Commandsave());
             Netcraft.AddCommand(new Commands.Commandtell());
             Netcraft.AddCommand(new Commands.Commandrmitem());
+            Netcraft.AddCommand(new Commands.Commandeval());
+            Netcraft.AddCommand(new Commands.Commandgamerule());
+            Netcraft.AddCommand(new Commands.Commandtime());
+            Netcraft.AddCommand(new Commands.Commandpermissions());
         }
 
         private void eventhandler_a(string m)
@@ -272,8 +289,8 @@ namespace NCore
         }
 
         private Thread loopThread;
-        internal const string NETCRAFT_VERSION = "0.1.4a";
-        internal const string NCORE_VERSION = "0.5";
+        internal const string NETCRAFT_VERSION = "0.1.5a";
+        internal const string NCORE_VERSION = "0.6";
         int hungerDecreaseDelay = 200;
 
         private async void ThreadLoop()
@@ -285,7 +302,7 @@ namespace NCore
                 hungerDecreaseDelay -= 1;
                 if(hungerDecreaseDelay == 0)
                 {
-                    hungerDecreaseDelay = 300;
+                    hungerDecreaseDelay = 200;
                     foreach(NetcraftPlayer player in players)
                     {
                         if(player.IsLoaded)
@@ -307,6 +324,8 @@ namespace NCore
                         File.WriteAllText("./log.txt", toAppend, Encoding.UTF8);
                         toAppend = "";
                     }
+
+                    File.WriteAllText("./permissions.json", JsonConvert.SerializeObject(permissions), Encoding.UTF8);
 
                     SaveAuth();
                     foreach (var b in World.Blocks)
@@ -374,8 +393,10 @@ namespace NCore
                             }
                         }
                     }
-                    foreach (Block b in World.Blocks)
+                    for (int i = 0; i <= World.Blocks.Count; i++)
                     {
+                        if (World.Blocks.Count - 1 < i) continue;
+                        Block b = World.Blocks[i];
                         if (b.Type == EnumBlockType.CHEST)
                         {
                             if (World.GetChestAt(b.Position) == null)
@@ -386,9 +407,24 @@ namespace NCore
                         }
                         else if(b.Type == EnumBlockType.SAND)
                         {
-                            if(World.GetBlockAt(b.Position.X, b.Position.Y + 1) == null)
+                            if(World.Gamerules.blockPhysics)
                             {
-
+                                if (World.GetBlockAt(b.Position.X, b.Position.Y + 1) == null)
+                                {
+                                    World.Blocks.Remove(b);
+                                    Point moveTo = new Point(b.Position.X, b.Position.Y + 1);
+                                    netcraft.server.api.events.SandPhysicsEvent ev = new netcraft.server.api.events.SandPhysicsEvent(b, b.Position, moveTo);
+                                    NCSApi.RESandPhysicsEvent(ev);
+                                    moveTo = ev.GetTo();
+                                    if (ev.GetCancelled()) continue;
+                                    await Send("removeblock?" + b.Position.X.ToString() + "?" + b.Position.Y.ToString());
+                                    b.Position = moveTo;
+                                    foreach (NetcraftPlayer p in Netcraft.GetOnlinePlayers())
+                                    {
+                                        await p.SendBlockChange(b.Position, EnumBlockType.SAND, false, false, b.IsBackground);
+                                    }
+                                    World.Blocks.Add(b);
+                                }
                             }
                         }
                         else { continue; }
@@ -419,27 +455,31 @@ namespace NCore
             }
         }
 
-        private List<Color> skyClr = new List<Color>();
-        private int worldtime, stp;
+        internal List<Color> skyClr = new List<Color>();
+        internal int worldtime;
+        private int stp;
         private Thread daytimeThread;
 
         public void daytimeThreadLoop()
         {
             while (true)
             {
-                Thread.Sleep(5000);
-                if (worldtime >= skyClr.Count - 1)
+                Thread.Sleep(15000);
+                if(World.Gamerules.daylightCycle)
                 {
-                    stp = -1;
-                }
+                    if (worldtime >= skyClr.Count - 1)
+                    {
+                        worldtime = 0;
+                    }
 
-                if (worldtime <= 0)
-                {
-                    stp = 1;
-                }
+                    if (worldtime <= 0)
+                    {
+                        stp = 1;
+                    }
 
-                worldtime += stp;
-                BroadcastSkyChange(skyClr[worldtime]);
+                    worldtime += stp;
+                    BroadcastSkyChange(skyClr[worldtime]);
+                }
             }
         }
 
@@ -462,6 +502,7 @@ namespace NCore
             daytimeThread = new Thread(daytimeThreadLoop);
             daytimeThread.Name = "World Time";
             daytimeThread.Start();
+
             skyClr.Add(Color.Black); // ночь
             skyClr.Add(Color.Black); // ночь
             skyClr.Add(Color.Black); // ночь
@@ -470,9 +511,16 @@ namespace NCore
             skyClr.Add(Color.DarkBlue); // рассвет/закат
             skyClr.Add(Color.MediumBlue); // рассвет/закат
             skyClr.Add(Color.Blue); // день
-            skyClr.Add(Color.Blue); // день
-            skyClr.Add(Color.Blue); // день
-            skyClr.Add(Color.Blue); // день
+            skyClr.Add(Color.DodgerBlue);
+            skyClr.Add(Color.LightBlue);
+            skyClr.Add(Color.DeepSkyBlue);
+            skyClr.Add(Color.MediumBlue);
+            skyClr.Add(Color.DarkBlue);
+            skyClr.Add(Color.DarkSlateBlue);
+            skyClr.Add(Color.Black);
+            skyClr.Add(Color.Black);
+            skyClr.Add(Color.Black);
+            skyClr.Add(Color.Black);
         }
 
         public void ThreadAdd()
@@ -582,7 +630,7 @@ namespace NCore
 
                 LoadConfig();
                 //lang = Lang.FromFile("./lang.txt");
-
+                
                 Log(lang.get("server.starting"));
 
                 Log("This is information");
@@ -594,6 +642,9 @@ namespace NCore
                 loopThread.Start();
                 threadWatchdog = new Thread(watchdogThreadLoop);
                 threadWatchdog.Start();
+                    
+                GametimeInitialize();
+
                 Thread.CurrentThread.Name = "Main";
 
                 LoadBanlist();
@@ -631,9 +682,9 @@ namespace NCore
                     pluginLoadSuccess++;
                 }
 
-                if (File.Exists(Conversions.ToString(worldfile)))
+                if (File.Exists(Conversions.ToString(NCORE_WORLDFILE)))
                 {
-                    World = sv.Load(File.ReadAllText(Conversions.ToString(worldfile)));
+                    World = sv.Load(File.ReadAllText(Conversions.ToString(NCORE_WORLDFILE)));
                     List<Block> blocksToRemove = new List<Block>();
                     foreach (Block b in World.Blocks)
                     {
@@ -656,7 +707,7 @@ namespace NCore
                 else
                 {
                     World = WorldGenerator.Generate();
-                    File.WriteAllText(Conversions.ToString(worldfile), sv.Save(World));
+                    File.WriteAllText(Conversions.ToString(NCORE_WORLDFILE), sv.Save(World));
                 }
 
                 await LoadScripts();
@@ -694,18 +745,12 @@ namespace NCore
                         bool y;
                         try
                         {
-                            y = toRun.OnCommand(Netcraft.ConsoleCommandSender, toRun, args, m).GetAwaiter().GetResult();
-                        }
-                        catch (CommandException ex)
-                        {
-                            Log(lang.get("commands.generic.error", ex.GetType().ToString(), ex.Message));
-                            return;
+                            y = await toRun.OnCommand(Netcraft.ConsoleCommandSender, toRun, args, m);
                         }
                         catch (Exception ex)
                         {
                             Log(lang.get("command.console.error", ex.ToString()));
                             y = true;
-                            break;
                         }
 
                         if (!y)
@@ -719,11 +764,24 @@ namespace NCore
                 Console.WriteLine(ex.ToString());
             }
         }
-
-        public void UpdateList(string str, bool relay = false)
+        string lastLog = "";
+        public void writeline(string str)
         {
             ThreadAdd();
-            Console.WriteLine(str);
+            if(Console.CursorLeft > 0)
+            {
+                Console.WriteLine(str);
+                //int x = Console.CursorLeft;
+                //int y = Console.CursorTop;
+                //Console.SetCursorPosition(0, Console.CursorTop - 1);
+                //Console.Write("\r\n" + lastLog + "\r\n" + str + "\r\n");
+                //Console.SetCursorPosition(x, y);
+            }
+            else
+            {
+                Console.WriteLine(str);
+            }
+            lastLog = str;
         }
 
         public delegate void xSend(string str, string except, bool readyClientsOnly);
@@ -854,7 +912,7 @@ namespace NCore
             //Console.ForegroundColor = ConsoleColor.White;
             //Console.Write($"] {arg0}\n");
             //UpdateList($"[{DateTime.Now} {arg1}] [Thread {Thread.CurrentThread.ManagedThreadId}]: {arg0}");
-            UpdateList($"[{DateTime.Now} {arg1}]: {arg0}");
+            writeline($"[{DateTime.Now} {arg1}]: {arg0}");
             toAppend += $"[{DateTime.Now} {arg1}] [Thread {Thread.CurrentThread.ManagedThreadId}]: {arg0}" + Constants.vbCrLf;
             Console.ForegroundColor = ConsoleColor.White;
         }
@@ -910,14 +968,6 @@ namespace NCore
             }
         }
 
-        public enum KickReason
-        {
-            LONG_PACKET,
-            SERVER_ERROR,
-            ILLEGAL_STATE,
-            NONE
-        }
-
         private Hashtable playerPasswords = new Hashtable();
         private StringCollection loggedIn = new StringCollection();
 
@@ -928,12 +978,13 @@ namespace NCore
             ThreadAdd();
             if(str == "")
             {
+                if (n.IsLoaded) return;
                 n.Disconnect();
                 Log(n.GetIp() + " disconnected for bad packet", "WARNING");
                 players.Remove(n);
                 return;
             }
-            if(str.Length > 10000)
+            if(str.Length > 5000)
             {
                 n.Disconnect();
                 Log(n.GetIp() + " disconnected for too long packet", "WARNING");
@@ -1040,6 +1091,7 @@ namespace NCore
                         await n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_SWORD, 1));
                         await n.PlayerInventory.AddItem(new ItemStack(Material.WOODEN_SHOVEL, 1));
                     }
+                    if (permissions.GetPermissions(n.Username) != null) permissions.AddPlayer(n.Username);
 
                     Log(this.lang.get("player.joined", a[1]));
                     await Chat(this.lang.get("player.joined", a[1]));
@@ -1098,7 +1150,7 @@ namespace NCore
                     NCSApi.REPlayerJoinEvent(ev);
                 }
 
-                if (!loggedIn.Contains(n.Username))
+                if (!loggedIn.Contains(n.Username) && (enableAuth == 1))
                 {
                     if (a[0] == "chat")
                     {
@@ -1193,7 +1245,7 @@ namespace NCore
                 if (a[0] == "entityplayermove")
                 {
                     var mto = new Point(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
-                    n.PlayerRectangle = new Rectangle(mto, new Size(47, 92));
+                    //n.PlayerRectangle = new Rectangle(mto, new Size(37, 72));
                     var ev = new netcraft.server.api.events.PlayerMoveEventArgs(n.Position, mto, n);
                     if (ev.GetCancelled())
                     {
@@ -1201,6 +1253,7 @@ namespace NCore
                         return;
                     }
 
+                    
                     var v = Normalize(mto - (Size)n.Position);
                     if (!n.DisableMovementCheck)
                     {
@@ -1244,7 +1297,7 @@ namespace NCore
                                 continue;
                             if (n.NoClip)
                                 break;
-                            if (brec.IntersectsWith(n.PlayerRectangle))
+                            if (brec.Contains(mto))
                             {
                                 if (b.IsBackground)
                                     continue;
@@ -1293,7 +1346,7 @@ namespace NCore
                             var brec = new Rectangle(bpos, new Size(32, 32));
                             if (DistanceBetweenPoint(bpos, n.Position) > 10 * 32)
                                 continue;
-                            if (brec.IntersectsWith(n.PlayerRectangle))
+                            if (brec.IntersectsWith(new Rectangle(mto, new Size(37, 72))))
                             {
                                 if (b.IsBackground)
                                     continue;
@@ -1357,6 +1410,20 @@ namespace NCore
                         if (ev.GetCancelled())
                             return;
                         if (message.Length == 0) return;
+                        if(!n.IsAdmin)
+                        {
+                            if(n.MessagePacketTimeout > DateTime.Now)
+                            {
+                                n.MessageTimeoutWarnings++;
+                                if(n.MessageTimeoutWarnings > 10)
+                                {
+                                    await n.Kick("Kicked for spamming");
+                                    Log(n.Username + " was kicked for spamming");
+                                    return;
+                                }
+                            }
+                            n.MessagePacketTimeout = DateTime.Now.AddSeconds(2);
+                        }
                         if (message[0] == '/')
                         {
                             if (commandsConsoleOnly == 1)
@@ -1369,7 +1436,7 @@ namespace NCore
                             var lbl = message.Skip(1).ToArray();
                             string label = new string(lbl);
                             var args = arr.Skip(1).ToArray();
-                            var cmd = default(Command);
+                            Command cmd = null;
                             Log(lang.get("command.requested", n.Username, label));
                             foreach (var g in Netcraft.GetCommands())
                             {
@@ -1390,10 +1457,15 @@ namespace NCore
                                 await n.SendMessage(lang.get("command.unknown"));
                                 return;
                             }
-
+                            if(!n.HasPermission(cmd.Permission))
+                            {
+                                await n.SendMessage(lang.get("commands.generic.error.no-perms"));
+                                return;
+                            }
                             bool y;
                             try
                             {
+                                
                                 y = await cmd.OnCommand(n, cmd, args, label);
                             }
                             catch(CommandException ex)
@@ -1409,7 +1481,7 @@ namespace NCore
                                 return;
                             }
 
-                            if (Conversions.ToBoolean(!y))
+                            if (!y)
                             {
                                 await n.SendMessage(lang.get("command.usage", cmd.Usage));
                             }
@@ -1437,12 +1509,6 @@ namespace NCore
                 {
                     if (a[0] == "update_inventory")
                     {
-                        // n.Send("clearinventory")
-                        // Thread.Sleep(100)
-                        // For Each i In n.PlayerInventory.Items
-                        // Thread.Sleep(100)
-                        // n.Send("additem?" + i.Type.ToString + " x " + i.Count.ToString)
-                        // Next
                         await n.UpdateInventory();
                     }
                 }
@@ -1547,14 +1613,14 @@ namespace NCore
                             n.Saturation += 1;
                             if (n.Hunger < 20) await n.UpdateHunger(n.Hunger + 5);
                             await n.RemoveItem(Material.COOKED_BEEF, 1);
-                            await n.Heal(5);
+                            await n.Heal(10);
                         }
                         if (n.SelectedItem.Type == Material.BREAD)
                         {
                             n.Saturation += 2;
                             if (n.Hunger < 20) await n.UpdateHunger(n.Hunger + 5);
                             await n.RemoveItem(Material.COOKED_BEEF, 1);
-                            await n.Heal(5);
+                            await n.Heal(10);
                         }
                         if (DistanceBetweenPoint(block.Position, Normalize(n.Position)) > 6) return;
                         if(block.Type == EnumBlockType.TNT)
@@ -1581,6 +1647,8 @@ namespace NCore
                     {
                         if (IsNothing(n.SelectedItem))
                             return;
+
+                        
                         foreach (var b in World.Blocks)
                         {
                             if (b.Position.X == Conversions.ToInteger(a[1]))
@@ -1593,7 +1661,7 @@ namespace NCore
 
                                     var ev = new netcraft.server.api.events.BlockBreakEventArgs(n, b);
                                     NCSApi.REBlockBreakEvent(ev);
-                                    if (DistanceBetween(pos.X, pos.Y, b.Position.X, b.Position.Y) > 6d)
+                                    if (!n.UnlimitedReach && (DistanceBetween(pos.X, pos.Y, b.Position.X, b.Position.Y) > 6d))
                                     {
                                         ev.SetCancelled(true);
                                         if (ev.GetCancelled())
@@ -1797,7 +1865,7 @@ namespace NCore
                                     }
 
                                     World.Blocks.Remove(World.GetBlockAt(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2])));
-                                    break;
+                                    return;
                                 }
                                 else
                                 {
@@ -1809,22 +1877,13 @@ namespace NCore
                                 // UpdateList($"{n.Username} trying to break {a(1)} {a(2)}, but X was {b.Position.X}")
                             }
                         }
+                        await Send("removeblock?" + a[1] + "?" + a[2]);
                     }
                     catch (Exception ex)
                     {
                         Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{ex.ToString()}", "WARNING");
                         return;
                     }
-                }
-                if(a[0] == "keepalive")
-                {
-                    if(n.LastKeepAlivePacket + keepAliveTimeout > DateTime.Now.AddSeconds(1))
-                    {
-                        await n.Kick("Too many keep-alive packets");
-                        Log($"{n.Username} was kicked for sending too many keep-alive packets");
-                        return;
-                    }
-                    n.LastKeepAlivePacket = DateTime.Now;
                 }
                 try
                 {
@@ -1834,7 +1893,13 @@ namespace NCore
                         EnumBlockType type;
                         var pos = Normalize(n.Position);
                         placeAt = Normalize(placeAt);
-                        if(n.SelectedItem.Type == Material.LAVA_BUCKET)
+                        if (World.GetBlockAt(placeAt) != null)
+                        {
+                            Block block = World.GetBlockAt(placeAt);
+                            await n.SendBlockChange(placeAt, block.Type, isBackground: block.IsBackground);
+                            return;
+                        }
+                        if (n.SelectedItem.Type == Material.LAVA_BUCKET)
                         {
                             if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d) return;
                                 foreach (var g in players)
@@ -1876,7 +1941,7 @@ namespace NCore
                         var b = new Block(placeAt, type, false, false);
                         var ev = new netcraft.server.api.events.BlockPlaceEventArgs(n, b);
                         NCSApi.REBlockPlaceEvent(ev);
-                        if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d)
+                        if (!n.UnlimitedReach && (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d))
                         {
                             ev.SetCancelled(true);
                             if(ev.GetCancelled())
@@ -1893,7 +1958,7 @@ namespace NCore
                         {
                             Block c = World.GetBlockAt(placeAt.X, placeAt.Y + 1);
                             if (c == null) return;
-                            if (c.Type != EnumBlockType.GRASS_BLOCK) return;
+                            if (c.Type != EnumBlockType.GRASS_BLOCK && c.Type != EnumBlockType.SNOWY_GRASS_BLOCK && c.Type != EnumBlockType.DIRT) return;
                         }
                         if(type == EnumBlockType.FIRE)
                         {
@@ -1917,9 +1982,16 @@ namespace NCore
                     if (a[0] == "block_place_bg")
                     {
                         var placeAt = new Point(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
+
                         EnumBlockType type;
                         var pos = Normalize(n.Position);
                         placeAt = Normalize(placeAt);
+                        if (World.GetBlockAt(placeAt) != null)
+                        {
+                            Block block = World.GetBlockAt(placeAt);
+                            await n.SendBlockChange(placeAt, block.Type, isBackground: block.IsBackground);
+                            return;
+                        }
                         if (n.SelectedItem.Type == Material.LAVA_BUCKET)
                         {
                             if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d) return;
@@ -1955,7 +2027,7 @@ namespace NCore
                         {
                             Block c = World.GetBlockAt(placeAt.X, placeAt.Y + 1);
                             if (c == null) return;
-                            if (c.Type != EnumBlockType.GRASS_BLOCK) return;
+                            if (c.Type != EnumBlockType.GRASS_BLOCK && c.Type != EnumBlockType.SNOWY_GRASS_BLOCK && c.Type != EnumBlockType.DIRT) return;
                         }
                         if (type == EnumBlockType.FIRE)
                         {
@@ -1966,7 +2038,7 @@ namespace NCore
                         var b = new Block(placeAt, type, false, true);
                         var ev = new netcraft.server.api.events.BlockPlaceEventArgs(n, b);
                         NCSApi.REBlockPlaceEvent(ev);
-                        if (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d)
+                        if (!n.UnlimitedReach && (DistanceBetween(pos.X, pos.Y, placeAt.X, placeAt.Y) > 6d))
                         {
                             ev.SetCancelled(true);
                             if (ev.GetCancelled())
@@ -2147,7 +2219,7 @@ namespace NCore
             {
                 if(DistanceBetweenPoint(Normalize(p.Position), point) <= radius)
                 {
-                    await p.Damage(10, "deathmessage.exploded");
+                    await p.Damage((int)(radius - DistanceBetweenPoint(Normalize(p.Position), point)), "deathmessage.exploded");
                 }
             }
             Log($"Explosion at [{point.X},{point.Y}] with power {radius.ToString()}");
@@ -2235,7 +2307,7 @@ namespace NCore
 
         private void OnClose()
         {
-            File.WriteAllText(Conversions.ToString(worldfile), sv.Save(World), Encoding.UTF8);
+            File.WriteAllText(Conversions.ToString(NCORE_WORLDFILE), sv.Save(World), Encoding.UTF8);
             foreach (var c in players)
                 ClientExited(c);
         }
@@ -2246,7 +2318,7 @@ namespace NCore
 
         public void SaveWorld()
         {
-            File.WriteAllText(Conversions.ToString(worldfile), sv.Save(World));
+            File.WriteAllText(Conversions.ToString(NCORE_WORLDFILE), sv.Save(World));
         }
 
         public async Task SendCommandFeedback(string a, CommandSender b)

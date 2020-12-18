@@ -61,7 +61,6 @@ namespace NetcraftNetwork
                     user.Send("name");
                     return;
                 }
-                user.Send("bl?" + File.ReadAllText("./blocked-servers.txt", Encoding.UTF8).Replace("\r\n", "\n").Replace("\n", "?"));
                 user.Username = u;
             }
             if (s[0] == "pass")

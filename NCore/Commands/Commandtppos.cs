@@ -5,18 +5,13 @@ namespace NCore
 {
     public class Commandtppos : Command
     {
-        public Commandtppos() : base("tppos", NCore.GetNCore().lang.get("commands.tppos.description"), "tppos <x> <y>")
+        public Commandtppos() : base("tppos", NCore.GetNCore().lang.get("commands.tppos.description"), "netcraft.command.tppos", "tppos <x> <y>")
         {
         }
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
-            if (!sender.GetAdmin())
-            {
-                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
-                return true;
-            }
 
             if (args.Length == 2)
             {

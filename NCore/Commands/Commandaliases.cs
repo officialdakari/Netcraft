@@ -6,7 +6,7 @@ namespace NCore
 {
     public class Commandaliases : Command
     {
-        public Commandaliases() : base("aliases", NCore.GetNCore().lang.get("commands.aliases.description"), "aliases", new[] { "a" })
+        public Commandaliases() : base("aliases", NCore.GetNCore().lang.get("commands.aliases.description"), "netcraft.command.aliases", "aliases", new[] { "a" })
         {
         }
 

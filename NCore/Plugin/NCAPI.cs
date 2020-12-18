@@ -13,17 +13,6 @@ namespace NCore.netcraft
     {
         namespace api
         {
-            // Public Class Logger
-            // Shared Sub Info(arg0 As String)
-            // Log(arg0, "INFO")
-            // End Sub
-            // Shared Sub Warning(arg0 As String)
-            // Log(arg0, "WARNING")
-            // End Sub
-            // Shared Sub Severe(arg0 As String)
-            // Log(arg0, "ERROR")
-            // End Sub
-            // End Class
             public class PluginLogger
             {
                 private Plugin plugin;
@@ -140,6 +129,32 @@ namespace NCore.netcraft
                 {
                     PlayerLoginEvent?.Invoke(e);
                 }
+
+                public static event PlayerPacketSendEventEventHandler PlayerPacketSendEvent;
+
+                public delegate void PlayerPacketSendEventEventHandler(events.PlayerPacketSend e);
+
+                internal static void REPlayerPacketSendEvent(events.PlayerPacketSend e)
+                {
+                    PlayerPacketSendEvent?.Invoke(e);
+                }
+
+                public static event PlayerPacketReceiveEventEventHandler PlayerPacketReceiveEvent;
+
+                public delegate void PlayerPacketReceiveEventEventHandler(events.PlayerPacketReceive e);
+
+                internal static void REPlayerPacketReceiveEvent(events.PlayerPacketReceive e)
+                {
+                    PlayerPacketReceiveEvent?.Invoke(e);
+                }
+
+                public static event SandPhysicsEventEventHandler SandPhysicsEvent;
+                public delegate void SandPhysicsEventEventHandler(events.SandPhysicsEvent e);
+
+                internal static void RESandPhysicsEvent(events.SandPhysicsEvent e)
+                {
+                    SandPhysicsEvent?.Invoke(e);
+                }
             }
 
             public class Netcraft
@@ -167,9 +182,22 @@ namespace NCore.netcraft
                     }
                 }
 
-                public static void PerformCommand(CommandSender arg_a, Command arg_b, string arg_c)
+                public async static Task<bool> DispatchCommand(CommandSender arg_a, Command arg_b, string arg_c)
                 {
-                    arg_b.OnCommand(arg_a, arg_b, arg_c.Split(" ").Skip(1).ToArray(), arg_c);
+                    return await arg_b.OnCommand(arg_a, arg_b, arg_c.Split(" ").Skip(1).ToArray(), arg_c);
+                }
+
+                public async static Task<bool> DispatchCommand(CommandSender arg_a, string arg_b)
+                {
+                    string[] args = arg_b.Split(' ');
+                    foreach(Command cmd in field_b)
+                    {
+                        if(cmd.Aliases.Contains(args[0].ToString()) || cmd.Name.ToLower() == args[0].ToLower())
+                        {
+                            return await cmd.OnCommand(arg_a, cmd, args.Skip(1).ToArray(), arg_b);
+                        }
+                    }
+                    return false;
                 }
 
                 public static List<Command> GetCommands()
@@ -188,7 +216,7 @@ namespace NCore.netcraft
                     {
                         if ((client.Username.ToLower() ?? "") == (a.ToLower() ?? ""))
                         {
-                            client.Kick(NCore.GetNCore().lang.get("error.banned"));
+                            await client.Kick(NCore.GetNCore().lang.get("error.banned"));
                         }
                     }
 
@@ -224,6 +252,22 @@ namespace NCore.netcraft
                 public static async Task Broadcast(string m)
                 {
                     dobc?.Invoke(m);
+                }
+
+                public static async Task<int> GetWorldTime()
+                {
+                    return NCore.GetNCore().worldtime;
+                }
+
+                public static async Task SetWorldTime(int time)
+                {
+                    if(time > NCore.GetNCore().skyClr.Count - 1)
+                    {
+                        throw new ArgumentOutOfRangeException();
+                        return;
+                    }
+                    NCore.GetNCore().worldtime = time;
+                    await NCore.GetNCore().BroadcastSkyChange(NCore.GetNCore().skyClr[time]);
                 }
 
                 internal static event dobcEventHandler dobc;

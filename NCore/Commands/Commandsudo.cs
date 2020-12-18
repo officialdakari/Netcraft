@@ -6,18 +6,13 @@ namespace NCore
 {
     public class Commandsudo : Command
     {
-        public Commandsudo() : base("sudo", NCore.GetNCore().lang.get("commands.sudo.description"), NCore.GetNCore().lang.get("commands.sudo.usage"))
+        public Commandsudo() : base("sudo", NCore.GetNCore().lang.get("commands.sudo.description"), "netcraft.command.sudo", NCore.GetNCore().lang.get("commands.sudo.usage"))
         {
         }
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
             NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
-            if (!sender.GetAdmin())
-            {
-                await sender.SendMessage(lang.get("commands.generic.error.no-perms"));
-                return true;
-            }
 
             if (args.Length > 1)
             {

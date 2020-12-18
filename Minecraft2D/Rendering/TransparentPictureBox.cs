@@ -11,12 +11,13 @@ namespace Minecraft2D
             base.OnPaintBackground(e);
             try
             {
-                if (Parent is object)
+                if (Parent != null)
                 {
                     int index = Parent.Controls.GetChildIndex(this);
                     for (int i = Parent.Controls.Count - 1, loopTo = index + 1; i >= loopTo; i -= 1)
                     {
                         var c = Parent.Controls[i];
+                        //c.Bounds.IntersectsWith(Bounds) && 
                         if (c.Bounds.IntersectsWith(Bounds) && c.Visible == true)
                         {
                             var bmp = new Bitmap(c.Width, c.Height, e.Graphics);

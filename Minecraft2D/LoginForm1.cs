@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Minecraft2D
@@ -53,6 +54,23 @@ namespace Minecraft2D
         {
             ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbg;
             ((Control)sender).Invalidate();
+        }
+        Random rnd = new Random();
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string[] arr1 = File.ReadAllLines("./resources/randomizer/first.txt");
+                string[] arr2 = File.ReadAllLines("./resources/randomizer/second.txt");
+                string first = arr1[rnd.Next(0, arr1.Length - 1)];
+                string second = arr2[rnd.Next(0, arr2.Length - 1)];
+                UsernameTextBox.Text = $"{first}{second}{rnd.Next(25, 99).ToString()}";
+                DialogResult = DialogResult.OK;
+                Close();
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }
