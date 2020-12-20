@@ -125,7 +125,7 @@ namespace Minecraft2D
             Hide();
         }
 
-        public readonly string Ver = "0.1.5a";
+        public readonly string Ver = "0.1.6a";
         internal static MainMenu instance;
         public static MainMenu GetInstance()
         {

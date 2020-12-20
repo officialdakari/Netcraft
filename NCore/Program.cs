@@ -289,8 +289,8 @@ namespace NCore
         }
 
         private Thread loopThread;
-        internal const string NETCRAFT_VERSION = "0.1.5a";
-        internal const string NCORE_VERSION = "0.6";
+        internal const string NETCRAFT_VERSION = "0.1.6a";
+        internal const string NCORE_VERSION = "0.7";
         int hungerDecreaseDelay = 200;
 
         private async void ThreadLoop()
