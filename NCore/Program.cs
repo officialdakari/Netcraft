@@ -768,19 +768,7 @@ namespace NCore
         public void writeline(string str)
         {
             ThreadAdd();
-            if(Console.CursorLeft > 0)
-            {
-                Console.WriteLine(str);
-                //int x = Console.CursorLeft;
-                //int y = Console.CursorTop;
-                //Console.SetCursorPosition(0, Console.CursorTop - 1);
-                //Console.Write("\r\n" + lastLog + "\r\n" + str + "\r\n");
-                //Console.SetCursorPosition(x, y);
-            }
-            else
-            {
-                Console.WriteLine(str);
-            }
+            Console.WriteLine(str);
             lastLog = str;
         }
 
@@ -1317,7 +1305,7 @@ namespace NCore
                                     continue;
                                 if (b.Type == EnumBlockType.YELLOW_FLOWER)
                                     continue;
-                                Log(lang.get("move.wrong", n.Username, "Into block", v.X.ToString(), v.Y.ToString()), "WARNING");
+                                //Log(lang.get("move.wrong", n.Username, "Into block", v.X.ToString(), v.Y.ToString()), "WARNING");
                                 if (v.Y > 1)
                                 {
                                     await n.Teleport(n.Position.X, n.Position.Y - 2);

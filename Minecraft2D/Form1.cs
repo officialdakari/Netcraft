@@ -1661,26 +1661,26 @@ namespace Minecraft2D
                         bool collision = false;
                         try
                         {
-                            foreach (var b in blocks)
-                            {
-                                if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
-                                if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
-                                if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
-                                if (b.Top > localPlayer.Top + localPlayer.Height - 10)
-                                    continue;
-                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
-                                {
-                                    continue;
-                                }
+                            //foreach (var b in blocks)
+                            //{
+                            //    if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
+                            //    if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
+                            //    if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
+                            //    if (b.Top > localPlayer.Top + localPlayer.Height - 10)
+                            //        continue;
+                            //    if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
+                            //    {
+                            //        continue;
+                            //    }
 
-                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
-                                    continue;
-                                if (b.Bounds.IntersectsWith(localPlayer.Bounds))
-                                {
-                                    collision = true;
-                                    break;
-                                }
-                            }
+                            //    if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
+                            //        continue;
+                            //    if (b.Bounds.IntersectsWith(localPlayer.Bounds))
+                            //    {
+                            //        collision = true;
+                            //        break;
+                            //    }
+                            //}
                         }
                         catch (Exception ex)
                         {
@@ -1702,26 +1702,26 @@ namespace Minecraft2D
                         bool collision = false;
                         try
                         {
-                            foreach (var b in blocks)
-                            {
-                                if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
-                                if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
-                                if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
-                                if (b.Top > localPlayer.Top + localPlayer.Height - 10)
-                                    continue;
-                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
-                                {
-                                    continue;
-                                }
+                            //foreach (var b in blocks)
+                            //{
+                            //    if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
+                            //    if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
+                            //    if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
+                            //    if (b.Top > localPlayer.Top + localPlayer.Height - 10)
+                            //        continue;
+                            //    if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
+                            //    {
+                            //        continue;
+                            //    }
 
-                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
-                                    continue;
-                                if (b.Bounds.IntersectsWith(localPlayer.Bounds))
-                                {
-                                    collision = true;
-                                    break;
-                                }
-                            }
+                            //    if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
+                            //        continue;
+                            //    if (b.Bounds.IntersectsWith(localPlayer.Bounds))
+                            //    {
+                            //        collision = true;
+                            //        break;
+                            //    }
+                            //}
                         }
                         catch (Exception ex)
                         {
@@ -1750,26 +1750,26 @@ namespace Minecraft2D
 
                         try
                         {
-                            foreach (var b in blocks)
-                            {
-                                if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
-                                if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
-                                if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
-                                if (b.Top > localPlayer.Top + localPlayer.Height - 10)
-                                    continue;
-                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
-                                {
-                                    continue;
-                                }
+                            //foreach (var b in blocks)
+                            //{
+                            //    if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
+                            //    if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
+                            //    if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
+                            //    if (b.Top > localPlayer.Top + localPlayer.Height - 10)
+                            //        continue;
+                            //    if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
+                            //    {
+                            //        continue;
+                            //    }
 
-                                if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
-                                    continue;
-                                if (b.Bounds.IntersectsWith(localPlayer.Bounds))
-                                {
-                                    grounded = true;
-                                    break;
-                                }
-                            }
+                            //    if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
+                            //        continue;
+                            //    if (b.Bounds.IntersectsWith(localPlayer.Bounds))
+                            //    {
+                            //        grounded = true;
+                            //        break;
+                            //    }
+                            //}
                         }
                         catch (Exception ex)
                         {
