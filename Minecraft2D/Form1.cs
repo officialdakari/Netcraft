@@ -173,12 +173,12 @@ namespace Minecraft2D
         internal string ip = "127.0.0.1";
         internal int port = 6575;
 
-        private void onServerProcessDataReceived(object sender, DataReceivedEventArgs e)
+        internal void onServerProcessDataReceived(object sender, DataReceivedEventArgs e)
         {
             Debug.WriteLine(e.Data);
         }
 
-        private void onServerProcessErrorDataReceived(object sender, DataReceivedEventArgs e)
+        internal void onServerProcessErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
             Debug.WriteLine("[ERROR DATA RECEIVED]: " + e.Data);
         }

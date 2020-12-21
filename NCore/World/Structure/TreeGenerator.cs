@@ -5,55 +5,56 @@ namespace NCore
 {
     public class TreeGenerator
     {
+        const bool BG_TREEGEN = true;
         public static void GenerateTree(Point pos, WorldServer w)
         {
             for (int i = 0; i <= 6; i++)
             {
                 if (i == 0)
                 {
-                    w.Blocks.Add(new Block(pos, EnumBlockType.WOOD, false, false));
+                    w.Blocks.Add(new Block(pos, EnumBlockType.WOOD, false, BG_TREEGEN));
                 }
 
                 if (i == 1)
                 {
                     var pos1 = pos;
                     pos1.Offset(0, -1);
-                    w.Blocks.Add(new Block(pos1, EnumBlockType.WOOD, false, false));
+                    w.Blocks.Add(new Block(pos1, EnumBlockType.WOOD, false, BG_TREEGEN));
                 }
 
                 if (i == 2)
                 {
                     var pos1 = pos;
                     pos1.Offset(0, -2);
-                    w.Blocks.Add(new Block(pos1, EnumBlockType.WOOD, false, false));
+                    w.Blocks.Add(new Block(pos1, EnumBlockType.WOOD, false, BG_TREEGEN));
                 }
 
                 if (i == 3)
                 {
                     var pos1 = pos;
                     pos1.Offset(-1, -3);
-                    w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, false));
+                    w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, BG_TREEGEN));
                 }
 
                 if (i == 4)
                 {
                     var pos1 = pos;
                     pos1.Offset(0, -3);
-                    w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, false));
+                    w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, BG_TREEGEN));
                 }
 
                 if (i == 5)
                 {
                     var pos1 = pos;
                     pos1.Offset(1, -3);
-                    w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, false));
+                    w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, BG_TREEGEN));
                 }
 
                 if (i == 6)
                 {
                     var pos1 = pos;
                     pos1.Offset(0, -4);
-                    w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, false));
+                    w.Blocks.Add(new Block(pos1, EnumBlockType.LEAVES, false, BG_TREEGEN));
                 }
             }
         }

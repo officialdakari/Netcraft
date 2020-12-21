@@ -1285,7 +1285,7 @@ namespace NCore
                                 continue;
                             if (n.NoClip)
                                 break;
-                            if (brec.Contains(mto))
+                            if (brec.IntersectsWith(new Rectangle(mto, new Size(37, 70))))
                             {
                                 if (b.IsBackground)
                                     continue;
@@ -1398,7 +1398,7 @@ namespace NCore
                         if (ev.GetCancelled())
                             return;
                         if (message.Length == 0) return;
-                        if(!n.IsAdmin)
+                        if(!n.HasPermission("netcraft.bypass.spam"))
                         {
                             if(n.MessagePacketTimeout > DateTime.Now)
                             {

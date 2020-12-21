@@ -367,9 +367,17 @@ namespace Minecraft2D
             My.MyProject.Forms.Form1.ServerProcess.StartInfo.Arguments = @"/c run.cmd";
             My.MyProject.Forms.Form1.ServerProcess.StartInfo.WorkingDirectory = @".\server\";
             My.MyProject.Forms.Form1.ServerProcess.StartInfo.FileName = "cmd.exe";
+            Form1.GetInstance().ServerProcess.StartInfo.StandardErrorEncoding = Encoding.Default;
+            Form1.GetInstance().ServerProcess.StartInfo.StandardOutputEncoding = Encoding.Default;
+            Form1.GetInstance().ServerProcess.StartInfo.RedirectStandardError = true;
+            Form1.GetInstance().ServerProcess.StartInfo.RedirectStandardOutput = true;
+            Form1.GetInstance().ServerProcess.StartInfo.RedirectStandardInput = true;
+            Form1.GetInstance().ServerProcess.StartInfo.UseShellExecute = false;
+            Form1.GetInstance().ServerProcess.OutputDataReceived += Form1.GetInstance().onServerProcessDataReceived;
+            Form1.GetInstance().ServerProcess.ErrorDataReceived += Form1.GetInstance().onServerProcessDataReceived;
             My.MyProject.Forms.Form1.ServerProcess.Start();
-          //  Form1.GetInstance().ServerProcess.BeginErrorReadLine();
-            //Form1.GetInstance().ServerProcess.BeginOutputReadLine();
+            Form1.GetInstance().ServerProcess.BeginErrorReadLine();
+            Form1.GetInstance().ServerProcess.BeginOutputReadLine();
         }
 
         private void Button5_Click(object sender, EventArgs e)
