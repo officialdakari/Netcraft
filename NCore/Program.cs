@@ -2177,26 +2177,29 @@ namespace NCore
 
         public async Task Explode(double radius, Point point)
         {
-            List<Block> blocksToRemove = new List<Block>();
-            foreach(Block b in World.Blocks)
+            if(!World.Gamerules.disableExplosions)
             {
-                if (b.Type == EnumBlockType.IRON_BLOCK)
-                    continue;
-                if (b.Type == EnumBlockType.DIAMOND_BLOCK)
-                    continue;
-                if (b.Type == EnumBlockType.OBSIDIAN)
-                    continue;
-                if (b.Type == EnumBlockType.BEDROCK)
-                    continue;
-                if (DistanceBetweenPoint(b.Position, point) <= radius) blocksToRemove.Add(b);
-            }
-            
-            foreach(Block b in blocksToRemove)
-            {
-                foreach(NetcraftPlayer p in players)
+                List<Block> blocksToRemove = new List<Block>();
+                foreach (Block b in World.Blocks)
                 {
-                    await p.PacketQueue.AddQueue($"removeblock?{b.Position.X.ToString()}?{b.Position.Y.ToString()}");
-                    World.Blocks.Remove(b);
+                    if (b.Type == EnumBlockType.IRON_BLOCK)
+                        continue;
+                    if (b.Type == EnumBlockType.DIAMOND_BLOCK)
+                        continue;
+                    if (b.Type == EnumBlockType.OBSIDIAN)
+                        continue;
+                    if (b.Type == EnumBlockType.BEDROCK)
+                        continue;
+                    if (DistanceBetweenPoint(b.Position, point) <= radius) blocksToRemove.Add(b);
+                }
+
+                foreach (Block b in blocksToRemove)
+                {
+                    foreach (NetcraftPlayer p in players)
+                    {
+                        await p.PacketQueue.AddQueue($"removeblock?{b.Position.X.ToString()}?{b.Position.Y.ToString()}");
+                        World.Blocks.Remove(b);
+                    }
                 }
             }
             foreach (NetcraftPlayer p in players)

@@ -8,5 +8,6 @@ namespace NCore.World
     {
         public bool daylightCycle = true;
         public bool blockPhysics = true;
+        public bool disableExplosions = false;
     }
 }

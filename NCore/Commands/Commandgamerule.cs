@@ -25,6 +25,10 @@ namespace NCore.Commands
                 {
                     await sender.SendMessage(lang.get("commands.gamerule.query", args[0], NCore.GetNCore().World.Gamerules.daylightCycle.ToString()));
                 }
+                else if (args[0] == "disableExplosions")
+                {
+                    await sender.SendMessage(lang.get("commands.gamerule.query", args[0], NCore.GetNCore().World.Gamerules.disableExplosions.ToString()));
+                }
                 else
                 {
                     await sender.SendMessage(lang.get("commands.gamerule.error.not-found"));
@@ -41,6 +45,11 @@ namespace NCore.Commands
                 {
                     Netcraft.GetWorld().Gamerules.blockPhysics = bool.Parse(args[1]);
                     await sender.SendMessage(lang.get("commands.gamerule.success", args[0], NCore.GetNCore().World.Gamerules.blockPhysics.ToString()));
+                }
+                else if (args[0] == "disableExplosions")
+                {
+                    Netcraft.GetWorld().Gamerules.disableExplosions = bool.Parse(args[1]);
+                    await sender.SendMessage(lang.get("commands.gamerule.success", args[0], NCore.GetNCore().World.Gamerules.disableExplosions.ToString()));
                 }
                 else
                 {

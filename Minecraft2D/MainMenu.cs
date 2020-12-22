@@ -197,7 +197,7 @@ namespace Minecraft2D
         {
             instance = this;
             button1 = _Button1;
-            Button1 = _Button1;
+            Button1 = _Button1; 
             comment("ты чё декомпилировал игру быстро удаляй декомпилированный код иначе бан");
             Form1.instance = My.MyProject.Forms.Form1;
             Application.ThreadException += My.MyApplication.threadException;
