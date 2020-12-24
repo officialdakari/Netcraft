@@ -17,6 +17,7 @@ using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.VisualBasic.Devices;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 
 namespace Minecraft2D
 {
@@ -448,6 +449,30 @@ namespace Minecraft2D
             }
         }
 
+        private void ColorAA()
+        {
+            var HT = new Dictionary<string, Color>();
+            HT.Add("&0", Color.DodgerBlue);
+            HT.Add("&1", Color.Red);
+            HT.Add("&2", Color.Orange);
+            HT.Add("&3", Color.Yellow);
+            HT.Add("&4", Color.Magenta);
+            HT.Add("&5", Color.Green);
+            HT.Add("&r", richTextBox1.ForeColor);
+            string wrd = string.Join("|", HT.Keys.Cast<string>().ToArray());
+            MatchCollection allIp = Regex.Matches(richTextBox1.Text, wrd);
+            foreach (Match ip in allIp)
+            {
+                int ind = richTextBox1.Find(ip.Value);
+                richTextBox1.Select(ind, richTextBox1.TextLength - ind);
+                richTextBox1.SelectionColor = HT[ip.Value];
+                richTextBox1.SelectedText = richTextBox1.SelectedText.Remove(0, ip.Value.Length);
+                richTextBox1.DeselectAll();
+            }
+            richTextBox1.DeselectAll();
+        }
+
+
         public void SetHunger(int arg0)
         {
             if (InvokeRequired)
@@ -543,6 +568,12 @@ namespace Minecraft2D
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
                         b.BackgroundImage = My.Resources.Resources.stone1;
+                        b.BackColor = BackColor;
+                    }
+                    else if (a[3] == "gravel")
+                    {
+                        b.BackgroundImageLayout = ImageLayout.Stretch;
+                        b.BackgroundImage = My.Resources.Resources.gravel;
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "bedrock")
@@ -953,6 +984,11 @@ namespace Minecraft2D
                         if (a[2] == "STONE")
                         {
                             await SetItem(a[1], My.Resources.Resources.stone1, My.Resources.Resources.stone1, a[2]);
+                        }
+
+                        if (a[2] == "GRAVEL")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.gravel, My.Resources.Resources.gravel, a[2]);
                         }
 
                         if (a[2] == "END_STONE")
@@ -2621,6 +2657,7 @@ namespace Minecraft2D
         {
             richTextBox1.Select(richTextBox1.TextLength, 0);
             richTextBox1.ScrollToCaret();
+            ColorAA();
         }
 
         public delegate void PreChat(string text, ref bool cancel);
@@ -2659,6 +2696,11 @@ namespace Minecraft2D
         private void invPanel_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void пасхалкажмиСюдаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://cdn.discordapp.com/attachments/789961408632586260/790309073425268776/pXbQ8xrEaXE.jpg");
         }
         //private void Form1_MouseDown(object sender, Global.System.Windows.Forms.MouseEventArgs e)
         //{

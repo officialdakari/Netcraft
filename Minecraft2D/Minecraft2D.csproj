@@ -100,12 +100,6 @@
     <Compile Include="ChestWindow.Designer.cs">
       <DependentUpon>ChestWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="credits.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="credits.Designer.cs">
-      <DependentUpon>credits.cs</DependentUpon>
-    </Compile>
     <Compile Include="FancyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -214,9 +208,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ChestWindow.resx">
       <DependentUpon>ChestWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="credits.resx">
-      <DependentUpon>credits.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FancyForm.resx">
       <DependentUpon>FancyForm.cs</DependentUpon>
@@ -354,6 +345,7 @@
     <None Include="Resources\IRON_SWORD_FLIPPED.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\gravel.png" />
     <None Include="Resources\dandelion.png" />
     <None Include="Resources\poppy.png" />
     <None Include="Resources\coal.png" />

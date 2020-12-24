@@ -21,8 +21,9 @@ namespace NCore
                     await sender.SendMessage(lang.get("commands.ban.failed.banned"));
                     return true;
                 }
-                await Netcraft.Broadcast(lang.get("commands.ban.success", sender.GetName(), a));
+                await NCore.GetNCore().BroadcastChatTranslation("commands.ban.success", new string[] { sender.GetName(), a });
                 await Netcraft.BanPlayer(a);
+                return true;
             }
 
             return false;

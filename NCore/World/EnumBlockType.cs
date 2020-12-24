@@ -36,6 +36,7 @@ namespace NCore
         SEEDS,
         WHEAT,
         RED_FLOWER,
-        YELLOW_FLOWER
+        YELLOW_FLOWER,
+        GRAVEL
     }
 }

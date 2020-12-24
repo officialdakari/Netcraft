@@ -24,7 +24,7 @@ namespace NCore
                     return true;
                 }
 
-                p.Kick(lang.get("commands.kick.kicked"));
+                await p.Kick(lang.get("commands.kick.kicked"));
                 await Netcraft.Broadcast(lang.get("commands.kick.success", sender.GetName(), p.Username, "None"));
                 return true;
             }
@@ -37,7 +37,7 @@ namespace NCore
                     return true;
                 }
 
-                p.Kick(p.lang.get("commands.kick.kicked.reason", string.Join(" ", args.Skip(1))));
+                await p.Kick(p.lang.get("commands.kick.kicked.reason", string.Join(" ", args.Skip(1))));
                 await Netcraft.Broadcast(lang.get("commands.kick.success", sender.GetName(), p.Username, string.Join(" ", args.Skip(1))));
 
                 return true;

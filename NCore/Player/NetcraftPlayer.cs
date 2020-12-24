@@ -9,6 +9,7 @@ using global::System.Net.Sockets;
 using global::System.Security.Cryptography;
 using global::System.Text;
 using global::System.Threading;
+using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using NCore.netcraft.server.api;
 
@@ -54,6 +55,7 @@ namespace NCore
         public BlockChest OpenChest { get; set; } = null;
         internal NCore.Lang lang;
         public DateTime LastKeepAlivePacket { get; internal set; }
+        public bool IsRconClient { get; internal set; } = false;
 
         public string GetIp()
         {
@@ -686,6 +688,8 @@ namespace NCore
                 t = "endstone";
             if (m == EnumBlockType.GLASS)
                 t = "glass";
+            if (m == EnumBlockType.GRAVEL)
+                t = "gravel";
             if (m == EnumBlockType.FIRE)
             {
                 t = "fire";
@@ -783,6 +787,8 @@ namespace NCore
                 t = "iron_ore";
             if (m == EnumBlockType.END_STONE)
                 t = "endstone";
+            if (m == EnumBlockType.GRAVEL)
+                t = "gravel";
             if (m == EnumBlockType.DIAMOND_ORE)
                 t = "diamond_ore";
             if (m == EnumBlockType.OBSIDIAN)
@@ -1054,10 +1060,8 @@ namespace NCore
             }
             catch (NullReferenceException ex)
             {
-                if (!IsLoaded)
-                {
+                if(d == null)
                     b?.Invoke(this);
-                }
 
                 NCore.GetNCore().LogError(ex);
             }
@@ -1082,10 +1086,10 @@ namespace NCore
             try
             {
                 string data = Encode.e(Messsage);
-                netcraft.server.api.events.PlayerPacketSend ev = new netcraft.server.api.events.PlayerPacketSend(this, data, false);
+                netcraft.server.api.events.PlayerPacketSend ev = new netcraft.server.api.events.PlayerPacketSend(this, Messsage, false);
                 netcraft.server.api.NCSApi.REPlayerPacketSendEvent(ev);
                 if (ev.GetCancelled()) return;
-                data = ev.GetPacket();
+                data = Encode.e(ev.GetPacket());
                 c = new StreamWriter(d.GetStream());
                 c.WriteLine(data);
                 c.Flush();
@@ -1132,6 +1136,7 @@ namespace NCore
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
                 return "";
             }
         }
@@ -1151,6 +1156,7 @@ namespace NCore
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
                 return "";
             }
         }

@@ -46,7 +46,9 @@ namespace Minecraft2D
             this._Timer3 = new System.Windows.Forms.Timer(this.components);
             this._ProgressBar1 = new System.Windows.Forms.ProgressBar();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this._localPlayer = new Minecraft2D.TransparentPicBox();
             this.ContextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.пасхалкажмиСюдаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._Warning = new System.Windows.Forms.Label();
             this._ButtonLeft = new System.Windows.Forms.Button();
             this._ButtonJump = new System.Windows.Forms.Button();
@@ -66,12 +68,12 @@ namespace Minecraft2D
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.debuginfo = new Minecraft2D.OpaqueLabel();
             this.R1 = new Minecraft2D.TransparentPicBox();
-            this._localPlayer = new Minecraft2D.TransparentPicBox();
+            ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).BeginInit();
+            this.ContextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.makeItDark)).BeginInit();
             this.invPanel.SuspendLayout();
             this.chatPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.R1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).BeginInit();
             this.SuspendLayout();
             // 
             // _Ticker
@@ -157,10 +159,33 @@ namespace Minecraft2D
             this.ToolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.ToolTip1.ToolTipTitle = "Информация";
             // 
+            // _localPlayer
+            // 
+            this._localPlayer.BackColor = System.Drawing.Color.Transparent;
+            this._localPlayer.ContextMenuStrip = this.ContextMenuStrip1;
+            this._localPlayer.Image = ((System.Drawing.Image)(resources.GetObject("_localPlayer.Image")));
+            this._localPlayer.Location = new System.Drawing.Point(0, 0);
+            this._localPlayer.Name = "_localPlayer";
+            this._localPlayer.Size = new System.Drawing.Size(37, 72);
+            this._localPlayer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this._localPlayer.TabIndex = 14;
+            this._localPlayer.TabStop = false;
+            this.ToolTip1.SetToolTip(this._localPlayer, "Локальный игрок");
+            this._localPlayer.Move += new System.EventHandler(this._localPlayer_Move);
+            // 
             // ContextMenuStrip1
             // 
+            this.ContextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.пасхалкажмиСюдаToolStripMenuItem});
             this.ContextMenuStrip1.Name = "ContextMenuStrip1";
-            this.ContextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.ContextMenuStrip1.Size = new System.Drawing.Size(191, 26);
+            // 
+            // пасхалкажмиСюдаToolStripMenuItem
+            // 
+            this.пасхалкажмиСюдаToolStripMenuItem.Name = "пасхалкажмиСюдаToolStripMenuItem";
+            this.пасхалкажмиСюдаToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.пасхалкажмиСюдаToolStripMenuItem.Text = "пасхалка (жми сюда)";
+            this.пасхалкажмиСюдаToolStripMenuItem.Click += new System.EventHandler(this.пасхалкажмиСюдаToolStripMenuItem_Click);
             // 
             // _Warning
             // 
@@ -491,7 +516,7 @@ namespace Minecraft2D
             this.debuginfo.BackColor = System.Drawing.Color.Transparent;
             this.debuginfo.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.debuginfo.ForeColor = System.Drawing.Color.White;
-            this.debuginfo.Location = new System.Drawing.Point(5, 53);
+            this.debuginfo.Location = new System.Drawing.Point(4, 51);
             this.debuginfo.Name = "debuginfo";
             this.debuginfo.Size = new System.Drawing.Size(197, 68);
             this.debuginfo.TabIndex = 19;
@@ -509,19 +534,6 @@ namespace Minecraft2D
             this.R1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.R1.TabIndex = 15;
             this.R1.TabStop = false;
-            // 
-            // _localPlayer
-            // 
-            this._localPlayer.BackColor = System.Drawing.Color.Transparent;
-            this._localPlayer.Image = ((System.Drawing.Image)(resources.GetObject("_localPlayer.Image")));
-            this._localPlayer.Location = new System.Drawing.Point(0, 0);
-            this._localPlayer.Name = "_localPlayer";
-            this._localPlayer.Size = new System.Drawing.Size(37, 72);
-            this._localPlayer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this._localPlayer.TabIndex = 14;
-            this._localPlayer.TabStop = false;
-            this.ToolTip1.SetToolTip(this._localPlayer, "Локальный игрок");
-            this._localPlayer.Move += new System.EventHandler(this._localPlayer_Move);
             // 
             // Form1
             // 
@@ -565,12 +577,13 @@ namespace Minecraft2D
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.Move += new System.EventHandler(this.Form1_Move);
+            ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).EndInit();
+            this.ContextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.makeItDark)).EndInit();
             this.invPanel.ResumeLayout(false);
             this.chatPanel1.ResumeLayout(false);
             this.chatPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.R1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -976,6 +989,7 @@ namespace Minecraft2D
         private Panel chatPanel1;
         private RichTextBox richTextBox1;
         public TransparentPicBox _localPlayer;
+        private ToolStripMenuItem пасхалкажмиСюдаToolStripMenuItem;
 
         internal ListBox ListBox2
         {

@@ -58,7 +58,8 @@ namespace NCore
         SNOWY_NETCRAFT_BLOCK, // yes...
         WHEAT, // rendering setup done
         SEEDS, // rendering setup done
-        RED_FLOWER,
-        YELLOW_FLOWER
+        RED_FLOWER, // +
+        YELLOW_FLOWER, // +
+        GRAVEL // +
     }
 }

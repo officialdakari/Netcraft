@@ -164,6 +164,7 @@ namespace NCore.netcraft
                 internal static List<NetcraftPlayer> clientList = new List<NetcraftPlayer>();
 
                 public static CommandSender ConsoleCommandSender { get; private set; } = new CommandSender("Server", true);
+                public static CommandSender RconCommandSender { get; private set; } = new CommandSender("RCON", true);
 
                 public static void AddCommand(Command a)
                 {
@@ -300,12 +301,12 @@ namespace NCore.netcraft
                     return s;
                 }
 
-                public static StringCollection GetPlayersData()
+                public static string[] GetPlayersData()
                 {
-                    var s = new StringCollection();
+                    var s = new List<string>();
                     foreach (var g in System.IO.Directory.GetFiles("./playerdata/"))
                         s.Add(g);
-                    return s;
+                    return s.ToArray();
                 }
             }
 

@@ -328,8 +328,10 @@ namespace NCore
                     File.WriteAllText("./permissions.json", JsonConvert.SerializeObject(permissions), Encoding.UTF8);
 
                     SaveAuth();
-                    foreach (var b in World.Blocks)
+                    for (int i = 0; i < World.Blocks.Count; i++)
                     {
+                        if (World.Blocks.Count > i + 1) continue;
+                        Block b = World.Blocks[i];
                         if (b.Type == EnumBlockType.SAPLING)
                         {
                             World.Blocks.Remove(b);
@@ -405,7 +407,7 @@ namespace NCore
                                 World.Chests.Add(chest);
                             }
                         }
-                        else if(b.Type == EnumBlockType.SAND)
+                        else if(b.Type == EnumBlockType.SAND || b.Type == EnumBlockType.GRAVEL)
                         {
                             if(World.Gamerules.blockPhysics)
                             {
@@ -421,7 +423,7 @@ namespace NCore
                                     b.Position = moveTo;
                                     foreach (NetcraftPlayer p in Netcraft.GetOnlinePlayers())
                                     {
-                                        await p.SendBlockChange(b.Position, EnumBlockType.SAND, false, false, b.IsBackground);
+                                        await p.SendBlockChange(b.Position, b.Type, false, false, b.IsBackground);
                                     }
                                     World.Blocks.Add(b);
                                 }
@@ -810,6 +812,44 @@ namespace NCore
             }
         }
 
+        public async Task DoWaterPhysics(int x, int y)
+        {
+            Block b = World.GetBlockAt(x, y);
+            if (b.Type == EnumBlockType.WATER)
+            {
+                Block b1 = World.GetBlockAt(new Point(b.Position.X, b.Position.Y + 1));
+                Block b2 = World.GetBlockAt(new Point(b.Position.X - 1, b.Position.Y));
+                Block b3 = World.GetBlockAt(new Point(b.Position.X + 1, b.Position.Y));
+                if (b1 == null)
+                {
+                    Block _b1 = new Block(new Point(b.Position.X, b.Position.Y + 1), b.Type, b.Unbreakable, b.IsBackground);
+                    World.Blocks.Add(_b1);
+                    foreach (NetcraftPlayer p in players)
+                    {
+                        await p.SendBlockChange(_b1.Position, _b1.Type, true, false, _b1.IsBackground);
+                    }
+                }
+                if (b2 == null)
+                {
+                    Block _b1 = new Block(new Point(b.Position.X - 1, b.Position.Y), b.Type, b.Unbreakable, b.IsBackground);
+                    World.Blocks.Add(_b1);
+                    foreach (NetcraftPlayer p in players)
+                    {
+                        await p.SendBlockChange(_b1.Position, _b1.Type, true, false, _b1.IsBackground);
+                    }
+                }
+                if (b3 == null)
+                {
+                    Block _b1 = new Block(new Point(b.Position.X + 1, b.Position.Y), b.Type, b.Unbreakable, b.IsBackground);
+                    World.Blocks.Add(_b1);
+                    foreach (NetcraftPlayer p in players)
+                    {
+                        await p.SendBlockChange(_b1.Position, _b1.Type, true, false, _b1.IsBackground);
+                    }
+                }
+            }
+        }
+
         public async Task BroadcastChatTranslation(string translationKey, string[] format, string except = null, bool readyClientsOnly = false)
         {
             ThreadAdd();
@@ -886,6 +926,7 @@ namespace NCore
         internal void Log(string arg0, string arg1 = "INFO")
         {
             ThreadAdd();
+            arg0 = arg0.Replace("&0", "").Replace("&1", "").Replace("&2", "").Replace("&3", "").Replace("&4", "").Replace("&5", "").Replace("&r", "");
             //Console.ForegroundColor = ConsoleColor.White;
             //Console.Write($"{DateTime.Now.ToString()} [");
             if (arg1 == "ERROR")
@@ -955,7 +996,7 @@ namespace NCore
                 }
             }
         }
-
+        const string RCON_PASSWORD = "12344321";
         private Hashtable playerPasswords = new Hashtable();
         private StringCollection loggedIn = new StringCollection();
 
@@ -971,6 +1012,7 @@ namespace NCore
                 Log(n.GetIp() + " disconnected for bad packet", "WARNING");
                 players.Remove(n);
                 return;
+
             }
             if(str.Length > 5000)
             {
@@ -988,22 +1030,41 @@ namespace NCore
                     if (allowQuery == 1)
                     {
                         await n.Send("name?" + name);
-                        Thread.Sleep(50);
+                        await Task.Delay(10);
                         await n.Send("motd?" + motd);
-                        Thread.Sleep(50);
-                        await n.Send("players?" + players.Count.ToString() + "/" + maxPlayers.ToString());
+                        await Task.Delay(10);
+                        await n.Send("players?" + players.Where(x => x.IsLoaded).ToArray().Length.ToString() + "/" + maxPlayers.ToString());
                     }
                     else
                     {
                         await n.Send("name?Access denied");
-                        Thread.Sleep(50);
+                        await Task.Delay(10);
                         await n.Send("motd?Sorry, but query is disabled for this server.");
-                        Thread.Sleep(50);
+                        await Task.Delay(10);
                         await n.Send("players?0/0");
                     }
 
                     n.Disconnect();
                     players.Remove(n);
+                    return;
+                }
+                if(a[0] == "setuprcon")
+                {
+                    if (a[1] == RCON_PASSWORD) 
+                    {
+                        n.Username = "RCON";
+                        n.IsAdmin = true;
+                        n.IsRconClient = true;
+                    }
+                }
+                if(n.IsRconClient)
+                {
+                    if(a[0] == "cmd")
+                    {
+                        string cmd = string.Join('?', a.Skip(1));
+                        Log(this.lang.get("command.requested", "RCON", cmd));
+                        await Netcraft.DispatchCommand(Netcraft.RconCommandSender, cmd);
+                    }
                     return;
                 }
                 Lang lang = n.lang;
@@ -1021,7 +1082,7 @@ namespace NCore
                     n.lang = Lang.FromFile("./lang/" + a[2] + ".txt");
                     lang = n.lang;
                     Log(this.lang.get("console.joined", a[1], n.GetIp()));
-                    if (maxPlayers + 1 == players.Count)
+                    if (maxPlayers + 1 == players.Where(x => x.IsLoaded).ToArray().Length)
                     {
                         n.Kick("Сервер заполнен!");
                         return;
@@ -1757,6 +1818,11 @@ namespace NCore
                                         await n.Give(Material.DIRT);
                                     }
 
+                                    if (b.Type == EnumBlockType.GRAVEL)
+                                    {
+                                        await n.Give(Material.GRAVEL);
+                                    }
+
                                     if (b.Type == EnumBlockType.WHEAT)
                                     {
                                         await n.Give(Material.WHEAT);
@@ -2250,7 +2316,6 @@ namespace NCore
             if (string.IsNullOrEmpty(Thread.CurrentThread.Name))
                 Thread.CurrentThread.Name = "Network Leave";
             ThreadAdd();
-            if (client.GetConnection() != null && client.GetConnection().Connected) return;
             if (client.IsLoaded)
             {
                 var ev = new netcraft.server.api.events.PlayerLeaveEventArgs(client);
@@ -2315,7 +2380,7 @@ namespace NCore
         public async Task SendCommandFeedback(string a, CommandSender b)
         {
             Log($"[{b.GetName()}: {a}]");
-            await Send($"chat?[{b.GetName()}: {a}]");
+            await Send($"chat?&4[{b.GetName()}: {a}]");
         }
 
         public static string Left(string a, int b)

@@ -22,7 +22,7 @@ namespace NCore
             Authors = e;
             logger = new netcraft.server.api.PluginLogger(this);
         }
-
+         
         public netcraft.server.api.PluginLogger GetLogger()
         {
             return logger;
