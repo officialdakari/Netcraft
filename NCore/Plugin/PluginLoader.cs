@@ -48,6 +48,10 @@ namespace NCore
 
         public static void Unload(Plugin p)
         {
+            foreach(var i in p.Threads)
+            {
+                i.Abort();
+            }
             p.OnUnload();
             Plugins.Remove(p);
             NCore.GetNCore().Log($"Плагин выгружен: {p.Name}");

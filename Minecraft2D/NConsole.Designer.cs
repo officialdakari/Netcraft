@@ -70,7 +70,7 @@
             this.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.Name = "NConsole";
-            this.Text = "Netcraft C# Interactive";
+            this.Text = " ";
             this.Load += new System.EventHandler(this.NConsole_Load);
             this.ResumeLayout(false);
 

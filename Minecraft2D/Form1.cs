@@ -357,7 +357,7 @@ namespace Minecraft2D
                 PluginManager.Load(pluginPath);
             try
             {
-                MainMenu.GetInstance().presence.Details = String.Format(lang.get("rpc.playername"), pName);
+                MainMenu.GetInstance().presence.Details = String.Format(lang.get("rpc.playername"), pName) + " | Netcraft " + MainMenu.GetInstance().Ver;
                 if (!IsSingleplayer)
                 {
                     MainMenu.GetInstance().presence.State = lang.get("rpc.playing.network_game");
@@ -1564,7 +1564,7 @@ namespace Minecraft2D
             }
         }
 
-        internal class Block
+        public class Block
         {
             string type;
             Rectangle rectangle;
@@ -1901,6 +1901,7 @@ namespace Minecraft2D
                     {
                         FormBorderStyle = FormBorderStyle.FixedSingle;
                         WindowState = FormWindowState.Normal;
+                        Size = new Size(1182, 615);
                     }
                     Form1_Scroll(this, null);
                     return;

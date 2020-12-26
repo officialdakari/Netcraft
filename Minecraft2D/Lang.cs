@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Minecraft2D
 {
-    class Lang
+    public class Lang
     {
 
         internal Hashtable formats;
-        internal static Lang FromText(string t)
+        public static Lang FromText(string t)
         {
             Lang lang = new Lang();
             lang.formats = new Hashtable(new Dictionary<string, string>());
@@ -23,12 +23,12 @@ namespace Minecraft2D
             return lang;
         }
 
-        internal static Lang FromFile(string p)
+        public static Lang FromFile(string p)
         {
             return FromText(System.IO.File.ReadAllText(p, Encoding.UTF8));
         }
 
-        internal string get(string i)
+        public string get(string i)
         {
             if (!formats.ContainsKey(i)) return i;
             return formats[i].ToString();

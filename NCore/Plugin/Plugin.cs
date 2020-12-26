@@ -1,4 +1,7 @@
 ﻿
+using System.Collections.Generic;
+using System.Threading;
+
 namespace NCore
 {
     public abstract class Plugin
@@ -7,6 +10,7 @@ namespace NCore
         public string Description { get; set; }
         public string Version { get; set; }
         public string[] Authors { get; set; }
+        public List<Thread> Threads;
 
         internal netcraft.server.api.PluginLogger logger;
 
@@ -21,6 +25,7 @@ namespace NCore
             Version = c;
             Authors = e;
             logger = new netcraft.server.api.PluginLogger(this);
+            Threads = new List<Thread>();
         }
          
         public netcraft.server.api.PluginLogger GetLogger()

@@ -41,7 +41,7 @@ namespace Minecraft2D
         protected int direction = 1;
         protected Color[] colors = new[] { Color.Red, Color.Orange, Color.Goldenrod, Color.Gold, Color.Yellow, Color.GreenYellow, Color.LightGreen, Color.Green, Color.LightBlue, Color.Blue, Color.DarkBlue, Color.BlueViolet, Color.Violet };
 
-        protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "Happy new year!", "Press F1 for help!", "Netcraft Is In 2D", "By GladCypress3030 and TheNonameee", "Converted to C#", "Join our Discord!"};
+        protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "Happy new year!", "Press F1 for help!", "Netcraft Is In 2D", "By DarkCoder15 and TheNonameee", "Converted to C#", "Join our Discord!"};
         protected string labelText;
         protected int presenceUpdateDelay = 20;
 
@@ -244,7 +244,7 @@ namespace Minecraft2D
                 presence.State = lang.get("rpc.menu");
                 var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party()).WithTimestamps(new DiscordRPC.Timestamps());
                 pr.Assets.LargeImageKey = "snowylogo";
-                pr.Assets.LargeImageText = "discord.gg/BuKCBP8";
+                pr.Assets.LargeImageText = "[пасхалка]";
                 pr.Details = "Netcraft " + Ver;
                 pr.Timestamps.Start = DateTime.UtcNow;
 

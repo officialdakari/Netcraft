@@ -65,6 +65,13 @@ namespace NCore
             ServerStarted?.Invoke();
         }
 
+        public delegate void OnLoopActionEventHandler();
+        public event OnLoopActionEventHandler LoopAction;
+        internal void loop()
+        {
+            LoopAction?.Invoke();
+        }
+
         public async Task ExecuteScript(string name)
         {
             await nCore.StartScript(name);
@@ -187,15 +194,16 @@ namespace NCore
         {
             ctx = new Context(this);
             Log(GetApplicationRoot());
-            foreach(string d in Directory.GetDirectories("./scripts"))
+            foreach(string d in Directory.GetFiles("./scripts"))
             {
-                string n = d.Split(Path.DirectorySeparatorChar).Last() + Path.DirectorySeparatorChar + "main";
+                string n = d.Split(Path.DirectorySeparatorChar).Last().Split('.')[0];
                 await StartScript(n);
             }
         }
 
         public async Task StartScript(string name)
         {
+            Log("Load script " + name);
             string i = $@"./scripts/{name}.cs";
             string n = i.Split('/', '\\').Last().Split('.')[0];
             ScriptOptions a = ScriptOptions.Default;
@@ -292,6 +300,7 @@ namespace NCore
         internal const string NETCRAFT_VERSION = "0.1.6a";
         internal const string NCORE_VERSION = "0.7";
         int hungerDecreaseDelay = 200;
+        public DateTime LastTick { get; private set; }
 
         private async void ThreadLoop()
         {
@@ -311,6 +320,8 @@ namespace NCore
                         }
                     }
                 }
+                if(ctx != null) ctx.loop();
+                LastTick = DateTime.Now;
                 if (logAppendDelay == 0)
                 {
                     logAppendDelay = 40;
@@ -542,6 +553,18 @@ namespace NCore
                 Thread.Sleep(100);
                 try
                 {
+                    if(LastTick.AddSeconds(10) < DateTime.Now)
+                    {
+                        Console.Title = "NCore (not responding)";
+                        Log($"SERVER IS NOT RESPONDING!", "ERROR");
+                        Log($"Watchdog detected server lag!", "ERROR");
+                        Log($"The server has not responded " + (DateTime.Now - LastTick).TotalSeconds + " seconds!");
+                        if((DateTime.Now - LastTick).TotalSeconds > 30)
+                        {
+                            Log($"SERVER HAS NOT RESPONDED WITH IN 30 SECONDS! STOPPING", "ERROR");
+                            Environment.Exit(-1);
+                        }
+                    }
                     foreach (var th in threads)
                     {
                         if (!th.IsAlive)
@@ -583,6 +606,7 @@ namespace NCore
             {
                 NCore app = new NCore();
                 nCore = app;
+                app.LastTick = DateTime.Now.AddSeconds(10);
                 app.Server();
                 if (args.Length == 1 && args[0] == "s")
                 {
@@ -592,6 +616,7 @@ namespace NCore
             {
                 CrashReport(e);
             }
+
             //Console.WriteLine("Что Вы хотите сделать?\r\n1 - запустить сервер");
             //char result = Console.ReadKey().KeyChar;
             //Console.WriteLine("\b");

@@ -61,14 +61,12 @@ namespace Minecraft2D
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.PictureBox2 = new System.Windows.Forms.PictureBox();
             this.PictureBox1 = new System.Windows.Forms.PictureBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.Panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -280,9 +278,9 @@ namespace Minecraft2D
             this.Label6.ForeColor = System.Drawing.Color.White;
             this.Label6.Location = new System.Drawing.Point(3, 25);
             this.Label6.Name = "Label6";
-            this.Label6.Size = new System.Drawing.Size(328, 18);
+            this.Label6.Size = new System.Drawing.Size(288, 18);
             this.Label6.TabIndex = 13;
-            this.Label6.Text = "by GladCypress3030 & TheNonameee";
+            this.Label6.Text = "by DarkCoder15 & TheNonameee";
             this.Label6.UseMnemonic = false;
             // 
             // panel2
@@ -370,25 +368,13 @@ namespace Minecraft2D
             this.textBox2.TabIndex = 0;
             this.textBox2.Text = "abcdefghiABCDEFGHIабвгдеёАБВГДЕЁ0123456789/\\.,[];\'";
             // 
-            // PictureBox2
-            // 
-            this.PictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.PictureBox2.Image = global::Minecraft2D.My.Resources.Resources.c_edition;
-            this.PictureBox2.Location = new System.Drawing.Point(478, 70);
-            this.PictureBox2.Name = "PictureBox2";
-            this.PictureBox2.Size = new System.Drawing.Size(310, 18);
-            this.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.PictureBox2.TabIndex = 15;
-            this.PictureBox2.TabStop = false;
-            this.PictureBox2.Paint += new System.Windows.Forms.PaintEventHandler(this.PictureBox2_Paint);
-            // 
             // PictureBox1
             // 
             this.PictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.PictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("PictureBox1.Image")));
             this.PictureBox1.Location = new System.Drawing.Point(478, 5);
             this.PictureBox1.Name = "PictureBox1";
-            this.PictureBox1.Size = new System.Drawing.Size(310, 59);
+            this.PictureBox1.Size = new System.Drawing.Size(310, 85);
             this.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PictureBox1.TabIndex = 14;
             this.PictureBox1.TabStop = false;
@@ -411,7 +397,6 @@ namespace Minecraft2D
             this.ClientSize = new System.Drawing.Size(800, 372);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.PictureBox2);
             this.Controls.Add(this.PictureBox1);
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this._Button5);
@@ -425,7 +410,7 @@ namespace Minecraft2D
             this.Name = "MainMenu";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Netcraft C#";
+            this.Text = " Netcraft C#";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainMenu_FormClosing);
             this.Load += new System.EventHandler(this.MainMenu_Load);
             this.LocationChanged += new System.EventHandler(this.MainMenu_LocationChanged);
@@ -438,7 +423,6 @@ namespace Minecraft2D
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.PictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -616,7 +600,6 @@ namespace Minecraft2D
         private Button button2;
         private Button button1;
         private TextBox textBox2;
-        internal PictureBox PictureBox2;
         internal PictureBox PictureBox1;
         private NotifyIcon notifyIcon1;
     }

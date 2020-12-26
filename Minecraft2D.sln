@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCoreWin32", "NCoreWin32\NC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RconClient", "RconClient\RconClient.csproj", "{16022E09-5946-41F0-BE1B-11C149627447}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetcraftCore", "NetcraftCore\NetcraftCore.csproj", "{F83BCEE9-FFFA-4B44-90FF-3094B927B2DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{16022E09-5946-41F0-BE1B-11C149627447}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16022E09-5946-41F0-BE1B-11C149627447}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16022E09-5946-41F0-BE1B-11C149627447}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F83BCEE9-FFFA-4B44-90FF-3094B927B2DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F83BCEE9-FFFA-4B44-90FF-3094B927B2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F83BCEE9-FFFA-4B44-90FF-3094B927B2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F83BCEE9-FFFA-4B44-90FF-3094B927B2DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
