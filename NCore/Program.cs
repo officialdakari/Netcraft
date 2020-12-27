@@ -54,6 +54,7 @@ namespace NCore
         {
             if (t != "INFO" &&
                 t != "WARNING" &&
+                t != "SEVERE" &&
                 t != "ERROR") t = "INFO";
             nCore.Log(message, t);
         }
@@ -95,7 +96,7 @@ namespace NCore
         {
 
             internal Hashtable formats;
-            internal static Lang FromText(string t)
+            public static Lang FromText(string t)
             {
                 Lang lang = new Lang();
                 lang.formats = new Hashtable(new Dictionary<string, string>());
@@ -107,7 +108,7 @@ namespace NCore
                 return lang;
             }
 
-            internal static Lang FromFile(string p)
+            public static Lang FromFile(string p)
             {
                 return FromText(System.IO.File.ReadAllText(p, Encoding.UTF8));
             }
@@ -136,15 +137,15 @@ namespace NCore
         public const string NCORE_CONFIGFILE = "./server.properties";
         private readonly SaveLoad sv = new SaveLoad();
         internal int maxPlayers = 20;
-        private string chatFormat = "%1 %2";
-        private int everyBodyAdmin = 0;
-        private int allowFlight = 0;
-        private string motd = "A NCore server";
-        private string name;
-        private int allowQuery = 0;
-        private int commandsConsoleOnly = 0;
-        private int enableAuth = -1;
-        private int enableConsole = 0;
+        internal string chatFormat = "%1 %2";
+        internal int everyBodyAdmin = 0;
+        internal int allowFlight = 0;
+        internal string motd = "A NCore server";
+        internal string name;
+        internal int allowQuery = 0;
+        internal int commandsConsoleOnly = 0;
+        internal int enableAuth = -1;
+        internal int enableConsole = 0;
         public const int WORLDGEN_CAVE_MIN_HEIGHT = 8;
         public const int WORLDGEN_CAVE_MAX_HEIGHT = 12;
         public Lang lang;
@@ -210,7 +211,10 @@ namespace NCore
             a = a.AddReferences(new string[] { "System", "System.Core", "System.Linq", "System.IO", "System.Text", "System.Threading", "System.Threading.Tasks",
                 GetApplicationRoot()});
             var script = await CSharpScript.RunAsync($@"Context ctx = global::NCore.NCore.GetNCore().ctx;void Log(string message, string t = ""INFO"") {{ ctx.Print(""[{n}] "" + message, t); }}", a.WithImports("System", "System.IO", "System.Net", "System.Linq", "NCore", "NCore.netcraft.server.api", "NCore.netcraft.server.api.events"));
-            await script.ContinueWithAsync(File.ReadAllText(i));
+            await script.ContinueWithAsync(File.ReadAllText(i), a, (Exception ex) => {
+                Log($"Unhandled exception in script '{name}'\r\n" + ex.ToString(), "ERROR");
+                return true;
+            });
         }
         internal Dictionary<string, ScriptState<object>> scripts = new Dictionary<string, ScriptState<object>>();
         public async Task Eval(string scriptt, NetcraftPlayer p)
@@ -351,7 +355,7 @@ namespace NCore
                             Log($"Tree growth at [{b.Position.X.ToString() + ", " + b.Position.Y.ToString()}]");
                             break;
                         }
-                        if(b.Type == EnumBlockType.SEEDS)
+                        if (b.Type == EnumBlockType.SEEDS)
                         {
                             b.Type = EnumBlockType.WHEAT;
                             await Send($"removeblock?{b.Position.X.ToString()}?{b.Position.Y.ToString()}");
@@ -384,7 +388,7 @@ namespace NCore
                                 continue;
                             if (b.Type == EnumBlockType.SAPLING)
                                 continue;
-                            if (brec.IntersectsWith(n.PlayerRectangle))
+                            if (brec.IntersectsWith(n.PlayerRectangle)) 
                             {
                                 if (n.NoClip)
                                     break;
@@ -398,7 +402,6 @@ namespace NCore
                                     await n.Damage(10, "deathmessage.fire");
                                     break;
                                 }
-
                             }
                             else
                             {
@@ -488,6 +491,7 @@ namespace NCore
                     if (worldtime <= 0)
                     {
                         stp = 1;
+
                     }
 
                     worldtime += stp;
@@ -555,10 +559,10 @@ namespace NCore
                 {
                     if(LastTick.AddSeconds(10) < DateTime.Now)
                     {
-                        Console.Title = "NCore (not responding)";
-                        Log($"SERVER IS NOT RESPONDING!", "ERROR");
-                        Log($"Watchdog detected server lag!", "ERROR");
-                        Log($"The server has not responded " + (DateTime.Now - LastTick).TotalSeconds + " seconds!");
+                        Console.Title = $"NCore (not responding for {(DateTime.Now - LastTick).TotalSeconds.ToString()} seconds)";
+                        //Log($"SERVER IS NOT RESPONDING!", "ERROR");
+                        //Log($"Watchdog detected server lag!", "ERROR");
+                        //Log($"The server has not responded " + (DateTime.Now - LastTick).TotalSeconds + " seconds!");
                         if((DateTime.Now - LastTick).TotalSeconds > 30)
                         {
                             Log($"SERVER HAS NOT RESPONDED WITH IN 30 SECONDS! STOPPING", "ERROR");
@@ -1693,8 +1697,13 @@ namespace NCore
                         {
                             n.Saturation += 2;
                             if (n.Hunger < 20) await n.UpdateHunger(n.Hunger + 5);
-                            await n.RemoveItem(Material.COOKED_BEEF, 1);
+                            await n.RemoveItem(Material.BREAD, 1);
                             await n.Heal(10);
+                        }
+                        if (n.SelectedItem.Type == Material.HEALING_POTION)
+                        {
+                            await n.RemoveItem(Material.HEALING_POTION, 1);
+                            await n.UpdateHealth(100);
                         }
                         if (DistanceBetweenPoint(block.Position, Normalize(n.Position)) > 6) return;
                         if(block.Type == EnumBlockType.TNT)

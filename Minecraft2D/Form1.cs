@@ -221,7 +221,8 @@ namespace Minecraft2D
             GOLD_BLOCK,
             DIAMOND_BLOCK,
             BUCKET,
-            CHEST
+            CHEST,
+            HEALING_POTION
         }
 
         public Control GetControl(string name)
@@ -1153,6 +1154,12 @@ namespace Minecraft2D
                             await SetItem(a[1], My.Resources.Resources.wheat_seeds, My.Resources.Resources.wheat_seeds, a[2]);
                         }
 
+                        // REM - Зелья
+                        if(a[2] == "HEALING_POTION")
+                        {
+                            await SetItem(a[1], My.Resources.Resources.potion_bottle_drinkable, My.Resources.Resources.potion_bottle_drinkable, a[2]);
+                        }
+
                         // REM - Nothing
                         if (a[2] == "nothing")
                         {
@@ -1420,7 +1427,7 @@ namespace Minecraft2D
                 Controls.Add(b);
                 b.Tag = name;
                 b.Image = playerSkin;
-                b.SizeMode = PictureBoxSizeMode.StretchImage;
+                //b.SizeMode = PictureBoxSizeMode.StretchImage;
                 b.Size = localPlayer.Size;
                 b.Left = x - HorizontalScroll.Value;
                 b.Top = y - VerticalScroll.Value;

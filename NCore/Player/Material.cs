@@ -60,6 +60,7 @@ namespace NCore
         SEEDS, // rendering setup done
         RED_FLOWER, // +
         YELLOW_FLOWER, // +
-        GRAVEL // +
+        GRAVEL, // +
+        HEALING_POTION
     }
 }

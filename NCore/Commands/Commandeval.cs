@@ -15,6 +15,7 @@ namespace NCore.Commands
 
         public override async Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label)
         {
+            if (NCore.GetNCore().enableConsole != 1) return false;
             NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
             if (args.Length < 1) return false;
             ScriptOptions a = ScriptOptions.Default;
