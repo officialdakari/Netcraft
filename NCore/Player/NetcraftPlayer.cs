@@ -256,9 +256,14 @@ namespace NCore
             await Send("teleport?" + x.ToString() + "?" + y.ToString());
         }
 
+        public async Task EditChatLine(int line, string message)
+        {
+            await Send("setchatline?" + line.ToString() + "?" + message);
+        }
+
         public async Task Chat(string arg0)
         {
-            await Send("chat?" + arg0.Replace("\n", ""));
+            await Send("chat?" + arg0.Replace("\n", "\r"));
         }
 
         public async Task Heal(int h = 1)
@@ -1091,8 +1096,8 @@ namespace NCore
                 if (ev.GetCancelled()) return;
                 data = Encode.e(ev.GetPacket());
                 c = new StreamWriter(d.GetStream());
-                c.WriteLine(data);
-                c.Flush();
+                await c.WriteLineAsync(data);
+                await c.FlushAsync();
             }
             catch (Exception ex)
             {

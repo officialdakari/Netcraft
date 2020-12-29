@@ -15,6 +15,7 @@
     <WarningsAsErrors />
     <Optimize>false</Optimize>
     <Prefer32Bit>false</Prefer32Bit>
+    <OutputPath>C:\Users\Proffi\Documents\Netcraft-another\Minecraft2D\bin\Debug\server\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />

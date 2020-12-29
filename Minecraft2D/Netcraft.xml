@@ -4,6 +4,57 @@
         <name>Netcraft</name>
     </assembly>
     <members>
+        <member name="F:Minecraft2D.ChestWindow.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Minecraft2D.ChestWindow.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Minecraft2D.ChestWindow.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Minecraft2D.FancyMessageBox.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Minecraft2D.FancyMessageBox.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Minecraft2D.FancyMessageBox.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Minecraft2D.NConsole.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Minecraft2D.NConsole.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Minecraft2D.NConsole.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
         <member name="T:Minecraft2D.My.Resources.Resources">
             <summary>
               Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
@@ -25,7 +76,42 @@
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.beef">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.bone_meal">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.bread">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.bucket">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.buttonbg">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.buttonbghover">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:Minecraft2D.My.Resources.Resources.c_edition">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.chest">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
@@ -40,12 +126,17 @@
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:Minecraft2D.My.Resources.Resources.COBBLESTONE">
+        <member name="P:Minecraft2D.My.Resources.Resources.cobblestone4">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:Minecraft2D.My.Resources.Resources.cobblestone4">
+        <member name="P:Minecraft2D.My.Resources.Resources.cooked_beef">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.dandelion">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
@@ -105,12 +196,22 @@
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:Minecraft2D.My.Resources.Resources.DIRT">
+        <member name="P:Minecraft2D.My.Resources.Resources.dirt1">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:Minecraft2D.My.Resources.Resources.dirt1">
+        <member name="P:Minecraft2D.My.Resources.Resources.end_stone">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.fire_0">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.flint_and_steel">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
@@ -150,12 +251,32 @@
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.grass_block_snow">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:Minecraft2D.My.Resources.Resources.grass_side">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.grass_side1">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.gravel">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:Minecraft2D.My.Resources.Resources.Grid_Sapling">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.Grid_Sapling1">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
@@ -215,6 +336,16 @@
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.lava_bucket">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.lava_still">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:Minecraft2D.My.Resources.Resources.leaves">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
@@ -225,12 +356,27 @@
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.logoNC">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.menubackground">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:Minecraft2D.My.Resources.Resources.NCLogo">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
         <member name="P:Minecraft2D.My.Resources.Resources.netcraft">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.oak_leaves">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
@@ -280,12 +426,27 @@
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.poppy">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.potion_bottle_drinkable">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:Minecraft2D.My.Resources.Resources.sand">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
         <member name="P:Minecraft2D.My.Resources.Resources.SANDBLOCK">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.snowylogo">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
@@ -350,12 +511,72 @@
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.tnt_side">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:Minecraft2D.My.Resources.Resources.vbnet_edition">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.water_bucket">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:Minecraft2D.My.Resources.Resources.water_still">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.wheat">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.wheat_seeds">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.wheat_stage0">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.wheat_stage1">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.wheat_stage2">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.wheat_stage3">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.wheat_stage4">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.wheat_stage5">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.wheat_stage6">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.My.Resources.Resources.wheat_stage7">
             <summary>
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
@@ -405,12 +626,6 @@
               Поиск локализованного ресурса типа System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="E:Minecraft2D.Form1.OnMessageReceived">
-            <summary>
-            Происходит когда клиент получает новое сообщение.
-            </summary>
-            <param name="msg">Сообщение</param>
-        </member>
         <member name="M:Minecraft2D.Form1.Connect(System.String,System.Int32)">
             <summary>
             Пытается подключиться к указанному серверу по указанному порту.
@@ -424,6 +639,454 @@
             </summary>
             <param name="ip">IP-адрес сервера</param>
             <param name="port">Порт сервера</param>
+        </member>
+        <member name="T:Minecraft2D.Properties.Resources">
+            <summary>
+              Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.ResourceManager">
+            <summary>
+              Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.Culture">
+            <summary>
+              Перезаписывает свойство CurrentUICulture текущего потока для всех
+              обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.bedrock">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.coal">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.coal_ore">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.COBBLESTONE">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.cobblestone4">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.dandelion">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.DIAMOND">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.DIAMOND_AXE">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.DIAMOND_AXE_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.diamond_block">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.diamond_ore">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.DIAMOND_PICKAXE">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.DIAMOND_PICKAXE_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.DIAMOND_SHOVEL">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.DIAMOND_SHOVEL_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.DIAMOND_SWORD">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.DIAMOND_SWORD_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.DIRT">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.dirt1">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.furnace_front_off">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.furnace_front_on">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.game_music_loop">
+            <summary>
+              Поиск локализованного ресурса типа System.Byte[].
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.glass">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.GLASSBLOCK">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.GOLD">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.gold_block">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.gold_ore">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.grass_block_snow">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.grass_side">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.gravel">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.Grid_Sapling">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.IRON">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.IRON_AXE">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.IRON_AXE_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.iron_block">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.iron_ore">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.IRON_PICKAXE">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.IRON_PICKAXE_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.IRON_SHOVEL">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.IRON_SHOVEL_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.IRON_SWORD">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.IRON_SWORD_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.leaves">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.leaves1">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.log_oak">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.NCLogo">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.netcraft">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.OBSIDIAN">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.obsidian1">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.planks_oak">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.platformPack_tile001">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.platformPack_tile004">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.platformPack_tile016">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.platformPack_tile034">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.Player1Texture">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.Player2Texture">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.poppy">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.potion_bottle_drinkable">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.sand">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.SANDBLOCK">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.sprite">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.STICK">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.STONE">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.STONE_AXE">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.STONE_AXE_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.STONE_PICKAXE">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.STONE_PICKAXE_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.STONE_SHOVEL">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.STONE_SHOVEL_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.STONE_SWORD">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.STONE_SWORD_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.stone1">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.vbnet_edition">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.water_still">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.WOOD">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.WOODEN_AXE">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.WOODEN_AXE_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.WOODEN_PICKAXE">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.WOODEN_PICKAXE_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.WOODEN_SHOVEL">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.WOODEN_SHOVEL_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.WOODEN_SWORD">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Minecraft2D.Properties.Resources.WOODEN_SWORD_FLIPPED">
+            <summary>
+              Поиск локализованного ресурса типа System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="F:Minecraft2D.SplashScreen.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Minecraft2D.SplashScreen.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Minecraft2D.SplashScreen.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
         </member>
         <member name="T:My.Resources.Resources">
             <summary>

@@ -118,26 +118,26 @@ namespace Minecraft2D
             this.kickPlayerToolStripMenuItem,
             this.banPlayerToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(206, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(198, 70);
             // 
             // sendAPrivateMessageToolStripMenuItem
             // 
             this.sendAPrivateMessageToolStripMenuItem.Name = "sendAPrivateMessageToolStripMenuItem";
-            this.sendAPrivateMessageToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.sendAPrivateMessageToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.sendAPrivateMessageToolStripMenuItem.Text = "Send a private message";
             this.sendAPrivateMessageToolStripMenuItem.Click += new System.EventHandler(this.sendAPrivateMessageToolStripMenuItem_Click);
             // 
             // kickPlayerToolStripMenuItem
             // 
             this.kickPlayerToolStripMenuItem.Name = "kickPlayerToolStripMenuItem";
-            this.kickPlayerToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.kickPlayerToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.kickPlayerToolStripMenuItem.Text = "Kick player";
             this.kickPlayerToolStripMenuItem.Click += new System.EventHandler(this.kickPlayerToolStripMenuItem_Click);
             // 
             // banPlayerToolStripMenuItem
             // 
             this.banPlayerToolStripMenuItem.Name = "banPlayerToolStripMenuItem";
-            this.banPlayerToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.banPlayerToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.banPlayerToolStripMenuItem.Text = "Ban player";
             this.banPlayerToolStripMenuItem.Click += new System.EventHandler(this.banPlayerToolStripMenuItem_Click);
             // 

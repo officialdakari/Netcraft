@@ -343,29 +343,35 @@ namespace NCore
                     File.WriteAllText("./permissions.json", JsonConvert.SerializeObject(permissions), Encoding.UTF8);
 
                     SaveAuth();
-                    for (int i = 0; i < World.Blocks.Count; i++)
+                    try
                     {
-                        if (World.Blocks.Count > i + 1) continue;
-                        Block b = World.Blocks[i];
-                        if (b.Type == EnumBlockType.SAPLING)
+                        for (int i = 0; i < World.Blocks.Count; i++)
                         {
-                            World.Blocks.Remove(b);
-                            await Send("removeblock?" + b.Position.X.ToString() + "?" + b.Position.Y.ToString());
-                            await TreeGenerator.GrowthTree(b.Position, World, b.IsBackground);
-                            Log($"Tree growth at [{b.Position.X.ToString() + ", " + b.Position.Y.ToString()}]");
-                            break;
+                            if (World.Blocks.Count - 1 < i) continue;
+                            Block b = World.Blocks[i];
+                            if (b.Type == EnumBlockType.SAPLING)
+                            {
+                                World.Blocks.Remove(b);
+                                await Send("removeblock?" + b.Position.X.ToString() + "?" + b.Position.Y.ToString());
+                                await TreeGenerator.GrowthTree(b.Position, World, b.IsBackground);
+                                Log($"Tree growth at [{b.Position.X.ToString() + ", " + b.Position.Y.ToString()}]");
+                                break;
+                            }
+                            if (b.Type == EnumBlockType.SEEDS)
+                            {
+                                b.Type = EnumBlockType.WHEAT;
+                                await Send($"removeblock?{b.Position.X.ToString()}?{b.Position.Y.ToString()}");
+                                await Task.Delay(30);
+                                foreach (NetcraftPlayer player in players)
+                                    await player.SendBlockChange(b.Position, EnumBlockType.WHEAT, true, false, b.IsBackground);
+                                Log($"Wheat growth at [{b.Position.X.ToString() + ", " + b.Position.Y.ToString()}]");
+                                //await Send($"blockchange?{b.Position.X.ToString()}?{b.Position.Y.ToString()}?wheat7?non-solid{(b.IsBackground ? "?bg" : "?fg")}");
+                                break;
+                            }
                         }
-                        if (b.Type == EnumBlockType.SEEDS)
-                        {
-                            b.Type = EnumBlockType.WHEAT;
-                            await Send($"removeblock?{b.Position.X.ToString()}?{b.Position.Y.ToString()}");
-                            await Task.Delay(30);
-                            foreach (NetcraftPlayer player in players)
-                                await player.SendBlockChange(b.Position, EnumBlockType.WHEAT, true, false, b.IsBackground);
-                            Log($"Wheat growth at [{b.Position.X.ToString() + ", " + b.Position.Y.ToString()}]");
-                            //await Send($"blockchange?{b.Position.X.ToString()}?{b.Position.Y.ToString()}?wheat7?non-solid{(b.IsBackground ? "?bg" : "?fg")}");
-                            break;
-                        }
+                    } catch(IndexOutOfRangeException)
+                    {
+
                     }
                 }
                 try

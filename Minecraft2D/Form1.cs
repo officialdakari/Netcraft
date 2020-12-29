@@ -90,8 +90,8 @@ namespace Minecraft2D
                 PacketSent?.Invoke(ref data, ref cancel);
                 if (cancel) return;
                 sWriter = new StreamWriter(client.GetStream());
-                sWriter.WriteLine(data);
-                sWriter.Flush();
+                await sWriter.WriteLineAsync(data);
+                await sWriter.FlushAsync();
             }
             catch (Exception ex)
             {
@@ -143,40 +143,41 @@ namespace Minecraft2D
 
         public bool IsSingleplayer { get; set; } = false;
 
-        private Process _ServerProcess;
+        public Process ServerProcess;
 
-        public Process ServerProcess
-        {
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return _ServerProcess;
-            }
+        //public Process ServerProcess
+        //{
+        //    [MethodImpl(MethodImplOptions.Synchronized)]
+        //    get
+        //    {
+        //        return _ServerProcess;
+        //    }
 
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                if (_ServerProcess != null)
-                {
-                    _ServerProcess.OutputDataReceived -= onServerProcessDataReceived;
-                    _ServerProcess.ErrorDataReceived -= onServerProcessErrorDataReceived;
-                }
+        //    [MethodImpl(MethodImplOptions.Synchronized)]
+        //    set
+        //    {
+        //        if (_ServerProcess != null)
+        //        {
+        //            _ServerProcess.OutputDataReceived -= onServerProcessDataReceived;
+        //            _ServerProcess.ErrorDataReceived -= onServerProcessErrorDataReceived;
+        //        }
 
-                _ServerProcess = value;
-                if (_ServerProcess != null)
-                {
-                    _ServerProcess.OutputDataReceived += onServerProcessDataReceived;
-                    _ServerProcess.ErrorDataReceived += onServerProcessErrorDataReceived;
-                }
-            }
-        }
+        //        _ServerProcess = value;
+        //        if (_ServerProcess != null)
+        //        {
+        //            _ServerProcess.OutputDataReceived += onServerProcessDataReceived;
+        //            _ServerProcess.ErrorDataReceived += onServerProcessErrorDataReceived;
+        //        }
+        //    }
+        //}
 
         internal string ip = "127.0.0.1";
         internal int port = 6575;
 
         internal void onServerProcessDataReceived(object sender, DataReceivedEventArgs e)
         {
-            Debug.WriteLine(e.Data);
+            Console.WriteLine(e.Data);
+            if (Logs.Instance != null) Logs.Instance.Log(e.Data);
         }
 
         internal void onServerProcessErrorDataReceived(object sender, DataReceivedEventArgs e)
@@ -416,6 +417,7 @@ namespace Minecraft2D
         }
 
         public delegate void xChat(string arg0);
+        public delegate void xSetChatLine(int i, string arg0);
 
         public void WriteChat(string arg0)
         {
@@ -426,6 +428,7 @@ namespace Minecraft2D
             }
             try
             {
+                chat += arg0 + "\n";
                 richTextBox1.AppendText(arg0 + "\r\n");
             } catch(Exception)
             {
@@ -434,6 +437,27 @@ namespace Minecraft2D
             //My.MyProject.Forms.Chat.RichTextBox1.AppendText(arg0 + Constants.vbCrLf);
             //My.MyProject.Forms.Chat.RichTextBox1.Select(My.MyProject.Forms.Chat.RichTextBox1.TextLength, 0);
             //My.MyProject.Forms.Chat.RichTextBox1.ScrollToCaret();
+        }
+        string chat = "";
+        public void SetChatLine(int i, string line)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new xSetChatLine(SetChatLine), i, line);
+                return;
+            }
+            try
+            {
+                //richTextBox1.Lines[i] = line;
+                string[] lines = chat.Split('\n');
+                lines[i] = line;
+                richTextBox1.Text = string.Join("\r\n", lines);
+                ColorAA();
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         public delegate void xHealth(int arg0);
@@ -792,6 +816,14 @@ namespace Minecraft2D
                 if (a[0] == "additem")
                 {
                     await AddItem(a[1]);
+                }
+
+                if (a[0] == "setchatline")
+                {
+                    int i = int.Parse(a[1]);
+                    if (i + 1 > richTextBox1.Lines.Length) return;
+                    //richTextBox1.Lines[i] = string.Join("?", a.Skip(2).ToArray());
+                    SetChatLine(i, string.Join("?", a.Skip(2).ToArray()));
                 }
 
                 if (a[0] == "msgerror")
@@ -2679,7 +2711,16 @@ namespace Minecraft2D
                 bool c = false;
                 PreChatEvent?.Invoke(textBox1.Text, ref c);
 
-                if(!c) await Send("chat?" + textBox1.Text);
+
+                if (!c)
+                {
+                    string text = textBox1.Text;
+                    if(text.StartsWith("%") && IsSingleplayer)
+                    {
+                        await ServerProcess.StandardInput.WriteLineAsync(text.Substring(1));
+                    }
+                    await Send("chat?" + textBox1.Text);
+                }
                 textBox1.Clear();
             }
         }

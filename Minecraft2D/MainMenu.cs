@@ -11,6 +11,7 @@ using System.Collections.Specialized;
 using System.Threading;
 using System.Threading.Tasks;
 using DiscordRPC;
+using System.Runtime.InteropServices;
 
 namespace Minecraft2D
 {
@@ -338,10 +339,14 @@ namespace Minecraft2D
         {
             Process.Start("https://discord.gg/BuKCBP8");
         }
-
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
         private async void Button2_Click_1(object sender, EventArgs e)
         {
             StartSingleplayer();
+            //AllocConsole();
+            new Logs().Show();
             await Task.Run(async () => {
                 await Task.Delay(1000);
                 BeginInvoke(new Action(() =>
@@ -365,7 +370,7 @@ namespace Minecraft2D
             My.MyProject.Forms.Form1.IsSingleplayer = true;
             My.MyProject.Forms.Form1.ServerProcess = new Process();
             My.MyProject.Forms.Form1.ServerProcess.StartInfo.Arguments = @"/c run.cmd";
-            My.MyProject.Forms.Form1.ServerProcess.StartInfo.WorkingDirectory = @".\server\";
+            My.MyProject.Forms.Form1.ServerProcess.StartInfo.WorkingDirectory = @".\server\netcoreapp2.1";
             My.MyProject.Forms.Form1.ServerProcess.StartInfo.FileName = "cmd.exe";
             Form1.GetInstance().ServerProcess.StartInfo.StandardErrorEncoding = Encoding.Default;
             Form1.GetInstance().ServerProcess.StartInfo.StandardOutputEncoding = Encoding.Default;
