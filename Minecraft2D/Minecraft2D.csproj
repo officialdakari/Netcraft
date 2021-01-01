@@ -354,6 +354,9 @@
     <None Include="Resources\IRON_SWORD_FLIPPED.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\complain.png" />
+    <None Include="Resources\cancel.png" />
+    <None Include="Resources\info.png" />
     <None Include="Resources\potion_bottle_drinkable.png" />
     <None Include="Resources\gravel.png" />
     <None Include="Resources\dandelion.png" />

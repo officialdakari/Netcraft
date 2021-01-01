@@ -37,11 +37,9 @@ namespace Minecraft2D
             
             label1.MouseMove += MyForm_MouseMove;
             
-            label2.MouseMove += MyForm_MouseMove;
+            pictureBox1.MouseMove += MyForm_MouseMove;
 
             label3.MouseMove += MyForm_MouseMove;
-
-            iconLabel1.MouseMove += MyForm_MouseMove;
         }
 
         private void MyForm_MouseMove(object sender, MouseEventArgs e)
@@ -118,19 +116,15 @@ namespace Minecraft2D
             switch(icon)
             {
                 case Icon.Info:
-                    msg.iconLabel1.Text = FancyMessageBox.INFO_TEXT;
-                    msg.iconLabel1.ForeColor = Color.DodgerBlue;
+                    msg.pictureBox1.Image = My.Resources.Resources.info;
                     My.MyProject.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Question);
                     break;
                 case Icon.Warning:
-                    msg.iconLabel1.Hide();
-                    msg.label2.Show();
-                    msg.iconLabel1.ForeColor = Color.Gold;
+                    msg.pictureBox1.Image = My.Resources.Resources.complain;
                     My.MyProject.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Exclamation);
                     break;
                 case Icon.Error:
-                    msg.iconLabel1.Text = FancyMessageBox.ERROR_TEXT;
-                    msg.iconLabel1.ForeColor = Color.Red;
+                    msg.pictureBox1.Image = My.Resources.Resources.cancel;
                     My.MyProject.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Asterisk);
                     break;
             }

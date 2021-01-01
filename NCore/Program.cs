@@ -301,8 +301,8 @@ namespace NCore
         }
 
         private Thread loopThread;
-        internal const string NETCRAFT_VERSION = "0.1.6a";
-        internal const string NCORE_VERSION = "0.7";
+        internal const string NETCRAFT_VERSION = "0.1.7a";
+        internal const string NCORE_VERSION = "0.8";
         int hungerDecreaseDelay = 200;
         public DateTime LastTick { get; private set; }
 
@@ -1137,6 +1137,7 @@ namespace NCore
 
                     n.Username = a[1];
                     n.senderName = n.Username;
+                    n.Sprite = a[3];
 
                     if (!Regex.Match(n.Username, "^[a-zA-Z0-9_]*").Success)
                     {
@@ -1162,7 +1163,7 @@ namespace NCore
                         CrashReport(new Exception("Invalid config property value"));
                     }
 
-                    await Send("addplayer?" + a[1], n.Username);
+                    await Send("addplayer?" + a[1] + "?" + a[3], n.Username);
                     n.PlayerInventory = new Inventory(n);
                     if (File.Exists(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), n.Username), ".txt"))))
                     {
@@ -1203,7 +1204,7 @@ namespace NCore
                         if (p.IsSpectator)
                             continue;
                         await Task.Delay(100);
-                        await n.PacketQueue.AddQueue("addplayer?" + p.Username);
+                        await n.PacketQueue.AddQueue("addplayer?" + p.Username + "?" + p.Sprite);
                         await Task.Delay(100);
                         await n.PacketQueue.AddQueue("moveplayer?" + p.Username + "?" + p.Position.X.ToString() + "?" + p.Position.Y.ToString());
                         

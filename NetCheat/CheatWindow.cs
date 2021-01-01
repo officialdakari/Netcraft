@@ -271,8 +271,14 @@ namespace NetCheat
 
         private void checkBox6_CheckedChanged_1(object sender, EventArgs e)
         {
-            if(checkBox6.Checked)
+            game._localPlayer.BorderStyle = checkBox6.Checked ? BorderStyle.FixedSingle : BorderStyle.None;
+        }
+
+        private async void CheatWindow_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(checkBox7.Checked)
             {
+                await game.Send("chat?Hello World");
             }
         }
     }

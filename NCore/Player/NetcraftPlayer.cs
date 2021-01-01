@@ -30,6 +30,7 @@ namespace NCore
         }
 
         public string Username { get; internal set; } = null;
+        public string Sprite { get; internal set; } = null;
         public string UUID { get; internal set; } = Guid.NewGuid().ToString();
         public Point Position { get; set; } = new Point(0, 0);
         public Inventory PlayerInventory { get; internal set; }

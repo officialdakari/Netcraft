@@ -18,6 +18,7 @@ using Microsoft.VisualBasic.Devices;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Imaging;
 
 namespace Minecraft2D
 {
@@ -292,6 +293,13 @@ namespace Minecraft2D
             makeItDark.Hide();
         }
 
+        public Image GetFlipped(Image bmp)
+        {
+            Bitmap b = (Bitmap)bmp.Clone();
+            b.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            return b;
+        }
+
         Lang lang;
         Dictionary<string, string> itemNames = new Dictionary<string, string>();
         private async void Form1_Load(object sender, EventArgs e)
@@ -311,9 +319,27 @@ namespace Minecraft2D
                 ac.KeyDown += Form1_KeyDown;
                 ac.KeyUp += Form1_KeyUp;
             }
-
+            Bitmap bmp;
+            try
+            {
+                System.Net.WebRequest request =
+    System.Net.WebRequest.Create(
+    MainMenu.GetInstance().textBox3.Text);
+                System.Net.WebResponse response = request.GetResponse();
+                System.IO.Stream responseStream =
+                    response.GetResponseStream();
+                bmp = new Bitmap(responseStream);
+            }
+            catch (Exception ex)
+            {
+                FancyMessage.Show(ex.ToString(), "Error", FancyMessage.Icon.Error);
+                bmp = My.Resources.Resources.sprite;
+            }
+            playerSkin = bmp;
+            playerSkinFlip = (Bitmap)bmp.Clone();
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             DoLang();
+            
             playerSkinFlip.RotateFlip(RotateFlipType.Rotate180FlipY);
 
             if (!Directory.Exists(@".\mods"))
@@ -345,7 +371,7 @@ namespace Minecraft2D
                 Close();
                 return;
             }
-            SendPacket("setname", pName, Utils.LANGUAGE);
+            await SendPacket("setname", pName, Utils.LANGUAGE, MainMenu.GetInstance().textBox3.Text);
             Username = pName;
             Thread.Sleep(900);
             SendSinglePacket("world");
@@ -781,7 +807,7 @@ namespace Minecraft2D
 
                 if (a[0] == "addplayer")
                 {
-                    await CreatePlayer(a[1], 0 - HorizontalScroll.Value, 0);
+                    await CreatePlayer(a[1], 0 - HorizontalScroll.Value, 0, a[2]);
                     Console.WriteLine($"Player added: {a[1]}");
                 }
 
@@ -1424,8 +1450,8 @@ namespace Minecraft2D
             var rect = ClientRectangle;
             rect.Width = 32;
             rect.Height = 32;
-            var clr = Color.Black;
-            int width = 1;
+            var clr = Color.DodgerBlue;
+            int width = 2;
 
             var g = c.CreateGraphics();
             ControlPaint.DrawBorder(g, rect,
@@ -1445,21 +1471,36 @@ namespace Minecraft2D
             ((Control)sender).Invalidate();
         }
 
-        public delegate Task AddPlayer(string name, int x, int y);
+        public delegate Task AddPlayer(string name, int x, int y, string url);
 
-        public async Task CreatePlayer(string name, int x, int y)
+        public async Task CreatePlayer(string name, int x, int y, string url)
         {
             if (InvokeRequired)
             {
-                Invoke(new AddPlayer(CreatePlayer), name, x, y);
+                Invoke(new AddPlayer(CreatePlayer), name, x, y, url);
             }
             else
             {
+                Bitmap bmp;
+                try
+                {
+                    System.Net.WebRequest request =
+        System.Net.WebRequest.Create(
+        url);
+                    System.Net.WebResponse response = request.GetResponse();
+                    System.IO.Stream responseStream =
+                        response.GetResponseStream();
+                    bmp = new Bitmap(responseStream);
+                } catch(Exception ex)
+                {
+                    FancyMessage.Show(ex.ToString(), "Error", FancyMessage.Icon.Error);
+                    bmp = My.Resources.Resources.sprite;
+                }
                 var b = new TransparentPicBox();
                 Controls.Add(b);
                 b.Tag = name;
-                b.Image = playerSkin;
-                //b.SizeMode = PictureBoxSizeMode.StretchImage;
+                b.Image = bmp;
+                b.SizeMode = PictureBoxSizeMode.StretchImage;
                 b.Size = localPlayer.Size;
                 b.Left = x - HorizontalScroll.Value;
                 b.Top = y - VerticalScroll.Value;
@@ -1469,7 +1510,9 @@ namespace Minecraft2D
                 b.Click += AttackPlayer;
                 ToolTip1.SetToolTip(b, String.Format(lang.get("game.tooltip.playername"), name));
                 playerEntities.Add(b);
-                players.Add(new EntityPlayer(name, "", new Point(x, y), b));
+                EntityPlayer en = new EntityPlayer(name, "", new Point(x, y), b);
+                en.Sprite = bmp;
+                players.Add(en);
                 b.BringToFront();
             }
         }
@@ -2340,20 +2383,15 @@ namespace Minecraft2D
                 leave();
                 return;
             }
-            if (FancyMessage.Show(lang.get("text.question.confirm_exit"), "Netcraft", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) != FancyMessage.Result.OK)
-            {
-                e.Cancel = true;
-                return;
-            }
-            leave();
             StopServer();
+            leave();
         }
 
         public void StopServer()
         {
             if(IsSingleplayer)
             {
-                ServerProcess.Kill();
+                if (!ServerProcess.HasExited) ServerProcess.Kill();
             }
         }
 

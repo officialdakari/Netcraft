@@ -114,5 +114,15 @@ namespace Minecraft2D
             ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbg;
             ((Control)sender).Invalidate();
         }
+
+        private void _CheckBox1_MouseEnter(object sender, EventArgs e)
+        {
+            BackButton_MouseEnter(sender, e);
+        }
+
+        private void _CheckBox1_MouseLeave(object sender, EventArgs e)
+        {
+            BackButton_MouseLeave(sender, e);
+        }
     }
 }

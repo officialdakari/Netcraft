@@ -397,6 +397,7 @@ namespace Minecraft2D
             this.imageList1.Images.SetKeyName(85, "WOODEN_SHOVEL_FLIPPED.png");
             this.imageList1.Images.SetKeyName(86, "WOODEN_SWORD.png");
             this.imageList1.Images.SetKeyName(87, "WOODEN_SWORD_FLIPPED.png");
+            this.imageList1.Images.SetKeyName(88, "cancel.png");
             // 
             // progressBar1
             // 
@@ -445,11 +446,12 @@ namespace Minecraft2D
             this.invClose1.BackColor = System.Drawing.SystemColors.Control;
             this.invClose1.BackgroundImage = global::Minecraft2D.My.Resources.Resources.buttonbg;
             this.invClose1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.invClose1.Location = new System.Drawing.Point(723, 0);
+            this.invClose1.ImageKey = "cancel.png";
+            this.invClose1.ImageList = this.imageList1;
+            this.invClose1.Location = new System.Drawing.Point(774, 0);
             this.invClose1.Name = "invClose1";
-            this.invClose1.Size = new System.Drawing.Size(108, 28);
+            this.invClose1.Size = new System.Drawing.Size(57, 31);
             this.invClose1.TabIndex = 22;
-            this.invClose1.Text = "Close";
             this.invClose1.UseVisualStyleBackColor = false;
             this.invClose1.Click += new System.EventHandler(this.button1_Click_1);
             this.invClose1.MouseEnter += new System.EventHandler(this.MenuButton_MouseEnter);
@@ -473,11 +475,12 @@ namespace Minecraft2D
             this.button1.BackgroundImage = global::Minecraft2D.My.Resources.Resources.buttonbg;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(445, 0);
+            this.button1.ImageKey = "cancel.png";
+            this.button1.ImageList = this.imageList1;
+            this.button1.Location = new System.Drawing.Point(495, 0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(107, 24);
+            this.button1.Size = new System.Drawing.Size(57, 24);
             this.button1.TabIndex = 23;
-            this.button1.Text = "Close";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click_2);
             this.button1.MouseEnter += new System.EventHandler(this.MenuButton_MouseEnter);
@@ -565,7 +568,7 @@ namespace Minecraft2D
             this.MaximumSize = new System.Drawing.Size(2140, 2060);
             this.Name = "Form1";
             this.ShowIcon = false;
-            this.Text = "Netcraft";
+            this.Text = " ";
             this.Activated += new System.EventHandler(this.Form1_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);

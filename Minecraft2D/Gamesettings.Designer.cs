@@ -98,48 +98,63 @@ namespace Minecraft2D
             // checkBox1
             // 
             this.checkBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.checkBox1.AutoSize = true;
+            this.checkBox1.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBox1.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBox1.BackgroundImage")));
+            this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBox1.ForeColor = System.Drawing.Color.White;
-            this.checkBox1.Location = new System.Drawing.Point(6, 108);
+            this.checkBox1.Location = new System.Drawing.Point(6, 130);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(109, 22);
+            this.checkBox1.Size = new System.Drawing.Size(282, 33);
             this.checkBox1.TabIndex = 2;
             this.checkBox1.Text = "Music (bad)";
+            this.checkBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.checkBox1.UseVisualStyleBackColor = false;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
+            this.checkBox1.MouseEnter += new System.EventHandler(this._CheckBox1_MouseEnter);
+            this.checkBox1.MouseLeave += new System.EventHandler(this._CheckBox1_MouseLeave);
             // 
             // CheckBox2
             // 
             this.CheckBox2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.CheckBox2.Appearance = System.Windows.Forms.Appearance.Button;
             this.CheckBox2.AutoCheck = false;
-            this.CheckBox2.AutoSize = true;
             this.CheckBox2.BackColor = System.Drawing.Color.Transparent;
+            this.CheckBox2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("CheckBox2.BackgroundImage")));
             this.CheckBox2.Checked = true;
             this.CheckBox2.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CheckBox2.Enabled = false;
+            this.CheckBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CheckBox2.ForeColor = System.Drawing.Color.White;
-            this.CheckBox2.Location = new System.Drawing.Point(6, 80);
+            this.CheckBox2.Location = new System.Drawing.Point(6, 91);
             this.CheckBox2.Name = "CheckBox2";
-            this.CheckBox2.Size = new System.Drawing.Size(157, 22);
+            this.CheckBox2.Size = new System.Drawing.Size(282, 33);
             this.CheckBox2.TabIndex = 1;
             this.CheckBox2.Text = "Block Highlighting";
+            this.CheckBox2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.CheckBox2.UseVisualStyleBackColor = false;
+            this.CheckBox2.MouseEnter += new System.EventHandler(this._CheckBox1_MouseEnter);
+            this.CheckBox2.MouseLeave += new System.EventHandler(this._CheckBox1_MouseLeave);
             // 
             // _CheckBox1
             // 
             this._CheckBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this._CheckBox1.AutoSize = true;
+            this._CheckBox1.Appearance = System.Windows.Forms.Appearance.Button;
             this._CheckBox1.BackColor = System.Drawing.Color.Transparent;
+            this._CheckBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("_CheckBox1.BackgroundImage")));
+            this._CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._CheckBox1.ForeColor = System.Drawing.Color.White;
             this._CheckBox1.Location = new System.Drawing.Point(6, 52);
             this._CheckBox1.Name = "_CheckBox1";
-            this._CheckBox1.Size = new System.Drawing.Size(245, 22);
+            this._CheckBox1.Size = new System.Drawing.Size(282, 33);
             this._CheckBox1.TabIndex = 0;
             this._CheckBox1.Text = "Button controls (Sensor mode)";
+            this._CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this._CheckBox1.UseVisualStyleBackColor = false;
             this._CheckBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
             this._CheckBox1.Click += new System.EventHandler(this._CheckBox1_Click);
+            this._CheckBox1.MouseEnter += new System.EventHandler(this._CheckBox1_MouseEnter);
+            this._CheckBox1.MouseLeave += new System.EventHandler(this._CheckBox1_MouseLeave);
             // 
             // SettingsButton
             // 
@@ -208,7 +223,6 @@ namespace Minecraft2D
             this.Load += new System.EventHandler(this.Gamesettings_Load);
             this.VisibleChanged += new System.EventHandler(this.Gamesettings_VisibleChanged);
             this.GroupBox1.ResumeLayout(false);
-            this.GroupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }

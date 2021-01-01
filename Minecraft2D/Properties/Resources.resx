@@ -118,253 +118,262 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="COBBLESTONE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\COBBLESTONE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DIRT" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DIRT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="IRON" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="IRON_AXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRON_AXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="IRON_AXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRON_AXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="IRON_PICKAXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRON_PICKAXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="IRON_PICKAXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRON_PICKAXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="IRON_SHOVEL" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRON_SHOVEL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="IRON_SHOVEL_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRON_SHOVEL_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="IRON_SWORD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRON_SWORD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="IRON_SWORD_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRON_SWORD_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="netcraft" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\netcraft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Player1Texture" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Player1Texture.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Player2Texture" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Player2Texture.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="STICK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\STICK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="STONE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\STONE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="STONE_AXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\STONE_AXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="STONE_AXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\STONE_AXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="STONE_PICKAXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\STONE_PICKAXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="STONE_PICKAXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\STONE_PICKAXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="STONE_SHOVEL" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\STONE_SHOVEL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="STONE_SHOVEL_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\STONE_SHOVEL_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="STONE_SWORD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\STONE_SWORD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="STONE_SWORD_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\STONE_SWORD_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WOOD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WOOD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WOODEN_AXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WOODEN_AXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WOODEN_AXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WOODEN_AXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WOODEN_PICKAXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WOODEN_PICKAXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WOODEN_PICKAXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WOODEN_PICKAXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WOODEN_SHOVEL" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WOODEN_SHOVEL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WOODEN_SHOVEL_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WOODEN_SHOVEL_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WOODEN_SWORD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WOODEN_SWORD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WOODEN_SWORD_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WOODEN_SWORD_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bedrock" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\bedrock.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="cobblestone4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\cobblestone4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DIAMOND" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DIAMOND.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DIAMOND_AXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DIAMOND_AXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DIAMOND_AXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DIAMOND_AXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="diamond_ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\diamond_ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DIAMOND_PICKAXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DIAMOND_PICKAXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DIAMOND_PICKAXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DIAMOND_PICKAXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DIAMOND_SHOVEL" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DIAMOND_SHOVEL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DIAMOND_SHOVEL_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DIAMOND_SHOVEL_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DIAMOND_SWORD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DIAMOND_SWORD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DIAMOND_SWORD_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DIAMOND_SWORD_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="dirt1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\dirt1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="iron_ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\iron_ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="leaves" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\leaves.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="log_oak" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\log_oak.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="OBSIDIAN" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OBSIDIAN.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="obsidian1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\obsidian1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="planks_oak" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\planks_oak.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="platformPack_tile001" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\platformPack_tile001.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="platformPack_tile004" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\platformPack_tile004.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="platformPack_tile016" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\platformPack_tile016.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="platformPack_tile034" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\platformPack_tile034.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="stone1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\stone1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="water_still" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\water_still.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="glass" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\glass.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GLASSBLOCK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GLASSBLOCK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GOLD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GOLD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="gold_ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\gold_ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="sand" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\sand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SANDBLOCK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SANDBLOCK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="coal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\coal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="coal_ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\coal_ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="furnace_front_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\furnace_front_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="furnace_front_on" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\furnace_front_on.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="sprite" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sprite.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="diamond_block" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\diamond_block.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Player2Texture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Player2Texture.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="gold_block" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\gold_block.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="log_oak" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\log_oak.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="iron_block" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\iron_block.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="GOLD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GOLD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Grid_Sapling" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Grid_Sapling.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="OBSIDIAN" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OBSIDIAN.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="NCLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\NCLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="platformPack_tile016" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\platformPack_tile016.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="vbnet_edition" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\vbnet-edition.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="glass" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\glass.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="game_music_loop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\game_music_loop.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="WOOD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WOOD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="grass_block_snow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\grass_block_snow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="STONE_AXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\STONE_AXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IRON_SWORD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRON_SWORD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="grass_side" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\grass_side.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="leaves1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\leaves.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="platformPack_tile034" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\platformPack_tile034.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="platformPack_tile004" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\platformPack_tile004.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DIAMOND_AXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIAMOND_AXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DIAMOND_PICKAXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIAMOND_PICKAXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="STONE_SHOVEL_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\STONE_SHOVEL_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="STONE_PICKAXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\STONE_PICKAXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="planks_oak" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\planks_oak.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DIAMOND_PICKAXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIAMOND_PICKAXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diamond_ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diamond_ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bedrock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bedrock.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="STICK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\STICK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SANDBLOCK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SANDBLOCK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DIAMOND_SWORD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIAMOND_SWORD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DIAMOND_SHOVEL_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIAMOND_SHOVEL_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IRON_PICKAXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRON_PICKAXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="furnace_front_on" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\furnace_front_on.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="coal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\coal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cobblestone4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cobblestone4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="water_still" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\water_still.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="STONE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\STONE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WOODEN_PICKAXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WOODEN_PICKAXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IRON_SHOVEL_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRON_SHOVEL_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="dandelion" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\dandelion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IRON_SWORD_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRON_SWORD_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="poppy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\poppy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dirt1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\dirt1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WOODEN_SHOVEL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WOODEN_SHOVEL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GLASSBLOCK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GLASSBLOCK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="leaves" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\leaves.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="COBBLESTONE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\COBBLESTONE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NCLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NCLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DIAMOND_AXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIAMOND_AXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="leaves1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\leaves.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="iron_block" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\iron_block.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WOODEN_PICKAXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WOODEN_PICKAXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DIAMOND_SHOVEL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIAMOND_SHOVEL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="vbnet_edition" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\vbnet-edition.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IRON" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WOODEN_SWORD_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WOODEN_SWORD_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="gravel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gravel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Player1Texture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Player1Texture.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="STONE_SWORD_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\STONE_SWORD_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="game_music_loop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\game_music_loop.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="DIAMOND" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIAMOND.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IRON_AXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRON_AXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IRON_SHOVEL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRON_SHOVEL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gold_block" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gold_block.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sand" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="netcraft" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\netcraft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="stone1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\stone1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="STONE_SWORD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\STONE_SWORD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="obsidian1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\obsidian1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WOODEN_SHOVEL_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WOODEN_SHOVEL_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Grid_Sapling" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Grid_Sapling.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DIAMOND_SWORD_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIAMOND_SWORD_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DIRT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DIRT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="STONE_PICKAXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\STONE_PICKAXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="STONE_AXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\STONE_AXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="iron_ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\iron_ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diamond_block" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\diamond_block.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WOODEN_SWORD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WOODEN_SWORD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="furnace_front_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\furnace_front_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IRON_AXE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRON_AXE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="grass_block_snow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\grass_block_snow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="potion_bottle_drinkable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\potion_bottle_drinkable.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WOODEN_AXE_FLIPPED" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WOODEN_AXE_FLIPPED.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="STONE_SHOVEL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\STONE_SHOVEL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gold_ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gold_ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="platformPack_tile001" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\platformPack_tile001.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cancel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cancel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="complain" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\complain.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="info" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

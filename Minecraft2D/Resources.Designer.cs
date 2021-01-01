@@ -143,6 +143,16 @@ namespace Minecraft2D.My.Resources {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cancel {
+            get {
+                object obj = ResourceManager.GetObject("cancel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap chest {
             get {
                 object obj = ResourceManager.GetObject("chest", resourceCulture);
@@ -176,6 +186,16 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap cobblestone4 {
             get {
                 object obj = ResourceManager.GetObject("cobblestone4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap complain {
+            get {
+                object obj = ResourceManager.GetObject("complain", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -476,6 +496,16 @@ namespace Minecraft2D.My.Resources {
         internal static System.Drawing.Bitmap Grid_Sapling1 {
             get {
                 object obj = ResourceManager.GetObject("Grid_Sapling1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap info {
+            get {
+                object obj = ResourceManager.GetObject("info", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -58,6 +58,8 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.checkBox6 = new System.Windows.Forms.CheckBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -69,6 +71,7 @@
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // checkBox1
@@ -387,9 +390,9 @@
             // 
             this.progressBar1.BackColor = System.Drawing.Color.Silver;
             this.progressBar1.ForeColor = System.Drawing.Color.Lime;
-            this.progressBar1.Location = new System.Drawing.Point(11, 351);
+            this.progressBar1.Location = new System.Drawing.Point(339, 384);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(322, 23);
+            this.progressBar1.Size = new System.Drawing.Size(405, 23);
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 9;
             this.progressBar1.Visible = false;
@@ -420,12 +423,37 @@
             this.checkBox6.UseVisualStyleBackColor = true;
             this.checkBox6.CheckedChanged += new System.EventHandler(this.checkBox6_CheckedChanged_1);
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.checkBox7);
+            this.groupBox6.ForeColor = System.Drawing.Color.Lime;
+            this.groupBox6.Location = new System.Drawing.Point(12, 297);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(268, 52);
+            this.groupBox6.TabIndex = 11;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Exploit";
+            // 
+            // checkBox7
+            // 
+            this.checkBox7.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBox7.FlatAppearance.CheckedBackColor = System.Drawing.Color.Blue;
+            this.checkBox7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBox7.Location = new System.Drawing.Point(6, 16);
+            this.checkBox7.Name = "checkBox7";
+            this.checkBox7.Size = new System.Drawing.Size(256, 24);
+            this.checkBox7.TabIndex = 1;
+            this.checkBox7.Text = "Server crasher";
+            this.checkBox7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox7.UseVisualStyleBackColor = true;
+            // 
             // CheatWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(761, 386);
+            this.ClientSize = new System.Drawing.Size(761, 419);
+            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.groupBox4);
@@ -439,6 +467,7 @@
             this.Text = "Cheats";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CheatWindow_FormClosing);
             this.Load += new System.EventHandler(this.CheatWindow_Load);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CheatWindow_MouseMove);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
@@ -452,6 +481,7 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -488,5 +518,7 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.CheckBox checkBox6;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.CheckBox checkBox7;
     }
 }

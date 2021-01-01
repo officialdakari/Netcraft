@@ -63,6 +63,8 @@ namespace Minecraft2D
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.PictureBox1 = new System.Windows.Forms.PictureBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.Panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -387,6 +389,29 @@ namespace Minecraft2D
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick_1);
             // 
+            // textBox3
+            // 
+            this.textBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.textBox3.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox3.ForeColor = System.Drawing.Color.White;
+            this.textBox3.Location = new System.Drawing.Point(6, 276);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(337, 27);
+            this.textBox3.TabIndex = 18;
+            this.textBox3.TabStop = false;
+            this.textBox3.Text = "http://netcraft.ddns.net/netcraft/sprite/1.png";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(3, 260);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 13);
+            this.label1.TabIndex = 19;
+            this.label1.Text = "URL скина:";
+            // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -395,6 +420,8 @@ namespace Minecraft2D
             this.BackgroundImage = global::Minecraft2D.Properties.Resources.netcraft;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(800, 372);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBox3);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.PictureBox1);
@@ -602,5 +629,7 @@ namespace Minecraft2D
         private TextBox textBox2;
         internal PictureBox PictureBox1;
         private NotifyIcon notifyIcon1;
+        internal TextBox textBox3;
+        internal Label label1;
     }
 }

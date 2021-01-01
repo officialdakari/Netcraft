@@ -14,6 +14,7 @@ namespace Minecraft2D
         public string ItemInHand { get; set; } = "";
         public Image ItemInImage { get; set; }
         public Image ItemInImageFlipped { get; set; }
+        public Image Sprite { get; set; } = My.MyProject.Forms.Form1.playerSkin;
         public Point Location { get; set; }
         public TransparentPicBox R1 { get; set; }
         public int LastWalk { get; set; } = 0;
@@ -63,11 +64,11 @@ namespace Minecraft2D
         {
             if (LastWalk == 1)
             {
-                Render.Image = My.MyProject.Forms.Form1.playerSkin;
+                Render.Image = Sprite;
             }
             else
             {
-                Render.Image = My.MyProject.Forms.Form1.playerSkinFlip;
+                Render.Image = Form1.GetInstance().GetFlipped(Sprite);
             }
 
             try
