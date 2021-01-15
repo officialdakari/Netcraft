@@ -65,7 +65,6 @@ namespace Minecraft2D
                 {
                     connected = false;
                     toNotice = $"{lang.get("text.error.connection_lost")}:\r\n\r\n{ex.ToString()}";
-                    Close();
                 }
             }
         }
@@ -332,7 +331,6 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                FancyMessage.Show(ex.ToString(), "Error", FancyMessage.Icon.Error);
                 bmp = My.Resources.Resources.sprite;
             }
             playerSkin = bmp;
@@ -502,6 +500,7 @@ namespace Minecraft2D
 
         private void ColorAA()
         {
+
             var HT = new Dictionary<string, Color>();
             HT.Add("&0", Color.DodgerBlue);
             HT.Add("&1", Color.Red);
@@ -521,6 +520,20 @@ namespace Minecraft2D
                 richTextBox1.DeselectAll();
             }
             richTextBox1.DeselectAll();
+            HighlightTagging();
+        }
+
+        public void HighlightTagging()
+        {
+            string Words_dont_come_easy = "\\@" + Username;
+            MatchCollection allIp = Regex.Matches(richTextBox1.Text, Words_dont_come_easy);
+            foreach (Match ip in allIp)
+            {
+                richTextBox1.SelectionStart = ip.Index;
+                richTextBox1.SelectionLength = ip.Length;
+                richTextBox1.SelectionBackColor = Color.Gold;
+                richTextBox1.SelectionColor = Color.Blue;
+            }
         }
 
 
@@ -874,6 +887,7 @@ namespace Minecraft2D
                 {
                     FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), lang.get("text.kicked"), FancyMessage.Icon.Info);
                     Console.WriteLine($"Kicked from server: {string.Join("?", a.Skip(1).ToArray())}");
+                    Close();
                 }
 
                 if (a[0] == "chat")
@@ -881,6 +895,8 @@ namespace Minecraft2D
                     WriteChat(string.Join("?", a.Skip(1).ToArray()));
                     Console.WriteLine($"Chat: {string.Join("?", a.Skip(1).ToArray())}");
                 }
+
+
                 if (a[0] == "health")
                 {
                     SetHealth(Conversions.ToInteger(a[1]));
@@ -906,6 +922,16 @@ namespace Minecraft2D
                 {
                     BackColor = Color.FromName(a[1]);
                     Update();
+                }
+
+                if(a[0] == "addentity")
+                {
+                    await CreateEntity(a[1], a[2]);
+                }
+
+                if(a[0] == "moveentity")
+                {
+                    await MoveEntity(a[1], new Point(int.Parse(a[2]), int.Parse(a[3])));
                 }
 
                 if (a[0] == "chestopen")
@@ -1493,7 +1519,6 @@ namespace Minecraft2D
                     bmp = new Bitmap(responseStream);
                 } catch(Exception ex)
                 {
-                    FancyMessage.Show(ex.ToString(), "Error", FancyMessage.Icon.Error);
                     bmp = My.Resources.Resources.sprite;
                 }
                 var b = new TransparentPicBox();
@@ -1514,6 +1539,57 @@ namespace Minecraft2D
                 en.Sprite = bmp;
                 players.Add(en);
                 b.BringToFront();
+            }
+        }
+
+        public Dictionary<string, Entity.Entity> entities = new Dictionary<string, Entity.Entity>();
+
+        public delegate Task AddEntity(string uuid, string type);
+        public async Task CreateEntity(string uuid, string type)
+        {
+            if(InvokeRequired)
+            {
+                Invoke(new AddEntity(CreateEntity), uuid, type);
+            } else
+            {
+                TransparentPicBox pic = new TransparentPicBox();
+                if(type == "test")
+                {
+                    pic.SetBounds(0, 0, 32, 32);
+                    pic.BorderStyle = BorderStyle.FixedSingle;
+                    pic.Image = My.Resources.Resources.bedrock;
+                    pic.SizeMode = PictureBoxSizeMode.StretchImage;
+                }
+
+                entities.Add(uuid, new Entity.Entity(uuid, pic, new Point(0 - HorizontalScroll.Value, 0 - VerticalScroll.Value), pic.Size));
+                Controls.Add(entities[uuid].Renderer);
+            }
+        }
+
+        public delegate Task _moveEntity(string uuid, Point point);
+        public async Task MoveEntity(string uuid, Point point)
+        {
+            if(InvokeRequired)
+            {
+                Invoke(new _moveEntity(MoveEntity), uuid, point);
+            } else
+            {
+                Entity.Entity e = entities[uuid];
+                e.Position = new Point(point.X - HorizontalScroll.Value, point.Y - VerticalScroll.Value);
+                e.Renderer.Location = e.Position;
+            }
+        }
+
+        public delegate Task RemoveEntity(string uuid);
+        public async Task DeleteEntity(string uuid)
+        {
+            if(InvokeRequired)
+            {
+                Invoke(new RemoveEntity(DeleteEntity), uuid);
+            } else
+            {
+                Controls.Remove(entities[uuid].Renderer);
+                entities.Remove(uuid);
             }
         }
 
@@ -2733,9 +2809,15 @@ namespace Minecraft2D
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-            richTextBox1.Select(richTextBox1.TextLength, 0);
-            richTextBox1.ScrollToCaret();
-            ColorAA();
+            try
+            {
+                richTextBox1.Select(richTextBox1.TextLength, 0);
+                richTextBox1.ScrollToCaret();
+                ColorAA();
+            } catch(Exception)
+            {
+
+            }
         }
 
         public delegate void PreChat(string text, ref bool cancel);

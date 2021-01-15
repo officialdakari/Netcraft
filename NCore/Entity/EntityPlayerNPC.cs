@@ -1,5 +1,6 @@
 ﻿using global::System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace NCore
 {
@@ -18,7 +19,7 @@ namespace NCore
             while(true)
             {
                 Thread.Sleep(10);
-                handleGravity();
+                HandleGravity();
             }
         }
 

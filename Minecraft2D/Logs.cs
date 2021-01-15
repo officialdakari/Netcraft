@@ -24,6 +24,10 @@ namespace Minecraft2D
 
         public void Log(string str)
         {
+            if (str == null)
+            {
+                return;
+            }
             listBox1.Items.Add(str);
         }
     }

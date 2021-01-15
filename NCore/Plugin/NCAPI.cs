@@ -183,6 +183,11 @@ namespace NCore.netcraft
                     }
                 }
 
+                public static NCore NCore()
+                {
+                    return global::NCore.NCore.GetNCore();
+                }
+
                 public async static Task<bool> DispatchCommand(CommandSender arg_a, Command arg_b, string arg_c)
                 {
                     return await arg_b.OnCommand(arg_a, arg_b, arg_c.Split(" ").Skip(1).ToArray(), arg_c);
@@ -217,12 +222,12 @@ namespace NCore.netcraft
                     {
                         if ((client.Username.ToLower() ?? "") == (a.ToLower() ?? ""))
                         {
-                            await client.Kick(NCore.GetNCore().lang.get("error.banned"));
+                            await client.Kick(NCore().lang.get("error.banned"));
                         }
                     }
 
                     field_a.Add(a.ToLower());
-                    NCore.GetNCore().SaveBanlist();
+                    NCore().SaveBanlist();
                 }
 
                 public static async Task UnbanPlayer(string a)
@@ -234,7 +239,7 @@ namespace NCore.netcraft
                     }
 
                     field_a.Remove(a.ToLower());
-                    NCore.GetNCore().SaveBanlist();
+                    NCore().SaveBanlist();
                 }
 
                 public static List<string> GetBannedPlayers()
@@ -257,18 +262,18 @@ namespace NCore.netcraft
 
                 public static async Task<int> GetWorldTime()
                 {
-                    return NCore.GetNCore().worldtime;
+                    return NCore().worldtime;
                 }
 
                 public static async Task SetWorldTime(int time)
                 {
-                    if(time > NCore.GetNCore().skyClr.Count - 1)
+                    if(time > NCore().skyClr.Count - 1)
                     {
                         throw new ArgumentOutOfRangeException();
                         return;
                     }
-                    NCore.GetNCore().worldtime = time;
-                    await NCore.GetNCore().BroadcastSkyChange(NCore.GetNCore().skyClr[time]);
+                    NCore().worldtime = time;
+                    await NCore().BroadcastSkyChange(NCore().skyClr[time]);
                 }
 
                 internal static event dobcEventHandler dobc;
@@ -277,7 +282,7 @@ namespace NCore.netcraft
 
                 public static WorldServer GetWorld()
                 {
-                    return NCore.GetNCore().World;
+                    return NCore().World;
                 }
 
                 public static NetcraftPlayer GetPlayer(string arg0)

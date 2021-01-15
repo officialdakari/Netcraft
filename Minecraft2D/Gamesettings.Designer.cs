@@ -88,9 +88,9 @@ namespace Minecraft2D
             this.GroupBox1.Controls.Add(this.checkBox1);
             this.GroupBox1.Controls.Add(this.CheckBox2);
             this.GroupBox1.Controls.Add(this._CheckBox1);
-            this.GroupBox1.Location = new System.Drawing.Point(59, 76);
+            this.GroupBox1.Location = new System.Drawing.Point(71, 139);
             this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(294, 224);
+            this.GroupBox1.Size = new System.Drawing.Size(294, 138);
             this.GroupBox1.TabIndex = 2;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Visible = false;
@@ -103,7 +103,7 @@ namespace Minecraft2D
             this.checkBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBox1.BackgroundImage")));
             this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBox1.ForeColor = System.Drawing.Color.White;
-            this.checkBox1.Location = new System.Drawing.Point(6, 130);
+            this.checkBox1.Location = new System.Drawing.Point(6, 96);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(282, 33);
             this.checkBox1.TabIndex = 2;
@@ -126,7 +126,7 @@ namespace Minecraft2D
             this.CheckBox2.Enabled = false;
             this.CheckBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CheckBox2.ForeColor = System.Drawing.Color.White;
-            this.CheckBox2.Location = new System.Drawing.Point(6, 91);
+            this.CheckBox2.Location = new System.Drawing.Point(6, 57);
             this.CheckBox2.Name = "CheckBox2";
             this.CheckBox2.Size = new System.Drawing.Size(282, 33);
             this.CheckBox2.TabIndex = 1;
@@ -144,7 +144,7 @@ namespace Minecraft2D
             this._CheckBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("_CheckBox1.BackgroundImage")));
             this._CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._CheckBox1.ForeColor = System.Drawing.Color.White;
-            this._CheckBox1.Location = new System.Drawing.Point(6, 52);
+            this._CheckBox1.Location = new System.Drawing.Point(6, 18);
             this._CheckBox1.Name = "_CheckBox1";
             this._CheckBox1.Size = new System.Drawing.Size(282, 33);
             this._CheckBox1.TabIndex = 0;

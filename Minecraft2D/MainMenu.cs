@@ -188,15 +188,20 @@ namespace Minecraft2D
             Form1.GetInstance().toNoticeType = 1;
             Form1.GetInstance().Close();
         }
+
         void comment(string a)
         {
             
         }
+
         string cfg;
         Client _client;
         private void MainMenu_Load(object sender, EventArgs e)
         {
             instance = this;
+            string[] p = Process.GetCurrentProcess().MainModule.FileName.Split(Path.DirectorySeparatorChar);
+            p[p.Length - 1] = "";
+            Directory.SetCurrentDirectory(string.Join(Path.DirectorySeparatorChar.ToString(), p));
             button1 = _Button1;
             Button1 = _Button1; 
             comment("ты чё декомпилировал игру быстро удаляй декомпилированный код иначе бан");
@@ -245,7 +250,7 @@ namespace Minecraft2D
                 presence.State = lang.get("rpc.menu");
                 var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party()).WithTimestamps(new DiscordRPC.Timestamps());
                 pr.Assets.LargeImageKey = "snowylogo";
-                pr.Assets.LargeImageText = "[пасхалка]";
+                pr.Assets.LargeImageText = "discord.gg/BuKCBP8";
                 pr.Details = "Netcraft " + Ver;
                 pr.Timestamps.Start = DateTime.UtcNow;
 
@@ -450,7 +455,7 @@ namespace Minecraft2D
 
         private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(FancyMessage.Show(lang.get("text.question.confirm_exit"), "Netcraft", FancyMessage.Icon.Info, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
+            if(FancyMessage.Show(lang.get("text.question.confirm_exit"), "Netcraft", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
             {
                 Environment.Exit(0);
                 dRPC.ClearPresence();

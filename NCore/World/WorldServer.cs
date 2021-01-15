@@ -7,6 +7,7 @@ namespace NCore
     public class WorldServer
     {
         public List<Block> Blocks { get; set; } = new List<Block>();
+        public List<Entity.EntityBase> Entities { get; set; } = new List<Entity.EntityBase>();
         public List<BlockChest> Chests { get; set; } = new List<BlockChest>();
         public string UUID { get; set; } = Guid.NewGuid().ToString();
         public World.Gamerules Gamerules { get; } = new World.Gamerules();

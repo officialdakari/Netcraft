@@ -146,12 +146,14 @@ namespace NCore
         internal int commandsConsoleOnly = 0;
         internal int enableAuth = -1;
         internal int enableConsole = 0;
+        internal int whitelist = 0;
         public const int WORLDGEN_CAVE_MIN_HEIGHT = 8;
         public const int WORLDGEN_CAVE_MAX_HEIGHT = 12;
         public Lang lang;
         public TimeSpan keepAliveTimeout = new TimeSpan(0, 0, 0, 5, 0);
         public Player.Permissions permissions;
         public Dictionary<string, string[]> groups;
+        public List<string> whitelistedPlayers;
 
         public bool IsSingleplayerServer { get; private set; } = false;
 
@@ -169,9 +171,11 @@ namespace NCore
             commandsConsoleOnly = Conversions.ToInteger(Config.GetValue("commands-console-only", nccfg, "0"));
             enableAuth = Conversions.ToInteger(Config.GetValue("enable-auth", cfg, "0"));
             enableConsole = Conversions.ToInteger(Config.GetValue("enable-csharp-script-console", nccfg, "0"));
+            whitelist = Conversions.ToInteger(Config.GetValue("enable-whitelist", cfg, "0"));
             lang = Lang.FromFile($"./lang/{Config.GetValue("def-lang", cfg, "english")}.txt");
             permissions = JsonConvert.DeserializeObject<Player.Permissions>(File.ReadAllText("./permissions.json", Encoding.UTF8));
             groups = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(File.ReadAllText("./groups.json", Encoding.UTF8));
+            whitelistedPlayers = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText("./whitelist.json"));
 
             if (isIllegalValue(everyBodyAdmin, 0, 1)) CrashReport(new Exception("Illegal property value"));
             if (isIllegalValue(allowFlight, 0, 1)) CrashReport(new Exception("Illegal property value"));
@@ -188,7 +192,6 @@ namespace NCore
             //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
             //var appRoot = appPathMatcher.Match(exePath).Value;
             return $"{Directory.GetCurrentDirectory()}\\NCore.dll";
-
         }
 
         public async Task LoadScripts()
@@ -326,6 +329,17 @@ namespace NCore
                 }
                 if(ctx != null) ctx.loop();
                 LastTick = DateTime.Now;
+                try
+                {
+                    for (int i = 0; i < World.Entities.Count; i++)
+                    {
+                        if (World.Entities.Count - 1 < i) continue;
+                        World.Entities[i].Tick();
+                    }
+                } catch(Exception)
+                {
+
+                }
                 if (logAppendDelay == 0)
                 {
                     logAppendDelay = 40;
@@ -341,6 +355,7 @@ namespace NCore
                     }
 
                     File.WriteAllText("./permissions.json", JsonConvert.SerializeObject(permissions), Encoding.UTF8);
+                    File.WriteAllText("./whitelist.json", JsonConvert.SerializeObject(whitelistedPlayers), Encoding.UTF8);
 
                     SaveAuth();
                     try
@@ -625,6 +640,7 @@ namespace NCore
             } catch (Exception e)
             {
                 CrashReport(e);
+                Console.ReadLine();
             }
 
             //Console.WriteLine("Что Вы хотите сделать?\r\n1 - запустить сервер");
@@ -945,7 +961,7 @@ namespace NCore
                     Thread.CurrentThread.Name = "Network Join";
                 pClient = new NetcraftPlayer(Listning.EndAcceptTcpClient(ar));
                 pClient.a += MessageReceived;
-                pClient.b += (_) => NCore.GetNCore().ClientExited(pClient, false);
+                pClient.b += (_) => NCore.GetNCore().handleDisconnection(pClient, false);
                 players.Add(pClient);
                 Netcraft.clientList = players;
                 Listning.BeginAcceptTcpClient(new AsyncCallback(AcceptClient), Listning);
@@ -1072,11 +1088,11 @@ namespace NCore
                     }
                     else
                     {
-                        await n.Send("name?Access denied");
+                        await n.Send("name?No Query");
                         await Task.Delay(10);
-                        await n.Send("motd?Sorry, but query is disabled for this server.");
+                        await n.Send("motd?No Query");
                         await Task.Delay(10);
-                        await n.Send("players?0/0");
+                        await n.Send("players?No Query");
                     }
 
                     n.Disconnect();
@@ -1117,9 +1133,17 @@ namespace NCore
                     n.lang = Lang.FromFile("./lang/" + a[2] + ".txt");
                     lang = n.lang;
                     Log(this.lang.get("console.joined", a[1], n.GetIp()));
+                    if(whitelist == 1)
+                    {
+                        if(!whitelistedPlayers.Any(x => x.ToLower() == a[1].ToLower()))
+                        {
+                            await n.Kick("You are not whitelisted on this server.");
+                            return;
+                        }
+                    }
                     if (maxPlayers + 1 == players.Where(x => x.IsLoaded).ToArray().Length)
                     {
-                        n.Kick("Сервер заполнен!");
+                        await n.Kick("Сервер заполнен!");
                         return;
                     }
 
@@ -1179,7 +1203,7 @@ namespace NCore
                     if (permissions.GetPermissions(n.Username) != null) permissions.AddPlayer(n.Username);
 
                     Log(this.lang.get("player.joined", a[1]));
-                    await Chat(this.lang.get("player.joined", a[1]));
+                    await Chat("&3" + this.lang.get("player.joined", a[1]));
 
 
                     // n.Send("blockchange?500?50?Red")
@@ -1219,6 +1243,10 @@ namespace NCore
                         {
                             LogError(ex);
                         }
+                    }
+                    foreach(var en in World.Entities)
+                    {
+                        await n.PacketQueue.AddQueue("addentity?" + en.UUID + "?" + en.GetEntityType());
                     }
                     await n.PacketQueue.SendQueue();
                     n.IsLoaded = true;
@@ -1628,6 +1656,11 @@ namespace NCore
 
                 if (a[0] == "tochest")
                 {
+                    if(n.OpenChest == null)
+                    {
+                        await n.Kick("Internal server error");
+                        return;
+                    }
                     ItemStack item = null;
 
                     foreach(ItemStack i in n.PlayerInventory.Items)
@@ -1649,6 +1682,11 @@ namespace NCore
 
                 if (a[0] == "fromchest")
                 {
+                    if (n.OpenChest == null)
+                    {
+                        await n.Kick("Internal server error");
+                        return;
+                    }
                     int item = -1;
 
                     foreach (ItemStack i in n.OpenChest.items)
@@ -2184,13 +2222,13 @@ namespace NCore
 
                         if (IsNothing(nd))
                         {
-                            n.Kick("Attempting to attack an invalid player");
+                            await n.Kick("Attempting to attack an invalid player");
                             return;
                         }
 
                         if ((nd.Username ?? "") == (n.Username ?? ""))
                         {
-                            n.Kick("Attempting to attack self");
+                            await n.Kick("Attempting to attack self");
                             return;
                         }
 
@@ -2265,6 +2303,9 @@ namespace NCore
         {
             string crashText = "Netcraft Crash Report" + Constants.vbCrLf + $"Server crashed at {DateTime.Now.ToString()}" + Constants.vbCrLf + $"{ex.GetType().ToString()}: {ex.Message}{Constants.vbCrLf}== STACK TRACE =={Constants.vbCrLf}{ex.InnerException.StackTrace}{Constants.vbCrLf}{Constants.vbCrLf}" + $"Exception.TargetSite: {ex.TargetSite}" + Constants.vbCrLf + $"Exception.Source: {ex.Source}";
             File.WriteAllText("./crash-reports/" + DateTime.Now.ToString().Replace(" ", "_").Replace(".", "-").Replace(":", "-") +  ".txt", crashText);
+            
+            Console.WriteLine(crashText);
+            Console.ReadLine();
             Environment.Exit(-1);
         }
 
@@ -2351,12 +2392,18 @@ namespace NCore
                 txt = Conversions.ToString(txt + Operators.AddObject(Operators.AddObject(t + "=", playerPasswords[t]), Constants.vbCrLf));
             File.WriteAllText("./auth.txt", txt, Encoding.UTF8);
         }
-
-        public async void ClientExited(NetcraftPlayer client, bool isError = false)
+        string handlingDisconnection = null;
+        public async void handleDisconnection(NetcraftPlayer client, bool isError = false)
         {
             if (string.IsNullOrEmpty(Thread.CurrentThread.Name))
                 Thread.CurrentThread.Name = "Network Leave";
             ThreadAdd();
+            if(handlingDisconnection == client.UUID)
+            {
+                Log($"handleDisconnection({client.ToString().TrimEnd(';')}, {isError.ToString().ToLower()}) called twice", "WARNING");
+                return;
+            }
+            if (handlingDisconnection == null) handlingDisconnection = client.UUID;
             if (client.IsLoaded)
             {
                 var ev = new netcraft.server.api.events.PlayerLeaveEventArgs(client);
@@ -2364,7 +2411,7 @@ namespace NCore
                 File.WriteAllText($"./playerdata/{client.Username}.txt", PlayerInfoSaveLoad.Save(client), Encoding.UTF8);
                 if (!isError)
                 {
-                    await Chat(lang.get("player.left", client.Username));
+                    await Chat("&3" + lang.get("player.left", client.Username));
                     Log(lang.get("player.left", client.Username));
                 }
                 else
@@ -2406,7 +2453,7 @@ namespace NCore
         {
             File.WriteAllText(Conversions.ToString(NCORE_WORLDFILE), sv.Save(World), Encoding.UTF8);
             foreach (var c in players)
-                ClientExited(c);
+                handleDisconnection(c);
         }
         public void ForceCrash()
         {

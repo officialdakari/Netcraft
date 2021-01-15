@@ -61,10 +61,12 @@ namespace Minecraft2D
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.makeItDark = new System.Windows.Forms.PictureBox();
             this.invPanel = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.invClose1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.chatPanel1 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.debuginfo = new Minecraft2D.OpaqueLabel();
             this.R1 = new Minecraft2D.TransparentPicBox();
@@ -107,9 +109,9 @@ namespace Minecraft2D
             this._ListBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this._ListBox1.ForeColor = System.Drawing.Color.White;
             this._ListBox1.FormattingEnabled = true;
-            this._ListBox1.Location = new System.Drawing.Point(364, 28);
+            this._ListBox1.Location = new System.Drawing.Point(364, 36);
             this._ListBox1.Name = "_ListBox1";
-            this._ListBox1.Size = new System.Drawing.Size(467, 381);
+            this._ListBox1.Size = new System.Drawing.Size(467, 368);
             this._ListBox1.TabIndex = 3;
             this._ListBox1.UseTabStops = false;
             this._ListBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
@@ -299,9 +301,9 @@ namespace Minecraft2D
             this._ListBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this._ListBox2.ForeColor = System.Drawing.Color.White;
             this._ListBox2.FormattingEnabled = true;
-            this._ListBox2.Location = new System.Drawing.Point(0, 28);
+            this._ListBox2.Location = new System.Drawing.Point(0, 36);
             this._ListBox2.Name = "_ListBox2";
-            this._ListBox2.Size = new System.Drawing.Size(365, 381);
+            this._ListBox2.Size = new System.Drawing.Size(365, 368);
             this._ListBox2.TabIndex = 17;
             this._ListBox2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox2_MouseDoubleClick);
             // 
@@ -429,6 +431,7 @@ namespace Minecraft2D
             // invPanel
             // 
             this.invPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.invPanel.Controls.Add(this.label1);
             this.invPanel.Controls.Add(this._ListBox2);
             this.invPanel.Controls.Add(this.invClose1);
             this.invPanel.Controls.Add(this._ListBox1);
@@ -440,6 +443,16 @@ namespace Minecraft2D
             this.invPanel.Visible = false;
             this.invPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.invPanel_Paint);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Arial", 11.25F);
+            this.label1.Location = new System.Drawing.Point(3, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(66, 17);
+            this.label1.TabIndex = 23;
+            this.label1.Text = "Inventory";
+            // 
             // invClose1
             // 
             this.invClose1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -448,9 +461,9 @@ namespace Minecraft2D
             this.invClose1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.invClose1.ImageKey = "cancel.png";
             this.invClose1.ImageList = this.imageList1;
-            this.invClose1.Location = new System.Drawing.Point(774, 0);
+            this.invClose1.Location = new System.Drawing.Point(770, 3);
             this.invClose1.Name = "invClose1";
-            this.invClose1.Size = new System.Drawing.Size(57, 31);
+            this.invClose1.Size = new System.Drawing.Size(58, 29);
             this.invClose1.TabIndex = 22;
             this.invClose1.UseVisualStyleBackColor = false;
             this.invClose1.Click += new System.EventHandler(this.button1_Click_1);
@@ -477,9 +490,9 @@ namespace Minecraft2D
             this.button1.ForeColor = System.Drawing.Color.White;
             this.button1.ImageKey = "cancel.png";
             this.button1.ImageList = this.imageList1;
-            this.button1.Location = new System.Drawing.Point(495, 0);
+            this.button1.Location = new System.Drawing.Point(492, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(57, 24);
+            this.button1.Size = new System.Drawing.Size(57, 26);
             this.button1.TabIndex = 23;
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click_2);
@@ -490,6 +503,7 @@ namespace Minecraft2D
             // 
             this.chatPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.chatPanel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.chatPanel1.Controls.Add(this.label2);
             this.chatPanel1.Controls.Add(this.button1);
             this.chatPanel1.Controls.Add(this.textBox1);
             this.chatPanel1.Controls.Add(this.richTextBox1);
@@ -499,16 +513,26 @@ namespace Minecraft2D
             this.chatPanel1.TabIndex = 22;
             this.chatPanel1.Visible = false;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Arial", 11.25F);
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(3, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(39, 17);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "Chat";
+            // 
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
-            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox1.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.richTextBox1.ForeColor = System.Drawing.Color.White;
-            this.richTextBox1.Location = new System.Drawing.Point(0, 22);
+            this.richTextBox1.Location = new System.Drawing.Point(0, 35);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(556, 327);
+            this.richTextBox1.Size = new System.Drawing.Size(556, 314);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
@@ -517,11 +541,11 @@ namespace Minecraft2D
             // 
             this.debuginfo.AutoSize = true;
             this.debuginfo.BackColor = System.Drawing.Color.Transparent;
-            this.debuginfo.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.debuginfo.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.debuginfo.ForeColor = System.Drawing.Color.White;
-            this.debuginfo.Location = new System.Drawing.Point(4, 51);
+            this.debuginfo.Location = new System.Drawing.Point(5, 51);
             this.debuginfo.Name = "debuginfo";
-            this.debuginfo.Size = new System.Drawing.Size(197, 68);
+            this.debuginfo.Size = new System.Drawing.Size(133, 68);
             this.debuginfo.TabIndex = 19;
             this.debuginfo.Text = "Netcraft {0}\r\nServer: {1}\r\nPlayer position: x, y\r\nOnline players: a";
             this.debuginfo.Visible = false;
@@ -584,6 +608,7 @@ namespace Minecraft2D
             this.ContextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.makeItDark)).EndInit();
             this.invPanel.ResumeLayout(false);
+            this.invPanel.PerformLayout();
             this.chatPanel1.ResumeLayout(false);
             this.chatPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.R1)).EndInit();
@@ -993,6 +1018,8 @@ namespace Minecraft2D
         private RichTextBox richTextBox1;
         public TransparentPicBox _localPlayer;
         private ToolStripMenuItem пасхалкажмиСюдаToolStripMenuItem;
+        private Label label1;
+        private Label label2;
 
         internal ListBox ListBox2
         {

@@ -15,6 +15,9 @@ namespace NCore
         public WorldServer Load(string arg0)
         {
             var world = JsonConvert.DeserializeObject<WorldServer>(arg0);
+            world.Entities.Clear();
+            // TODO Correct entity saving & loading
+            //world.Entities.Add(new Entity.EntityTest());
             return world;
         }
     }

@@ -12,28 +12,13 @@ namespace Minecraft2D
         {
             try
             {
-                // If ONE_PLUGIN_LOADED Then
                 var p = Assembly.LoadFrom(path);
-                // Dim pForm As Form = New Form
-                // pForm.Text = $"(TeamExplorer) Расширение {p.GetName.Name}"
-
                 Plugins.Add(p);
                 ((PluginAbstract)GetObject(p, "Plugin")).OnLoad(My.MyProject.Forms.Form1);
                 return p;
             }
-            // GetObject(p, "Plugin").MainForm = pForm
-            // GetObject(p, "Plugin").OnMainFormSet()
-
-            // GetMainWindow(Plugins.Last).SetMsgBox(New MessageBox1)
-            // Else
-            // Plugins(0) = Assembly.LoadFrom(path)
-
-            // ONE_PLUGIN_LOADED = True
-            // End If
-            // Plugin_One = Assembly.LoadFrom(path)
             catch (Exception ex)
             {
-                // Main.Fatal($"Не удалось загрузить расширение. Путь к расширению: {path}{vbCrLf}{vbCrLf}{ex.ToString}")
             }
 
             return default;
@@ -51,7 +36,7 @@ namespace Minecraft2D
             {
             }
 
-            return default;
+            return null;
         }
     }
 }

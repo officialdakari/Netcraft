@@ -8,7 +8,7 @@ namespace NCore
         GRASS_BLOCK,
         SNOWY_GRASS_BLOCK,
         COBBLESTONE, // DONE
-        BEDROCK,
+        BEDROCK, // wait what
         WOOD, // DONE
         PLANKS, // DONE
         WOODEN_PICKAXE, // DONE

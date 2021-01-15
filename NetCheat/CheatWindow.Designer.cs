@@ -59,7 +59,7 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.checkBox6 = new System.Windows.Forms.CheckBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.checkBox7 = new System.Windows.Forms.CheckBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -83,7 +83,7 @@
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(256, 24);
             this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "No-Clip [Patched]";
+            this.checkBox1.Text = "Flight";
             this.checkBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
@@ -135,11 +135,11 @@
             // 
             // trackBar2
             // 
-            this.trackBar2.Location = new System.Drawing.Point(10, 93);
+            this.trackBar2.Location = new System.Drawing.Point(6, 91);
             this.trackBar2.Maximum = 25;
-            this.trackBar2.Minimum = 5;
+            this.trackBar2.Minimum = 1;
             this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(110, 45);
+            this.trackBar2.Size = new System.Drawing.Size(186, 45);
             this.trackBar2.TabIndex = 6;
             this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar2.Value = 10;
@@ -148,7 +148,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 72);
+            this.label3.Location = new System.Drawing.Point(3, 72);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(42, 13);
             this.label3.TabIndex = 5;
@@ -162,17 +162,17 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(393, 34);
             this.button1.TabIndex = 4;
-            this.button1.Text = "Start";
+            this.button1.Text = "Spam";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(164, 93);
+            this.trackBar1.Location = new System.Drawing.Point(214, 91);
             this.trackBar1.Maximum = 100;
             this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(109, 45);
+            this.trackBar1.Size = new System.Drawing.Size(185, 45);
             this.trackBar1.TabIndex = 3;
             this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar1.Value = 1;
@@ -181,7 +181,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(161, 74);
+            this.label2.Location = new System.Drawing.Point(211, 72);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 2;
@@ -202,7 +202,7 @@
             this.textBox1.ForeColor = System.Drawing.Color.Lime;
             this.textBox1.Location = new System.Drawing.Point(9, 40);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(153, 20);
+            this.textBox1.Size = new System.Drawing.Size(390, 20);
             this.textBox1.TabIndex = 0;
             // 
             // groupBox2
@@ -425,27 +425,26 @@
             // 
             // groupBox6
             // 
-            this.groupBox6.Controls.Add(this.checkBox7);
+            this.groupBox6.Controls.Add(this.button5);
             this.groupBox6.ForeColor = System.Drawing.Color.Lime;
             this.groupBox6.Location = new System.Drawing.Point(12, 297);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(268, 52);
+            this.groupBox6.Size = new System.Drawing.Size(268, 51);
             this.groupBox6.TabIndex = 11;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Exploit";
             // 
-            // checkBox7
+            // button5
             // 
-            this.checkBox7.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox7.FlatAppearance.CheckedBackColor = System.Drawing.Color.Blue;
-            this.checkBox7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBox7.Location = new System.Drawing.Point(6, 16);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(256, 24);
-            this.checkBox7.TabIndex = 1;
-            this.checkBox7.Text = "Server crasher";
-            this.checkBox7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.checkBox7.UseVisualStyleBackColor = true;
+            this.button5.FlatAppearance.BorderColor = System.Drawing.Color.Lime;
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button5.Location = new System.Drawing.Point(5, 19);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(256, 24);
+            this.button5.TabIndex = 7;
+            this.button5.Text = "Kill (stand near to target)";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click_4);
             // 
             // CheatWindow
             // 
@@ -467,7 +466,6 @@
             this.Text = "Cheats";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CheatWindow_FormClosing);
             this.Load += new System.EventHandler(this.CheatWindow_Load);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CheatWindow_MouseMove);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
@@ -519,6 +517,6 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.CheckBox checkBox6;
         private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.CheckBox checkBox7;
+        private System.Windows.Forms.Button button5;
     }
 }

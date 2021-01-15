@@ -269,16 +269,19 @@ namespace NetCheat
             progressBar1.Value = 0;
         }
 
+
         private void checkBox6_CheckedChanged_1(object sender, EventArgs e)
         {
             game._localPlayer.BorderStyle = checkBox6.Checked ? BorderStyle.FixedSingle : BorderStyle.None;
         }
 
-        private async void CheatWindow_MouseMove(object sender, MouseEventArgs e)
+        private async void button5_Click_4(object sender, EventArgs e)
         {
-            if(checkBox7.Checked)
+            string target = Utils.InputBox("Select target");
+            if (target == null) return;
+            for(int i = 0; i < 15; i++)
             {
-                await game.Send("chat?Hello World");
+                await game.Send("pvp?" + target);
             }
         }
     }

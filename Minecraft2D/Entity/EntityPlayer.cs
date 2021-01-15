@@ -12,8 +12,8 @@ namespace Minecraft2D
         public string Name { get; set; }
         public string UUID { get; set; }
         public string ItemInHand { get; set; } = "";
-        public Image ItemInImage { get; set; }
-        public Image ItemInImageFlipped { get; set; }
+        public Image ItemImage { get; set; }
+        public Image ItemImageFlipped { get; set; }
         public Image Sprite { get; set; } = My.MyProject.Forms.Form1.playerSkin;
         public Point Location { get; set; }
         public TransparentPicBox R1 { get; set; }
@@ -73,13 +73,13 @@ namespace Minecraft2D
 
             try
             {
-                if (Information.IsNothing(ItemInImageFlipped))
+                if (Information.IsNothing(ItemImageFlipped))
                 {
                     R1.Hide();
                     return;
                 }
 
-                if (Information.IsNothing(ItemInImage))
+                if (Information.IsNothing(ItemImage))
                 {
                     R1.Hide();
                     return;
@@ -87,17 +87,17 @@ namespace Minecraft2D
 
                 R1.Show();
                 var lc = Render.Location;
-                if (ItemInImage.Equals(null))
+                if (ItemImage.Equals(null))
                     return;
                 if (LastWalk == 1)
                 {
                     lc.X += Render.Width - 5;
-                    R1.Image = ItemInImage;
+                    R1.Image = ItemImage;
                 }
                 else
                 {
                     lc.X -= R1.Width - 5;
-                    R1.Image = ItemInImageFlipped;
+                    R1.Image = ItemImageFlipped;
                 }
 
                 lc.Y = (int)(lc.Y + (45d - R1.Height / 2d));
@@ -116,8 +116,8 @@ namespace Minecraft2D
         {
             if (!Information.IsNothing(i))
                 R1.Image = i;
-            ItemInImage = i;
-            ItemInImageFlipped = iflipped;
+            ItemImage = i;
+            ItemImageFlipped = iflipped;
             ItemInHand = str;
             Render.Update();
             R1.Update();

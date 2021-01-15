@@ -100,6 +100,7 @@
     <Compile Include="ChestWindow.Designer.cs">
       <DependentUpon>ChestWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entity\Entity.cs" />
     <Compile Include="FancyForm.cs">
       <SubType>Form</SubType>
     </Compile>

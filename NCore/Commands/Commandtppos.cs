@@ -38,6 +38,7 @@ namespace NCore
                 await NCore.GetNCore().SendCommandFeedback(lang.get("commands.tppos.success", x, y, NCore.DistanceBetweenPoint(NCore.Normalize(p.Position), NCore.Normalize(new System.Drawing.Point(Conversions.ToInteger(x), Conversions.ToInteger(y)))).ToString(), p.Username), sender);
                 //await NCore.GetNCore().SendCommandFeedback($"{p.Username} телепортирован на [{x}, {y}] ({NCore.DistanceBetweenPoint(NCore.Normalize(p.Position), NCore.Normalize(new System.Drawing.Point(Conversions.ToInteger(x), Conversions.ToInteger(y))))} блоков отсюда)", sender);
                 await p.Teleport(Conversions.ToInteger(x) * 32, Conversions.ToInteger(y) * 32);
+                return true;
             }
 
             return false;

@@ -115,10 +115,11 @@ namespace Minecraft2D
             // 
             this.Label2.AutoSize = true;
             this.Label2.BackColor = System.Drawing.Color.Transparent;
+            this.Label2.Font = new System.Drawing.Font("Arial", 11.25F);
             this.Label2.ForeColor = System.Drawing.Color.White;
-            this.Label2.Location = new System.Drawing.Point(475, 195);
+            this.Label2.Location = new System.Drawing.Point(475, 192);
             this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(20, 13);
+            this.Label2.Size = new System.Drawing.Size(25, 17);
             this.Label2.TabIndex = 3;
             this.Label2.Text = "IP:";
             // 
@@ -223,7 +224,7 @@ namespace Minecraft2D
             this._Button5.Size = new System.Drawing.Size(80, 27);
             this._Button5.TabIndex = 11;
             this._Button5.TabStop = false;
-            this._Button5.Text = "Ping";
+            this._Button5.Text = "Query";
             this._Button5.UseVisualStyleBackColor = false;
             this._Button5.Click += new System.EventHandler(this.Button5_Click);
             this._Button5.MouseEnter += new System.EventHandler(this._Button5_MouseEnter);
@@ -306,7 +307,7 @@ namespace Minecraft2D
             this.panel3.Controls.Add(this.textBox2);
             this.panel3.Location = new System.Drawing.Point(6, 5);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(272, 93);
+            this.panel3.Size = new System.Drawing.Size(443, 93);
             this.panel3.TabIndex = 17;
             this.panel3.Visible = false;
             // 
@@ -318,7 +319,7 @@ namespace Minecraft2D
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel4.Location = new System.Drawing.Point(0, 65);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(272, 28);
+            this.panel4.Size = new System.Drawing.Size(443, 28);
             this.panel4.TabIndex = 1;
             // 
             // button2
@@ -366,9 +367,10 @@ namespace Minecraft2D
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Size = new System.Drawing.Size(272, 65);
+            this.textBox2.Size = new System.Drawing.Size(443, 65);
             this.textBox2.TabIndex = 0;
             this.textBox2.Text = "abcdefghiABCDEFGHIабвгдеёАБВГДЕЁ0123456789/\\.,[];\'";
+            this.textBox2.WordWrap = false;
             // 
             // PictureBox1
             // 
@@ -405,10 +407,11 @@ namespace Minecraft2D
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Arial", 11.25F);
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(3, 260);
+            this.label1.Location = new System.Drawing.Point(3, 256);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 13);
+            this.label1.Size = new System.Drawing.Size(83, 17);
             this.label1.TabIndex = 19;
             this.label1.Text = "URL скина:";
             // 

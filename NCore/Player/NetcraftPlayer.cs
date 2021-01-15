@@ -68,8 +68,9 @@ namespace NCore
             string t = "";
             t += $"username='{Username}';";
             t += $"uuid='{UUID}';";
+            t += $"ip='{GetIp()}';";
             t += $"position={Position.X.ToString()},{Position.Y.ToString()};";
-            t += $"selecteditem='{SelectedItem.ToString()}';";
+            t += $"selecteditem='{(SelectedItem == null ? "NULL" : SelectedItem.ToString())}';";
             t += $"world='NCore.WorldServer';";
             t += $"isSpectator='{IsSpectator.ToString()}';";
             t += $"nomovecheck='{DisableMovementCheck.ToString()}';";
@@ -77,13 +78,18 @@ namespace NCore
             t += $"playerRectangle='{PlayerRectangle.ToString()}';";
             t += $"noclip='{NoClip.ToString()}';";
             t += $"falldistance='{FallDistance.ToString()}';";
-            t += $"antiflywarnings='{AntiFlyWarnings.ToString()}';";
+            t += $"antiflywarnings='{AntiFlyWarnings.ToString()}'";
             return t;
         }
 
         public TcpClient GetConnection()
         {
             return d;
+        }
+
+        public NetworkStream GetStream()
+        {
+            return d.GetStream();
         }
 
         private string ip;

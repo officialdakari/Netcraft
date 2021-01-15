@@ -101,7 +101,6 @@ namespace NCore
                     {
                         if (a + 5 < i)
                         {
-                            // If Not world.GetBlockAt(i, o + 1).Type = EnumBlockType.WATER Then 
                             TreeGenerator.GenerateTree(new Point(i, o), world);
                             caveheight = rnd.Next(NCore.WORLDGEN_CAVE_MIN_HEIGHT, NCore.WORLDGEN_CAVE_MAX_HEIGHT);
                             a = i;

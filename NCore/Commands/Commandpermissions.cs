@@ -42,7 +42,7 @@ namespace NCore.Commands
                     }
                     if (NCore.GetNCore().permissions.AddPermission(args[1], args[2]))
                     {
-                        await sender.SendMessage($"Permission '{args[2]}' added: '{args[1]}'");
+                        await sender.SendMessage($"Permission '{args[2]}' added for '{args[1]}'");
                     }
                     else
                     {
@@ -63,7 +63,7 @@ namespace NCore.Commands
                     }
                     if (NCore.GetNCore().permissions.RemovePermission(args[1], args[2]))
                     {
-                        await sender.SendMessage($"Permission '{args[2]}' removed: '{args[1]}'");
+                        await sender.SendMessage($"Permission '{args[2]}' removed for '{args[1]}'");
                     }
                     else
                     {
