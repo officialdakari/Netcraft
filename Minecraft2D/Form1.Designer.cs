@@ -114,6 +114,7 @@ namespace Minecraft2D
             this._ListBox1.Size = new System.Drawing.Size(467, 368);
             this._ListBox1.TabIndex = 3;
             this._ListBox1.UseTabStops = false;
+            this._ListBox1.SelectedIndexChanged += new System.EventHandler(this._ListBox1_SelectedIndexChanged);
             this._ListBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this._ListBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this._ListBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox1_MouseDoubleClick);
@@ -591,7 +592,6 @@ namespace Minecraft2D
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(2140, 2060);
             this.Name = "Form1";
-            this.ShowIcon = false;
             this.Text = " ";
             this.Activated += new System.EventHandler(this.Form1_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);

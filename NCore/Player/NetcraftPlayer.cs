@@ -1033,7 +1033,7 @@ namespace NCore
             PlayerRectangle = new Rectangle(Position, new Size(37, 72));
             try
             {
-                string data = Encode.d(new StreamReader(d.GetStream()).ReadLine());
+                string data = Encode.d(await new StreamReader(d.GetStream()).ReadLineAsync());
                 netcraft.server.api.events.PlayerPacketReceive ev = new netcraft.server.api.events.PlayerPacketReceive(this, data, false);
                 netcraft.server.api.NCSApi.REPlayerPacketReceiveEvent(ev);
                 data = ev.GetPacket();
@@ -1097,7 +1097,7 @@ namespace NCore
         {
             try
             {
-                string data = Encode.e(Messsage);
+                string data = Messsage;
                 netcraft.server.api.events.PlayerPacketSend ev = new netcraft.server.api.events.PlayerPacketSend(this, Messsage, false);
                 netcraft.server.api.NCSApi.REPlayerPacketSendEvent(ev);
                 if (ev.GetCancelled()) return;

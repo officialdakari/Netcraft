@@ -54,7 +54,7 @@ namespace Minecraft2D
         {
             try
             {
-                var x = Encode.d(new StreamReader(client.GetStream()).ReadLine()).Split(Conversions.ToChar(Constants.vbLf));
+                var x = Encode.d(await new StreamReader(client.GetStream()).ReadLineAsync()).Split(Conversions.ToChar(Constants.vbLf));
                 await handlePackets(x);
                 client.GetStream().BeginRead(new byte[] { 0 }, 0, 0, Read, null);
             }
@@ -2040,9 +2040,16 @@ namespace Minecraft2D
                 {
                     G.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
                     G.CopyFromScreen(this.PointToScreen(new Point(0, 0)), new Point(0, 0), this.ClientRectangle.Size);
-                    G.DrawString("Netcraft " + MainMenu.GetInstance().Ver, new Font("Courier New", 12, FontStyle.Regular), new SolidBrush(Color.White), new Point(0, 0));
+                    //G.DrawString("Netcraft " + MainMenu.GetInstance().Ver, new Font("Courier New", 12, FontStyle.Regular), new SolidBrush(Color.White), new Point(0, 0));
                 }
-                Clipboard.SetImage((Image)bmp);
+                if (!Directory.Exists("./screenshots")) Directory.CreateDirectory("./screenshots");
+                string path = $"./screenshots/{DateTime.Now.ToString().Replace(":", "-").Replace(".", "-")}.png";
+                bmp.Save(path, ImageFormat.Png);
+                if(FancyMessage.Show(lang.get("question.screenshot.open"), "", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
+                {
+                    Process.Start(path);
+                }
+                //Clipboard.SetImage((Image)bmp);
                 return;
             }
 
@@ -2870,6 +2877,11 @@ namespace Minecraft2D
         private void пасхалкажмиСюдаToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://cdn.discordapp.com/attachments/789961408632586260/790309073425268776/pXbQ8xrEaXE.jpg");
+        }
+
+        private void _ListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
         //private void Form1_MouseDown(object sender, Global.System.Windows.Forms.MouseEventArgs e)
         //{
