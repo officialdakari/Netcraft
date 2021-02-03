@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Windows.Media.Imaging;
+using Newtonsoft.Json;
 
 namespace Minecraft2D
 {
@@ -95,7 +96,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                //Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 if (connected)
                 {
                     toNotice = $"{lang.get("text.error.packet_send_error")}:\r\n\r\n{ex.ToString()}";
@@ -370,6 +371,7 @@ namespace Minecraft2D
                 return;
             }
             await SendPacket("setname", pName, Utils.LANGUAGE, MainMenu.GetInstance().textBox3.Text);
+            log($"Sending 'SETUP' packet with arguments ['{pName}', '{Utils.LANGUAGE}', '{MainMenu.GetInstance().textBox3.Text}']");
             Username = pName;
             Thread.Sleep(900);
             SendSinglePacket("world");
@@ -377,8 +379,9 @@ namespace Minecraft2D
             initializeMove();
             foreach (var i in Enum.GetNames(typeof(Craftable)))
                 ListBox2.Items.Add(i.ToLower());
-            cTicker = new Thread(tickLoop);
-            cTicker.Start();
+            //cTicker = new Thread(tickLoop);
+            //cTicker.Start();
+            timer1.Start();
             foreach (var pluginPath in Directory.GetFiles(@".\mods"))
                 PluginManager.Load(pluginPath);
             try
@@ -425,11 +428,11 @@ namespace Minecraft2D
 
         public async void tickLoop()
         {
-            while (true)
-            {
-                Thread.Sleep(5);
-                Tick();
-            }
+            //while (true)
+            //{
+            //    Thread.Sleep(5);
+            //    Tick();
+            //}
         }
 
         public Thread cTicker;
@@ -845,6 +848,7 @@ namespace Minecraft2D
                     TeleportLocalPlayer(Conversions.ToInteger(a[1]) - HorizontalScroll.Value, Conversions.ToInteger(a[2]) - VerticalScroll.Value);
                     await UpdatePlayerPosition();
                     Console.WriteLine(String.Format("Local player teleported: {0}, {1}", a[1], a[2]));
+                    log(String.Format("Local player teleported: {0}, {1}", a[1], a[2]));
                 }
 
                 if (a[0] == "clearinventory")
@@ -863,6 +867,7 @@ namespace Minecraft2D
                     if (i + 1 > richTextBox1.Lines.Length) return;
                     //richTextBox1.Lines[i] = string.Join("?", a.Skip(2).ToArray());
                     SetChatLine(i, string.Join("?", a.Skip(2).ToArray()));
+                    log($"Server chat: Line {i.ToString()} edited to '{string.Join("?", a.Skip(2).ToArray())}'");
                 }
 
                 if (a[0] == "msgerror")
@@ -887,6 +892,7 @@ namespace Minecraft2D
                 {
                     FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), lang.get("text.kicked"), FancyMessage.Icon.Info);
                     Console.WriteLine($"Kicked from server: {string.Join("?", a.Skip(1).ToArray())}");
+                    log($"Kicked from server: {string.Join("?", a.Skip(1).ToArray())}");
                     Close();
                 }
 
@@ -894,6 +900,7 @@ namespace Minecraft2D
                 {
                     WriteChat(string.Join("?", a.Skip(1).ToArray()));
                     Console.WriteLine($"Chat: {string.Join("?", a.Skip(1).ToArray())}");
+                    log($"Server chat: {string.Join("?", a.Skip(1).ToArray())}");
                 }
 
 
@@ -944,6 +951,12 @@ namespace Minecraft2D
                     cw.Close();
                     cw.Dispose();
                     chest = null;
+                }
+
+                if(a[0] == "updatestats")
+                {
+                    log($"Received 'UPDATE_STATS': {string.Join("?", a.Skip(1))}");
+                    Stats = JsonConvert.DeserializeObject<Dictionary<string, string>>(string.Join("?", a.Skip(1)));
                 }
 
                 if (a[0] == "itemset")
@@ -1332,6 +1345,7 @@ namespace Minecraft2D
 
         public void ApplyBrightness(ref Bitmap bmp, int brightnessValue)
         {
+            log($"API WARNING: ApplyBrightness is absolute");
             try
             {
                 var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
@@ -1392,6 +1406,7 @@ namespace Minecraft2D
                 throw new Exception();
                 return;
             }
+            log($"API: Added keybind '{key.ToString()}' with action '{action.ToString()}'");
             keybinds.Add(key, action);
         }
 
@@ -1402,6 +1417,7 @@ namespace Minecraft2D
                 throw new Exception();
                 return;
             }
+            log($"API: Removed keybind '{key.ToString()}'");
             keybinds.Remove(key);
         }
 
@@ -1508,6 +1524,7 @@ namespace Minecraft2D
             else
             {
                 Bitmap bmp;
+                log($"Creating '{name}' player entity");
                 try
                 {
                     System.Net.WebRequest request =
@@ -1539,6 +1556,7 @@ namespace Minecraft2D
                 en.Sprite = bmp;
                 players.Add(en);
                 b.BringToFront();
+                log($"Created '{name}' player entity");
             }
         }
 
@@ -1553,16 +1571,25 @@ namespace Minecraft2D
             } else
             {
                 TransparentPicBox pic = new TransparentPicBox();
-                if(type == "test")
+                log($"Creating '{uuid}' entity");
+                if (type == "test")
                 {
                     pic.SetBounds(0, 0, 32, 32);
                     pic.BorderStyle = BorderStyle.FixedSingle;
                     pic.Image = My.Resources.Resources.bedrock;
                     pic.SizeMode = PictureBoxSizeMode.StretchImage;
                 }
+                if (type == "Cow")
+                {
+                    pic.SetBounds(0, 0, 32, 20);
+                    pic.BorderStyle = BorderStyle.FixedSingle;
+                    pic.Image = My.Resources.Resources.cow;
+                    pic.SizeMode = PictureBoxSizeMode.StretchImage;
+                }
 
-                entities.Add(uuid, new Entity.Entity(uuid, pic, new Point(0 - HorizontalScroll.Value, 0 - VerticalScroll.Value), pic.Size));
+                entities.Add(uuid, new Entity.Entity(uuid, pic, new Point(0 - HorizontalScroll.Value, 0 - VerticalScroll.Value), pic.Size, type));
                 Controls.Add(entities[uuid].Renderer);
+                log($"Created '{uuid}' '{type}' entity");
             }
         }
 
@@ -1575,6 +1602,16 @@ namespace Minecraft2D
             } else
             {
                 Entity.Entity e = entities[uuid];
+                if(e.Type == "Cow")
+                {
+                    if(point.X < e.Position.X)
+                    {
+                        e.Renderer.Image = GetFlipped(My.Resources.Resources.cow);
+                    } else
+                    {
+                        e.Renderer.Image = My.Resources.Resources.cow;
+                    }
+                }
                 e.Position = new Point(point.X - HorizontalScroll.Value, point.Y - VerticalScroll.Value);
                 e.Renderer.Location = e.Position;
             }
@@ -1590,12 +1627,14 @@ namespace Minecraft2D
             {
                 Controls.Remove(entities[uuid].Renderer);
                 entities.Remove(uuid);
+                log($"Deleted '{uuid}' entity from the world");
             }
         }
 
-        private void AttackPlayer(object sender, EventArgs e)
+        private async void AttackPlayer(object sender, EventArgs e)
         {
-            SendPacket("pvp", ((TransparentPicBox)sender).Tag.ToString());
+            await SendPacket("pvp", ((TransparentPicBox)sender).Tag.ToString());
+            log($"Sending 'ATTACK_PLAYER' packet with arguments ['{((TransparentPicBox)sender).Tag.ToString()}']");
         }
 
         public delegate Task DoWarn(string n);
@@ -1798,12 +1837,14 @@ namespace Minecraft2D
                 {
                     Control c = ((Control)sender);
                     SendPacket("furnace", c.Name.Split('B')[0], c.Name.Split('B')[1]);
+                    log($"Sending 'USE_FURNACE' packet with arguments ['{c.Name.Split('B')[0]}', '{c.Name.Split('B')[1]}']");
                 }
             }
             else if (e.Button == MouseButtons.Right)
             {
                 Control c = ((Control)sender);
                 SendPacket("rightclick", c.Name.Split('B')[0], c.Name.Split('B')[1]);
+                log($"Sending 'RIGHT_CLICK_BLOCK' packet with arguments ['{c.Name.Split('B')[0]}', '{c.Name.Split('B')[1]}']");
             }
             // MsgBox((sender.left / 32).ToString + " " + (sender.top / 32).ToString)
         }
@@ -1811,13 +1852,14 @@ namespace Minecraft2D
         public event BlockEvent BlockPreBreakEvent;
         public event BlockEvent BlockBrokenEvent;
 
-        private void BreakBlock(object sender)
+        private async void BreakBlock(object sender)
         {
             // Dim a As String() = {sender.Name.Split("B")(0), sender.Name.Split("B")(1)}
             // Invoke(New xSendPacket(AddressOf SendPacket), "block_break", a)
             BlockPreBreakEvent?.Invoke(((Control)sender).Location);
-            this.SendPacket("block_break", Operators.DivideObject(((Control)sender).Left + HorizontalScroll.Value, 32).ToString() + "?" + Operators.DivideObject(((Control)sender).Top + VerticalScroll.Value, 32).ToString()); // sender.Name.Split("B")(0), sender.Name.Split("B")(1))
+            await this.SendPacket("block_break", Operators.DivideObject(((Control)sender).Left + HorizontalScroll.Value, 32).ToString() + "?" + Operators.DivideObject(((Control)sender).Top + VerticalScroll.Value, 32).ToString()); // sender.Name.Split("B")(0), sender.Name.Split("B")(1))
 
+            log($"Sending 'BLOCK_BREAK' packet with arguments ['{Operators.DivideObject(((Control)sender).Left + HorizontalScroll.Value, 32).ToString()}', '{Operators.DivideObject(((Control)sender).Top + VerticalScroll.Value, 32).ToString()}']");
             BlockBrokenEvent?.Invoke(((Control)sender).Location);                                                                                                                                    // Text = sender.Name.Split("B")(0) + " " + sender.Name.Split("B")(1)
         }
 
@@ -2045,7 +2087,8 @@ namespace Minecraft2D
                 if (!Directory.Exists("./screenshots")) Directory.CreateDirectory("./screenshots");
                 string path = $"./screenshots/{DateTime.Now.ToString().Replace(":", "-").Replace(".", "-")}.png";
                 bmp.Save(path, ImageFormat.Png);
-                if(FancyMessage.Show(lang.get("question.screenshot.open"), "", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
+                log($"Screenshot saved at '{path}'");
+                if (FancyMessage.Show(lang.get("question.screenshot.open"), "", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
                 {
                     Process.Start(path);
                 }
@@ -2062,11 +2105,13 @@ namespace Minecraft2D
                     {
                         FormBorderStyle = FormBorderStyle.None;
                         WindowState = FormWindowState.Maximized;
+                        log($"Full screen mode activated");
                     } else
                     {
                         FormBorderStyle = FormBorderStyle.FixedSingle;
                         WindowState = FormWindowState.Normal;
                         Size = new Size(1182, 615);
+                        log($"Full screen mode deactivated");
                     }
                     Form1_Scroll(this, null);
                     return;
@@ -2144,6 +2189,7 @@ namespace Minecraft2D
             foreach(Keys k in keybinds.Keys)
             {
                 if (e.KeyCode != k) continue;
+                log($"Calling keybind function '{k.ToString()}'");
                 keybinds[k]();
             }
         }
@@ -2236,25 +2282,35 @@ namespace Minecraft2D
                 if (!NoClip)
                 {
                     bool collision = false;
-
-                    foreach (var b in blocks)
+                    try
                     {
-                        if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) continue;
-                        if ((b.Left / 32 - localPlayer.Left / 32) > 4) continue;
-                        if ((b.Left / 32 - localPlayer.Left / 32) < -4) continue;
-                        if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
+                        blocks.Any(b =>
                         {
-                            continue;
-                        }
+                            if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) return false;
+                            if ((b.Left / 32 - localPlayer.Left / 32) > 4) return false;
+                            if ((b.Left / 32 - localPlayer.Left / 32) < -4) return false;
+                            if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
+                            {
+                                return false;
+                            }
 
-                        if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
-                            continue;
-                        if (b.Bounds.IntersectsWith(localPlayer.Bounds))
-                        {
-                            collision = true;
-                            break;
-                        }
+                            if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
+                                return false;
+                            if (b.Bounds.IntersectsWith(localPlayer.Bounds))
+                            {
+                                collision = true;
+                                return true;
+                            }
+                            return false;
+                        });
+                    } catch(ArgumentOutOfRangeException)
+                    {
+                        //выходим из цикла
                     }
+                    //foreach (var b in blocks)
+                    //{
+                        
+                    //}
 
                     if (!collision)
                     {
@@ -2316,6 +2372,7 @@ namespace Minecraft2D
                 if (Conversions.ToBoolean(Operators.ConditionalCompareObjectNotEqual(ListBox1.SelectedItem, null, false)))
                 {
                     SendPacket("splititems", ListBox1.SelectedItem.ToString());
+                    log($"Sending 'SPLIT_ITEMS' packet with arguments ['{(ListBox1.SelectedItem).ToString()}']");
                 }
             }
         }
@@ -2325,7 +2382,10 @@ namespace Minecraft2D
             if(e.Button == MouseButtons.Left)
             {
                 if (Conversions.ToBoolean(Operators.ConditionalCompareObjectNotEqual(ListBox1.SelectedItem, null, false)))
+                {
                     SendPacket("selectitem", ListBox1.SelectedItem.ToString());
+                    log($"Sending 'SELECT_ITEM' packet with arguments ['{(ListBox1.SelectedItem).ToString()}']");
+                }
             }
         }
 
@@ -2336,12 +2396,14 @@ namespace Minecraft2D
                 BlockPrePlaceEvent?.Invoke(new Point((e.X + HorizontalScroll.Value), (e.Y + VerticalScroll.Value)));
                 SendPacket("block_place", (e.X + HorizontalScroll.Value).ToString(), (e.Y + VerticalScroll.Value).ToString());
                 BlockPlacedEvent?.Invoke(new Point((e.X + HorizontalScroll.Value), (e.Y + VerticalScroll.Value)));
+                log($"Sending 'BLOCK_PLACE' packet with arguments ['{(e.X + HorizontalScroll.Value).ToString()}', '{(e.Y + VerticalScroll.Value).ToString()}']");
             }
             else if (e.Button == MouseButtons.Middle)
             {
                 BlockPrePlaceEventBg?.Invoke(new Point((e.X + HorizontalScroll.Value), (e.Y + VerticalScroll.Value)));
                 SendPacket("block_place_bg", (e.X + HorizontalScroll.Value).ToString(), (e.Y + VerticalScroll.Value).ToString());
                 BlockPlacedEventBg?.Invoke(new Point((e.X + HorizontalScroll.Value), (e.Y + VerticalScroll.Value)));
+                log($"Sending 'BLOCK_PLACE_BG' packet with arguments ['{(e.X + HorizontalScroll.Value).ToString()}', '{(e.Y + VerticalScroll.Value).ToString()}']");
             }
         }
 
@@ -2353,12 +2415,14 @@ namespace Minecraft2D
 
         public async Task SendPlace(int x, int y)
         {
-            SendPacket("block_place", (x + HorizontalScroll.Value).ToString(), (y + VerticalScroll.Value).ToString());
+            await SendPacket("block_place", (x + HorizontalScroll.Value).ToString(), (y + VerticalScroll.Value).ToString());
+            log($"Sending 'BLOCK_PLACE' packet with arguments ['{(x + HorizontalScroll.Value).ToString()}', '{(y + VerticalScroll.Value).ToString()}']");
         }
 
         public async Task SendPlaceBack(int x, int y)
         {
-            SendPacket("block_place_bg", (x + HorizontalScroll.Value).ToString(), (y + VerticalScroll.Value).ToString());
+            await SendPacket("block_place_bg", (x + HorizontalScroll.Value).ToString(), (y + VerticalScroll.Value).ToString());
+            log($"Sending 'BLOCK_PLACE_BG' packet with arguments ['{(x + HorizontalScroll.Value).ToString()}', '{(y + VerticalScroll.Value).ToString()}']");
         }
 
         public int JumpStep { get; set; } = -1;
@@ -2418,6 +2482,7 @@ namespace Minecraft2D
             {
                 R1.Hide();
                 Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                log($"Exception thrown:\r\n" + ex.ToString());
             }
         }
 
@@ -2463,6 +2528,7 @@ namespace Minecraft2D
                 MainMenu.GetInstance().presence.Details = "";
                 MainMenu.GetInstance().presence.State = lang.get("rpc.menu");
                 MainMenu.GetInstance().dRPC.SetPresence(MainMenu.GetInstance().presence);
+                log($"Updating presence state to '', details to '{lang.get("rpc.menu")}'");
                 leave();
                 return;
             }
@@ -2490,6 +2556,7 @@ namespace Minecraft2D
             MainMenu.GetInstance().presence.State = "";
             MainMenu.GetInstance().presence.Details = lang.get("rpc.menu");
             MainMenu.GetInstance().dRPC.SetPresence(MainMenu.GetInstance().presence);
+            log($"Updating presence state to '', details to '{lang.get("rpc.menu")}'");
             Hide();
             
             MainMenu.instance.Show();
@@ -2596,6 +2663,7 @@ namespace Minecraft2D
             }
 
             await SendPacket("pvp", arg0.Name);
+            log($"Sending 'ATTACK_PLAYER' packet with arguments ['{arg0.Name}']");
         }
 
         private void localPlayer_Click(object sender, EventArgs e)
@@ -2614,6 +2682,7 @@ namespace Minecraft2D
             if (!Information.IsNothing(ListBox2.SelectedItem))
             {
                 await SendPacket("craft", Conversions.ToString(ListBox2.SelectedItem));
+                log($"Sending 'CRAFT' packet with arguments ['{ListBox2.SelectedItem.ToString()}']");
             }
         }
 
@@ -2787,9 +2856,15 @@ namespace Minecraft2D
                 Invoke(new logResult(log), res);
             } else
             {
-                NConsole.instance.richTextBox1.AppendText(res + "\r\n");
-                NConsole.instance.richTextBox1.Select(NConsole.instance.richTextBox1.TextLength, 0);
-                NConsole.instance.richTextBox1.ScrollToCaret();
+                try
+                {
+                    NConsole.instance.richTextBox1.AppendText($"[{DateTime.Now.ToString()}]: {res}\r\n");
+                    NConsole.instance.richTextBox1.Select(NConsole.instance.richTextBox1.TextLength, 0);
+                    NConsole.instance.richTextBox1.ScrollToCaret();
+                } catch(Exception)
+                {
+
+                }
             }
         }
 
@@ -2829,6 +2904,7 @@ namespace Minecraft2D
 
         public delegate void PreChat(string text, ref bool cancel);
         public event PreChat PreChatEvent;
+        public Dictionary<string, string> Stats { get; internal set; }
 
         private async void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -2845,6 +2921,17 @@ namespace Minecraft2D
                     if(text.StartsWith("%") && IsSingleplayer)
                     {
                         await ServerProcess.StandardInput.WriteLineAsync(text.Substring(1));
+                        textBox1.Clear();
+                        return;
+                    }
+                    if(text == "g")
+                    {
+                        foreach(string k in Stats.Keys)
+                        {
+                            log(k + " = " + Stats[k]);
+                        }
+                        textBox1.Clear();
+                        return;
                     }
                     await Send("chat?" + textBox1.Text);
                 }
@@ -2882,6 +2969,28 @@ namespace Minecraft2D
         private void _ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void debuginfo_MouseClick(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Right)
+            {
+                if(RightToLeft == RightToLeft.Yes)
+                {
+                    RightToLeft = RightToLeft.No;
+                    RightToLeftLayout = false;
+                } else
+                {
+                    RightToLeft = RightToLeft.Yes;
+                    RightToLeftLayout = true;
+                }
+            }
+        }
+
+        private async void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Interval = 5;
+            await Tick();
         }
         //private void Form1_MouseDown(object sender, Global.System.Windows.Forms.MouseEventArgs e)
         //{

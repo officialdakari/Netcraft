@@ -168,7 +168,9 @@ namespace NCore.netcraft
 
                 public static void AddCommand(Command a)
                 {
+                    NCore().Log($"Registring command '{a.Name}'");
                     field_b.Add(a);
+                    NCore().Log($"Command '{a.Name}' registered");
                 }
 
                 public static void RemoveCommand(string a)

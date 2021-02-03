@@ -53,7 +53,7 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>logoNC.ico</ApplicationIcon>
+    <ApplicationIcon>netcraft.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -355,6 +355,8 @@
     <None Include="Resources\IRON_SWORD_FLIPPED.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="netcraft.ico" />
+    <None Include="Resources\cow.png" />
     <None Include="Resources\complain.png" />
     <None Include="Resources\cancel.png" />
     <None Include="Resources\info.png" />

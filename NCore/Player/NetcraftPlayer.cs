@@ -12,6 +12,7 @@ using global::System.Threading;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using NCore.netcraft.server.api;
+using Newtonsoft.Json;
 
 namespace NCore
 {
@@ -659,6 +660,47 @@ namespace NCore
                 await Give(Material.BREAD, 2);
             }
         }
+
+        #region stats
+        public Dictionary<string, string> Stats { get; internal set; } = new Dictionary<string, string>();
+        public void SetStat(string a, string b)
+        {
+            if (!Stats.ContainsKey(a))
+            {
+                Stats.Add(a, b);
+                return;
+            }
+            Stats[a] = b;
+        }
+
+        public void SetStatInt(string a, int b)
+        {
+            if (!Stats.ContainsKey(a))
+            {
+                Stats.Add(a, b.ToString());
+                return;
+            }
+            Stats[a] = b.ToString();
+        }
+
+        public string GetStat(string a) => Stats[a];
+        public int GetStatInt(string a) => int.Parse(Stats[a]);
+
+        public void IncrementStatInt(string a)
+        {
+            Stats[a] = (int.Parse(Stats[a]) + 1).ToString();
+        }
+
+        public void DecrementStatInt(string a)
+        {
+            Stats[a] = (int.Parse(Stats[a]) - 1).ToString();
+        }
+
+        public async Task UpdateStats()
+        {
+            await Send("updatestats?" + JsonConvert.SerializeObject(Stats));
+        }
+        #endregion
 
         public async Task SendBlockChange(int x, int y, EnumBlockType m, bool nonsolid = false, bool packetQueue = false, bool isBackground = false)
         {

@@ -61,27 +61,30 @@ namespace NCore.Entity
             HandleGravity();
         }
 
-        public virtual async Task<bool> Move(System.Drawing.Point to)
+        public virtual async Task<bool> Move(System.Drawing.Point to, bool force = false)
         {
             bool collision = false;
-            foreach(Block b in World.Blocks)
-            { 
-                if (b.IsBackground) continue;
-                if (b.Type == EnumBlockType.SAPLING || b.Type == EnumBlockType.WATER) continue;
-                var bpos = new Point(b.Position.X * 32, b.Position.Y * 32);
-                var brec = new Rectangle(bpos, new Size(32, 32));
-                if (NCore.DistanceBetweenPoint(bpos, Position) > 10 * 32)
-                    continue;
-                if (brec.IntersectsWith(Rectangle))
-                {
-                    collision = true;
-                    break;
-                }
-            }
-            if(collision)
+            if(!force)
             {
-                NCore.GetNCore().Log($"{Name} ({this.GetType().ToString()}) moved wrongly!", "ERROR");
-                return false;
+                foreach (Block b in World.Blocks)
+                {
+                    if (b.IsBackground) continue;
+                    if (b.Type == EnumBlockType.SAPLING || b.Type == EnumBlockType.WATER) continue;
+                    var bpos = new Point(b.Position.X * 32, b.Position.Y * 32);
+                    var brec = new Rectangle(bpos, new Size(32, 32));
+                    if (NCore.DistanceBetweenPoint(bpos, Position) > 10 * 32)
+                        continue;
+                    if (brec.IntersectsWith(Rectangle))
+                    {
+                        collision = true;
+                        break;
+                    }
+                }
+                if (collision)
+                {
+                    NCore.GetNCore().Log($"{Name} ({this.GetType().ToString()}) moved wrongly!", "ERROR");
+                    return false;
+                }
             }
             Position = to;
             EntityMoved();

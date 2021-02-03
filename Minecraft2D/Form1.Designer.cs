@@ -70,6 +70,7 @@ namespace Minecraft2D
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.debuginfo = new Minecraft2D.OpaqueLabel();
             this.R1 = new Minecraft2D.TransparentPicBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).BeginInit();
             this.ContextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.makeItDark)).BeginInit();
@@ -417,7 +418,6 @@ namespace Minecraft2D
             // timer2
             // 
             this.timer2.Enabled = true;
-            this.timer2.Interval = 1000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // makeItDark
@@ -431,6 +431,7 @@ namespace Minecraft2D
             // 
             // invPanel
             // 
+            this.invPanel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.invPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.invPanel.Controls.Add(this.label1);
             this.invPanel.Controls.Add(this._ListBox2);
@@ -502,6 +503,7 @@ namespace Minecraft2D
             // 
             // chatPanel1
             // 
+            this.chatPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chatPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.chatPanel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.chatPanel1.Controls.Add(this.label2);
@@ -551,6 +553,7 @@ namespace Minecraft2D
             this.debuginfo.Text = "Netcraft {0}\r\nServer: {1}\r\nPlayer position: x, y\r\nOnline players: a";
             this.debuginfo.Visible = false;
             this.debuginfo.Click += new System.EventHandler(this.debuginfo_Click);
+            this.debuginfo.MouseClick += new System.Windows.Forms.MouseEventHandler(this.debuginfo_MouseClick);
             // 
             // R1
             // 
@@ -562,6 +565,10 @@ namespace Minecraft2D
             this.R1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.R1.TabIndex = 15;
             this.R1.TabStop = false;
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
@@ -1020,6 +1027,7 @@ namespace Minecraft2D
         private ToolStripMenuItem пасхалкажмиСюдаToolStripMenuItem;
         private Label label1;
         private Label label2;
+        private Timer timer1;
 
         internal ListBox ListBox2
         {

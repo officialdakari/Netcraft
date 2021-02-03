@@ -13,7 +13,7 @@ namespace NCore
             var world = new WorldServer();
             int a = 0;
             caveheight = rnd.Next(NCore.WORLDGEN_CAVE_MIN_HEIGHT, NCore.WORLDGEN_CAVE_MAX_HEIGHT);
-            for (int i = 0; i <= 63; i++)
+            for (int i = 0; i <= 43; i++)
             {
                 int YHeight = new Random().Next(1, 14);
                 

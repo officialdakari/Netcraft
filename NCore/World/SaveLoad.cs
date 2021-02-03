@@ -16,6 +16,7 @@ namespace NCore
         {
             var world = JsonConvert.DeserializeObject<WorldServer>(arg0);
             world.Entities.Clear();
+            world.Entities.Add(new Entity.EntityCow());
             // TODO Correct entity saving & loading
             //world.Entities.Add(new Entity.EntityTest());
             return world;

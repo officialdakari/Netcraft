@@ -12,13 +12,15 @@ namespace Minecraft2D.Entity
         public TransparentPicBox Renderer;
         public Point Position;
         public Size Size;
+        public string Type;
 
-        public Entity(string uuid, TransparentPicBox renderer, Point position, Size size)
+        public Entity(string uuid, TransparentPicBox renderer, Point position, Size size, string type)
         {
             UUID = uuid;
             Renderer = renderer;
             Position = position;
             Size = size;
+            Type = type;
         }
     }
 }

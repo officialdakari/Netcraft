@@ -147,6 +147,7 @@ namespace NCore
         internal int enableAuth = -1;
         internal int enableConsole = 0;
         internal int whitelist = 0;
+        internal int autosave = 0;
         public const int WORLDGEN_CAVE_MIN_HEIGHT = 8;
         public const int WORLDGEN_CAVE_MAX_HEIGHT = 12;
         public Lang lang;
@@ -172,6 +173,7 @@ namespace NCore
             enableAuth = Conversions.ToInteger(Config.GetValue("enable-auth", cfg, "0"));
             enableConsole = Conversions.ToInteger(Config.GetValue("enable-csharp-script-console", nccfg, "0"));
             whitelist = Conversions.ToInteger(Config.GetValue("enable-whitelist", cfg, "0"));
+            autosave = Conversions.ToInteger(Config.GetValue("enable-autosave", cfg, "0"));
             lang = Lang.FromFile($"./lang/{Config.GetValue("def-lang", cfg, "english")}.txt");
             permissions = JsonConvert.DeserializeObject<Player.Permissions>(File.ReadAllText("./permissions.json", Encoding.UTF8));
             groups = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(File.ReadAllText("./groups.json", Encoding.UTF8));
@@ -182,6 +184,7 @@ namespace NCore
             if (isIllegalValue(allowQuery, 0, 1)) CrashReport(new Exception("Illegal property value"));
             if (isIllegalValue(commandsConsoleOnly, 0, 1)) CrashReport(new Exception("Illegal property value"));
             if (isIllegalValue(enableAuth, 0, 1)) CrashReport(new Exception("Illegal property value"));
+            if (isIllegalValue(autosave, 0, 1)) CrashReport(new Exception("Illegal property value"));
 
         }
 
@@ -272,6 +275,7 @@ namespace NCore
 
         public void LoadCommands()
         {
+            Log("Loading commands...");
             Netcraft.AddCommand(new Commandhelp());
             Netcraft.AddCommand(new Commandban());
             Netcraft.AddCommand(new Commandunban());
@@ -295,6 +299,8 @@ namespace NCore
             Netcraft.AddCommand(new Commands.Commandgamerule());
             Netcraft.AddCommand(new Commands.Commandtime());
             Netcraft.AddCommand(new Commands.Commandpermissions());
+            Log("Default commands loaded!");
+            Log($"{Netcraft.GetCommands().Count.ToString()} total commands");
         }
 
         private void eventhandler_a(string m)
@@ -308,12 +314,24 @@ namespace NCore
         internal const string NCORE_VERSION = "0.8";
         int hungerDecreaseDelay = 200;
         public DateTime LastTick { get; private set; }
+        DateTime lastSave;
 
         private async void ThreadLoop()
         {
             while (true)
             {
                 Thread.Sleep(100);
+                //if(lastSave == null)
+                //{
+                //    lastSave = DateTime.Now.AddSeconds(15);
+                //}
+                //if(lastSave < DateTime.Now)
+                //{
+                //    Log("World is autosaving");
+                //    SaveWorld();
+                //    Log("World was autosaved");
+                //    lastSave = DateTime.Now.AddSeconds(15);
+                //}
                 logAppendDelay -= 1;
                 hungerDecreaseDelay -= 1;
                 if(hungerDecreaseDelay == 0)
@@ -1050,6 +1068,7 @@ namespace NCore
         const string RCON_PASSWORD = "12344321";
         private Hashtable playerPasswords = new Hashtable();
         private StringCollection loggedIn = new StringCollection();
+        const bool ENABLE_STATISTICS_EXPERIMENTAL = true;
 
         public async void MessageReceived(string str, NetcraftPlayer n)
         {
@@ -1711,6 +1730,11 @@ namespace NCore
                     n.OpenChest = null;
                 }
 
+                if(a[0] == "hamburger")
+                {
+                    await n.UpdateStats();
+                }
+
                 if (a[0] == "rightclick")
                 {
                     try
@@ -1822,6 +1846,11 @@ namespace NCore
                                         else { return; }
                                     }
                                     await Send("removeblock?" + a[1] + "?" + a[2]);
+                                    //Он сделал что хотел
+                                    if(ENABLE_STATISTICS_EXPERIMENTAL)
+                                    {
+                                        n.IncrementStatInt("Blocks Broken");
+                                    }
                                     if (b.Type == EnumBlockType.STONE)
                                     {
                                         if (n.SelectedItem.Type == Material.WOODEN_PICKAXE)
@@ -2108,8 +2137,12 @@ namespace NCore
                             n.PlayerInventory.Items.Remove(n.SelectedItem);
                             n.SelectedItem = null;
                         }
-
-                        n.UpdateInventory();
+                        //Он сделал что хотел
+                        if (ENABLE_STATISTICS_EXPERIMENTAL)
+                        {
+                            n.IncrementStatInt("Blocks Placed");
+                        }
+                        await n.UpdateInventory();
                     }
 
                     if (a[0] == "block_place_bg")
@@ -2194,7 +2227,10 @@ namespace NCore
                             n.PlayerInventory.Items.Remove(n.SelectedItem);
                             n.SelectedItem = null;
                         }
-
+                        if (ENABLE_STATISTICS_EXPERIMENTAL)
+                        {
+                            n.IncrementStatInt("Blocks Placed On Background");
+                        }
                         await n.UpdateInventory();
                     }
                 }
@@ -2455,6 +2491,7 @@ namespace NCore
             foreach (var c in players)
                 handleDisconnection(c);
         }
+
         public void ForceCrash()
         {
             throw new NullReferenceException();

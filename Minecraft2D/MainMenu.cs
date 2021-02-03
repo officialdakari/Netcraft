@@ -249,7 +249,7 @@ namespace Minecraft2D
                 //};
                 presence.State = lang.get("rpc.menu");
                 var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party()).WithTimestamps(new DiscordRPC.Timestamps());
-                pr.Assets.LargeImageKey = "snowylogo";
+                pr.Assets.LargeImageKey = "netcraft";
                 pr.Assets.LargeImageText = "discord.gg/BuKCBP8";
                 pr.Details = "Netcraft " + Ver;
                 pr.Timestamps.Start = DateTime.UtcNow;

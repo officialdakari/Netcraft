@@ -54,7 +54,7 @@ namespace NCore
             }
             p.OnUnload();
             Plugins.Remove(p);
-            NCore.GetNCore().Log($"Плагин выгружен: {p.Name}");
+            NCore.GetNCore().Log($"Plugin unloaded: {p.Name}");
         }
     }
 }

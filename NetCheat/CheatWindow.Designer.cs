@@ -463,7 +463,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "CheatWindow";
-            this.Text = "Cheats";
+            this.Text = "TEST ONLY";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CheatWindow_FormClosing);
             this.Load += new System.EventHandler(this.CheatWindow_Load);
             this.groupBox1.ResumeLayout(false);

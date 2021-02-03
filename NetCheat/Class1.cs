@@ -17,9 +17,9 @@ namespace NetCheat
             plugin = this;
             window = new CheatWindow();
             window.Show();
-            window.Text = "NetCheat 1.0";
+            window.Text = "NetCheat 1.0 !!! TEST ONLY";
             window.TopMost = false;
-            main.WriteChat("Netcheat - сделал игрок_999_про");
+            main.WriteChat("Netcheat !!! ТОЛЬКО ДЛЯ ТЕСТИРОВАНИЯ");
             return this;
         }
     }
