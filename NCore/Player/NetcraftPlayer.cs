@@ -196,7 +196,7 @@ namespace NCore
 
         public async Task SendLog(string t)
         {
-            await Send("evalresult?" + t);
+            await Send("evalresult?" + t.Replace("\n", "\r").Replace("\r\r", "\r"));
         }
 
         public async Task Damage(int d, NetcraftPlayer damager = null)
@@ -688,11 +688,22 @@ namespace NCore
 
         public void IncrementStatInt(string a)
         {
+            if (!Stats.ContainsKey(a))
+            {
+                Stats.Add(a, "0");
+                return;
+            }
             Stats[a] = (int.Parse(Stats[a]) + 1).ToString();
         }
 
         public void DecrementStatInt(string a)
         {
+            if (!Stats.ContainsKey(a))
+            {
+                Stats.Add(a, "0");
+                return;
+            }
+            if (int.Parse(Stats[a]) < 1) return;
             Stats[a] = (int.Parse(Stats[a]) - 1).ToString();
         }
 

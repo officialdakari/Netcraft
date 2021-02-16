@@ -100,6 +100,12 @@
     <Compile Include="ChestWindow.Designer.cs">
       <DependentUpon>ChestWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="WinFormsConsole.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinFormsConsole.Designer.cs">
+      <DependentUpon>WinFormsConsole.cs</DependentUpon>
+    </Compile>
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="FancyForm.cs">
       <SubType>Form</SubType>
@@ -131,12 +137,6 @@
     <Compile Include="Properties\MyNamespace.Static.2.Designer.cs" />
     <Compile Include="Properties\MyNamespace.Static.3.Designer.cs" />
     <Compile Include="ApplicationEvents.cs" />
-    <Compile Include="Chat.Designer.cs">
-      <DependentUpon>Chat.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Chat.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Entity\EntityPlayer.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -206,13 +206,16 @@
     <Compile Include="SplashScreen.Designer.cs">
       <DependentUpon>SplashScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="SplashScreen1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SplashScreen1.Designer.cs">
+      <DependentUpon>SplashScreen1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stats.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Chat.resx">
-      <DependentUpon>Chat.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ChestWindow.resx">
       <DependentUpon>ChestWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -255,6 +258,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SplashScreen.resx">
       <DependentUpon>SplashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SplashScreen1.resx">
+      <DependentUpon>SplashScreen1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinFormsConsole.resx">
+      <DependentUpon>WinFormsConsole.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -9,29 +9,6 @@ namespace Minecraft2D.My
         internal partial class MyForms
         {
             [EditorBrowsable(EditorBrowsableState.Never)]
-            public Chat m_Chat;
-
-            public Chat Chat
-            {
-                [DebuggerHidden]
-                get
-                {
-                    m_Chat = Create__Instance__(m_Chat);
-                    return m_Chat;
-                }
-
-                [DebuggerHidden]
-                set
-                {
-                    if (ReferenceEquals(value, m_Chat))
-                        return;
-                    if (value is object)
-                        throw new ArgumentException("Property can only be set to Nothing");
-                    Dispose__Instance__(ref m_Chat);
-                }
-            }
-
-            [EditorBrowsable(EditorBrowsableState.Never)]
             public Form1 m_Form1;
 
             public Form1 Form1

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*  
+ *  PROJECT: NETCRAFT
+ *  AUTHOR: DarkCoder15#5102
+ *  GITHUB: https://github.com/GladCypress3030/Netcraft
+ *  VERSION: 0.1.7A
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -305,6 +312,11 @@ namespace Minecraft2D
         private async void Form1_Load(object sender, EventArgs e)
         {
             instance = this;
+            NConsole.instance = new NConsole();
+            if(Debugger.IsAttached || (Interaction.Command() == "dbg"))
+            {
+                NConsole.instance.Show();
+            }
             invClose1.BringToFront();
             itemNames.Add("WOODEN_PICKAXE", "Wooden Pickaxe");
             itemNames.Add("WOODEN_AXE", "Wooden Axe");
@@ -373,6 +385,9 @@ namespace Minecraft2D
             await SendPacket("setname", pName, Utils.LANGUAGE, MainMenu.GetInstance().textBox3.Text);
             log($"Sending 'SETUP' packet with arguments ['{pName}', '{Utils.LANGUAGE}', '{MainMenu.GetInstance().textBox3.Text}']");
             Username = pName;
+            NConsole.instance.winFormsConsole1.PromptString = pName + "@" + ip + " > ";
+            NConsole.instance.Text = pName + " - Netcraft Developer Shell";
+            NConsole.instance.winFormsConsole1.reload();
             Thread.Sleep(900);
             SendSinglePacket("world");
             WriteChat("Client message: Вы вошли на сервер");
@@ -1581,7 +1596,7 @@ namespace Minecraft2D
                 }
                 if (type == "Cow")
                 {
-                    pic.SetBounds(0, 0, 32, 20);
+                    pic.Size = new Size(64, 40);
                     pic.BorderStyle = BorderStyle.FixedSingle;
                     pic.Image = My.Resources.Resources.cow;
                     pic.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -1757,6 +1772,7 @@ namespace Minecraft2D
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                    log(ex.ToString());
                 }
             }
         }
@@ -1818,6 +1834,7 @@ namespace Minecraft2D
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                    log(ex.ToString());
                 }
             }
         }
@@ -1921,6 +1938,7 @@ namespace Minecraft2D
                         catch (Exception ex)
                         {
                             Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                            log(ex.ToString());
                         }
 
                         if (collision)
@@ -1962,6 +1980,7 @@ namespace Minecraft2D
                         catch (Exception ex)
                         {
                             Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                            log(ex.ToString());
                         }
 
                         if (collision)
@@ -2010,6 +2029,7 @@ namespace Minecraft2D
                         catch (Exception ex)
                         {
                             Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                            log(ex.ToString());
                         }
 
                         if (grounded)
@@ -2025,6 +2045,7 @@ namespace Minecraft2D
                 } catch(Exception ex)
                 {
                     Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                    log(ex.ToString());
                 }
             }
         }
@@ -2081,18 +2102,93 @@ namespace Minecraft2D
                 using (Graphics G = Graphics.FromImage(bmp))
                 {
                     G.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-                    G.CopyFromScreen(this.PointToScreen(new Point(0, 0)), new Point(0, 0), this.ClientRectangle.Size);
+                    // Rework screenshot system
+                    
+                    // Draw background
+                    G.FillRectangle(new SolidBrush(BackColor), new Rectangle(Point.Empty, bmp.Size));
+
+                    // Draw blocks
+                    foreach(var b in blocks)
+                    {
+                        try
+                        {
+                            G.DrawImage(b.BackgroundImage, b.Bounds);
+                        } catch(Exception)
+                        {
+
+                        }
+                    }
+
+                    // Draw local player
+                    try
+                    {
+                        G.DrawImage(localPlayer.Image, localPlayer.Bounds);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+
+                    // Draw local player's item in hand
+                    try
+                    {
+                        G.DrawImage(R1.Image, R1.Bounds);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+
+                    // Draw other players
+                    foreach (var p in players)
+                    {
+                        try
+                        {
+                            G.DrawImage(p.Render.Image, p.Render.Bounds);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+
+                    // Draw other players' items in hand
+                    foreach (var p in players)
+                    {
+                        try
+                        {
+                            G.DrawImage(p.R1.Image, p.R1.Bounds);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+
+                    // Draw entities
+                    foreach(var id in entities.Keys)
+                    {
+                        try
+                        {
+                            G.DrawImage(entities[id].Renderer.Image, entities[id].Renderer.Bounds);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+
                     //G.DrawString("Netcraft " + MainMenu.GetInstance().Ver, new Font("Courier New", 12, FontStyle.Regular), new SolidBrush(Color.White), new Point(0, 0));
                 }
                 if (!Directory.Exists("./screenshots")) Directory.CreateDirectory("./screenshots");
                 string path = $"./screenshots/{DateTime.Now.ToString().Replace(":", "-").Replace(".", "-")}.png";
                 bmp.Save(path, ImageFormat.Png);
                 log($"Screenshot saved at '{path}'");
-                if (FancyMessage.Show(lang.get("question.screenshot.open"), "", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
-                {
-                    Process.Start(path);
-                }
-                //Clipboard.SetImage((Image)bmp);
+                //if (FancyMessage.Show(lang.get("question.screenshot.open"), "", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
+                //{
+                //    Process.Start(path);
+                //}
+                Clipboard.SetImage((Image)bmp);
                 return;
             }
 
@@ -2130,11 +2226,13 @@ namespace Minecraft2D
                 {
                     localPlayer.Left += 2;
                     UpdatePlayerPosition();
+                    lastWalk = 1;
                     return;
                 }
                 else if (e.KeyCode == Keys.A)
                 {
                     localPlayer.Left -= 2;
+                    lastWalk = 2;
                     UpdatePlayerPosition();
                     return;
                 }
@@ -2272,6 +2370,7 @@ namespace Minecraft2D
                 } catch(Exception ex)
                 {
                     Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                    log(ex.ToString());
                 }
             }
 
@@ -2306,6 +2405,7 @@ namespace Minecraft2D
                     } catch(ArgumentOutOfRangeException)
                     {
                         //выходим из цикла
+                        //хорошо это можно было без exceptionов
                     }
                     //foreach (var b in blocks)
                     //{
@@ -2322,6 +2422,7 @@ namespace Minecraft2D
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                log(ex.ToString());
             }
         }
 
@@ -2482,6 +2583,7 @@ namespace Minecraft2D
             {
                 R1.Hide();
                 Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
+                log(ex.ToString());
                 log($"Exception thrown:\r\n" + ex.ToString());
             }
         }
@@ -2517,23 +2619,31 @@ namespace Minecraft2D
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!connected)
+            //if (!connected)
+            //{
+            //    MainMenu.GetInstance().Show();
+            //    if(toNotice != null)
+            //    {
+            //        MainMenu.GetInstance().notice(toNotice, toNoticeType);
+            //    }
+            //    My.MyProject.Forms.Chat.Close();
+            //    MainMenu.GetInstance().presence.Details = "";
+            //    MainMenu.GetInstance().presence.State = lang.get("rpc.menu");
+            //    MainMenu.GetInstance().dRPC.SetPresence(MainMenu.GetInstance().presence);
+            //    log($"Updating presence state to '', details to '{lang.get("rpc.menu")}'");
+            //    leave();
+            //    return;
+            //}
+            if(FancyMessage.Show(lang.get("question.exit"), "", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
             {
-                MainMenu.GetInstance().Show();
-                if(toNotice != null)
-                {
-                    MainMenu.GetInstance().notice(toNotice, toNoticeType);
-                }
-                My.MyProject.Forms.Chat.Close();
-                MainMenu.GetInstance().presence.Details = "";
-                MainMenu.GetInstance().presence.State = lang.get("rpc.menu");
-                MainMenu.GetInstance().dRPC.SetPresence(MainMenu.GetInstance().presence);
-                log($"Updating presence state to '', details to '{lang.get("rpc.menu")}'");
+                StopServer();
                 leave();
-                return;
+                MainMenu.Restart();
+
+            } else
+            {
+                e.Cancel = true;
             }
-            StopServer();
-            leave();
         }
 
         public void StopServer()
@@ -2560,7 +2670,6 @@ namespace Minecraft2D
             Hide();
             
             MainMenu.instance.Show();
-            My.MyProject.Forms.Chat.Close();
             if(client != null && client.Connected) Disconnect();
         }
 
@@ -2836,8 +2945,6 @@ namespace Minecraft2D
                 players.Add(p.Name);
                 return true;
             });
-            My.MyProject.Forms.Chat.listBox1.Items.Clear();
-            My.MyProject.Forms.Chat.listBox1.Items.AddRange(players.ToArray());
 
             timer2.Stop();
             timer2.Start();
@@ -2858,9 +2965,15 @@ namespace Minecraft2D
             {
                 try
                 {
-                    NConsole.instance.richTextBox1.AppendText($"[{DateTime.Now.ToString()}]: {res}\r\n");
-                    NConsole.instance.richTextBox1.Select(NConsole.instance.richTextBox1.TextLength, 0);
-                    NConsole.instance.richTextBox1.ScrollToCaret();
+                    res = res.Replace("\r", "\n");
+                    res = res.Replace("\n\n", "\n");
+                    foreach(string a in res.Split('\n'))
+                    {
+                       NConsole.instance.winFormsConsole1.WriteLine($"[{DateTime.Now.ToShortTimeString()}]: {a}");
+                    }
+                    //NConsole.instance.richTextBox1.AppendText($"[{DateTime.Now.ToString()}]: {res}\r\n");
+                    //NConsole.instance.richTextBox1.Select(NConsole.instance.richTextBox1.TextLength, 0);
+                    //NConsole.instance.richTextBox1.ScrollToCaret();
                 } catch(Exception)
                 {
 
@@ -2871,7 +2984,7 @@ namespace Minecraft2D
         NConsole nConsole = null;
         private void debuginfo_Click(object sender, EventArgs e)
         {
-            if (nConsole == null) nConsole = new NConsole();
+            if (nConsole == null) nConsole = NConsole.instance;
             nConsole.Show();
             debuginfo.Hide();
             //panel1.Show();
@@ -2924,12 +3037,14 @@ namespace Minecraft2D
                         textBox1.Clear();
                         return;
                     }
-                    if(text == "g")
+                    if(text == ".stats")
                     {
+                        string st = "";
                         foreach(string k in Stats.Keys)
                         {
-                            log(k + " = " + Stats[k]);
+                            st += k + " = " + Stats[k] + "\n";
                         }
+                        FancyMessage.Show(st.TrimEnd('\n'), "Player stats", FancyMessage.Icon.Info, FancyMessage.Buttons.OK);
                         textBox1.Clear();
                         return;
                     }
@@ -2991,6 +3106,11 @@ namespace Minecraft2D
         {
             timer1.Interval = 5;
             await Tick();
+        }
+
+        private void richTextBox1_DoubleClick(object sender, EventArgs e)
+        {
+
         }
         //private void Form1_MouseDown(object sender, Global.System.Windows.Forms.MouseEventArgs e)
         //{

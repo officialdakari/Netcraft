@@ -1,20 +1,21 @@
 ﻿
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace NCore
 {
     public abstract class Plugin
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Version { get; set; }
-        public string[] Authors { get; set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public string Version { get; private set; }
+        public string[] Authors { get; private set; }
         public List<Thread> Threads;
 
         internal netcraft.server.api.PluginLogger logger;
 
-        public System.Reflection.Assembly Assembly { get; set; }
+        public System.Reflection.Assembly Assembly { get; internal set; }
 
         public abstract Plugin Create();
 

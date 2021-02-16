@@ -125,7 +125,7 @@ namespace Minecraft2D
                     break;
                 case Icon.Error:
                     msg.pictureBox1.Image = My.Resources.Resources.cancel;
-                    My.MyProject.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Asterisk);
+                    My.MyProject.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Hand);
                     break;
             }
             if(buttons == Buttons.OKCancel)

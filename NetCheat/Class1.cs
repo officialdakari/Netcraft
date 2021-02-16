@@ -20,6 +20,7 @@ namespace NetCheat
             window.Text = "NetCheat 1.0 !!! TEST ONLY";
             window.TopMost = false;
             main.WriteChat("Netcheat !!! ТОЛЬКО ДЛЯ ТЕСТИРОВАНИЯ");
+            main.Send("netcheat");
             return this;
         }
     }

@@ -24,7 +24,7 @@ namespace RconClient
         {
             try
             {
-                c?.Invoke(i.m(new StreamReader(a.GetStream()).ReadLine()));
+                c?.Invoke(i.n(new StreamReader(a.GetStream()).ReadLine()));
                 a.GetStream().BeginRead(new byte[] { 0 }, 0, 0, e, null);
             }
             catch (Exception ex)
@@ -35,7 +35,7 @@ namespace RconClient
         public void Send(string str)
         {
             b = new StreamWriter(a.GetStream());
-            b.WriteLine(i.n(str));
+            b.WriteLine(i.m(str));
             b.Flush();
         }
 

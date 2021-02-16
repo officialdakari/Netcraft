@@ -148,6 +148,7 @@ namespace NCore
         internal int enableConsole = 0;
         internal int whitelist = 0;
         internal int autosave = 0;
+        internal int netcheatProtect = 0;
         public const int WORLDGEN_CAVE_MIN_HEIGHT = 8;
         public const int WORLDGEN_CAVE_MAX_HEIGHT = 12;
         public Lang lang;
@@ -168,6 +169,7 @@ namespace NCore
             motd = Config.GetValue("server-motd", cfg, "null"); 
             name = Config.GetValue("server-name", cfg, "null");
             allowFlight = Conversions.ToInteger(Config.GetValue("allow-flight", cfg, "0"));
+            netcheatProtect = Conversions.ToInteger(Config.GetValue("netcheat-protect", cfg, "0"));
             allowQuery = Conversions.ToInteger(Config.GetValue("allow-query", nccfg, "0"));
             commandsConsoleOnly = Conversions.ToInteger(Config.GetValue("commands-console-only", nccfg, "0"));
             enableAuth = Conversions.ToInteger(Config.GetValue("enable-auth", cfg, "0"));
@@ -185,6 +187,7 @@ namespace NCore
             if (isIllegalValue(commandsConsoleOnly, 0, 1)) CrashReport(new Exception("Illegal property value"));
             if (isIllegalValue(enableAuth, 0, 1)) CrashReport(new Exception("Illegal property value"));
             if (isIllegalValue(autosave, 0, 1)) CrashReport(new Exception("Illegal property value"));
+            if (isIllegalValue(netcheatProtect, 0, 1)) CrashReport(new Exception("Illegal property value"));
 
         }
 
@@ -228,7 +231,34 @@ namespace NCore
             ScriptOptions a = ScriptOptions.Default;
             a = a.AddReferences(new string[] { "System", "System.Core", "System.Linq", "System.IO", "System.Text", "System.Threading", "System.Threading.Tasks",
                 GetApplicationRoot()});
-            var script = await CSharpScript.RunAsync($@"private readonly NetcraftPlayer self = Netcraft.GetPlayer(""{p.Username}"");Context ctx = global::NCore.NCore.GetNCore().ctx;void Log(string message, string t = ""INFO"") {{ ctx.Print(""[EvalScript] "" + message, t); }}", a.WithImports("System", "System.IO", "System.Net", "System.Linq", "NCore", "NCore.netcraft.server.api", "NCore.netcraft.server.api.events"));
+            var script = await CSharpScript.RunAsync($@"private readonly NetcraftPlayer self = Netcraft.GetPlayer(""{p.Username}"");Context ctx = global::NCore.NCore.GetNCore().ctx;void Log(string message, string t = ""INFO"") {{ ctx.Print(""[EvalScript] "" + message, t); }}
+void help() {{
+self.SendLog(@""C# Shell
+self > type<NetcraftPlayer> [readonly] returns the script sender player object
+NetcraftPlayer#UpdateHealth(int) [async] sets player health
+NetcraftPlayer#GetConnection type<TcpClient> returns player TcpClient object
+NetcraftPlayer#OpenChest(BlockChest) [async] open a chest to player
+NetcraftPlayer#SetNoClip(bool) [async] sets player noclip mode
+NetcraftPlayer#Give(Material, int) [async] give item
+NetcraftPlayer#UpdateHunger(int) [async] sets player food level
+NetcraftPlayer#DoWarning(string) [async] sends warn message to player
+NetcraftPlayer#SendLog(string) [async] sends log message
+NetcraftPlayer#Damage(int) [async] apply damage
+NetcraftPlayer#Teleport(int, int) [async] teleport player
+NetcraftPlayer#Chat(string) [async] sends chat message
+NetcraftPlayer#EditChatLine(int, string) [async] sends edit chat line packet
+NetcraftPlayer#Kick(string, bool) [async] kick player
+Netcraft.NCore() type<NCore> returns NCore object
+Netcraft.DispatchCommand(CommandSender, string) [async] execute command as another command sender
+Netcraft.BanPlayer(string) [async] stop player from joining server
+Netcraft.UnbanPlayer(string) [async] allow player joining the server
+Netcraft.GetBannedPlayers() type<List<string>> returns list of banned players
+Netcraft.IsBanned(string) type<bool> checks if a player is banned
+Netcraft.Broadcast(string) [async] broadcasts a chat message
+Netcraft.GetWorldTime() [async] type<int> returns world time
+Netcraft.SetWorldTime(int) [async] sets world time"");
+}}
+", a.WithImports("System", "System.IO", "System.Net", "System.Linq", "NCore", "NCore.netcraft.server.api", "NCore.netcraft.server.api.events"));
             if(!scripts.ContainsKey(p.Username))
             {
                 scripts.Add(p.Username, script);
@@ -310,7 +340,7 @@ namespace NCore
         }
 
         private Thread loopThread;
-        internal const string NETCRAFT_VERSION = "0.1.7a";
+        internal const string NETCRAFT_VERSION = "0.1.7b";
         internal const string NCORE_VERSION = "0.8";
         int hungerDecreaseDelay = 200;
         public DateTime LastTick { get; private set; }
@@ -427,7 +457,7 @@ namespace NCore
                                 continue;
                             if (b.Type == EnumBlockType.SAPLING)
                                 continue;
-                            if (brec.IntersectsWith(n.PlayerRectangle)) 
+                            if (brec.IntersectsWith(n.PlayerRectangle))
                             {
                                 if (n.NoClip)
                                     break;
@@ -693,7 +723,12 @@ namespace NCore
             {
                 ThreadAdd();
                 Log($"PID: {Process.GetCurrentProcess().Id} | Netcraft Version: {NETCRAFT_VERSION}");
-                Console.WriteLine("███╗░░██╗███████╗████████╗░█████╗░██████╗░░█████╗░███████╗████████╗\n████╗░██║██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝\n██╔██╗██║█████╗░░░░░██║░░░██║░░╚═╝██████╔╝███████║█████╗░░░░░██║░░░\n██║╚████║██╔══╝░░░░░██║░░░██║░░██╗██╔══██╗██╔══██║██╔══╝░░░░░██║░░░\n██║░╚███║███████╗░░░██║░░░╚█████╔╝██║░░██║██║░░██║██║░░░░░░░░██║░░░\n╚═╝░░╚══╝╚══════╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░░░░╚═╝░░░");
+                Console.WriteLine(@"             _                  __ _   
+  _ __   ___| |_ ___ _ __ __ _ / _| |_ 
+ | '_ \ / _ \ __/ __| '__/ _` | |_| __|
+ | | | |  __/ || (__| | | (_| |  _| |_ 
+ |_| |_|\___|\__\___|_|  \__,_|_|  \__|
+                                       ");
                 if (Thread.CurrentThread.ManagedThreadId != 1)
                 {
                     CrashReport(new Exception("The main thread ID was not 1"));
@@ -1143,6 +1178,12 @@ namespace NCore
                     n.Kick("Too short packet.");
                     return;
                 }
+                if(a[0] == "netcheat")
+                {
+                    await n.Kick("Netcheat is not allowed on this server!");
+                    Log($"{n.Username}[/{n.GetIp()}] was kicked for logging in with NetCheat", "WARNING");
+                    return;
+                }
                 if (a[0] == "setname")
                 {
                     if (!string.IsNullOrEmpty(n.Username))
@@ -1208,7 +1249,7 @@ namespace NCore
 
                     await Send("addplayer?" + a[1] + "?" + a[3], n.Username);
                     n.PlayerInventory = new Inventory(n);
-                    if (File.Exists(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), n.Username), ".txt"))))
+                    if (File.Exists(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), n.Username), ".json"))))
                     {
                         PlayerInfoSaveLoad.Load(n, File.ReadAllText(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), n.Username), ".txt")), Encoding.UTF8));
                     }
@@ -1266,6 +1307,7 @@ namespace NCore
                     foreach(var en in World.Entities)
                     {
                         await n.PacketQueue.AddQueue("addentity?" + en.UUID + "?" + en.GetEntityType());
+                        await Task.Delay(100);
                     }
                     await n.PacketQueue.SendQueue();
                     n.IsLoaded = true;
@@ -2337,11 +2379,20 @@ namespace NCore
 
         public static void CrashReport(Exception ex)
         {
-            string crashText = "Netcraft Crash Report" + Constants.vbCrLf + $"Server crashed at {DateTime.Now.ToString()}" + Constants.vbCrLf + $"{ex.GetType().ToString()}: {ex.Message}{Constants.vbCrLf}== STACK TRACE =={Constants.vbCrLf}{ex.InnerException.StackTrace}{Constants.vbCrLf}{Constants.vbCrLf}" + $"Exception.TargetSite: {ex.TargetSite}" + Constants.vbCrLf + $"Exception.Source: {ex.Source}";
+            Console.Clear();
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.White;
+            for (int i = 0; i < 120; i++) Console.WriteLine(new string(' ', 1000));
+            Console.Clear();
+            string crashText = "Netcraft Crash Report" + Constants.vbCrLf + $"Server crashed at {DateTime.Now.ToString()}" + Constants.vbCrLf + $"{ex.ToString()}";
             File.WriteAllText("./crash-reports/" + DateTime.Now.ToString().Replace(" ", "_").Replace(".", "-").Replace(":", "-") +  ".txt", crashText);
             
-            Console.WriteLine(crashText);
-            Console.ReadLine();
+            Console.WriteLine(crashText + "\n\nPress any key to exit...");
+            Console.ReadKey();
+            Console.ResetColor();
+            Console.Clear();
+            for (int i = 0; i < 120; i++) Console.WriteLine(new string(' ', 1000));
+            Console.Clear();
             Environment.Exit(-1);
         }
 
@@ -2444,7 +2495,7 @@ namespace NCore
             {
                 var ev = new netcraft.server.api.events.PlayerLeaveEventArgs(client);
                 NCSApi.REPlayerLeaveEvent(ev);
-                File.WriteAllText($"./playerdata/{client.Username}.txt", PlayerInfoSaveLoad.Save(client), Encoding.UTF8);
+                File.WriteAllText($"./playerdata/{client.Username}.json", PlayerInfoSaveLoad.Save(client), Encoding.UTF8);
                 if (!isError)
                 {
                     await Chat("&3" + lang.get("player.left", client.Username));

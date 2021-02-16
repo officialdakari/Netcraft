@@ -34,8 +34,6 @@ namespace Minecraft2D.My
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyApplication.threadException);
             MyApplication.SetErrorMode(SetErrorMode(ErrorModes.SYSTEM_DEFAULT) | ErrorModes.SEM_NOGPFAULTERRORBOX | ErrorModes.SEM_FAILCRITICALERRORS | ErrorModes.SEM_NOOPENFILEERRORBOX);
             Application.Run(new MainMenu());
-            Thread consoleThread = new Thread(Form1.consoleThread);
-            consoleThread.Start();
             //MyProject.Application.Run(Args);
         }
         /* TODO ERROR: Skipped EndIfDirectiveTrivia */

@@ -128,7 +128,7 @@ namespace Minecraft2D
             this._OK.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
             this._OK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._OK.ForeColor = System.Drawing.Color.White;
-            this._OK.Location = new System.Drawing.Point(207, 73);
+            this._OK.Location = new System.Drawing.Point(207, 70);
             this._OK.Name = "_OK";
             this._OK.Size = new System.Drawing.Size(94, 23);
             this._OK.TabIndex = 4;
@@ -148,7 +148,7 @@ namespace Minecraft2D
             this._Cancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
             this._Cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._Cancel.ForeColor = System.Drawing.Color.White;
-            this._Cancel.Location = new System.Drawing.Point(310, 73);
+            this._Cancel.Location = new System.Drawing.Point(310, 70);
             this._Cancel.Name = "_Cancel";
             this._Cancel.Size = new System.Drawing.Size(94, 23);
             this._Cancel.TabIndex = 5;
@@ -165,7 +165,7 @@ namespace Minecraft2D
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Minecraft2D.My.Resources.Resources.menubackground;
             this.CancelButton = this._Cancel;
-            this.ClientSize = new System.Drawing.Size(411, 104);
+            this.ClientSize = new System.Drawing.Size(411, 101);
             this.Controls.Add(this._Cancel);
             this.Controls.Add(this._OK);
             this.Controls.Add(this.UsernameTextBox);

@@ -46,6 +46,18 @@ namespace NCore
             return default;
         }
 
+        public static Plugin GetPlugin(string name)
+        {
+            foreach(var p in Plugins)
+            {
+                if(p.Name.ToLower() == name.ToLower())
+                {
+                    return p;
+                }
+            }
+            return null;
+        }
+
         public static void Unload(Plugin p)
         {
             foreach(var i in p.Threads)

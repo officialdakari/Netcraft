@@ -53,6 +53,14 @@ namespace Minecraft2D
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
+            try
+            {
+                if (sp.Visible || (Form1.instance != null && Form1.instance.Visible)) Hide();
+                
+            } catch(Exception)
+            {
+
+            }
             if (labelCurDelay == 0)
             {
                 labelWithCur = !labelWithCur;
@@ -126,7 +134,7 @@ namespace Minecraft2D
             Hide();
         }
 
-        public readonly string Ver = "0.1.7a";
+        public readonly string Ver = "0.1.7b";
         internal static MainMenu instance;
         public static MainMenu GetInstance()
         {
@@ -196,15 +204,20 @@ namespace Minecraft2D
 
         string cfg;
         Client _client;
+        SplashScreen1 sp = new SplashScreen1();
+
         private void MainMenu_Load(object sender, EventArgs e)
         {
+            move.LearnToMove(block);
+            //sp.Show();
+            //Hide();
             instance = this;
             string[] p = Process.GetCurrentProcess().MainModule.FileName.Split(Path.DirectorySeparatorChar);
             p[p.Length - 1] = "";
             Directory.SetCurrentDirectory(string.Join(Path.DirectorySeparatorChar.ToString(), p));
             button1 = _Button1;
             Button1 = _Button1; 
-            comment("ты чё декомпилировал игру быстро удаляй декомпилированный код иначе бан");
+            //Я это добавил когда игра была с закрытым исходным кодом --- comment("ты чё декомпилировал игру быстро удаляй декомпилированный код иначе бан");
             Form1.instance = My.MyProject.Forms.Form1;
             Application.ThreadException += My.MyApplication.threadException;
             AppDomain.CurrentDomain.UnhandledException += My.MyApplication.threadException;
@@ -222,7 +235,7 @@ namespace Minecraft2D
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             DoLang();
             SetTitle();
-            dRPC = new DiscordRPC.DiscordRpcClient("763782798838071346");
+            dRPC = new DiscordRPC.DiscordRpcClient("809683612348841994");
             try
             {
                 dRPC.RegisterUriScheme(executable: Application.ExecutablePath);
@@ -455,15 +468,15 @@ namespace Minecraft2D
 
         private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(FancyMessage.Show(lang.get("text.question.confirm_exit"), "Netcraft", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
-            {
-                Environment.Exit(0);
-                dRPC.ClearPresence();
-                dRPC.Deinitialize();
-            } else
-            {
-                e.Cancel = true;
-            }
+            //if(FancyMessage.Show(lang.get("text.question.confirm_exit"), "Netcraft", FancyMessage.Icon.Warning, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK)
+            //{
+            //    Environment.Exit(0);
+            //    dRPC.ClearPresence();
+            //    dRPC.Deinitialize();
+            //} else
+            //{
+            //    e.Cancel = true;
+            //}
         }
 
         private void button2_Click_2(object sender, EventArgs e)
@@ -558,6 +571,35 @@ namespace Minecraft2D
         private void notifyIcon1_MouseDoubleClick_1(object sender, MouseEventArgs e)
         {
             Environment.Exit(0);
+        }
+
+        private void timer1_Tick_1(object sender, EventArgs e)
+        {
+            bool c = false;
+            Controls.Cast<Control>().ToArray().Any(x =>
+            {
+                if (x.Name == block.Name) return false;
+                if (!x.Enabled) return false;
+                if (!x.Visible) return false;
+                if (x is PictureBox) return false;
+                if (x.Bounds.IntersectsWith(block.Bounds))
+                {
+                    c = true;
+                    return true;
+                }
+                return false;
+            });
+            if (!c) block.Top++;
+        }
+
+        private void PictureBox1_Click(object sender, EventArgs e)
+        {
+        }
+
+        public static void Restart()
+        {
+            //Process.Start(Application.ExecutablePath);
+            Process.GetCurrentProcess().Kill();
         }
     }
 
@@ -671,6 +713,59 @@ namespace Minecraft2D
         {
             client.Client.Close();
             client = null;
+        }
+    }
+
+    public abstract class move
+    {
+
+        static bool isPress = false;
+        static Point startPst;
+        /// <summary>
+        /// Функция выполняется при нажатии на перемещаемый контрол
+        /// </summary>
+        /// <param name="sender">контролл</param>
+        /// <param name="e">событие мышки</param>
+        private static void mDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) return;//проверка что нажата левая кнопка
+            isPress = true;
+            startPst = e.Location;
+        }
+        /// <summary>
+        /// Функция выполняется при отжатии перемещаемого контрола
+        /// </summary>
+        /// <param name="sender">контролл</param>
+        /// <param name="e">событие мышки</param>
+        private static void mUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) return;//проверка что нажата левая кнопка
+            isPress = false;
+        }
+        /// <summary>
+        /// Функция выполняется при перемещении контрола
+        /// </summary>
+        /// <param name="sender">контролл</param>
+        /// <param name="e">событие мышки</param>
+        private static void mMove(object sender, MouseEventArgs e)
+        {
+            if (isPress)
+            {
+                Control control = (Control)sender;
+                control.Top += e.Y - startPst.Y;
+                control.Left += e.X - startPst.X;
+            }
+        }
+        /// <summary>
+        /// обучает контролы передвигаться
+        /// </summary>
+        /// <param name="sender">контролл(это может быть кнопка, лейбл, календарик и.т.д)</param>
+        public static void LearnToMove(object sender)
+        {
+            Control control = (Control)sender;
+            control.MouseDown += new MouseEventHandler(mDown);
+            control.MouseUp += new MouseEventHandler(mUp);
+            control.MouseMove += new MouseEventHandler(mMove);
         }
     }
 }

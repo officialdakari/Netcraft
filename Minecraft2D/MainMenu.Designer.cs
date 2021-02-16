@@ -65,11 +65,14 @@ namespace Minecraft2D
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.block = new System.Windows.Forms.PictureBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.Panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.block)).BeginInit();
             this.SuspendLayout();
             // 
             // _Timer1
@@ -382,6 +385,7 @@ namespace Minecraft2D
             this.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PictureBox1.TabIndex = 14;
             this.PictureBox1.TabStop = false;
+            this.PictureBox1.Click += new System.EventHandler(this.PictureBox1_Click);
             this.PictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.PictureBox2_Paint);
             // 
             // notifyIcon1
@@ -415,6 +419,22 @@ namespace Minecraft2D
             this.label1.TabIndex = 19;
             this.label1.Text = "URL скина:";
             // 
+            // block
+            // 
+            this.block.Image = global::Minecraft2D.Properties.Resources.diamond_ore;
+            this.block.Location = new System.Drawing.Point(125, 241);
+            this.block.Name = "block";
+            this.block.Size = new System.Drawing.Size(32, 32);
+            this.block.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.block.TabIndex = 20;
+            this.block.TabStop = false;
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick_1);
+            // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -423,6 +443,7 @@ namespace Minecraft2D
             this.BackgroundImage = global::Minecraft2D.Properties.Resources.netcraft;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(800, 372);
+            this.Controls.Add(this.block);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.panel3);
@@ -454,6 +475,7 @@ namespace Minecraft2D
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.block)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -634,5 +656,7 @@ namespace Minecraft2D
         private NotifyIcon notifyIcon1;
         internal TextBox textBox3;
         internal Label label1;
+        private PictureBox block;
+        private Timer timer1;
     }
 }

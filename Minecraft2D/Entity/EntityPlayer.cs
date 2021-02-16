@@ -19,9 +19,9 @@ namespace Minecraft2D
         public TransparentPicBox R1 { get; set; }
         public int LastWalk { get; set; } = 0;
 
-        private PictureBox _Render;
+        private TransparentPicBox _Render;
 
-        private PictureBox Render
+        public TransparentPicBox Render
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
@@ -30,7 +30,7 @@ namespace Minecraft2D
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
-            set
+            internal set
             {
                 if (_Render != null)
                 {
@@ -45,7 +45,7 @@ namespace Minecraft2D
             }
         }
 
-        public EntityPlayer(string arg0, string arg1, Point arg2, PictureBox arg3)
+        public EntityPlayer(string arg0, string arg1, Point arg2, TransparentPicBox arg3)
         {
             Name = arg0;
             UUID = arg1;

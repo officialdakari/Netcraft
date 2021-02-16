@@ -8,7 +8,7 @@ namespace NCore.Entity
 {
     public class EntityCow : EntityBase
     {
-        public EntityCow() : base("Cow", new System.Drawing.Point(0, 0), null, new System.Drawing.Size(32, 20))
+        public EntityCow() : base("Cow", new System.Drawing.Point(0, 0), null, new System.Drawing.Size(64, 40))
         {
         }
 
@@ -20,7 +20,7 @@ namespace NCore.Entity
         public override void Tick()
         {
             base.Tick();
-            Move(new Point(Position.X + goDirection, Position.Y));
+            Move(new Point(Position.X + goDirection, Position.Y), true);
             if (Position.X < 1) goDirection = 1;
             if (Position.X >= 50) goDirection = -1; 
         }

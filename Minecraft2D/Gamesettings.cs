@@ -30,12 +30,10 @@ namespace Minecraft2D
         {
             GroupBox1.Visible = !GroupBox1.Visible;
         }
-
+        //
         private void Button3_Click(object sender, EventArgs e)
         {
-            Form1.GetInstance().Close();
-            My.MyProject.Forms.MainMenu.Show();
-            Hide();
+            MainMenu.Restart();
         }
 
         public new void Move()

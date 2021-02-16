@@ -539,16 +539,17 @@ namespace Minecraft2D
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            this.richTextBox1.DoubleClick += new System.EventHandler(this.richTextBox1_DoubleClick);
             // 
             // debuginfo
             // 
             this.debuginfo.AutoSize = true;
             this.debuginfo.BackColor = System.Drawing.Color.Transparent;
-            this.debuginfo.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.debuginfo.Font = new System.Drawing.Font("Video Terminal Screen", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.debuginfo.ForeColor = System.Drawing.Color.White;
             this.debuginfo.Location = new System.Drawing.Point(5, 51);
             this.debuginfo.Name = "debuginfo";
-            this.debuginfo.Size = new System.Drawing.Size(133, 68);
+            this.debuginfo.Size = new System.Drawing.Size(176, 64);
             this.debuginfo.TabIndex = 19;
             this.debuginfo.Text = "Netcraft {0}\r\nServer: {1}\r\nPlayer position: x, y\r\nOnline players: a";
             this.debuginfo.Visible = false;
