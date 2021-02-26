@@ -42,7 +42,7 @@ namespace Minecraft2D
         protected int direction = 1;
         protected Color[] colors = new[] { Color.Red, Color.Orange, Color.Goldenrod, Color.Gold, Color.Yellow, Color.GreenYellow, Color.LightGreen, Color.Green, Color.LightBlue, Color.Blue, Color.DarkBlue, Color.BlueViolet, Color.Violet };
 
-        protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "Happy new year!", "Press F1 for help!", "Netcraft Is In 2D", "By DarkCoder15 and TheNonameee", "Converted to C#", "Join our Discord!"};
+        protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "Happy new year!", "Press F1 for help!", "Netcraft Is In 2D", "By DarkCoder15 and TheNonameee", "Converted to C#", "Join our Discord!", "There aren't too many bugs here..." };
         protected string labelText;
         protected int presenceUpdateDelay = 20;
 
@@ -73,7 +73,7 @@ namespace Minecraft2D
             }
             
              
-            string t = "❯ " + Strings.Left(labelText, labelPos) + (labelWithCur ? "\u258C" : "");
+            string t = "[Netcraft:netcraft] " + Strings.Left(labelText, labelPos) + (labelWithCur ? "\u258C" : "");
             if (labelChangeDelay == 0)
             {
                 labelPos += labelDirection;
@@ -559,6 +559,31 @@ namespace Minecraft2D
         {
             Environment.Exit(0);
         }
+
+        private void Label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LabelPlayers_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Label2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class EasterEggFoundException : Exception
@@ -662,7 +687,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                Interaction.MsgBox("Не удалось Ping сервер!" + Constants.vbCrLf + Constants.vbCrLf + $"{ex.GetType().ToString()}: {ex.Message}");
+                Interaction.MsgBox("Не удалось установить соединение с сервером!" + Constants.vbCrLf + Constants.vbCrLf + $"{ex.GetType().ToString()}: {ex.Message}");
                 // Close()
             }
         }
