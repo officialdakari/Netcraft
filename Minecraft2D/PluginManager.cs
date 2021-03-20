@@ -12,9 +12,12 @@ namespace Minecraft2D
         {
             try
             {
+                Form1.instance.log($"Loading mod from: {path}");
                 var p = Assembly.LoadFrom(path);
                 Plugins.Add(p);
+                Form1.instance.log($"Calling load function");
                 ((PluginAbstract)GetObject(p, "Plugin")).OnLoad(My.MyProject.Forms.Form1);
+                Form1.instance.log($"Loaded: {path}");
                 return p;
             }
             catch (Exception ex)

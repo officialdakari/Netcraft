@@ -56,6 +56,7 @@ namespace Minecraft2D
             this.LabelName = new System.Windows.Forms.Label();
             this.Label6 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button3 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
@@ -131,8 +132,6 @@ namespace Minecraft2D
             this._Button3.BackColor = System.Drawing.Color.Red;
             this._Button3.FlatAppearance.BorderColor = System.Drawing.Color.Red;
             this._Button3.FlatAppearance.BorderSize = 3;
-            this._Button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Yellow;
-            this._Button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
             this._Button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._Button3.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this._Button3.ForeColor = System.Drawing.Color.White;
@@ -164,8 +163,6 @@ namespace Minecraft2D
             this._Button4.BackColor = System.Drawing.Color.SteelBlue;
             this._Button4.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
             this._Button4.FlatAppearance.BorderSize = 3;
-            this._Button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Yellow;
-            this._Button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
             this._Button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._Button4.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this._Button4.ForeColor = System.Drawing.Color.White;
@@ -292,6 +289,7 @@ namespace Minecraft2D
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Black;
+            this.panel2.Controls.Add(this.button3);
             this.panel2.Controls.Add(this.Label3);
             this.panel2.Controls.Add(this._Button3);
             this.panel2.Controls.Add(this._Button4);
@@ -302,6 +300,23 @@ namespace Minecraft2D
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(800, 73);
             this.panel2.TabIndex = 16;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.Green;
+            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.Green;
+            this.button3.FlatAppearance.BorderSize = 3;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button3.ForeColor = System.Drawing.Color.White;
+            this.button3.Location = new System.Drawing.Point(641, 3);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 66);
+            this.button3.TabIndex = 14;
+            this.button3.TabStop = false;
+            this.button3.Text = "Lone Chat";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // panel3
             // 
@@ -402,10 +417,10 @@ namespace Minecraft2D
             this.textBox3.ForeColor = System.Drawing.Color.White;
             this.textBox3.Location = new System.Drawing.Point(6, 276);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(337, 27);
+            this.textBox3.Size = new System.Drawing.Size(463, 27);
             this.textBox3.TabIndex = 18;
             this.textBox3.TabStop = false;
-            this.textBox3.Text = "http://netcraft.ddns.net/netcraft/sprite/1.png";
+            this.textBox3.Text = "http://mcblockmine.ddns.net/netcraft/sprite/1.png";
             // 
             // label1
             // 
@@ -422,7 +437,7 @@ namespace Minecraft2D
             // block
             // 
             this.block.Image = global::Minecraft2D.Properties.Resources.diamond_ore;
-            this.block.Location = new System.Drawing.Point(125, 241);
+            this.block.Location = new System.Drawing.Point(580, 267);
             this.block.Name = "block";
             this.block.Size = new System.Drawing.Size(32, 32);
             this.block.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -658,5 +673,6 @@ namespace Minecraft2D
         internal Label label1;
         private PictureBox block;
         private Timer timer1;
+        private Button button3;
     }
 }

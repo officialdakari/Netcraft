@@ -155,10 +155,11 @@ namespace Minecraft2D
         private void NConsole_Shown(object sender, EventArgs e)
         {
             Text = Form1.instance.Username + "@" + Form1.instance.ip;
-            winFormsConsole1.PromptString = Text + " > ";
+            winFormsConsole1.PromptString = Text + "> ";
             winFormsConsole1.ProcessCommand += ConsoleBox1_ProcessCommand;
             winFormsConsole1.Font = Font;
             winFormsConsole1.reload();
+            winFormsConsole1.WriteLine($"Netcraft ${MainMenu.GetInstance().Ver}");
         }
 
         //private void richTextBox2_KeyDown(object sender, KeyEventArgs e)

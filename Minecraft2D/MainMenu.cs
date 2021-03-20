@@ -378,17 +378,17 @@ namespace Minecraft2D
 
         public void StartSingleplayer()
         {
-            if(!File.Exists(@"C:\Program Files\dotnet\dotnet.exe") && !File.Exists(@"C:\Program Files (x86)\dotnet\dotnet.exe"))
-            {
-                if(FancyMessage.Show("You have not installed .NET Core. Do you wanted to open download website?", "Ошибка", FancyMessage.Icon.Error, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK) {
-                    Process.Start(@"https://dotnet.microsoft.com/download/dotnet-core/2.1");
-                }
-                return;
-            }
+            //if(!File.Exists(@"C:\Program Files\dotnet\dotnet.exe") && !File.Exists(@"C:\Program Files (x86)\dotnet\dotnet.exe"))
+            //{
+            //    if(FancyMessage.Show("You have not installed .NET Core. Do you wanted to open download website?", "Ошибка", FancyMessage.Icon.Error, FancyMessage.Buttons.OKCancel) == FancyMessage.Result.OK) {
+            //        Process.Start(@"https://dotnet.microsoft.com/download/dotnet-core/2.1");
+            //    }
+            //    return;
+            //}
             My.MyProject.Forms.Form1.IsSingleplayer = true;
             My.MyProject.Forms.Form1.ServerProcess = new Process();
             My.MyProject.Forms.Form1.ServerProcess.StartInfo.Arguments = @"/c run.cmd";
-            My.MyProject.Forms.Form1.ServerProcess.StartInfo.WorkingDirectory = @".\server\netcoreapp2.1";
+            My.MyProject.Forms.Form1.ServerProcess.StartInfo.WorkingDirectory = @".\server\";
             My.MyProject.Forms.Form1.ServerProcess.StartInfo.FileName = "cmd.exe";
             Form1.GetInstance().ServerProcess.StartInfo.StandardErrorEncoding = Encoding.Default;
             Form1.GetInstance().ServerProcess.StartInfo.StandardOutputEncoding = Encoding.Default;
@@ -600,6 +600,11 @@ namespace Minecraft2D
         {
             //Process.Start(Application.ExecutablePath);
             Process.GetCurrentProcess().Kill();
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            FancyMessage.Show("Name: netcraft\nPassword: netcraft\n\n/ch join netcraft netcraft", "Join Netcraft on Lone Chat!");
         }
     }
 

@@ -15,7 +15,7 @@
     <WarningsAsErrors />
     <Optimize>false</Optimize>
     <Prefer32Bit>false</Prefer32Bit>
-    <OutputPath>C:\Users\Proffi\Documents\Netcraft-another\Minecraft2D\bin\Debug\server\</OutputPath>
+    <OutputPath>E:\BACKUP160221\Documents\Netcraft-another\Minecraft2D\bin\Debug\server\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Entity\EntityPlayerNPC.cs" />

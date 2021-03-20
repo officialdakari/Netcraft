@@ -40,7 +40,7 @@
             // 
             this.pictureBox1.Image = global::Minecraft2D.Properties.Resources.bedrock;
             this.pictureBox1.Location = new System.Drawing.Point(13, 57);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(450, 41);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -55,6 +55,7 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Netcraft";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // timer1
             // 
@@ -80,7 +81,7 @@
             this.Font = new System.Drawing.Font("Arial", 11F);
             this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "SplashScreen1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.SplashScreen1_Load);

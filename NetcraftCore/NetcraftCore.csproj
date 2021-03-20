@@ -18,11 +18,11 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Minecraft2D\bin\Debug\server\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -50,9 +50,6 @@
       <HintPath>..\packages\Microsoft.CodeAnalysis.Scripting.Common.3.8.0\lib\netstandard2.0\Microsoft.CodeAnalysis.Scripting.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="NCore">
-      <HintPath>..\NCore\bin\Debug\netcoreapp2.1\NCore.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -65,6 +62,7 @@
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
     </Reference>
@@ -92,8 +90,60 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\Commandaliases.cs" />
+    <Compile Include="Commands\Commandban.cs" />
+    <Compile Include="Commands\Commandbroadcast.cs" />
+    <Compile Include="Commands\Commandeval.cs" />
+    <Compile Include="Commands\Commandgamerule.cs" />
+    <Compile Include="Commands\Commandgive.cs" />
+    <Compile Include="Commands\Commandhelp.cs" />
+    <Compile Include="Commands\Commanditems.cs" />
+    <Compile Include="Commands\Commandkick.cs" />
+    <Compile Include="Commands\Commandkill.cs" />
+    <Compile Include="Commands\Commandlist.cs" />
+    <Compile Include="Commands\Commandpermissions.cs" />
+    <Compile Include="Commands\Commandplugins.cs" />
+    <Compile Include="Commands\Commandrmitem.cs" />
+    <Compile Include="Commands\Commandsave.cs" />
+    <Compile Include="Commands\Commandstop.cs" />
+    <Compile Include="Commands\Commandsudo.cs" />
+    <Compile Include="Commands\Commandtell.cs" />
+    <Compile Include="Commands\Commandtime.cs" />
+    <Compile Include="Commands\Commandtoggleadmin.cs" />
+    <Compile Include="Commands\Commandtppos.cs" />
+    <Compile Include="Commands\Commandunban.cs" />
+    <Compile Include="Commands\Commandversion.cs" />
+    <Compile Include="Entity\EntityBase.cs" />
+    <Compile Include="Entity\EntityCow.cs" />
+    <Compile Include="Entity\EntityMetadata.cs" />
+    <Compile Include="Entity\EntityPlayerNPC.cs" />
+    <Compile Include="Entity\EntityTest.cs" />
+    <Compile Include="Exception\ThreadDeathException.cs" />
+    <Compile Include="Netcraft\Location.cs" />
+    <Compile Include="Player\Inventory.cs" />
+    <Compile Include="Player\ItemStack.cs" />
+    <Compile Include="Player\Material.cs" />
+    <Compile Include="Player\NetcraftPlayer.cs" />
+    <Compile Include="Player\Permissions.cs" />
+    <Compile Include="Player\PlayerSave.cs" />
+    <Compile Include="Player\SendQueue.cs" />
+    <Compile Include="Plugin\Events.cs" />
+    <Compile Include="Plugin\NCAPI.cs" />
+    <Compile Include="Plugin\Plugin.cs" />
+    <Compile Include="Plugin\PluginLoader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="World\Block.cs" />
+    <Compile Include="World\BlockChest.cs" />
+    <Compile Include="World\BlockMetadata.cs" />
+    <Compile Include="World\EnumBlockType.cs" />
+    <Compile Include="World\Gamerules.cs" />
+    <Compile Include="World\PlayerInfoSaveLoad.cs" />
+    <Compile Include="World\SaveLoad.cs" />
+    <Compile Include="World\Structure\TreeGenerator.cs" />
+    <Compile Include="World\WorldGenerator.cs" />
+    <Compile Include="World\WorldServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

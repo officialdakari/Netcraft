@@ -100,6 +100,7 @@
     <Compile Include="ChestWindow.Designer.cs">
       <DependentUpon>ChestWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="NCResources.cs" />
     <Compile Include="WinFormsConsole.cs">
       <SubType>UserControl</SubType>
     </Compile>

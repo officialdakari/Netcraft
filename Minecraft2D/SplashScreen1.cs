@@ -48,5 +48,10 @@ namespace Minecraft2D
         {
             My.MyProject.Computer.Audio.Play("./resources/splash.wav", Microsoft.VisualBasic.AudioPlayMode.Background);
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
