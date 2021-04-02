@@ -159,7 +159,6 @@ namespace Minecraft2D
             winFormsConsole1.ProcessCommand += ConsoleBox1_ProcessCommand;
             winFormsConsole1.Font = Font;
             winFormsConsole1.reload();
-            winFormsConsole1.WriteLine($"Netcraft ${MainMenu.GetInstance().Ver}");
         }
 
         //private void richTextBox2_KeyDown(object sender, KeyEventArgs e)

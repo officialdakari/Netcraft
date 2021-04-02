@@ -545,7 +545,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
         private int stp;
         private Thread daytimeThread;
 
-        public void daytimeThreadLoop()
+        public async void daytimeThreadLoop()
         {
             while (true)
             {
@@ -564,7 +564,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                     }
 
                     worldtime += stp;
-                    BroadcastSkyChange(skyClr[worldtime]);
+                    await BroadcastSkyChange(skyClr[worldtime]);
                 }
             }
         }
@@ -1251,7 +1251,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                     n.PlayerInventory = new Inventory(n);
                     if (File.Exists(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), n.Username), ".json"))))
                     {
-                        PlayerInfoSaveLoad.Load(n, File.ReadAllText(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), n.Username), ".txt")), Encoding.UTF8));
+                        PlayerInfoSaveLoad.Load(n, File.ReadAllText(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), n.Username), ".json")), Encoding.UTF8));
                     }
                     else
                     {

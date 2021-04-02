@@ -182,12 +182,12 @@ namespace Minecraft2D
             this.ContextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.пасхалкажмиСюдаToolStripMenuItem});
             this.ContextMenuStrip1.Name = "ContextMenuStrip1";
-            this.ContextMenuStrip1.Size = new System.Drawing.Size(191, 26);
+            this.ContextMenuStrip1.Size = new System.Drawing.Size(192, 26);
             // 
             // пасхалкажмиСюдаToolStripMenuItem
             // 
             this.пасхалкажмиСюдаToolStripMenuItem.Name = "пасхалкажмиСюдаToolStripMenuItem";
-            this.пасхалкажмиСюдаToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.пасхалкажмиСюдаToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.пасхалкажмиСюдаToolStripMenuItem.Text = "пасхалка (жми сюда)";
             this.пасхалкажмиСюдаToolStripMenuItem.Click += new System.EventHandler(this.пасхалкажмиСюдаToolStripMenuItem_Click);
             // 

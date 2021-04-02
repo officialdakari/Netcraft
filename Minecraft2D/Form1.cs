@@ -310,9 +310,13 @@ namespace Minecraft2D
         Lang lang;
         Dictionary<string, string> itemNames = new Dictionary<string, string>();
         NCResources ncr;
+        string logFileName = $"log-{DateTime.Now.ToString().Replace(":", "-").Replace(".", "-")}.txt";
         private async void Form1_Load(object sender, EventArgs e)
         {
             instance = this;
+            log($"Netcraft Beta v{MainMenu.GetInstance().Ver}");
+            log("by DarkCoder15 & TheNonameee");
+            log("");
             log("Initializing...");
             DateTime loadStartTime = DateTime.Now;
 
@@ -367,6 +371,11 @@ namespace Minecraft2D
             {
                 log("Mods folder not found, creating one for you...");
                 Directory.CreateDirectory(@".\mods");
+            }
+            if (!Directory.Exists(@".\logs"))
+            {
+                log("Logs folder not found, creating one for you...");
+                Directory.CreateDirectory(@".\logs");
             }
 
             log("Setting control layers...");
@@ -977,9 +986,14 @@ namespace Minecraft2D
                     await CreateEntity(a[1], a[2]);
                 }
 
-                if(a[0] == "moveentity")
+                if (a[0] == "moveentity")
                 {
                     await MoveEntity(a[1], new Point(int.Parse(a[2]), int.Parse(a[3])));
+                }
+
+                if (a[0] == "delentity")
+                {
+                    await DeleteEntity(a[1]);
                 }
 
                 if (a[0] == "chestopen")
@@ -2341,11 +2355,11 @@ namespace Minecraft2D
                 walking = 0;
             }
         }
-        private List<Panel> nearestBlocks = new List<Panel>();
+        //private List<Panel> nearestBlocks = new List<Panel>();
         private void Ticker_Tick(object sender, EventArgs e)
         {
-            nearestBlocks.Clear();
-            
+            //nearestBlocks.Clear();
+            File.WriteAllText("./logs/" + logFileName, gamelog);
 
             Ticker.Stop();
             Ticker.Start();
@@ -2610,6 +2624,7 @@ namespace Minecraft2D
                     lc.X -= R1.Width - 5;
                     R1.Image = ItemInImageFlipped;
                 }
+                //R1.Update();
 
                 lc.Y = (int)(lc.Y + (45d - R1.Height / 2d));
                 R1.Size = new Size(24, 24);
@@ -2994,6 +3009,7 @@ namespace Minecraft2D
         }
 
         delegate void logResult(string res);
+        string gamelog = "";
         public void log(string res)
         {
             if(InvokeRequired)
@@ -3007,7 +3023,8 @@ namespace Minecraft2D
                     res = res.Replace("\n\n", "\n");
                     foreach(string a in res.Split('\n'))
                     {
-                       NConsole.instance.winFormsConsole1.WriteLine($"[{DateTime.Now.ToShortTimeString()}]: {a}");
+                        gamelog += $"[{DateTime.Now.ToShortTimeString()}]: {a}\n";
+                        NConsole.instance.winFormsConsole1.WriteLine($"[{DateTime.Now.ToShortTimeString()}]: {a}");
                     }
                     //NConsole.instance.richTextBox1.AppendText($"[{DateTime.Now.ToString()}]: {res}\r\n");
                     //NConsole.instance.richTextBox1.Select(NConsole.instance.richTextBox1.TextLength, 0);

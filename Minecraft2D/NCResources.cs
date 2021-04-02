@@ -65,12 +65,12 @@ namespace Minecraft2D
 
         public Bitmap GetBitmap(string key)
         {
-            return res_bmp.ContainsKey(key) ? res_bmp[key] : nullBmp;
+            return res_bmp.ContainsKey(key) ? (Bitmap)res_bmp[key].Clone (): nullBmp;
         }
 
         public Bitmap GetBitmapFlipped(string key)
         {
-            Bitmap bmp = res_bmp.ContainsKey(key) ? res_bmp[key] : null ;
+            Bitmap bmp = res_bmp.ContainsKey(key) ? (Bitmap)res_bmp[key].Clone() : null ;
             if (bmp == null) return nullBmp;
             bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
             return bmp;
