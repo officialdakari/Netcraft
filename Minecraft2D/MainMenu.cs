@@ -46,10 +46,7 @@ namespace Minecraft2D
         protected string labelText;
         protected int presenceUpdateDelay = 20;
 
-        private void SetTitle()
-        {
-            labelText = strings[0];
-        }
+        private void SetTitle() { labelText = strings[0]; }
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
@@ -189,10 +186,7 @@ namespace Minecraft2D
             Form1.GetInstance().Close();
         }
 
-        void comment(string a)
-        {
-            
-        }
+        void comment(string a) { }
 
         string cfg;
         Client _client;
@@ -236,17 +230,6 @@ namespace Minecraft2D
                 dRPC.Initialize();
 
                 presence = new DiscordRPC.RichPresence();
-
-                //presence = presence.WithSecrets(new DiscordRPC.Secrets()
-                //{
-                //    JoinSecret = "MTI4NzM0OjFpMmhuZToxMjMxMjM= "
-                //});
-                //presence.Party = new Party()
-                //{
-                //    ID = Secrets.CreateFriendlySecret(new Random()),
-                //    Size = 1,
-                //    Max = 5
-                //};
                 presence.State = lang.get("rpc.menu");
                 var pr = presence.WithAssets(new DiscordRPC.Assets()).WithParty(new DiscordRPC.Party()).WithTimestamps(new DiscordRPC.Timestamps());
                 pr.Assets.LargeImageKey = "netcraft";
@@ -256,16 +239,6 @@ namespace Minecraft2D
 
                 dRPC.SetPresence(pr);
                 dRPC.Invoke();
-                //dRPC.SetSubscription(EventType.Join | EventType.Spectate | EventType.JoinRequest);
-                //dRPC.UpdateParty(new DiscordRPC.Party()
-                //{
-                //    ID = Secrets.CreateFriendlySecret(new Random()),
-                //    Size = 1,
-                //    Max = 4
-                //});
-                //dRPC.OnJoinRequested += DRPC_OnJoinRequested;
-                //dRPC.OnJoin += DRPC_OnJoin;
-                //dRPC.OnSpectate += DRPC_OnSpectate;
                 uTh.Start();
             }
             catch (Exception ex)
@@ -280,15 +253,9 @@ namespace Minecraft2D
             _Timer1.Start();
         }
 
-        private void DRPC_OnSpectate(object sender, DiscordRPC.Message.SpectateMessage args)
-        {
+        private void DRPC_OnSpectate(object sender, DiscordRPC.Message.SpectateMessage args) { }
 
-        }
-
-        private void DRPC_OnJoin(object sender, DiscordRPC.Message.JoinMessage args)
-        {
-
-        }
+        private void DRPC_OnJoin(object sender, DiscordRPC.Message.JoinMessage args) { }
 
         private async void DRPC_OnJoinRequested(object sender, DiscordRPC.Message.JoinRequestMessage args)
         {
@@ -466,10 +433,7 @@ namespace Minecraft2D
             }
         }
 
-        private void button2_Click_2(object sender, EventArgs e)
-        {
-            Environment.Exit(0);
-        }
+        private void button2_Click_2(object sender, EventArgs e) { Environment.Exit(0); }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
@@ -477,36 +441,11 @@ namespace Minecraft2D
             panel2.Show();
         }
 
-        private void Label3_Click(object sender, EventArgs e)
-        {
+        private void Label3_Click(object sender, EventArgs e) { }
 
-        }
-
-        private void MainMenu_Paint(object sender, PaintEventArgs e)
-        {
-            //Image image = My.Resources.Resources.cobblestone4;
-            //Graphics g = CreateGraphics();
-            //g.Clear(BackColor);
-            //for (int x = 0; x < (Width / 64) * 64; x++)
-            //{
-            //    for (int y = 0; y < (Height / 64) * 64; y++)
-            //    {
-            //        Rectangle rect = new Rectangle(x * 64, y * 64, 64, 64);
-            //        g.DrawImage(image, rect);
-            //    }
-            //}
-        }
-
-        private void PictureBox2_Paint(object sender, PaintEventArgs e)
-        {
-            
-        }
-
-        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-
-        }
-
+        private void MainMenu_Paint(object sender, PaintEventArgs e) { }
+        private void PictureBox2_Paint(object sender, PaintEventArgs e) { }
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e) { }
         private void _Button2_MouseEnter(object sender, EventArgs e)
         {
             ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbghover;
@@ -525,65 +464,25 @@ namespace Minecraft2D
                  clr, width, ButtonBorderStyle.Solid);
         }
 
-        private void _Button2_MouseHover(object sender, EventArgs e)
-        {
-
-        }
-
+        private void _Button2_MouseHover(object sender, EventArgs e) { }
         private void _Button2_MouseLeave(object sender, EventArgs e)
         {
             ((Control)sender).BackgroundImage = My.Resources.Resources.buttonbg;
             ((Control)sender).Invalidate();
         }
 
-        private void _Button5_MouseEnter(object sender, EventArgs e)
-        {
-            _Button2_MouseEnter(sender, e);
-        }
+        private void _Button5_MouseEnter(object sender, EventArgs e) { _Button2_MouseEnter(sender, e); }
+        private void _Button5_MouseHover(object sender, EventArgs e) { }
 
-        private void _Button5_MouseHover(object sender, EventArgs e)
-        {
+        private void _Button5_MouseLeave(object sender, EventArgs e) { _Button2_MouseLeave(sender, e); }
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) { }
+        private void notifyIcon1_MouseDoubleClick_1(object sender, MouseEventArgs e) { Environment.Exit(0); }
+        private void Label6_Click(object sender, EventArgs e) { }
+        private void Label5_Click(object sender, EventArgs e) { }
 
-        }
-
-        private void _Button5_MouseLeave(object sender, EventArgs e)
-        {
-            _Button2_MouseLeave(sender, e);
-        }
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-        }
-
-        private void notifyIcon1_MouseDoubleClick_1(object sender, MouseEventArgs e)
-        {
-            Environment.Exit(0);
-        }
-
-        private void Label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void LabelPlayers_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Label2_Click(object sender, EventArgs e)
-        {
-
-        }
+        private void LabelPlayers_Click(object sender, EventArgs e) { }
+        private void label1_Click(object sender, EventArgs e) { }
+        private void Label2_Click(object sender, EventArgs e){ }
     }
 
     public class EasterEggFoundException : Exception
@@ -672,11 +571,6 @@ namespace Minecraft2D
                 // Throw ex
             }
         }
-        /// <summary>
-    /// Пытается подключиться к указанному серверу по указанному порту.
-    /// </summary>
-    /// <param name="ip">IP-адрес сервера</param>
-    /// <param name="port">Порт сервера</param>
 
         public void Connect(string ip, int port)
         {
