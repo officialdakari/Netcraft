@@ -34,32 +34,45 @@
             // 
             // listBox1
             // 
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.listBox1.BackColor = System.Drawing.Color.White;
+            this.listBox1.Font = new System.Drawing.Font("Arial", 11F);
+            this.listBox1.ForeColor = System.Drawing.Color.Black;
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(0, 0);
+            this.listBox1.ItemHeight = 17;
+            this.listBox1.Location = new System.Drawing.Point(12, 13);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(263, 450);
+            this.listBox1.Size = new System.Drawing.Size(644, 157);
             this.listBox1.TabIndex = 0;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             this.listBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDoubleClick);
             // 
             // listBox2
             // 
-            this.listBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox2.BackColor = System.Drawing.Color.White;
+            this.listBox2.Font = new System.Drawing.Font("Arial", 11F);
+            this.listBox2.ForeColor = System.Drawing.Color.Black;
             this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(263, 0);
+            this.listBox2.ItemHeight = 17;
+            this.listBox2.Location = new System.Drawing.Point(12, 178);
+            this.listBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(537, 450);
+            this.listBox2.Size = new System.Drawing.Size(644, 157);
             this.listBox2.TabIndex = 1;
             this.listBox2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox2_MouseDoubleClick);
             // 
             // ChestWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.ClientSize = new System.Drawing.Size(670, 350);
             this.Controls.Add(this.listBox2);
             this.Controls.Add(this.listBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Font = new System.Drawing.Font("Arial", 10F);
+            this.ForeColor = System.Drawing.Color.White;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ChestWindow";

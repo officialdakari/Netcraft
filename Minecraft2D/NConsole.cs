@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -45,10 +46,13 @@ namespace Minecraft2D
         private void NConsole_Load(object sender, EventArgs e)
         {
             Icon = Extract(@"C:\Windows\System32\cmd.exe", 0);
+
+            Font = Form1.GetInstance().resources.GetFont("Fixedsys Excelsior 3.01", 12, FontStyle.Regular);
         }
 
         private void ConsoleBox1_ProcessCommand(object sender, ConsoleBoxEventArgs e)
         {
+            WinFormsConsole w = winFormsConsole1;
             Form1.instance.sendEval(e.Message);
         }
 

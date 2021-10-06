@@ -7,12 +7,12 @@ namespace NCore
 {
     public class SaveLoad
     {
-        public string Save(WorldServer arg0)
+        public static string Save(WorldServer arg0)
         {
-            return JsonConvert.SerializeObject(arg0);
+            return JsonConvert.SerializeObject(arg0, Formatting.Indented);
         }
 
-        public WorldServer Load(string arg0)
+        public static WorldServer Load(string arg0)
         {
             var world = JsonConvert.DeserializeObject<WorldServer>(arg0);
             //world.Entities.Clear();

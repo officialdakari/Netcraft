@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Drawing;
+using System.Drawing.Text;
 
 namespace Minecraft2D
 {
@@ -13,6 +14,8 @@ namespace Minecraft2D
         Dictionary<string, Bitmap> res_bmp = new Dictionary<string, Bitmap>();
         Dictionary<string, string> res_txt = new Dictionary<string, string>();
         Dictionary<string, Stream> res_stream = new Dictionary<string, Stream>();
+        Dictionary<string, FontFamily> res_font = new Dictionary<string, FontFamily>();
+        PrivateFontCollection collection = new PrivateFontCollection();
 
         Bitmap nullBmp;
 
@@ -57,6 +60,9 @@ namespace Minecraft2D
                         case "wav":
                             ncr.res_stream.Add(f.Split('\\').Last().Split('.')[0], File.OpenRead(f));
                             break;
+                        case "ttf":
+                            ncr.collection.AddFontFile(f);
+                            break;
                     }
                 }
 
@@ -84,6 +90,11 @@ namespace Minecraft2D
         public Stream GetStream(string key)
         {
             return res_stream.ContainsKey(key) ? res_stream[key] : null;
+        }
+
+        public Font GetFont(string name, float size, FontStyle style)
+        {
+            return new Font(new FontFamily(name, collection), size, style);
         }
     }
 }

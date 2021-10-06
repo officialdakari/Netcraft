@@ -16,7 +16,7 @@ namespace Minecraft2D
         public Image ItemImageFlipped { get; set; }
         public Image Sprite { get; set; } = My.MyProject.Forms.Form1.playerSkin;
         public Point Location { get; set; }
-        public TransparentPicBox R1 { get; set; }
+        public TransparentPicBox HandItem { get; set; }
         public int LastWalk { get; set; } = 0;
 
         private TransparentPicBox _Render;
@@ -51,13 +51,13 @@ namespace Minecraft2D
             UUID = arg1;
             Location = arg2;
             Render = arg3;
-            R1 = new TransparentPicBox()
+            HandItem = new TransparentPicBox()
             {
                 Name = "Testrender",
                 BackColor = Color.Transparent,
                 SizeMode = PictureBoxSizeMode.StretchImage
             };
-            My.MyProject.Forms.Form1.Controls.Add(R1);
+            My.MyProject.Forms.Form1.Controls.Add(HandItem);
         }
 
         private void Test()
@@ -75,52 +75,52 @@ namespace Minecraft2D
             {
                 if (Information.IsNothing(ItemImageFlipped))
                 {
-                    R1.Hide();
+                    HandItem.Hide();
                     return;
                 }
 
                 if (Information.IsNothing(ItemImage))
                 {
-                    R1.Hide();
+                    HandItem.Hide();
                     return;
                 }
 
-                R1.Show();
+                HandItem.Show();
                 var lc = Render.Location;
                 if (ItemImage.Equals(null))
                     return;
                 if (LastWalk == 1)
                 {
                     lc.X += Render.Width - 5;
-                    R1.Image = ItemImage;
+                    HandItem.Image = ItemImage;
                 }
                 else
                 {
-                    lc.X -= R1.Width - 5;
-                    R1.Image = ItemImageFlipped;
+                    lc.X -= HandItem.Width - 5;
+                    HandItem.Image = ItemImageFlipped;
                 }
 
-                lc.Y = (int)(lc.Y + (45d - R1.Height / 2d));
-                R1.Size = new Size(24, 24);
-                R1.SizeMode = PictureBoxSizeMode.StretchImage;
-                R1.BringToFront();
-                R1.Location = lc;
+                lc.Y = (int)(lc.Y + (45d - HandItem.Height / 2d));
+                HandItem.Size = new Size(24, 24);
+                HandItem.SizeMode = PictureBoxSizeMode.StretchImage;
+                HandItem.BringToFront();
+                HandItem.Location = lc;
             }
             catch (Exception)
             {
-                R1.Hide();
+                HandItem.Hide();
             }
         }
 
         public async Task SetItemInHand(Image i, Image iflipped, string str)
         {
             if (!Information.IsNothing(i))
-                R1.Image = i;
+                HandItem.Image = i;
             ItemImage = i;
             ItemImageFlipped = iflipped;
             ItemInHand = str;
             Render.Update();
-            R1.Update();
+            HandItem.Update();
         }
 
         public void Remove()
@@ -131,7 +131,7 @@ namespace Minecraft2D
             }
             else
             {
-                My.MyProject.Forms.Form1.Controls.Remove(R1);
+                My.MyProject.Forms.Form1.Controls.Remove(HandItem);
             }
         }
     }

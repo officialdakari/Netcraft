@@ -6,6 +6,7 @@ namespace NCore
 {
     public class WorldServer
     {
+        private string NOTE = "WARNING! DO NOT MODIFY THIS JSON FILE !!";
         public List<Block> Blocks { get; set; } = new List<Block>();
         public List<Entity.EntityBase> Entities { get; set; } = new List<Entity.EntityBase>();
         public List<BlockChest> Chests { get; set; } = new List<BlockChest>();
@@ -17,6 +18,7 @@ namespace NCore
             try
             {
                 return Blocks.Where(b => b.Position.X == x && b.Position.Y == y).ToArray()[0];
+                
             } catch(IndexOutOfRangeException)
             {
                 return null;

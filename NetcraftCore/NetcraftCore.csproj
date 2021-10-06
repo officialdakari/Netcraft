@@ -102,6 +102,7 @@
     <Compile Include="Commands\Commandkick.cs" />
     <Compile Include="Commands\Commandkill.cs" />
     <Compile Include="Commands\Commandlist.cs" />
+    <Compile Include="Commands\Commandno.cs" />
     <Compile Include="Commands\Commandpermissions.cs" />
     <Compile Include="Commands\Commandplugins.cs" />
     <Compile Include="Commands\Commandrmitem.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Commands\Commandtppos.cs" />
     <Compile Include="Commands\Commandunban.cs" />
     <Compile Include="Commands\Commandversion.cs" />
+    <Compile Include="Commands\Commandyes.cs" />
     <Compile Include="Entity\EntityBase.cs" />
     <Compile Include="Entity\EntityCow.cs" />
     <Compile Include="Entity\EntityMetadata.cs" />

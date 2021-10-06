@@ -409,5 +409,38 @@ namespace NCore.netcraft.server.api
                 this.d = false;
             }
         }
+
+        public class ConsoleLogEvent
+        {
+            private string a;
+            private bool b;
+            private string c;
+
+            public string GetLine() => a;
+            public bool GetCancelled() => b;
+            public string GetLevel() => c;
+
+            public void SetLine(string a)
+            {
+                this.a = a;
+            }
+
+            public void SetCancelled(bool b)
+            {
+                this.b = b;
+            }
+
+            public void SetLevel(string c)
+            {
+                this.c = c;
+            }
+
+            internal ConsoleLogEvent(string a, bool b, string c)
+            {
+                this.a = a;
+                this.b = b;
+                this.c = c;
+            }
+        }
     }
 }

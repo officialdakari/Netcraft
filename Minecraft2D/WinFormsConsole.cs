@@ -101,6 +101,7 @@ namespace Minecraft2D
             var a = this.TextBox1.Lines;
             a[a.Length - 1] = PromptString;
             this.TextBox1.Text = string.Join("\r\n", a);
+            this.TextBox1.Font = this.Font;
             this.TextBox1.ForeColor = Color.FromArgb(255, 255, 255);
             // ConsoleBox_Load(Nothing, Nothing)
         }

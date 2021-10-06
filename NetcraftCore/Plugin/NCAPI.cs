@@ -155,6 +155,14 @@ namespace NCore.netcraft
                 {
                     SandPhysicsEvent?.Invoke(e);
                 }
+
+                public static event ConsoleLogEventEventHandler ConsoleLogEvent;
+                public delegate void ConsoleLogEventEventHandler(events.ConsoleLogEvent e);
+
+                internal static void REConsoleLogEvent(events.ConsoleLogEvent e)
+                {
+                    ConsoleLogEvent?.Invoke(e);
+                }
             }
 
             public class Netcraft

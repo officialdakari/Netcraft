@@ -289,15 +289,15 @@ namespace Minecraft2D
                     G.FillRectangle(brsh, this.ClientRectangle);
                 }
             }
-            makeItDark.Image = bmp;
-            makeItDark.SizeMode = PictureBoxSizeMode.Normal;
-            makeItDark.Show();
-            makeItDark.Size = ClientSize + new Size(100, 100);
+            blackbackground.Image = bmp;
+            blackbackground.SizeMode = PictureBoxSizeMode.Normal;
+            blackbackground.Show();
+            blackbackground.Size = ClientSize + new Size(100, 100);
         }    
 
         public void Lighten()
         {
-            makeItDark.Hide();
+            blackbackground.Hide();
         }
 
         public Image GetFlipped(Image bmp)
@@ -309,19 +309,19 @@ namespace Minecraft2D
 
         Lang lang;
         Dictionary<string, string> itemNames = new Dictionary<string, string>();
-        NCResources ncr;
+        public NCResources resources;
         string logFileName = $"log-{DateTime.Now.ToString().Replace(":", "-").Replace(".", "-")}.txt";
         private async void Form1_Load(object sender, EventArgs e)
         {
             instance = this;
-            log($"Netcraft Beta v{MainMenu.GetInstance().Ver}");
+            log($"Beta Netcraft {MainMenu.GetInstance().Ver}");
             log("by DarkCoder15 & TheNonameee");
             log("");
             log("Initializing...");
             DateTime loadStartTime = DateTime.Now;
 
             log($"Loading resources");
-            ncr = NCResources.Load("./ncr");
+            resources = NCResources.Load("./ncr");
             log($"Resources loaded");
             NConsole.instance = new NConsole();
             if(Debugger.IsAttached || (Interaction.Command() == "dbg"))
@@ -329,11 +329,11 @@ namespace Minecraft2D
                 NConsole.instance.Show();
             }
             invClose1.BringToFront();
-            chatPanel1.KeyDown += Form1_KeyDown;
-            chatPanel1.KeyUp += Form1_KeyDown;
-            makeItDark.KeyDown += Form1_KeyDown;
-            makeItDark.KeyUp += Form1_KeyDown;
-            foreach (Control ac in chatPanel1.Controls)
+            chatpanel.KeyDown += Form1_KeyDown;
+            chatpanel.KeyUp += Form1_KeyDown;
+            blackbackground.KeyDown += Form1_KeyDown;
+            blackbackground.KeyUp += Form1_KeyDown;
+            foreach (Control ac in chatpanel.Controls)
             {
                 ac.KeyDown += Form1_KeyDown;
                 ac.KeyUp += Form1_KeyUp;
@@ -346,7 +346,7 @@ namespace Minecraft2D
     System.Net.WebRequest.Create(
     MainMenu.GetInstance().textBox3.Text);
                 System.Net.WebResponse response = request.GetResponse();
-                System.IO.Stream responseStream =
+                System.IO.Stream responseStream =   
                     response.GetResponseStream();
                 bmp = new Bitmap(responseStream);
                 log("Got player sprite from " + MainMenu.GetInstance().textBox3.Text);
@@ -380,14 +380,14 @@ namespace Minecraft2D
 
             log("Setting control layers...");
             localPlayer.SendToBack();
-            R1.BringToFront();
+            HandItem.BringToFront();
             ListBox1.BringToFront();
             log("Done setting control layers");
             this.Text = "NetCraft " + MainMenu.GetInstance().Ver;
             if (IsSingleplayer)
             {
                 log("Note: singleplayer server loaded. If you close opened console, server will shut down");
-                Text = $"NetCraft {My.MyProject.Forms.MainMenu.Ver} (Singleplayer)";
+                Text = $"Netcraft {My.MyProject.Forms.MainMenu.Ver} (Singleplayer)";
             }
 
             log($"Connecting to {ip}:{port}");
@@ -617,7 +617,7 @@ namespace Minecraft2D
         }
 
         ChestWindow chest;
-
+        Menu menu;
         public async Task Packet(string p)
         {
             InvokePacket(p);
@@ -640,6 +640,18 @@ namespace Minecraft2D
                     //NConsole.instance.richTextBox1.Select(textBox2.TextLength, 0);
                     //NConsole.instance.richTextBox1.ScrollToCaret();
                 }
+                if (a[0] == "closemenu") menu.Close();
+                if (a[0] == "openmenu")
+                {
+                    menu = new Menu();
+                    menu.listBox1.Items.AddRange(a.Skip(1).ToArray());
+                    menu.Show();
+                }
+                if (a[0] == "rewritemenu")
+                {
+                    menu.listBox1.Items.Clear();
+                    menu.listBox1.Items.AddRange(a.Skip(1).ToArray());
+                }
                 if (a[0] == "blockchange")
                 {
                     var b = new PictureBox();
@@ -656,199 +668,199 @@ namespace Minecraft2D
                     if (a[3] == "iron_ore")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("iron_ore");
+                        b.BackgroundImage = resources.GetBitmap("iron_ore");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "grass_block")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("grass_side");
+                        b.BackgroundImage = resources.GetBitmap("grass_side");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "dandelion")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("dandelion");
+                        b.BackgroundImage = resources.GetBitmap("dandelion");
                     }
                     else if (a[3] == "poppy")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("poppy");
+                        b.BackgroundImage = resources.GetBitmap("poppy");
                     }
                     else if (a[3] == "dirt")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("dirt");
+                        b.BackgroundImage = resources.GetBitmap("dirt");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "stone")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("stone");
+                        b.BackgroundImage = resources.GetBitmap("stone");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "gravel")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("gravel");
+                        b.BackgroundImage = resources.GetBitmap("gravel");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "bedrock")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("bedrock");
+                        b.BackgroundImage = resources.GetBitmap("bedrock");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "wood")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("wood");
+                        b.BackgroundImage = resources.GetBitmap("wood");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "leaves")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("leaves");
+                        b.BackgroundImage = resources.GetBitmap("leaves");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "cobble")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("COBBLESTONE");
+                        b.BackgroundImage = resources.GetBitmap("COBBLESTONE");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "planks")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("planks");
+                        b.BackgroundImage = resources.GetBitmap("planks");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "endstone")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("endstone");
+                        b.BackgroundImage = resources.GetBitmap("endstone");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "netcraft_block")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("NETCRAFT_BLOCK");
+                        b.BackgroundImage = resources.GetBitmap("NETCRAFT_BLOCK");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "netcraft_block_snowy")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("SNOWY_NETCRAFT_BLOCK");
+                        b.BackgroundImage = resources.GetBitmap("SNOWY_NETCRAFT_BLOCK");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "diamond_ore")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("diamond_ore");
+                        b.BackgroundImage = resources.GetBitmap("diamond_ore");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "snowygrass")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("grass_block_snow");
+                        b.BackgroundImage = resources.GetBitmap("grass_block_snow");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "gold_ore")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("gold_ore");
+                        b.BackgroundImage = resources.GetBitmap("gold_ore");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "obsidian")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("obsidian");
+                        b.BackgroundImage = resources.GetBitmap("obsidian");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "water")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("WATER");
+                        b.BackgroundImage = resources.GetBitmap("WATER");
                         b.BackColor = Color.Blue;
                     }
                     else if (a[3] == "fire")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("FIRE");
+                        b.BackgroundImage = resources.GetBitmap("FIRE");
                     }
                     else if (a[3] == "sand")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("sand");
+                        b.BackgroundImage = resources.GetBitmap("sand");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "glass")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("glass");
+                        b.BackgroundImage = resources.GetBitmap("glass");
                     }
                     else if (a[3] == "furnace")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("FURNACE");
+                        b.BackgroundImage = resources.GetBitmap("FURNACE");
                         b.Tag += b.Tag.ToString() + "?furnace";
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "iron_block")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("iron_block");
+                        b.BackgroundImage = resources.GetBitmap("iron_block");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "diamond_block")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("diamond_block");
+                        b.BackgroundImage = resources.GetBitmap("diamond_block");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "gold_block")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("gold_block");
+                        b.BackgroundImage = resources.GetBitmap("gold_block");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "coal_ore")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("coal_ore");
+                        b.BackgroundImage = resources.GetBitmap("coal_ore");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "wheat0")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("wheat");
+                        b.BackgroundImage = resources.GetBitmap("wheat");
                     }
                     else if (a[3] == "wheat7")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("WHEAT_GROW");
+                        b.BackgroundImage = resources.GetBitmap("WHEAT_GROW");
                     }
                     else if (a[3] == "sapling")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("sapling");
+                        b.BackgroundImage = resources.GetBitmap("sapling");
                     }
                     else if (a[3] == "tnt") 
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("TNT");
+                        b.BackgroundImage = resources.GetBitmap("TNT");
                         b.BackColor = BackColor;
                     }
                     else if (a[3] == "lava")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("lava");
+                        b.BackgroundImage = resources.GetBitmap("lava");
                         b.BackColor = Color.Orange;
                     }
                     else if (a[3] == "chest")
                     {
                         b.BackgroundImageLayout = ImageLayout.Stretch;
-                        b.BackgroundImage = ncr.GetBitmap("chest");
+                        b.BackgroundImage = resources.GetBitmap("chest");
                     }
                     else
                     {
@@ -938,6 +950,8 @@ namespace Minecraft2D
                     Console.WriteLine($"Info message from server: {string.Join("?", a.Skip(1).ToArray())}");
                 }
 
+                
+
                 if (a[0] == "msgkick")
                 {
                     FancyMessage.Show(string.Join("?", a.Skip(1).ToArray()), lang.get("text.kicked"), FancyMessage.Icon.Info);
@@ -1014,6 +1028,12 @@ namespace Minecraft2D
                     Stats = JsonConvert.DeserializeObject<Dictionary<string, string>>(string.Join("?", a.Skip(1)));
                 }
 
+                if(a[0] == "inputbox")
+                {
+
+                    //await Send("input?" + a[1] + "?" + )
+                }
+
                 if (a[0] == "itemset")
                 {
                     try
@@ -1021,81 +1041,81 @@ namespace Minecraft2D
                         // REM - Деревянные инструменты
                         if (a[2] == "WOODEN_PICKAXE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("WOODEN_PICKAXE"), ncr.GetBitmapFlipped("WOODEN_PICKAXE"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("WOODEN_PICKAXE"), resources.GetBitmapFlipped("WOODEN_PICKAXE"), a[2]);
                         }
 
                         if (a[2] == "WOODEN_AXE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("WOODEN_AXE"), ncr.GetBitmapFlipped("WOODEN_AXE"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("WOODEN_AXE"), resources.GetBitmapFlipped("WOODEN_AXE"), a[2]);
                         }
 
                         if (a[2] == "WOODEN_SWORD")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("WOODEN_SWORD"), ncr.GetBitmapFlipped("WOODEN_SWORD"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("WOODEN_SWORD"), resources.GetBitmapFlipped("WOODEN_SWORD"), a[2]);
                         }
 
                         if (a[2] == "WOODEN_SHOVEL")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("WOODEN_SHOVEL"), ncr.GetBitmapFlipped("WOODEN_SHOVEL"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("WOODEN_SHOVEL"), resources.GetBitmapFlipped("WOODEN_SHOVEL"), a[2]);
                         }
 
 
                         // REM - Каменные инструменты
                         if (a[2] == "STONE_PICKAXE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("STONE_PICKAXE"), ncr.GetBitmapFlipped("STONE_PICKAXE"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("STONE_PICKAXE"), resources.GetBitmapFlipped("STONE_PICKAXE"), a[2]);
                         }
 
                         if (a[2] == "STONE_AXE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("STONE_AXE"), ncr.GetBitmapFlipped("STONE_AXE"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("STONE_AXE"), resources.GetBitmapFlipped("STONE_AXE"), a[2]);
                         }
 
                         if (a[2] == "STONE_SWORD")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("STONE_SWORD"), ncr.GetBitmapFlipped("STONE_SWORD"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("STONE_SWORD"), resources.GetBitmapFlipped("STONE_SWORD"), a[2]);
                         }
 
                         if (a[2] == "STONE_SHOVEL")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("STONE_SHOVEL"), ncr.GetBitmapFlipped("STONE_SHOVEL"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("STONE_SHOVEL"), resources.GetBitmapFlipped("STONE_SHOVEL"), a[2]);
                         }
 
                         // REM - Железные инструменты
                         if (a[2] == "IRON_PICKAXE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("IRON_PICKAXE"), ncr.GetBitmapFlipped("IRON_PICKAXE"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("IRON_PICKAXE"), resources.GetBitmapFlipped("IRON_PICKAXE"), a[2]);
                         }
 
                         if (a[2] == "IRON_AXE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("IRON_AXE"), ncr.GetBitmapFlipped("IRON_AXE"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("IRON_AXE"), resources.GetBitmapFlipped("IRON_AXE"), a[2]);
                         }
 
                         if (a[2] == "IRON_SWORD")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("IRON_SWORD"), ncr.GetBitmapFlipped("IRON_SWORD"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("IRON_SWORD"), resources.GetBitmapFlipped("IRON_SWORD"), a[2]);
                         }
 
                         if (a[2] == "IRON_SHOVEL")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("IRON_SHOVEL"), ncr.GetBitmapFlipped("IRON_SHOVEL"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("IRON_SHOVEL"), resources.GetBitmapFlipped("IRON_SHOVEL"), a[2]);
                         }
 
                         // REM - Алмазные инструменты
                         if (a[2] == "DIAMOND_PICKAXE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("DIAMOND_PICKAXE"), ncr.GetBitmapFlipped("DIAMOND_PICKAXE"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("DIAMOND_PICKAXE"), resources.GetBitmapFlipped("DIAMOND_PICKAXE"), a[2]);
                         }
 
                         if (a[2] == "DIAMOND_AXE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("DIAMOND_AXE"), ncr.GetBitmapFlipped("DIAMOND_AXE"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("DIAMOND_AXE"), resources.GetBitmapFlipped("DIAMOND_AXE"), a[2]);
                         }
 
                         if (a[2] == "DIAMOND_SWORD")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("DIAMOND_SWORD"), ncr.GetBitmapFlipped("DIAMOND_SWORD"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("DIAMOND_SWORD"), resources.GetBitmapFlipped("DIAMOND_SWORD"), a[2]);
                         }
 
                         if (a[2] == "DIAMOND_SHOVEL")
@@ -1106,210 +1126,210 @@ namespace Minecraft2D
                         // REM - Блоки
                         if (a[2] == "GRASS_BLOCK")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("grass_side"), ncr.GetBitmap("grass_side"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("grass_side"), resources.GetBitmap("grass_side"), a[2]);
                         }
 
                         if (a[2] == "SNOWY_GRASS_BLOCK")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("grass_block_snow"), ncr.GetBitmap("grass_block_snow"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("grass_block_snow"), resources.GetBitmap("grass_block_snow"), a[2]);
                         }
 
                         if (a[2] == "NETCRAFT_BLOCK")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("NETCRAFT_BLOCK"), ncr.GetBitmap("NETCRAFT_BLOCK"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("NETCRAFT_BLOCK"), resources.GetBitmap("NETCRAFT_BLOCK"), a[2]);
                         }
 
                         if (a[2] == "SNOWY_NETCRAFT_BLOCK")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("NETCRAFT_BLOCK"), My.Resources.Resources.snowylogo, a[2]);
+                            await SetItem(a[1], resources.GetBitmap("NETCRAFT_BLOCK"), My.Resources.Resources.snowylogo, a[2]);
                         }
 
                         if (a[2] == "WOOD")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("wood"), ncr.GetBitmap("wood"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("wood"), resources.GetBitmap("wood"), a[2]);
                         }
 
                         if (a[2] == "COBBLESTONE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("COBBLESTONE"), ncr.GetBitmap("COBBLESTONE"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("COBBLESTONE"), resources.GetBitmap("COBBLESTONE"), a[2]);
                         }
 
                         if (a[2] == "STONE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("stone"), ncr.GetBitmap("stone"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("stone"), resources.GetBitmap("stone"), a[2]);
                         }
 
                         if (a[2] == "GRAVEL")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("gravel"), ncr.GetBitmap("gravel"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("gravel"), resources.GetBitmap("gravel"), a[2]);
                         }
 
                         if (a[2] == "END_STONE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("end_stone"), ncr.GetBitmap("end_stone"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("end_stone"), resources.GetBitmap("end_stone"), a[2]);
                         }
 
                         if (a[2] == "PLANKS")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("planks"), ncr.GetBitmap("planks"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("planks"), resources.GetBitmap("planks"), a[2]);
                         }
 
                         if (a[2] == "DIRT")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("dirt"), ncr.GetBitmap("dirt"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("dirt"), resources.GetBitmap("dirt"), a[2]);
                         }
 
                         if (a[2] == "OBSIDIAN")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("obsidian"), ncr.GetBitmap("obsidian"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("obsidian"), resources.GetBitmap("obsidian"), a[2]);
                         }
 
                         if (a[2] == "SAND")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("sand"), ncr.GetBitmap("sand"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("sand"), resources.GetBitmap("sand"), a[2]);
                         }
 
                         if (a[2] == "GLASS")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("glass"), ncr.GetBitmap("glass"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("glass"), resources.GetBitmap("glass"), a[2]);
                         }
 
                         if (a[2] == "FURNACE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("FURNACE"), ncr.GetBitmap("FURNACE"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("FURNACE"), resources.GetBitmap("FURNACE"), a[2]);
                         }
 
                         if (a[2] == "LEAVES")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("leaves"), ncr.GetBitmap("leaves"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("leaves"), resources.GetBitmap("leaves"), a[2]);
                         }
 
                         if (a[2] == "SAPLING")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("sapling"), ncr.GetBitmap("sapling"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("sapling"), resources.GetBitmap("sapling"), a[2]);
                         }
 
                         if (a[2] == "CHEST")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("chest"), ncr.GetBitmap("sapling"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("chest"), resources.GetBitmap("chest"), a[2]);
                         }
 
                         // REM - Драгоценные блоки
                         if (a[2] == "IRON_BLOCK")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("iron_block"), ncr.GetBitmap("iron_block"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("iron_block"), resources.GetBitmap("iron_block"), a[2]);
                         }
 
                         if (a[2] == "DIAMOND_BLOCK")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("diamond_block"), ncr.GetBitmap("diamond_block"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("diamond_block"), resources.GetBitmap("diamond_block"), a[2]);
                         }
 
                         if (a[2] == "GOLD_BLOCK")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("gold_block"), ncr.GetBitmap("gold_block"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("gold_block"), resources.GetBitmap("gold_block"), a[2]);
                         }
 
                         if (a[2] == "GOLD_ORE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("gold_ore"), ncr.GetBitmap("gold_ore"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("gold_ore"), resources.GetBitmap("gold_ore"), a[2]);
                         }
 
                         if (a[2] == "IRON_ORE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("iron_ore"), ncr.GetBitmap("iron_ore"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("iron_ore"), resources.GetBitmap("iron_ore"), a[2]);
                         }
 
                         // REM - Еда
                         if (a[2] == "RAW_BEEF")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("beef"), ncr.GetBitmap("beef"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("beef"), resources.GetBitmap("beef"), a[2]);
                         }
                         if (a[2] == "COOKED_BEEF")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("cooked_beef"), ncr.GetBitmap("cooked_beef"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("cooked_beef"), resources.GetBitmap("cooked_beef"), a[2]);
                         }
                         if (a[2] == "BREAD")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("bread"), ncr.GetBitmap("bread"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("bread"), resources.GetBitmap("bread"), a[2]);
                         }
 
                         // REM - Инструменты
                         if (a[2] == "FIRE")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("flint_and_steel"), ncr.GetBitmap("flint_and_steel"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("flint_and_steel"), resources.GetBitmap("flint_and_steel"), a[2]);
                         }
 
                         // REM - Разное
                         if (a[2] == "STICK")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("STICK"), ncr.GetBitmap("STICK"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("STICK"), resources.GetBitmap("STICK"), a[2]);
                         }
 
                         if (a[2] == "COAL")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("coal"), ncr.GetBitmap("coal"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("coal"), resources.GetBitmap("coal"), a[2]);
                         }
 
                         if (a[2] == "RED_FLOWER")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("poppy"), ncr.GetBitmap("poppy"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("poppy"), resources.GetBitmap("poppy"), a[2]);
                         }
 
                         if (a[2] == "YELLOW_FLOWER")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("dandelion"), ncr.GetBitmap("dandelion"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("dandelion"), resources.GetBitmap("dandelion"), a[2]);
                         }
 
                         if (a[2] == "IRON")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("IRON"), ncr.GetBitmap("IRON"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("IRON"), resources.GetBitmap("IRON"), a[2]);
                         }
 
                         if (a[2] == "GOLD")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("GOLD"), ncr.GetBitmap("GOLD"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("GOLD"), resources.GetBitmap("GOLD"), a[2]);
                         }
 
                         if (a[2] == "DIAMOND")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("DIAMOND"), ncr.GetBitmap("DIAMOND"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("DIAMOND"), resources.GetBitmap("DIAMOND"), a[2]);
                         }
 
                         if (a[2] == "TNT")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("TNT"), ncr.GetBitmap("TNT"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("TNT"), resources.GetBitmap("TNT"), a[2]);
                         }
 
                         if (a[2] == "BUCKET")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("bucket"), ncr.GetBitmap("bucket"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("bucket"), resources.GetBitmap("bucket"), a[2]);
                         }
 
                         if (a[2] == "WATER_BUCKET")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("water_bucket"), ncr.GetBitmap("water_bucket"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("water_bucket"), resources.GetBitmap("water_bucket"), a[2]);
                         }
 
                         if (a[2] == "LAVA_BUCKET")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("lava_bucket"), ncr.GetBitmap("lava_bucket"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("lava_bucket"), resources.GetBitmap("lava_bucket"), a[2]);
                         }
 
                         if (a[2] == "WHEAT")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("wheat"), ncr.GetBitmap("wheat"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("wheat"), resources.GetBitmap("wheat"), a[2]);
                         }
 
                         if (a[2] == "SEEDS")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("wheat_seeds"), ncr.GetBitmap("wheat_seeds"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("wheat_seeds"), resources.GetBitmap("wheat_seeds"), a[2]);
                         }
 
                         // REM - Зелья
                         if(a[2] == "HEALING_POTION")
                         {
-                            await SetItem(a[1], ncr.GetBitmap("potion_bottle_drinkable"), ncr.GetBitmap("potion_bottle_drinkable"), a[2]);
+                            await SetItem(a[1], resources.GetBitmap("potion_bottle_drinkable"), resources.GetBitmap("potion_bottle_drinkable"), a[2]);
                         }
 
                         // REM - Nothing
@@ -1367,7 +1387,7 @@ namespace Minecraft2D
             ItemInImage = a;
             ItemInImageFlipped = b;
             localPlayer.Update();
-            R1.Update();
+            HandItem.Update();
         }
 
         private void furnaceInteract(object sender, MouseEventArgs e)
@@ -1948,7 +1968,7 @@ namespace Minecraft2D
                 {
 
                     Thread.Sleep(moveInterval);
-                    if (!makeItDark.Visible && walking == 1)
+                    if (!blackbackground.Visible && walking == 1)
                     {
                         localPlayer.Left -= 1;
                         bool collision = false;
@@ -1990,7 +2010,7 @@ namespace Minecraft2D
                             await UpdatePlayerPosition();
                         }
                     }
-                    else if (!makeItDark.Visible && walking == 2)
+                    else if (!blackbackground.Visible && walking == 2)
                     {
                         localPlayer.Left += 1;
                         bool collision = false;
@@ -2033,7 +2053,7 @@ namespace Minecraft2D
                         }
                     }
 
-                    if (JumpStep > -1 && !makeItDark.Visible)
+                    if (JumpStep > -1 && !blackbackground.Visible)
                     {
                         bool grounded = true;
                         JumpStep += 1;
@@ -2164,7 +2184,7 @@ namespace Minecraft2D
                     {
                         try
                         {
-                            G.DrawImage(b.BackgroundImage, b.Bounds);
+                            G.DrawImage(b.BackgroundImage, new Rectangle(new Point(b.Left + HorizontalScroll.Value, b.Top + VerticalScroll.Value), b.Size));
                         } catch(Exception)
                         {
 
@@ -2174,7 +2194,7 @@ namespace Minecraft2D
                     // Draw local player
                     try
                     {
-                        G.DrawImage(localPlayer.Image, localPlayer.Bounds);
+                        G.DrawImage(localPlayer.Image, new Rectangle(new Point(localPlayer.Left + HorizontalScroll.Value, localPlayer.Top + VerticalScroll.Value), localPlayer.Size));
                     }
                     catch (Exception)
                     {
@@ -2184,7 +2204,7 @@ namespace Minecraft2D
                     // Draw local player's item in hand
                     try
                     {
-                        G.DrawImage(R1.Image, R1.Bounds);
+                        G.DrawImage(HandItem.Image, new Rectangle(new Point(HandItem.Left + HorizontalScroll.Value, HandItem.Top + VerticalScroll.Value), HandItem.Size));
                     }
                     catch (Exception)
                     {
@@ -2196,7 +2216,7 @@ namespace Minecraft2D
                     {
                         try
                         {
-                            G.DrawImage(p.Render.Image, p.Render.Bounds);
+                            G.DrawImage(p.Render.Image, new Rectangle(new Point(p.Render.Left + HorizontalScroll.Value, p.Render.Top + VerticalScroll.Value), p.Render.Size));
                         }
                         catch (Exception)
                         {
@@ -2209,7 +2229,7 @@ namespace Minecraft2D
                     {
                         try
                         {
-                            G.DrawImage(p.R1.Image, p.R1.Bounds);
+                            G.DrawImage(p.HandItem.Image, new Rectangle(new Point(p.HandItem.Left + HorizontalScroll.Value, p.HandItem.Top + VerticalScroll.Value), p.HandItem.Size));
                         }
                         catch (Exception)
                         {
@@ -2222,7 +2242,7 @@ namespace Minecraft2D
                     {
                         try
                         {
-                            G.DrawImage(entities[id].Renderer.Image, entities[id].Renderer.Bounds);
+                            G.DrawImage(entities[id].Renderer.Image, new Rectangle(new Point(entities[id].Renderer.Left + HorizontalScroll.Value, entities[id].Renderer.Top + VerticalScroll.Value), entities[id].Renderer.Size));
                         }
                         catch (Exception)
                         {
@@ -2266,12 +2286,12 @@ namespace Minecraft2D
                 }
             }
 
-            if(e.KeyCode == Keys.C && !chatPanel1.Visible)
+            if(e.KeyCode == Keys.C && !chatpanel.Visible)
             {
                 ChatButton.PerformClick();
                 return;
             }
-
+            if (chatpanel.Visible) return;
             if (NoClip)
             {
                 if (e.KeyCode == Keys.D)
@@ -2437,22 +2457,22 @@ namespace Minecraft2D
                     {
                         blocks.Any(b =>
                         {
-                            if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) return false;
-                            if ((b.Left / 32 - localPlayer.Left / 32) > 4) return false;
-                            if ((b.Left / 32 - localPlayer.Left / 32) < -4) return false;
+                            if (DistanceBetween(b.Location, localPlayer.Location) > 5 * 32) return false; // вместо continue
+                            if ((b.Left / 32 - localPlayer.Left / 32) > 4) return false; // вместо continue
+                            if ((b.Left / 32 - localPlayer.Left / 32) < -4) return false; // вместо continue
                             if (Conversions.ToBoolean(b.Tag.ToString().Contains("non-solid")))
                             {
-                                return false;
+                                return false; // вместо continue
                             }
 
                             if (Conversions.ToBoolean(b.Tag.ToString().Contains("bg")))
-                                return false;
+                                return false; // вместо continue
                             if (b.Bounds.IntersectsWith(localPlayer.Bounds))
                             {
                                 collision = true;
-                                return true;
+                                return true; // вместо break
                             }
-                            return false;
+                            return false; // вместо continue
                         });
                     } catch(ArgumentOutOfRangeException)
                     {
@@ -2504,7 +2524,7 @@ namespace Minecraft2D
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if (chatPanel1.Visible) return;
+            if (chatpanel.Visible) return;
             SendSinglePacket("update_inventory");
             invPanel.BringToFront();
             if(invPanel.Visible)
@@ -2600,41 +2620,41 @@ namespace Minecraft2D
             {
                 if (Information.IsNothing(ItemInImageFlipped))
                 {
-                    R1.Hide();
+                    HandItem.Hide();
                     return;
                 }
 
                 if (Information.IsNothing(ItemInImage))
                 {
-                    R1.Hide();
+                    HandItem.Hide();
                     return;
                 }
 
-                R1.Show();
+                HandItem.Show();
                 var lc = localPlayer.Location;
                 if (ItemInImage.Equals(null))
                     return;
                 if (lastWalk == 1)
                 {
                     lc.X += localPlayer.Width - 5;
-                    R1.Image = ItemInImage;
+                    HandItem.Image = ItemInImage;
                 }
                 else
                 {
-                    lc.X -= R1.Width - 5;
-                    R1.Image = ItemInImageFlipped;
+                    lc.X -= HandItem.Width - 5;
+                    HandItem.Image = ItemInImageFlipped;
                 }
                 //R1.Update();
 
-                lc.Y = (int)(lc.Y + (45d - R1.Height / 2d));
-                R1.Size = new Size(24, 24);
-                R1.SizeMode = PictureBoxSizeMode.StretchImage;
-                R1.BringToFront();
-                R1.Location = lc;
+                lc.Y = (int)(lc.Y + (45d - HandItem.Height / 2d));
+                HandItem.Size = new Size(24, 24);
+                HandItem.SizeMode = PictureBoxSizeMode.StretchImage;
+                HandItem.BringToFront();
+                HandItem.Location = lc;
             }
             catch (Exception ex)
             {
-                R1.Hide();
+                HandItem.Hide();
                 Console.WriteLine("Error: " + ex.Message + "\r\n" + ex.ToString());
                 log(ex.ToString());
                 log($"Exception thrown:\r\n" + ex.ToString());
@@ -2652,15 +2672,15 @@ namespace Minecraft2D
         {
             //My.MyProject.Forms.Chat.Show();
             if (invPanel.Visible) return;
-            chatPanel1.BringToFront();
-            if(!chatPanel1.Visible)
+            chatpanel.BringToFront();
+            if(!chatpanel.Visible)
             {
                 Darker();
-                chatPanel1.Show();
+                chatpanel.Show();
             } else
             {
                 Lighten();
-                chatPanel1.Hide();
+                chatpanel.Hide();
             }
         }
 
@@ -2886,7 +2906,7 @@ namespace Minecraft2D
             ProgressBar1.BringToFront();
             ChatButton.Location = new Point(0, 0);
             ChatButton.BringToFront();
-            makeItDark.Location = new Point(0, 0);
+            blackbackground.Location = new Point(0, 0);
             //CraftButton.Location = new Point(0, 29);
             debuginfo.Location = new Point(5, 53);
             _Warning.Location = new Point(239, 0);
@@ -2899,9 +2919,9 @@ namespace Minecraft2D
             _ButtonJump.BringToFront();
             _ButtonAttack.Location = new Point(1008, 500);
             _ButtonAttack.BringToFront();
-            makeItDark.BringToFront();
-            chatPanel1.Location = new Point(5, 124);
-            chatPanel1.BringToFront();
+            blackbackground.BringToFront();
+            chatpanel.Location = new Point(5, 124);
+            chatpanel.BringToFront();
             invPanel.BringToFront();
         }
         int effectPlayingDirection = -1;
@@ -3111,7 +3131,7 @@ namespace Minecraft2D
 
         private void button1_Click_2(object sender, EventArgs e)
         {
-            chatPanel1.Hide();
+            chatpanel.Hide();
             Lighten();
             Focus();
         }

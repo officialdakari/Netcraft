@@ -102,9 +102,10 @@ namespace Minecraft2D
             // 
             this.UsernameLabel.BackColor = System.Drawing.Color.Transparent;
             this.UsernameLabel.ForeColor = System.Drawing.Color.White;
-            this.UsernameLabel.Location = new System.Drawing.Point(12, 15);
+            this.UsernameLabel.Location = new System.Drawing.Point(6, 18);
+            this.UsernameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.UsernameLabel.Name = "UsernameLabel";
-            this.UsernameLabel.Size = new System.Drawing.Size(220, 23);
+            this.UsernameLabel.Size = new System.Drawing.Size(293, 19);
             this.UsernameLabel.TabIndex = 0;
             this.UsernameLabel.Text = "text.playername";
             this.UsernameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -113,9 +114,10 @@ namespace Minecraft2D
             // 
             this.UsernameTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.UsernameTextBox.ForeColor = System.Drawing.Color.White;
-            this.UsernameTextBox.Location = new System.Drawing.Point(12, 41);
+            this.UsernameTextBox.Location = new System.Drawing.Point(9, 41);
+            this.UsernameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.UsernameTextBox.Name = "UsernameTextBox";
-            this.UsernameTextBox.Size = new System.Drawing.Size(392, 20);
+            this.UsernameTextBox.Size = new System.Drawing.Size(390, 22);
             this.UsernameTextBox.TabIndex = 1;
             this.UsernameTextBox.Text = "Example";
             // 
@@ -128,9 +130,10 @@ namespace Minecraft2D
             this._OK.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
             this._OK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._OK.ForeColor = System.Drawing.Color.White;
-            this._OK.Location = new System.Drawing.Point(207, 70);
+            this._OK.Location = new System.Drawing.Point(137, 70);
+            this._OK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._OK.Name = "_OK";
-            this._OK.Size = new System.Drawing.Size(94, 23);
+            this._OK.Size = new System.Drawing.Size(125, 25);
             this._OK.TabIndex = 4;
             this._OK.Text = "ОК";
             this._OK.UseMnemonic = false;
@@ -148,9 +151,10 @@ namespace Minecraft2D
             this._Cancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
             this._Cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._Cancel.ForeColor = System.Drawing.Color.White;
-            this._Cancel.Location = new System.Drawing.Point(310, 70);
+            this._Cancel.Location = new System.Drawing.Point(274, 70);
+            this._Cancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._Cancel.Name = "_Cancel";
-            this._Cancel.Size = new System.Drawing.Size(94, 23);
+            this._Cancel.Size = new System.Drawing.Size(125, 25);
             this._Cancel.TabIndex = 5;
             this._Cancel.Text = "Отмена";
             this._Cancel.UseMnemonic = false;
@@ -161,16 +165,18 @@ namespace Minecraft2D
             // LoginForm1
             // 
             this.AcceptButton = this._OK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Minecraft2D.My.Resources.Resources.menubackground;
             this.CancelButton = this._Cancel;
-            this.ClientSize = new System.Drawing.Size(411, 101);
+            this.ClientSize = new System.Drawing.Size(409, 108);
             this.Controls.Add(this._Cancel);
             this.Controls.Add(this._OK);
             this.Controls.Add(this.UsernameTextBox);
             this.Controls.Add(this.UsernameLabel);
+            this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "LoginForm1";

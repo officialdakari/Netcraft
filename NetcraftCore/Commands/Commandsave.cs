@@ -17,7 +17,7 @@ namespace NCore.Commands
             NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
             if(args.Length == 0)
             {
-                System.IO.File.WriteAllText(NCore.NCORE_WORLDFILE, new SaveLoad().Save(NCore.GetNCore().World), Encoding.UTF8);
+                System.IO.File.WriteAllText(NCore.NCORE_WORLDFILE, SaveLoad.Save(NCore.GetNCore().World), Encoding.UTF8);
                 await sender.SendMessage(lang.get("commands.save.success"));
                 NCore.GetNCore().Log(sender.GetName() + " saved the game");
                 return true;

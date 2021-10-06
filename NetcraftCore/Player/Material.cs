@@ -61,7 +61,7 @@ namespace NCore
         RED_FLOWER, // +
         YELLOW_FLOWER, // +
         GRAVEL, // +
-        HEALING_POTION // +
-
+        HEALING_POTION, // +
+        NOTHING
     }
 }

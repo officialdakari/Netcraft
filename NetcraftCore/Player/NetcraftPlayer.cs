@@ -58,10 +58,39 @@ namespace NCore
         internal NCore.Lang lang;
         public DateTime LastKeepAlivePacket { get; internal set; }
         public bool IsRconClient { get; internal set; } = false;
+        private Action<bool> _question = null;
 
         public string GetIp()
         {
             return ip;
+        }
+
+        public string Yes()
+        {
+            if (_question == null)
+            {
+                return "There is no question to answer!";
+            }
+            _question(true);
+            _question = null;
+            return null;
+        }
+
+        public string No()
+        {
+            if (_question == null)
+            {
+                return "There is no question to answer!";
+            }
+            _question(false);
+            _question = null;
+            return null;
+        }
+
+        public void Ask(string message, Action<bool> action)
+        {
+            _question = action;
+            Chat(message);
         }
 
         public override string ToString()
@@ -162,7 +191,7 @@ namespace NCore
                 }
             }
 
-            PlayerInventory.AddItem(new ItemStack(m, count));
+            await PlayerInventory.AddItem(new ItemStack(m, count));
             await UpdateInventory();
         }
 
@@ -249,7 +278,7 @@ namespace NCore
             {
                 await NCore.GetNCore().Chat(Username + deathMessage);
             }
-            Teleport(ev.GetSpawn().X, ev.GetSpawn().Y);
+            await Teleport(ev.GetSpawn().X, ev.GetSpawn().Y);
             Position = ev.GetSpawn();
             await PacketQueue.AddQueue($"teleport?{ev.GetSpawn().X.ToString()}?{ev.GetSpawn().Y.ToString()}");
             Health = 100;

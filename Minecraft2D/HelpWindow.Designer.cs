@@ -37,48 +37,50 @@ namespace Minecraft2D
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            _ListBox1 = new ListBox();
-            _ListBox1.MouseDoubleClick += new MouseEventHandler(ListBox1_MouseDoubleClick);
-            RichTextBox1 = new RichTextBox();
-            SuspendLayout();
+            this._ListBox1 = new System.Windows.Forms.ListBox();
+            this.RichTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.SuspendLayout();
             // 
-            // ListBox1
+            // _ListBox1
             // 
-            _ListBox1.Dock = DockStyle.Left;
-            _ListBox1.Font = new Font("Arial", 9.75f, FontStyle.Bold);
-            _ListBox1.FormattingEnabled = true;
-            _ListBox1.ItemHeight = 16;
-            _ListBox1.Location = new Point(0, 0);
-            _ListBox1.Margin = new Padding(4, 4, 4, 4);
-            _ListBox1.Name = "_ListBox1";
-            _ListBox1.Size = new Size(198, 493);
-            _ListBox1.TabIndex = 0;
+            this._ListBox1.Dock = System.Windows.Forms.DockStyle.Left;
+            this._ListBox1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
+            this._ListBox1.FormattingEnabled = true;
+            this._ListBox1.ItemHeight = 16;
+            this._ListBox1.Location = new System.Drawing.Point(0, 0);
+            this._ListBox1.Margin = new System.Windows.Forms.Padding(4);
+            this._ListBox1.Name = "_ListBox1";
+            this._ListBox1.Size = new System.Drawing.Size(198, 493);
+            this._ListBox1.TabIndex = 0;
+            this._ListBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox1_MouseDoubleClick);
             // 
             // RichTextBox1
             // 
-            RichTextBox1.BorderStyle = BorderStyle.None;
-            RichTextBox1.Dock = DockStyle.Fill;
-            RichTextBox1.Font = new Font("Arial", 9.75f, FontStyle.Bold, GraphicsUnit.Point, Conversions.ToByte(204));
-            RichTextBox1.Location = new Point(198, 0);
-            RichTextBox1.Margin = new Padding(4, 4, 4, 4);
-            RichTextBox1.Name = "RichTextBox1";
-            RichTextBox1.Size = new Size(609, 493);
-            RichTextBox1.TabIndex = 1;
-            RichTextBox1.Text = "Please select something from the list";
+            this.RichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RichTextBox1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.RichTextBox1.Location = new System.Drawing.Point(198, 0);
+            this.RichTextBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.RichTextBox1.Name = "RichTextBox1";
+            this.RichTextBox1.ReadOnly = true;
+            this.RichTextBox1.Size = new System.Drawing.Size(609, 493);
+            this.RichTextBox1.TabIndex = 1;
+            this.RichTextBox1.Text = "Please select something from the list";
             // 
             // HelpWindow
             // 
-            AutoScaleDimensions = new SizeF(8.0f, 16.0f);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(807, 493);
-            Controls.Add(RichTextBox1);
-            Controls.Add(_ListBox1);
-            Font = new Font("Arial", 9.75f, FontStyle.Bold);
-            Margin = new Padding(4, 4, 4, 4);
-            Name = "HelpWindow";
-            Text = "Обучение";
-            Load += new EventHandler(HelpWindow_Load);
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(807, 493);
+            this.Controls.Add(this.RichTextBox1);
+            this.Controls.Add(this._ListBox1);
+            this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
+            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Name = "HelpWindow";
+            this.Text = "Обучение";
+            this.Load += new System.EventHandler(this.HelpWindow_Load);
+            this.ResumeLayout(false);
+
         }
 
         private ListBox _ListBox1;

@@ -42,7 +42,7 @@ namespace Minecraft2D
         protected int direction = 1;
         protected Color[] colors = new[] { Color.Red, Color.Orange, Color.Goldenrod, Color.Gold, Color.Yellow, Color.GreenYellow, Color.LightGreen, Color.Green, Color.LightBlue, Color.Blue, Color.DarkBlue, Color.BlueViolet, Color.Violet };
 
-        protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "Happy new year!", "Press F1 for help!", "Netcraft Is In 2D", "By DarkCoder15 and TheNonameee", "Converted to C#", "Join our Discord!"};
+        protected string[] strings = {"Not affiliated with Mojang Studios or Microsoft.", "!", "Press F1 for help!", "Netcraft created at 9th October 2020", "By DarkCoder15 and TheNonameee", "Converted to C#", "Join our Discord!"};
         protected string labelText;
         protected int presenceUpdateDelay = 20;
 
@@ -208,7 +208,8 @@ namespace Minecraft2D
 
         private void MainMenu_Load(object sender, EventArgs e)
         {
-            move.LearnToMove(block);
+            //move.LearnToMove(block);
+            //new FancyForm().Show();
             //sp.Show();
             //Hide();
             instance = this;
@@ -235,7 +236,7 @@ namespace Minecraft2D
             lang = Lang.FromFile($"./lang/{Utils.LANGUAGE}.txt");
             DoLang();
             SetTitle();
-            dRPC = new DiscordRPC.DiscordRpcClient("809683612348841994");
+            dRPC = new DiscordRPC.DiscordRpcClient("823927476358086687");
             try
             {
                 dRPC.RegisterUriScheme(executable: Application.ExecutablePath);
@@ -387,7 +388,7 @@ namespace Minecraft2D
             //}
             My.MyProject.Forms.Form1.IsSingleplayer = true;
             My.MyProject.Forms.Form1.ServerProcess = new Process();
-            My.MyProject.Forms.Form1.ServerProcess.StartInfo.Arguments = @"/c run.cmd";
+            My.MyProject.Forms.Form1.ServerProcess.StartInfo.Arguments = @"/c NetcraftCore.exe";
             My.MyProject.Forms.Form1.ServerProcess.StartInfo.WorkingDirectory = @".\server\";
             My.MyProject.Forms.Form1.ServerProcess.StartInfo.FileName = "cmd.exe";
             Form1.GetInstance().ServerProcess.StartInfo.StandardErrorEncoding = Encoding.Default;
@@ -604,7 +605,7 @@ namespace Minecraft2D
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            FancyMessage.Show("Name: netcraft\nPassword: netcraft\n\n/ch join netcraft netcraft", "Join Netcraft on Lone Chat!");
+            Process.Start("https://t.me/netcraftcommunity");
         }
     }
 
@@ -709,7 +710,7 @@ namespace Minecraft2D
             }
             catch (Exception ex)
             {
-                Interaction.MsgBox("Не удалось Ping сервер!" + Constants.vbCrLf + Constants.vbCrLf + $"{ex.GetType().ToString()}: {ex.Message}");
+                Interaction.MsgBox("Не удалось установить соединение с сервером!" + Constants.vbCrLf + Constants.vbCrLf + $"{ex.GetType().ToString()}: {ex.Message}");
                 // Close()
             }
         }

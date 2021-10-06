@@ -59,24 +59,24 @@ namespace Minecraft2D
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.makeItDark = new System.Windows.Forms.PictureBox();
+            this.blackbackground = new System.Windows.Forms.PictureBox();
             this.invPanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.invClose1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.chatPanel1 = new System.Windows.Forms.Panel();
+            this.chatpanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.debuginfo = new Minecraft2D.OpaqueLabel();
-            this.R1 = new Minecraft2D.TransparentPicBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.debuginfo = new Minecraft2D.OpaqueLabel();
+            this.HandItem = new Minecraft2D.TransparentPicBox();
             ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).BeginInit();
             this.ContextMenuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.makeItDark)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.blackbackground)).BeginInit();
             this.invPanel.SuspendLayout();
-            this.chatPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.R1)).BeginInit();
+            this.chatpanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HandItem)).BeginInit();
             this.SuspendLayout();
             // 
             // _Ticker
@@ -92,7 +92,7 @@ namespace Minecraft2D
             this.InventoryButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("InventoryButton.BackgroundImage")));
             this.InventoryButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.InventoryButton.ForeColor = System.Drawing.Color.White;
-            this.InventoryButton.Location = new System.Drawing.Point(1088, 0);
+            this.InventoryButton.Location = new System.Drawing.Point(1051, 0);
             this.InventoryButton.Name = "InventoryButton";
             this.InventoryButton.Size = new System.Drawing.Size(75, 23);
             this.InventoryButton.TabIndex = 2;
@@ -210,7 +210,7 @@ namespace Minecraft2D
             this._ButtonLeft.BackColor = System.Drawing.SystemColors.Control;
             this._ButtonLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._ButtonLeft.Font = new System.Drawing.Font("Wingdings", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this._ButtonLeft.Location = new System.Drawing.Point(8, 503);
+            this._ButtonLeft.Location = new System.Drawing.Point(8, 479);
             this._ButtonLeft.Name = "_ButtonLeft";
             this._ButtonLeft.Size = new System.Drawing.Size(70, 61);
             this._ButtonLeft.TabIndex = 9;
@@ -229,7 +229,7 @@ namespace Minecraft2D
             this._ButtonJump.BackColor = System.Drawing.SystemColors.Control;
             this._ButtonJump.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._ButtonJump.Font = new System.Drawing.Font("Wingdings", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this._ButtonJump.Location = new System.Drawing.Point(1084, 503);
+            this._ButtonJump.Location = new System.Drawing.Point(1047, 479);
             this._ButtonJump.Name = "_ButtonJump";
             this._ButtonJump.Size = new System.Drawing.Size(70, 61);
             this._ButtonJump.TabIndex = 10;
@@ -248,7 +248,7 @@ namespace Minecraft2D
             this._ButtonRight.BackColor = System.Drawing.SystemColors.Control;
             this._ButtonRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._ButtonRight.Font = new System.Drawing.Font("Wingdings", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this._ButtonRight.Location = new System.Drawing.Point(84, 503);
+            this._ButtonRight.Location = new System.Drawing.Point(84, 479);
             this._ButtonRight.Name = "_ButtonRight";
             this._ButtonRight.Size = new System.Drawing.Size(70, 61);
             this._ButtonRight.TabIndex = 11;
@@ -268,7 +268,7 @@ namespace Minecraft2D
             this.MenuButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("MenuButton.BackgroundImage")));
             this.MenuButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MenuButton.ForeColor = System.Drawing.Color.White;
-            this.MenuButton.Location = new System.Drawing.Point(1088, 29);
+            this.MenuButton.Location = new System.Drawing.Point(1051, 29);
             this.MenuButton.Name = "MenuButton";
             this.MenuButton.Size = new System.Drawing.Size(75, 23);
             this.MenuButton.TabIndex = 12;
@@ -287,7 +287,7 @@ namespace Minecraft2D
             this._ButtonAttack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._ButtonAttack.Font = new System.Drawing.Font("Webdings", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this._ButtonAttack.ForeColor = System.Drawing.Color.Red;
-            this._ButtonAttack.Location = new System.Drawing.Point(1008, 503);
+            this._ButtonAttack.Location = new System.Drawing.Point(971, 479);
             this._ButtonAttack.Name = "_ButtonAttack";
             this._ButtonAttack.Size = new System.Drawing.Size(70, 61);
             this._ButtonAttack.TabIndex = 13;
@@ -420,14 +420,14 @@ namespace Minecraft2D
             this.timer2.Enabled = true;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
-            // makeItDark
+            // blackbackground
             // 
-            this.makeItDark.Location = new System.Drawing.Point(460, -16);
-            this.makeItDark.Name = "makeItDark";
-            this.makeItDark.Size = new System.Drawing.Size(100, 13);
-            this.makeItDark.TabIndex = 20;
-            this.makeItDark.TabStop = false;
-            this.makeItDark.Visible = false;
+            this.blackbackground.Location = new System.Drawing.Point(460, -16);
+            this.blackbackground.Name = "blackbackground";
+            this.blackbackground.Size = new System.Drawing.Size(100, 13);
+            this.blackbackground.TabIndex = 20;
+            this.blackbackground.TabStop = false;
+            this.blackbackground.Visible = false;
             // 
             // invPanel
             // 
@@ -438,7 +438,7 @@ namespace Minecraft2D
             this.invPanel.Controls.Add(this.invClose1);
             this.invPanel.Controls.Add(this._ListBox1);
             this.invPanel.ForeColor = System.Drawing.Color.White;
-            this.invPanel.Location = new System.Drawing.Point(172, 54);
+            this.invPanel.Location = new System.Drawing.Point(153, 42);
             this.invPanel.Name = "invPanel";
             this.invPanel.Size = new System.Drawing.Size(831, 408);
             this.invPanel.TabIndex = 21;
@@ -501,20 +501,20 @@ namespace Minecraft2D
             this.button1.MouseEnter += new System.EventHandler(this.MenuButton_MouseEnter);
             this.button1.MouseLeave += new System.EventHandler(this.MenuButton_MouseLeave);
             // 
-            // chatPanel1
+            // chatpanel
             // 
-            this.chatPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chatPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
-            this.chatPanel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.chatPanel1.Controls.Add(this.label2);
-            this.chatPanel1.Controls.Add(this.button1);
-            this.chatPanel1.Controls.Add(this.textBox1);
-            this.chatPanel1.Controls.Add(this.richTextBox1);
-            this.chatPanel1.Location = new System.Drawing.Point(5, 124);
-            this.chatPanel1.Name = "chatPanel1";
-            this.chatPanel1.Size = new System.Drawing.Size(556, 373);
-            this.chatPanel1.TabIndex = 22;
-            this.chatPanel1.Visible = false;
+            this.chatpanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chatpanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.chatpanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.chatpanel.Controls.Add(this.label2);
+            this.chatpanel.Controls.Add(this.button1);
+            this.chatpanel.Controls.Add(this.textBox1);
+            this.chatpanel.Controls.Add(this.richTextBox1);
+            this.chatpanel.Location = new System.Drawing.Point(5, 100);
+            this.chatpanel.Name = "chatpanel";
+            this.chatpanel.Size = new System.Drawing.Size(556, 373);
+            this.chatpanel.TabIndex = 22;
+            this.chatpanel.Visible = false;
             // 
             // label2
             // 
@@ -541,48 +541,48 @@ namespace Minecraft2D
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             this.richTextBox1.DoubleClick += new System.EventHandler(this.richTextBox1_DoubleClick);
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // debuginfo
             // 
             this.debuginfo.AutoSize = true;
             this.debuginfo.BackColor = System.Drawing.Color.Transparent;
-            this.debuginfo.Font = new System.Drawing.Font("Video Terminal Screen", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.debuginfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.debuginfo.ForeColor = System.Drawing.Color.White;
             this.debuginfo.Location = new System.Drawing.Point(5, 51);
             this.debuginfo.Name = "debuginfo";
-            this.debuginfo.Size = new System.Drawing.Size(176, 64);
+            this.debuginfo.Size = new System.Drawing.Size(141, 80);
             this.debuginfo.TabIndex = 19;
             this.debuginfo.Text = "Netcraft {0}\r\nServer: {1}\r\nPlayer position: x, y\r\nOnline players: a";
             this.debuginfo.Visible = false;
             this.debuginfo.Click += new System.EventHandler(this.debuginfo_Click);
             this.debuginfo.MouseClick += new System.Windows.Forms.MouseEventHandler(this.debuginfo_MouseClick);
             // 
-            // R1
+            // HandItem
             // 
-            this.R1.BackColor = System.Drawing.Color.Transparent;
-            this.R1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.R1.Location = new System.Drawing.Point(54, 146);
-            this.R1.Name = "R1";
-            this.R1.Size = new System.Drawing.Size(32, 32);
-            this.R1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.R1.TabIndex = 15;
-            this.R1.TabStop = false;
-            // 
-            // timer1
-            // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.HandItem.BackColor = System.Drawing.Color.Transparent;
+            this.HandItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.HandItem.Location = new System.Drawing.Point(54, 146);
+            this.HandItem.Name = "HandItem";
+            this.HandItem.Size = new System.Drawing.Size(32, 32);
+            this.HandItem.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.HandItem.TabIndex = 15;
+            this.HandItem.TabStop = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.ClientSize = new System.Drawing.Size(1166, 576);
-            this.Controls.Add(this.chatPanel1);
+            this.ClientSize = new System.Drawing.Size(1129, 552);
+            this.Controls.Add(this.chatpanel);
             this.Controls.Add(this.invPanel);
-            this.Controls.Add(this.makeItDark);
+            this.Controls.Add(this.blackbackground);
             this.Controls.Add(this.debuginfo);
             this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.R1);
+            this.Controls.Add(this.HandItem);
             this.Controls.Add(this._localPlayer);
             this.Controls.Add(this._ButtonAttack);
             this.Controls.Add(this.MenuButton);
@@ -614,12 +614,12 @@ namespace Minecraft2D
             this.Move += new System.EventHandler(this.Form1_Move);
             ((System.ComponentModel.ISupportInitialize)(this._localPlayer)).EndInit();
             this.ContextMenuStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.makeItDark)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.blackbackground)).EndInit();
             this.invPanel.ResumeLayout(false);
             this.invPanel.PerformLayout();
-            this.chatPanel1.ResumeLayout(false);
-            this.chatPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.R1)).EndInit();
+            this.chatpanel.ResumeLayout(false);
+            this.chatpanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HandItem)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1010,19 +1010,19 @@ namespace Minecraft2D
             }
         }
 
-        internal TransparentPicBox R1;
+        internal TransparentPicBox HandItem;
 
         private ListBox _ListBox2;
         private ImageList imageList1;
         private ProgressBar progressBar1;
         private OpaqueLabel debuginfo;
         private Timer timer2;
-        private PictureBox makeItDark;
+        private PictureBox blackbackground;
         private Panel invPanel;
         private Button invClose1;
         private TextBox textBox1;
         private Button button1;
-        private Panel chatPanel1;
+        private Panel chatpanel;
         private RichTextBox richTextBox1;
         public TransparentPicBox _localPlayer;
         private ToolStripMenuItem пасхалкажмиСюдаToolStripMenuItem;
