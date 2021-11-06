@@ -23,7 +23,7 @@ namespace NCore.Commands
                 NCore.GetNCore().GetApplicationRoot()});
             a = a.AddImports(new string[] { "System", "System.Linq", "System.IO", "System.Text", "System.Threading", "System.Threading.Tasks",
                 "NCore", "NCore.netcraft.server.api"});
-            await sender.SendMessage((await CSharpScript.EvaluateAsync(string.Join(' ', args), a)).ToString());
+            await sender.SendMessage((await CSharpScript.EvaluateAsync(string.Join(" ", args), a)).ToString());
             return true;
         }
     }

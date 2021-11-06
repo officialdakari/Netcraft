@@ -420,7 +420,7 @@ namespace Minecraft2D
             this.textBox3.Size = new System.Drawing.Size(463, 27);
             this.textBox3.TabIndex = 18;
             this.textBox3.TabStop = false;
-            this.textBox3.Text = "http://netcraft.darkcoder15.duckdns.org/netcraft/sprite/1.png";
+            this.textBox3.Text = "http://blockminemc.duckdns.org/netcraft/sprite/1.png";
             // 
             // label1
             // 

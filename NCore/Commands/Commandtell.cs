@@ -17,7 +17,7 @@ namespace NCore.Commands
             NCore.Lang lang = sender.IsPlayer ? ((NetcraftPlayer)sender).lang : NCore.GetNCore().lang;
             if (args.Length >= 2)
             {
-                string message = string.Join(' ', args.Skip(1).ToArray());
+                string message = string.Join(" ", args.Skip(1).ToArray());
                 NetcraftPlayer player = netcraft.server.api.Netcraft.GetPlayer(args[0]);
                 if(player == null)
                 {

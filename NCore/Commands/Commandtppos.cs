@@ -17,16 +17,19 @@ namespace NCore
 
             if (args.Length >= 2)
             {
-                if (!sender.IsPlayer)
+                if (!sender.IsPlayer && args.Length < 3)
                 {
                     await sender.SendMessage("Только для игрока.");
                     return true;
                 }
 
-                NetcraftPlayer p = (NetcraftPlayer)sender;
+                NetcraftPlayer p;
                 if(args.Length == 3)
                 {
                     p = Netcraft.GetPlayer(args[2]);
+                } else
+                {
+                    p = (NetcraftPlayer)sender;
                 }
                 if(p == null)
                 {

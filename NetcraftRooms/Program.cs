@@ -742,6 +742,14 @@ namespace NCore
                                                     {
                                                     }
                                                 }
+                                                for(int x = 0; x < 70; x++)
+                                                {
+                                                    for(int y = 0; y < 20; y++)
+                                                    {
+                                                        n.PacketQueue.AddQueue($"removeblock?{x.ToString()}?{y.ToString()}");
+                                                    }
+                                                }
+                                                n.PacketQueue.SendQueue();
                                                 n.Connect("127.0.0.1", r.port);
                                                 n.Server = nickname;
                                                 n.OnMessageReceived += __forward;
@@ -945,9 +953,9 @@ namespace NCore
             {
                 if (_isStarted) return;
                 _server = new Process();
-                _server.StartInfo.FileName = "dotnet";
+                _server.StartInfo.FileName = "cmd.exe";
                 _server.StartInfo.UseShellExecute = true;
-                _server.StartInfo.Arguments = "NetcraftCore.dll";
+                _server.StartInfo.Arguments = "/c NetcraftCore.exe";
                 _server.StartInfo.WorkingDirectory = _path;
 
                 _server.Start();

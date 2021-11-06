@@ -26,9 +26,9 @@ namespace NCore
         public static string GetValue(string var, string cfg, string ifNull = null)
         {
             cfg = cfg.Replace(Constants.vbCrLf, Constants.vbLf);
-            foreach (var a in cfg.Split(Constants.vbLf))
+            foreach (var a in cfg.Split('\n'))
             {
-                var b = a.Split("=");
+                var b = a.Split('=');
                 if (a.Length == 0) continue;
                 if (a[0] == '#') continue;
                 if ((b[0].ToLower() ?? "") == (var.ToLower() ?? ""))
@@ -135,7 +135,6 @@ namespace NCore
         private NetcraftPlayer pClient;
         public const string NCORE_WORLDFILE = "./world.json"; 
         public const string NCORE_CONFIGFILE = "./server.properties";
-        private readonly SaveLoad sv = new SaveLoad();
         internal int maxPlayers = 20;
         internal string chatFormat = "%1 %2";
         internal int everyBodyAdmin = 0;
@@ -162,7 +161,7 @@ namespace NCore
         public void LoadConfig()
         {
             string cfg = File.ReadAllText(Conversions.ToString(NCORE_CONFIGFILE), Encoding.UTF8);
-            string nccfg = File.ReadAllText("./ncore.cfg", Encoding.UTF8);
+            string nccfg = File.ReadAllText("./server.cfg", Encoding.UTF8);
             maxPlayers = Conversions.ToInteger(Config.GetValue("max-players", cfg, "-1"));
             chatFormat = Config.GetValue("chat-format", cfg, "%1 %2");
             everyBodyAdmin = Conversions.ToInteger(Config.GetValue("everybody-admin", cfg, "0"));
@@ -176,6 +175,7 @@ namespace NCore
             enableConsole = Conversions.ToInteger(Config.GetValue("enable-csharp-script-console", nccfg, "0"));
             whitelist = Conversions.ToInteger(Config.GetValue("enable-whitelist", cfg, "0"));
             autosave = Conversions.ToInteger(Config.GetValue("enable-autosave", cfg, "0"));
+            port = Conversions.ToInteger(Config.GetValue("server-port", cfg, "6575"));
             lang = Lang.FromFile($"./lang/{Config.GetValue("def-lang", cfg, "english")}.txt");
             permissions = JsonConvert.DeserializeObject<Player.Permissions>(File.ReadAllText("./permissions.json", Encoding.UTF8));
             groups = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(File.ReadAllText("./groups.json", Encoding.UTF8));
@@ -197,7 +197,7 @@ namespace NCore
             //                  .Assembly.GetExecutingAssembly().CodeBase);
             //Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
             //var appRoot = appPathMatcher.Match(exePath).Value;
-            return $"{Directory.GetCurrentDirectory()}\\NCore.dll";
+            return Process.GetCurrentProcess().MainModule.FileName;
         }
 
         public async Task LoadScripts()
@@ -291,7 +291,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
         public async Task<bool> BreakBlock(Point position)
         {
             Block b = World.GetBlockAt(position);
-            if (b == null)
+            if (b != null)
             {
                 World.Blocks.Remove(b);
                 foreach (NetcraftPlayer n in players)
@@ -329,6 +329,8 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
             Netcraft.AddCommand(new Commands.Commandgamerule());
             Netcraft.AddCommand(new Commands.Commandtime());
             Netcraft.AddCommand(new Commands.Commandpermissions());
+            Netcraft.AddCommand(new NetcraftCore.Commands.Commandyes());
+            Netcraft.AddCommand(new NetcraftCore.Commands.Commandno());
             Log("Default commands loaded!");
             Log($"{Netcraft.GetCommands().Count.ToString()} total commands");
         }
@@ -348,6 +350,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
 
         private async void ThreadLoop()
         {
+            
             while (true)
             {
                 Thread.Sleep(100);
@@ -536,7 +539,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                 }
                 
 
-                Console.Title = $"NCore {NCORE_VERSION} (Netcraft {NETCRAFT_VERSION}) | {players.Count}/{maxPlayers.ToString()} players | {(Process.GetCurrentProcess().WorkingSet64 / 1024L / 1024L).ToString().Split(".")[0]}MB used of {Process.GetCurrentProcess().MaxWorkingSet.ToInt64() / 1024L}MB, {(Process.GetCurrentProcess().MaxWorkingSet.ToInt64() / 1024L - Process.GetCurrentProcess().WorkingSet64 / 1024L / 1024L).ToString().Split(".")[0]}MB free | Total Processor Time: {Process.GetCurrentProcess().TotalProcessorTime.ToString()} | Uptime: {(DateTime.Now - Process.GetCurrentProcess().StartTime).ToString().Split(".")[0]}";
+                //problem detected ---- Console.Title = $"NCore {NCORE_VERSION} (Netcraft {NETCRAFT_VERSION}) | {players.Count}/{maxPlayers.ToString()} players | {(Process.GetCurrentProcess().WorkingSet64 / 1024L / 1024L).ToString().Split('.')[0]}MB used of {Process.GetCurrentProcess().MaxWorkingSet.ToInt64() / 1024L}MB, {(Process.GetCurrentProcess().MaxWorkingSet.ToInt64() / 1024L - Process.GetCurrentProcess().WorkingSet64 / 1024L / 1024L).ToString().Split('.')[0]}MB free | Total Processor Time: {Process.GetCurrentProcess().TotalProcessorTime.ToString()} | Uptime: {(DateTime.Now - Process.GetCurrentProcess().StartTime).ToString().Split(".")[0]}";
             }
         }
 
@@ -545,7 +548,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
         private int stp;
         private Thread daytimeThread;
 
-        public void daytimeThreadLoop()
+        public async void daytimeThreadLoop()
         {
             while (true)
             {
@@ -564,7 +567,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                     }
 
                     worldtime += stp;
-                    BroadcastSkyChange(skyClr[worldtime]);
+                    await BroadcastSkyChange(skyClr[worldtime]);
                 }
             }
         }
@@ -739,10 +742,6 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                 
                 Log(lang.get("server.starting"));
 
-                Log("This is information");
-                Log("WARNING!", "WARNING");
-                Log("SEVERE!!!!", "SEVERE");
-                Log("ERRROROORR!!!!!!!!!", "ERROR");
                 loopThread = new Thread(ThreadLoop);
                 loopThread.Name = "Loop";
                 loopThread.Start();
@@ -754,13 +753,13 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                 Thread.CurrentThread.Name = "Main";
 
                 LoadBanlist();
-                foreach (var i in File.ReadAllText("./auth.txt", Encoding.UTF8).Split(Constants.vbCrLf))
+                foreach (var i in File.ReadAllText("./auth.txt", Encoding.UTF8).Split('\n'))
                 {
                     if (i.Length < 2)
                         continue;
-                    if (playerPasswords.ContainsKey(i.Split("=")[0]))
+                    if (playerPasswords.ContainsKey(i.Split('=')[0]))
                         continue;
-                    playerPasswords.Add(i.Split("=")[0], i.Split("=").Last());
+                    playerPasswords.Add(i.Split('=')[0], i.Split('=').Last());
                 }
                 LoadCommands();
                 Netcraft.dobc += eventhandler_a;
@@ -770,7 +769,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                 int pluginLoadSuccess = 0;
                 foreach (var s in Directory.GetFiles("./plugins"))
                 {
-                    if (s.Split(".").Last() != "dll") continue;
+                    if (s.Split('.').Last() != "dll") continue;
 
                     all++;
 
@@ -790,7 +789,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
 
                 if (File.Exists(Conversions.ToString(NCORE_WORLDFILE)))
                 {
-                    World = sv.Load(File.ReadAllText(Conversions.ToString(NCORE_WORLDFILE)));
+                    World = SaveLoad.Load(File.ReadAllText(Conversions.ToString(NCORE_WORLDFILE)));
                     List<Block> blocksToRemove = new List<Block>();
                     foreach (Block b in World.Blocks)
                     {
@@ -813,11 +812,11 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                 else
                 {
                     World = WorldGenerator.Generate();
-                    File.WriteAllText(Conversions.ToString(NCORE_WORLDFILE), sv.Save(World));
+                    File.WriteAllText(Conversions.ToString(NCORE_WORLDFILE), SaveLoad.Save(World));
                 }
 
                 await LoadScripts();
-
+                Log("Listening at *:" + port.ToString());
                 Start();
 
                 Log(lang.get("server.started"));
@@ -825,8 +824,8 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                 while (true)
                 {
                     string m = Console.ReadLine();
-                    var args = m.Split(" ").Skip(1).ToArray();
-                    string cmd = m.Split(" ")[0];
+                    var args = m.Split(' ').Skip(1).ToArray();
+                    string cmd = m.Split(' ')[0];
                     var toRun = default(Command);
                     foreach (var local_a in Netcraft.GetCommands())
                     {
@@ -1001,7 +1000,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
         public void LoadBanlist()
         {
             ThreadAdd();
-            foreach (var a in File.ReadAllText("banned-players.txt", Encoding.UTF8).Split(Constants.vbLf))
+            foreach (var a in File.ReadAllText("banned-players.txt", Encoding.UTF8).Split('\n'))
                 Netcraft.field_a.Add(a);
         }
 
@@ -1045,8 +1044,13 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
             //Console.ForegroundColor = ConsoleColor.White;
             //Console.Write($"] {arg0}\n");
             //UpdateList($"[{DateTime.Now} {arg1}] [Thread {Thread.CurrentThread.ManagedThreadId}]: {arg0}");
-            writeline($"[{DateTime.Now} {arg1}]: {arg0}");
-            toAppend += $"[{DateTime.Now} {arg1}] [Thread {Thread.CurrentThread.ManagedThreadId}]: {arg0}" + Constants.vbCrLf;
+            netcraft.server.api.events.ConsoleLogEvent ev = new netcraft.server.api.events.ConsoleLogEvent(arg0, false, arg1);
+
+            NCSApi.REConsoleLogEvent(ev);
+            if (ev.GetCancelled()) return;
+            
+            writeline($"[{DateTime.Now} {ev.GetLevel()}]: {ev.GetLine()}");
+            toAppend += $"[{DateTime.Now} {ev.GetLevel()}] [Thread {Thread.CurrentThread.ManagedThreadId}]: {ev.GetLine()}" + Constants.vbCrLf;
             Console.ForegroundColor = ConsoleColor.White;
         }
 
@@ -1113,9 +1117,8 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
             if(str == "")
             {
                 if (n.IsLoaded) return;
-                n.Disconnect();
-                Log(n.GetIp() + " disconnected for bad packet", "WARNING");
-                players.Remove(n);
+                Log("Received corrupted packet from " + n.GetIp() + "", "WARNING");
+                await n.SendLog("Received corrupted packet");
                 return;
 
             }
@@ -1128,7 +1131,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
             }
             try
             {
-                var a = str.Split("?");
+                var a = str.Split('?');
                 if (str == "ping")
                 {
                     Log($"Pinged from {n.GetIp()}");
@@ -1166,7 +1169,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                 {
                     if(a[0] == "cmd")
                     {
-                        string cmd = string.Join('?', a.Skip(1));
+                        string cmd = string.Join("?", a.Skip(1).ToArray());
                         Log(this.lang.get("command.requested", "RCON", cmd));
                         await Netcraft.DispatchCommand(Netcraft.RconCommandSender, cmd);
                     }
@@ -1212,7 +1215,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                         if (netplayer.UUID == n.UUID) continue;
                         if (netplayer.Username == a[1])
                         {
-                            n.Kick(lang.get("error.alreadyplaying"));
+                            await n.Kick(lang.get("error.alreadyplaying"));
                             return;
                         }
                     }
@@ -1225,13 +1228,13 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
 
                     if (!Regex.Match(n.Username, "^[a-zA-Z0-9_]*").Success)
                     {
-                        n.Kick(lang.get("error.invalidnick"));
+                        await n.Kick(lang.get("error.invalidnick"));
                         return;
                     }
 
                     if (Netcraft.IsBanned(n.Username))
                     {
-                        n.Kick(lang.get("error.banned"));
+                        await n.Kick(lang.get("error.banned"));
                         return;
                     }
 
@@ -1251,7 +1254,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                     n.PlayerInventory = new Inventory(n);
                     if (File.Exists(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), n.Username), ".json"))))
                     {
-                        PlayerInfoSaveLoad.Load(n, File.ReadAllText(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), n.Username), ".txt")), Encoding.UTF8));
+                        PlayerInfoSaveLoad.Load(n, File.ReadAllText(Conversions.ToString(Operators.AddObject(Operators.AddObject(Operators.AddObject(Application.StartupPath, "/playerdata/"), n.Username), ".json")), Encoding.UTF8));
                     }
                     else
                     {
@@ -1271,7 +1274,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
 
                 if (string.IsNullOrEmpty(n.Username))
                 {
-                    n.Kick("You can't send another packets");
+                    await n.Kick("You can't send another packets");
                     return;
                 }
 
@@ -1279,8 +1282,8 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                 if (a[0] == "world")
                 {
                     foreach (var b in World.Blocks)
-                        n.SendBlockChange(b.Position, b.Type, packetQueue: true, isBackground: b.IsBackground);
-                    n.PacketQueue.SendQueue();
+                        await n.SendBlockChange(b.Position, b.Type, packetQueue: true, isBackground: b.IsBackground);
+                    await n.PacketQueue.SendQueue();
                     foreach (var p in players)
                     {
                         if (p.UUID == n.UUID)
@@ -1312,9 +1315,9 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                     await n.PacketQueue.SendQueue();
                     n.IsLoaded = true;
                     await Task.Delay(100);
-                    n.Send("completeload");
+                    await n.Send("completeload");
                     await Task.Delay(100);
-                    if(enableAuth == 1) n.Chat(lang.get("auth.require"));
+                    if(enableAuth == 1) await n.Chat(lang.get("auth.require"));
                     if (everyBodyAdmin == 1)
                     {
                         n.IsAdmin = true;
@@ -1330,7 +1333,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                     {
                         if (!Regex.Match(a[1], "^[a-zA-Z0-9_]*").Success)
                         {
-                            n.SendMessage("Invalid password.");
+                            await n.SendMessage("Invalid password.");
                         }
 
                         if (!playerPasswords.Keys.Cast<string>().ToArray().Contains(n.Username))
@@ -1344,7 +1347,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                             await n.SendMessage(lang.get("auth.success.login"));
                             loggedIn.Add(n.Username);
                             Log($"{n.Username} logged in!");
-                            n.Send("teleport?" + n.Position.X.ToString() + "?" + n.Position.Y.ToString());
+                            await n.Send("teleport?" + n.Position.X.ToString() + "?" + n.Position.Y.ToString());
                             n.IsAuthorized = true;
                             netcraft.server.api.events.PlayerLoginEventArgs ev = new netcraft.server.api.events.PlayerLoginEventArgs(n);
                             NCSApi.REPlayerLoginEvent(ev);
@@ -1364,7 +1367,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                     try
                     {
                         var m = Enum.Parse(typeof(Material), a[1].ToUpper());
-                        n.Craft((Material)m);
+                        await n.Craft((Material)m);
                     }
                     catch (Exception ex)
                     {
@@ -1381,7 +1384,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                     }
                     try
                     {
-                        string m = string.Join('?', a.Skip(1).ToArray());
+                        string m = string.Join("?", a.Skip(1).ToArray());
                         if(!n.IsAdmin)
                         {
                             await n.Message("No permissions", 2);
@@ -1454,15 +1457,17 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                                     Log(lang.get("move.wrong", n.Username, "Flight", v.X.ToString(), v.Y.ToString()), "WARNING");
                                     if(n.AntiFlyWarnings == 10)
                                     {
-                                        n.Kick("Flying is not enabled on this server");
+                                        await n.Kick("Flying is not enabled on this server");
                                     }
                                     return;
                                 }
                             }
                         }
-
-                        foreach (var b in World.Blocks)
+                        
+                        for (int i = 0; i < World.Blocks.Count; i++)
                         {
+                            if (i > World.Blocks.Count) continue;
+                            var b = World.Blocks[i];
                             var bpos = new Point(b.Position.X * 32, b.Position.Y * 32);
                             var brec = new Rectangle(bpos, new Size(32, 32));
                             if (DistanceBetweenPoint(bpos, n.Position) > 10 * 32)
@@ -1540,6 +1545,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                             n.FallDistance += 1;
                             if (inWater)
                             {
+                                // player fell into water
                                 n.FallDistance = 0;
                             }
                         }
@@ -1606,7 +1612,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                                 return;
                             }
 
-                            var arr = message.Split(" ");
+                            var arr = message.Split(' ');
                             var lbl = message.Skip(1).ToArray();
                             string label = new string(lbl);
                             var args = arr.Skip(1).ToArray();
@@ -1614,12 +1620,12 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                             Log(lang.get("command.requested", n.Username, label));
                             foreach (var g in Netcraft.GetCommands())
                             {
-                                if (g.Name.ToLower() == label.Split(" ")[0].ToLower())
+                                if (g.Name.ToLower() == label.Split(' ')[0].ToLower())
                                 {
                                     cmd = g;
                                     break;
                                 }
-                                if(g.Aliases.Contains(label.Split(" ")[0].ToLower()))
+                                if(g.Aliases.Contains(label.Split(' ')[0].ToLower()))
                                 {
                                     cmd = g;
                                     break;
@@ -1735,7 +1741,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
 
                     if (item == null)
                     {
-                        Log($"{n.SelectedItem} tried to put null item into chest.", "WARNING");
+                        Log($"{n.Username} tried to put null item into chest.", "WARNING");
                         return;
                     }
                     n.OpenChest.AddItem(ref n, item);
@@ -1761,7 +1767,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
 
                     if (item == -1)
                     {
-                        Log($"{n.SelectedItem} tried to get null item from chest.", "WARNING");
+                        Log($"{n.Username} tried to get null item from chest.", "WARNING");
                         return;
                     }
                     n.OpenChest.RemoveItem(ref n, item);
@@ -1784,7 +1790,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                         var block = World.GetBlockAt(Conversions.ToInteger(a[1]), Conversions.ToInteger(a[2]));
                         if (block == null)
                         {
-                            n.Kick("Internal server error occured.");
+                            await n.Kick("Internal server error occured.");
                             return;
                         }
 
@@ -1888,7 +1894,6 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                                         else { return; }
                                     }
                                     await Send("removeblock?" + a[1] + "?" + a[2]);
-                                    //Он сделал что хотел
                                     if(ENABLE_STATISTICS_EXPERIMENTAL)
                                     {
                                         n.IncrementStatInt("Blocks Broken");
@@ -2179,7 +2184,6 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                             n.PlayerInventory.Items.Remove(n.SelectedItem);
                             n.SelectedItem = null;
                         }
-                        //Он сделал что хотел
                         if (ENABLE_STATISTICS_EXPERIMENTAL)
                         {
                             n.IncrementStatInt("Blocks Placed");
@@ -2336,7 +2340,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
                             }
                             else
                             {
-                                nd.Damage(9, n);
+                                await nd.Damage(9, n);
                             }
                         }
                         else
@@ -2372,7 +2376,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
             catch (Exception globalEx)
             {
                 Log($"Error while processing {n.Username}'s packet:{Constants.vbCrLf}{globalEx.ToString()}", "WARNING");
-                n.Kick("Internal server error occured.");
+                await n.Kick("Internal server error occured.");
                 return;
             }
         }
@@ -2520,10 +2524,10 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
         }
 
         private bool Listening = false;
-
+        int port = 6575;
         private void Start()
         {
-            Listning = new TcpListener(IPAddress.Any, 6575);
+            Listning = new TcpListener(IPAddress.Any, port);
             if (Listening == false)
             {
                 Listning.Start();
@@ -2538,7 +2542,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
 
         private void OnClose()
         {
-            File.WriteAllText(Conversions.ToString(NCORE_WORLDFILE), sv.Save(World), Encoding.UTF8);
+            File.WriteAllText(Conversions.ToString(NCORE_WORLDFILE), SaveLoad.Save(World), Encoding.UTF8);
             foreach (var c in players)
                 handleDisconnection(c);
         }
@@ -2550,7 +2554,7 @@ Netcraft.SetWorldTime(int) [async] sets world time"");
 
         public void SaveWorld()
         {
-            File.WriteAllText(Conversions.ToString(NCORE_WORLDFILE), sv.Save(World));
+            File.WriteAllText(Conversions.ToString(NCORE_WORLDFILE), SaveLoad.Save(World));
         }
 
         public async Task SendCommandFeedback(string a, CommandSender b)

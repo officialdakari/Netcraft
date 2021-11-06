@@ -13,20 +13,20 @@ namespace NCore
         public string[] Aliases { get; }
         public string Permission { get; }
 
-        public Command(string a, string b, string d, string c, string[] e = null)
+        public Command(string name, string desc, string permission, string usage, string[] aliases = null)
         {
-            Name = a;
-            Description = b;
-            Usage = c;
-            if (!NCore.IsNothing(e))
+            Name = name;
+            Description = desc;
+            Usage = usage;
+            if (!NCore.IsNothing(aliases))
             {
-                Aliases = e;
+                Aliases = aliases;
             }
             else
             {
-                Aliases = new[] { a };
+                Aliases = new[] { name };
             }
-            Permission = d;
+            Permission = permission;
         }
 
         public abstract Task<bool> OnCommand(CommandSender sender, Command cmd, string[] args, string label);

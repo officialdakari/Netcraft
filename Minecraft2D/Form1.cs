@@ -2125,8 +2125,13 @@ namespace Minecraft2D
                 My.MyProject.Forms.HelpWindow.Show();
                 return;
             }
+            if (e.KeyCode == Keys.L && e.Control)
+            {
+                lockCur = !lockCur;
+                return;
+            }
 
-            if(e.KeyCode == Keys.F2)
+            if (e.KeyCode == Keys.F2)
             {
                 hideGui = !hideGui;
                 if(hideGui)
@@ -2404,7 +2409,8 @@ namespace Minecraft2D
         private int rd = 15;
         private bool effectPlaying = false;
         string targetted = "";
-
+        const int g = 2;
+        private int velocityY = 0;
         public async Task Tick()
         {
             if (d == 60)
@@ -2486,8 +2492,12 @@ namespace Minecraft2D
 
                     if (!collision)
                     {
-                        localPlayer.Top += 1;
+                        velocityY += g * 2;
+                        localPlayer.Top += velocityY * 2;
                         await UpdatePlayerPosition();
+                    } else
+                    {
+                        velocityY = 0;
                     }
                 }
             }
@@ -2953,24 +2963,27 @@ namespace Minecraft2D
             //    }
             //}
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            //Point p1 = new Point(localPlayer.Left + localPlayer.Width / 2, localPlayer.Top + 15);
-            //Point p2 = PointToClient(Cursor.Position);
-            //if(DistanceBetween(p1, p2) > 192)
-            //{
+            Point p1 = new Point(localPlayer.Left + localPlayer.Width / 2, localPlayer.Top + 15);
+            Point p2 = PointToClient(Cursor.Position);
+            if (DistanceBetween(p1, p2) > 192)
+            {
 
-            //    double dcur = DistanceBetween(p1, p2);
-            //    var coff = dcur / 192;
-            //    Point p21 = new Point(p2.X - p1.X, p2.Y - p1.Y);
-            //    var p3 = new Point((int)(p21.X / coff), (int)(p21.Y / coff)) + (Size)p1;
+                double dcur = DistanceBetween(p1, p2);
+                var coff = dcur / 192;
+                Point p21 = new Point(p2.X - p1.X, p2.Y - p1.Y);
+                var p3 = new Point((int)(p21.X / coff), (int)(p21.Y / coff)) + (Size)p1;
 
 
-            //    g.DrawLine(Pens.Yellow, p1, p3);
-            //    g.DrawLine(Pens.Red, p2, p3);
-            //} else
-            //{
-            //    g.DrawLine(Pens.Yellow, p1, p2);
-            //}
+                g.DrawLine(Pens.Yellow, p1, p3);
+                g.DrawLine(Pens.Red, p2, p3);
+                if(lockCur && !blackbackground.Visible)Cursor.Position = PointToScreen(p3);
+            }
+            else
+            {
+                g.DrawLine(Pens.Yellow, p1, p2);
+            }
         }
+        bool lockCur = false;
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {

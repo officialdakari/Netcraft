@@ -15,11 +15,8 @@
     <WarningsAsErrors />
     <Optimize>false</Optimize>
     <Prefer32Bit>false</Prefer32Bit>
-    <OutputPath>E:\BACKUP160221\Documents\Netcraft-another\Minecraft2D\bin\Debug\server\</OutputPath>
+    <OutputPath>E:\BACKUP160221\Documents\Netcraft-another\NCore\bin\Debug\</OutputPath>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Entity\EntityPlayerNPC.cs" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="3.8.0" />

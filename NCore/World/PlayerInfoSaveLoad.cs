@@ -15,10 +15,11 @@ namespace NCore
             //data += arg0.IsAdmin.ToString();
             Player.PlayerSave save = new Player.PlayerSave();
             save.isAdmin = arg0.IsAdmin;
+
             save.items = arg0.PlayerInventory.Items;
             save.stats = arg0.Stats;
             save.pos = arg0.Position;
-            data = JsonConvert.SerializeObject(save);
+            data = JsonConvert.SerializeObject(save, Formatting.Indented);
             return data;
         }
 

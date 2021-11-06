@@ -155,6 +155,14 @@ namespace NCore.netcraft
                 {
                     SandPhysicsEvent?.Invoke(e);
                 }
+
+                public static event ConsoleLogEventEventHandler ConsoleLogEvent;
+                public delegate void ConsoleLogEventEventHandler(events.ConsoleLogEvent e);
+
+                internal static void REConsoleLogEvent(events.ConsoleLogEvent e)
+                {
+                    ConsoleLogEvent?.Invoke(e);
+                }
             }
 
             public class Netcraft
@@ -168,9 +176,7 @@ namespace NCore.netcraft
 
                 public static void AddCommand(Command a)
                 {
-                    NCore().Log($"Registring command '{a.Name}'");
                     field_b.Add(a);
-                    NCore().Log($"Command '{a.Name}' registered");
                 }
 
                 public static void RemoveCommand(string a)
@@ -192,7 +198,7 @@ namespace NCore.netcraft
 
                 public async static Task<bool> DispatchCommand(CommandSender arg_a, Command arg_b, string arg_c)
                 {
-                    return await arg_b.OnCommand(arg_a, arg_b, arg_c.Split(" ").Skip(1).ToArray(), arg_c);
+                    return await arg_b.OnCommand(arg_a, arg_b, arg_c.Split(' ').Skip(1).ToArray(), arg_c);
                 }
 
                 public async static Task<bool> DispatchCommand(CommandSender arg_a, string arg_b)
